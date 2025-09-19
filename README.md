@@ -10,16 +10,17 @@ It automates the full pipeline: data scraping, preprocessing, text chunking, emb
 
 Run:
 
-    python scrape_data.py --headless true --start-page 1
+    python ./scripts/scrape_data.py --headless true --start-page 1 --until-date 2025-08-01
 
 - `--headless`: run Chrome without opening a window (`true` or `false`)  
 - `--start-page`: page number to start from (default `1`)  
+- `--until-date`: a date in YYYY-MM-DD format until which we need to continue the scraping (default none)
 
 ## 2. Preprocess data
 
 Run:
 
-    python preprocess_data.py
+    poetry run python ./scripts/preprocess_data.py
 
 - Loads all `data/raw/*.jsonl` files  
 - Cleans and normalizes text, date, and district  
@@ -30,11 +31,11 @@ Run:
 
 With SentenceTransformers:
 
-    python build_vector_store.py --backend faiss --embedding sentence-transformers/all-MiniLM-L6-v2
+    poetry run python ./scripts/build_vector_store.py --backend faiss --embedding sentence-transformers/distiluse-base-multilingual-cased-v2
 
 Or with OpenAI embeddings:
 
-    python build_vector_store.py --backend faiss --embedding text-embedding-ada-002 --api-key YOUR_OPENAI_KEY
+    poetry run python ./scripts/build_vector_store.py --backend faiss --embedding sentence-transformers/distiluse-base-multilingual-cased-v2
 
 - `--backend`: `faiss` or `chroma`  
 - `--embedding`: embedding model  
@@ -43,4 +44,4 @@ Or with OpenAI embeddings:
 
 ## 4. Run the RAG pipeline
 
-    python rag_pipeline.py --query="What are the unresolved issues in Tömő street in District VIII?" --vector_backend=faiss --embedding_provider=local
+    poetry run python ./src/jarokelo_tracker/rag_pipeline.py --query="What are the unresolved issues in Tömő street in District VIII?" --vector_backend=faiss --embedding_provider=local

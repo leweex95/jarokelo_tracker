@@ -15,7 +15,7 @@ TOP_K = 6
 class RAGClient:
     def __init__(self, vector_backend: str, embedding_provider: str,
                  vector_path: str = None,
-                 local_model: str = "all-MiniLM-L6-v2",
+                 local_model: str = "distiluse-base-multilingual-cased-v2",
                  openai_model: str = "text-embedding-3-small",
                  llm_model: str = "gpt-4o-mini",
                  vector_base_dir: str = "data/vector_store"):
@@ -60,12 +60,13 @@ class RAGClient:
         else:
             raise ValueError(f"Unknown embedding provider: {self.embedding_provider}")
 
-        faiss.normalize_L2(vec.reshape(1, -1))
+        vec = vec.reshape(1, -1)
+        faiss.normalize_L2(vec)
         return vec
 
     def retrieve_chunks(self, query: str, top_k: int = TOP_K):
         """Retrieve top_k chunks from vector store."""
-        q_vec = self.embed_query(query).reshape(1, -1)
+        q_vec = self.embed_query(query)
         distances, indices = self.index.search(q_vec, top_k)
 
         retrieved = []
@@ -122,7 +123,7 @@ def main():
                         help="Optional exact path to vector store folder")
     parser.add_argument("--embedding_provider", choices=["local", "openai"], required=True,
                         help="Embedding provider: 'local' uses Sentence-Transformers, 'openai' uses OpenAI API")
-    parser.add_argument("--local_model", default="all-MiniLM-L6-v2",
+    parser.add_argument("--local_model", default="distiluse-base-multilingual-cased-v2",
                         help="Local embeddings model if using 'local'")
     parser.add_argument("--openai_model", default="text-embedding-3-small",
                         help="OpenAI embeddings model if using 'openai'")
