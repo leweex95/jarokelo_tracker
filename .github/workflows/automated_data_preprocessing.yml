@@ -1,0 +1,39 @@
+name: Auto-preprocess newly scraped data
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'jarokelo_tracker/data/raw/*.jsonl'
+
+jobs:
+  preprocess-and-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Install dependencies via Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          export PATH="$HOME/.local/bin:$PATH"
+          poetry install --no-root
+
+      - name: Run preprocessing
+        run: poetry run python jarokelo_tracker/scripts/preprocess_data.py
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add jarokelo_tracker/data/processed/
+          git diff --quiet && git diff --staged --quiet || git commit -m "Auto-update preprocessed data"
+          git push origin master
