@@ -28,13 +28,18 @@ jobs:
           export PATH="$HOME/.local/bin:$PATH"
           poetry install --no-root
 
+      - name: List repo files
+        run: |
+          echo "Current working directory: $(pwd)"
+          ls -R
+
       - name: Run preprocessing
-        run: poetry run python jarokelo_tracker/scripts/preprocess_data.py
+        run: poetry run python ../scripts/preprocess_data.py
 
       - name: Commit and push changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add jarokelo_tracker/data/processed/
+          git add ./data/processed/
           git diff --quiet && git diff --staged --quiet || git commit -m "Auto-update preprocessed data"
           git push origin master
