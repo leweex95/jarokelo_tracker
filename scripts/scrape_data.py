@@ -10,7 +10,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 BASE_URL = "https://jarokelo.hu/bejelentesek"
-DATA_DIR = "data/entries"
+DATA_DIR = "data/raw"
 
 locale.setlocale(locale.LC_TIME, 'hu_HU.UTF-8')
 
@@ -35,12 +35,35 @@ def load_existing_urls(report_date: str) -> set:
     return urls
 
 def save_report(report: dict, existing_urls: set) -> None:
-    """Save a report if it's not already saved."""
+    """Save a report based on its date relative to file's top and bottom."""
     if report["url"] in existing_urls:
         return
     existing_urls.add(report["url"])
-    with open(get_monthly_file(report["date"]), "a", encoding="utf-8") as f:
-        f.write(json.dumps(report, ensure_ascii=False) + "\n")
+
+    file_path = get_monthly_file(report["date"])
+    new_line = json.dumps(report, ensure_ascii=False) + "\n"
+
+    if not os.path.exists(file_path):
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.write(new_line)
+        return
+
+    with open(file_path, "r+", encoding="utf-8") as f:
+        lines = f.readlines()
+        if not lines:
+            f.write(new_line)
+            return
+
+        first_date = json.loads(lines[0])["date"]
+        last_date = json.loads(lines[-1])["date"]
+
+        if report["date"] >= first_date:
+            f.seek(0)
+            f.write(new_line + "".join(lines))
+        elif report["date"] <= last_date:
+            f.seek(0, 2)  # move to end
+            f.write(new_line)
+
 
 def normalize_date(date_str: str) -> str:
     """Convert Hungarian date like '2025. szeptember 15.' to 'YYYY-MM-DD'."""
@@ -116,24 +139,31 @@ def scrape_report(driver, wait, url: str) -> dict:
         "images": images
     }
 
-def scrape_listing_page(driver, wait, page_url: str) -> str:
-    """Scrape all reports from a listing page. Return next page URL or None."""
+def scrape_listing_page(driver, wait, page_url: str, until_date: str = None) -> tuple[str, bool]:
+    """Return next page URL and a flag if we reached the until_date."""
     driver.get(page_url)
+    reached_until = False
     links = [a.get_attribute("href") for a in driver.find_elements(By.CSS_SELECTOR, "article.card a.card__media__bg")]
 
     for link in links:
         report = scrape_report(driver, wait, link)
         existing_urls = load_existing_urls(report["date"])
         save_report(report, existing_urls)
+        if until_date and report["date"] <= until_date:
+            reached_until = True
+            break
+
+    if reached_until:
+        return None, True
 
     next_page_elems = driver.find_elements(By.CSS_SELECTOR, "a.pagination__link")
     for elem in next_page_elems:
         if "Következő" in elem.text:
-            return elem.get_attribute("href")
-    return None
+            return elem.get_attribute("href"), False
+    return None, False
 
 
-def main(headless: bool, start_page: int):
+def main(headless: bool, start_page: int, until_date: str = None):
     os.makedirs(DATA_DIR, exist_ok=True)
 
     options = Options()
@@ -151,7 +181,10 @@ def main(headless: bool, start_page: int):
 
     while page_url:
         print(f"[Page {page_num}] Loading: {page_url}")
-        page_url = scrape_listing_page(driver, wait, page_url)
+        page_url, done = scrape_listing_page(driver, wait, page_url, until_date)
+        if done:
+            print(f"Reached until-date {until_date}. Exiting.")
+            break
         page_num += 1
 
     driver.quit()
@@ -159,9 +192,10 @@ def main(headless: bool, start_page: int):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Jarokelo scraper")
-    parser.add_argument("--headless", type=lambda x: x.lower() in ("true", "1"), default=True,
-                        help="Run browser in headless mode (true/false)")
+    parser.add_argument("--headless", type=lambda x: x.lower() in ("true", "1"), default=True, help="Run browser in headless mode (true/false)")
     parser.add_argument("--start-page", type=int, default=1, help="Page number to start scraping from")
+    parser.add_argument("--until-date", type=str, default=None, help="Scrape until this date (YYYY-MM-DD), inclusive")
+
     args = parser.parse_args()
 
-    main(headless=args.headless, start_page=args.start_page)
+    main(headless=args.headless, start_page=args.start_page, until_date=args.until_date)
