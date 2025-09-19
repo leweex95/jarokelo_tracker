@@ -2,6 +2,7 @@ import os
 import re
 import glob
 import json
+import locale
 import pandas as pd
 from datetime import datetime
 
@@ -9,6 +10,8 @@ RAW_PATTERN = "data/raw/*.jsonl"
 PROCESSED_DIR = "data/processed"
 CHUNK_TARGET_TOKENS = 400
 DATE_FORMAT = "%Y-%m-%d"
+
+locale.setlocale(locale.LC_TIME, "hu_HU.UTF-8")
 
 os.makedirs(PROCESSED_DIR, exist_ok=True)
 
@@ -18,6 +21,27 @@ def load_raw_files(pattern: str) -> pd.DataFrame:
     files = sorted(glob.glob(pattern))
     dfs = [pd.read_json(f, lines=True) for f in files]
     return pd.concat(dfs, ignore_index=True)
+
+
+# extract district from address if district column is missing
+def extract_district(row):
+    if pd.notna(row.get("district")) and row.get("district") != "":
+        return row["district"]
+    addr = row.get("address", "")
+    if addr:
+        parts = [p.strip() for p in addr.split(",")]
+        if len(parts) > 1:
+            return parts[1]  # "III. kerület"
+    return "Unknown"
+
+
+def parse_hu_date(d):
+    if pd.isna(d):
+        return pd.NaT
+    try:
+        return datetime.strptime(d, "%Y. %B %d.")
+    except:
+        return pd.NaT
 
 
 def normalize_text(df: pd.DataFrame) -> pd.DataFrame:
@@ -30,8 +54,8 @@ def normalize_text(df: pd.DataFrame) -> pd.DataFrame:
         .str.lower()
     )
     df = df[df["description"].str.strip() != ""]
-    df["district"] = df.get("district", pd.Series(["Unknown"] * len(df))).fillna("Unknown")
-    df["date"] = pd.to_datetime(df.get("date"), format=DATE_FORMAT, errors="coerce")
+    df["district"] = df.apply(extract_district, axis=1)
+    df["date"] = df["date"].apply(parse_hu_date)
     df["original_id"] = df.get("url", pd.Series(df.index.astype(str)))
     return df
 
@@ -77,10 +101,17 @@ def build_chunks(df: pd.DataFrame) -> tuple[list[dict], list[dict]]:
                 "title": row.get("title", ""),
                 "district": row.get("district", "Unknown"),
                 "status": row.get("status", ""),
-                "tags": row.get("tags", []),
                 "date": row["date"].strftime(DATE_FORMAT) if pd.notna(row["date"]) else None,
                 "url": row.get("url", None),
+                "author": row.get("author", ""),
+                "author_profile": row.get("author_profile", ""),
+                "category": row.get("category", ""),
+                "institution": row.get("institution", ""),
+                "supporter": row.get("supporter", ""),
+                "address": row.get("address", ""),
+                "images": row.get("images", []),
             }
+
             chunks_out.append({"id": cid, "text": ch, "metadata": metadata})
 
     return chunks_out, long_entries
