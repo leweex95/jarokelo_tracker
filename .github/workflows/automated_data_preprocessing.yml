@@ -34,7 +34,7 @@ jobs:
           ls -R
 
       - name: Run preprocessing
-        run: poetry run python ../scripts/preprocess_data.py
+        run: poetry run python ./scripts/preprocess_data.py
 
       - name: Commit and push changes
         run: |
