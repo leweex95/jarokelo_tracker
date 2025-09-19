@@ -40,3 +40,7 @@ Or with OpenAI embeddings:
 - `--embedding`: embedding model  
 - `--api-key`: required only for OpenAI embeddings  
 - Saves vector store to `data/vector_store/<backend>_YYYYMMDDTHHMMSSZ`
+
+## 4. Run the RAG pipeline
+
+    python rag_pipeline.py --query="What are the unresolved issues in Tömő street in District VIII?" --vector_backend=faiss --embedding_provider=local
