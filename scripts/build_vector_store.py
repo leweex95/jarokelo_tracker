@@ -63,9 +63,17 @@ class VectorStoreBuilder:
         collection = client.create_collection(name="issues")
         collection.add(ids=ids, embeddings=embeddings.tolist(), metadatas=metas, documents=docs)
 
-    def build(self):
+    def build(self, overwrite=False):
         embeddings = self.compute_embeddings()
         os.makedirs(VECTOR_DIR, exist_ok=True)
+
+        # remove previous backend folder if overwrite
+        if overwrite:
+            for p in Path(VECTOR_DIR).glob(f"{self.backend}_*"):
+                if p.is_dir():
+                    import shutil
+                    shutil.rmtree(p)
+
         timestamp = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
         outdir = Path(VECTOR_DIR) / f"{self.backend}_{timestamp}"
         outdir.mkdir(parents=True, exist_ok=True)
@@ -90,7 +98,9 @@ if __name__ == "__main__":
                         help="Embedding provider (e.g. 'sentence-transformers/all-MiniLM-L6-v2' or 'text-embedding-ada-002')")
     parser.add_argument("--api-key", default=None,
                         help="OpenAI API key (only if using OpenAI embeddings)")
+    parser.add_argument("--overwrite", action="store_true", help="Overwrite existing vector store for this backend")
+    
     args = parser.parse_args()
 
     builder = VectorStoreBuilder(args.backend, args.embedding, args.api_key)
-    builder.build()
+    builder.build(overwrite=args.overwrite)
