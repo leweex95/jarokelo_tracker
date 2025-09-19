@@ -25,13 +25,8 @@ jobs:
       - name: Install dependencies via Poetry
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
-          export PATH="$HOME/.local/bin:$PATH"
+          $env:Path = "$env:USERPROFILE\.local\bin;$env:Path"
           poetry install --no-root
-
-      - name: List repo files
-        run: |
-          echo "Current working directory: $(pwd)"
-          ls -R
 
       - name: Run preprocessing
         run: poetry run python ./scripts/preprocess_data.py
