@@ -8,6 +8,7 @@ import numpy as np
 import faiss
 from sentence_transformers import SentenceTransformer
 import openai
+import levisllmhub.chatgpt.chatgpt as chatgpt_client
 
 TOP_K = 6
 
@@ -115,6 +116,7 @@ Question:
 
 
 def main():
+
     parser = argparse.ArgumentParser(description="RAG query for civic issues")
     parser.add_argument("--query", required=True, help="User query")
     parser.add_argument("--vector_backend", choices=["faiss", "chroma"], required=True,

@@ -14,7 +14,8 @@ dependencies = [
     "sentence-transformers (>=5.1.0,<6.0.0)",
     "faiss-cpu (>=1.12.0,<2.0.0)",
     "chromadb (>=1.1.0,<2.0.0)",
-    "openai (>=1.108.0,<2.0.0)"
+    "openai (>=1.108.0,<2.0.0)",
+    "levisllmhub @ git+https://github.com/leweex95/levisLLMhub.git",
 ]
 
 [tool.poetry]
