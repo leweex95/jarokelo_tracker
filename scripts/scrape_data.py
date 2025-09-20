@@ -206,7 +206,14 @@ def main(headless: bool, start_page: int, until_date: str = None):
     options = Options()
     if headless:
         options.add_argument("--headless")
-    options.add_experimental_option("excludeSwitches", ["enable-logging"])
+
+    options.add_experimental_option("excludeSwitches", ["enable-logging", "enable-automation"])
+    options.add_argument("--disable-gpu")
+    options.add_argument("--disable-extensions")
+    options.add_argument("--disable-background-networking")
+    options.add_argument("--disable-sync")
+    options.add_argument("--disable-component-update")
+
     driver = webdriver.Chrome(options=options)
     wait = WebDriverWait(driver, 10)
 
@@ -240,6 +247,6 @@ if __name__ == "__main__":
         oldest_date, total = get_scraping_resume_point()
         page = max(total // 8 - 1, 1)
         print(f"Proceeding with scraping from date: {oldest_date} and from page number: {page}")
-        main(headless=args.headless, start_page=page, until_date=args.until_date or oldest_date)
+        main(headless=args.headless, start_page=page, until_date=args.until_date)
     else:
         main(headless=args.headless, start_page=args.start_page, until_date=args.until_date)
