@@ -67,8 +67,26 @@ def save_report(report: dict, existing_urls: set) -> None:
 
 def normalize_date(date_str: str) -> str:
     """Convert Hungarian date like '2025. szeptember 15.' to 'YYYY-MM-DD'."""
-    dt = datetime.strptime(date_str.strip(), "%Y. %B %d.")
-    return dt.strftime("%Y-%m-%d")
+    HU_MONTHS = {
+        "január": "01",
+        "február": "02",
+        "március": "03",
+        "április": "04",
+        "május": "05",
+        "június": "06",
+        "július": "07",
+        "augusztus": "08",
+        "szeptember": "09",
+        "október": "10",
+        "november": "11",
+        "december": "12",
+    }
+
+    parts = date_str.strip(". ").split()
+    year = parts[0].replace(".", "")
+    month = HU_MONTHS[parts[1].lower()]
+    day = parts[2].replace(".", "")
+    return f"{year}-{month}-{day.zfill(2)}"
 
 def scrape_report(driver, wait, url: str) -> dict:
     """Scrape a single report page and return its data."""
@@ -162,6 +180,25 @@ def scrape_listing_page(driver, wait, page_url: str, until_date: str = None) -> 
             return elem.get_attribute("href"), False
     return None, False
 
+def get_scraping_resume_point() -> tuple[str, int]:
+    """Determine resume point: oldest scraped report date and total saved reports."""
+    all_files = sorted(
+        [os.path.join(DATA_DIR, f) for f in os.listdir(DATA_DIR) if f.endswith(".jsonl")]
+    )
+    if not all_files:
+        return None, 0
+
+    oldest_date = None
+    total = 0
+    for f in all_files:
+        with open(f, encoding="utf-8") as fh:
+            lines = fh.readlines()
+            total += len(lines)
+            if lines:
+                last_date = json.loads(lines[-1])["date"]
+                if oldest_date is None or last_date < oldest_date:
+                    oldest_date = last_date
+    return oldest_date, total
 
 def main(headless: bool, start_page: int, until_date: str = None):
     os.makedirs(DATA_DIR, exist_ok=True)
@@ -195,7 +232,14 @@ if __name__ == "__main__":
     parser.add_argument("--headless", type=lambda x: x.lower() in ("true", "1"), default=True, help="Run browser in headless mode (true/false)")
     parser.add_argument("--start-page", type=int, default=1, help="Page number to start scraping from")
     parser.add_argument("--until-date", type=str, default=None, help="Scrape until this date (YYYY-MM-DD), inclusive")
-
+    parser.add_argument("--continue-scraping", action="store_true", help="Resume automatically based on existing data")
+    
     args = parser.parse_args()
-
-    main(headless=args.headless, start_page=args.start_page, until_date=args.until_date)
+    
+    if args.continue_scraping:
+        oldest_date, total = get_scraping_resume_point()
+        page = max(total // 8 - 1, 1)
+        print(f"Proceeding with scraping from date: {oldest_date} and from page number: {page}")
+        main(headless=args.headless, start_page=page, until_date=args.until_date or oldest_date)
+    else:
+        main(headless=args.headless, start_page=args.start_page, until_date=args.until_date)
