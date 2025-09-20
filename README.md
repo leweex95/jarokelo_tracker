@@ -33,15 +33,10 @@ With SentenceTransformers:
 
     poetry run python ./scripts/build_vector_store.py --backend faiss --embedding sentence-transformers/distiluse-base-multilingual-cased-v2
 
-Or with OpenAI embeddings:
-
-    poetry run python ./scripts/build_vector_store.py --backend faiss --embedding sentence-transformers/distiluse-base-multilingual-cased-v2
-
 - `--backend`: `faiss` or `chroma`  
-- `--embedding`: embedding model  
-- `--api-key`: required only for OpenAI embeddings  
+- `--embedding`: embedding model
 - Saves vector store to `data/vector_store/<backend>_YYYYMMDDTHHMMSSZ`
 
 ## 4. Run the RAG pipeline
 
-    poetry run python ./src/jarokelo_tracker/rag_pipeline.py --query="What are the unresolved issues in Tömő street in District VIII?" --vector_backend=faiss --embedding_provider=local
+    poetry run python ./src/jarokelo_tracker/rag_pipeline.py --query "What issues are not yet resolved in district 8 in Budapest?" --vector-backend "faiss" --embedding-provider "local" --local-model "distiluse-base-multilingual-cased-v2" --headless true --top_k 20

@@ -1217,7 +1217,7 @@ adal = ["adal (>=1.0.2)"]
 
 [[package]]
 name = "levisllmhub"
-version = "0.3.1"
+version = "0.3.2"
 description = "My personal LLM hub to connect to web-based LLMs"
 optional = false
 python-versions = "*"
@@ -1229,7 +1229,7 @@ develop = false
 type = "git"
 url = "https://github.com/leweex95/levisLLMhub.git"
 reference = "HEAD"
-resolved_reference = "f37159b28e9b3d1cec8a0383bb4d5815b7dda1af"
+resolved_reference = "eea94ce8009ba44b17c667f3799630538b5ff4d5"
 
 [[package]]
 name = "markdown-it-py"
