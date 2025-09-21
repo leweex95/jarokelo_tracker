@@ -35,7 +35,17 @@ def load_existing_urls(report_date: str) -> set:
     return urls
 
 def save_report(report: dict, existing_urls: set) -> None:
-    """Save a report based on its date relative to file's top and bottom."""
+    """
+    Save a report to the monthly JSONL file, organizing entries by date.
+
+    Ordering logic:
+    - If the report URL already exists in the current file, it is skipped.
+    - If all existing entries in the file have the same date, new reports are always appended to the bottom.
+    - Otherwise:
+        - If the report's date is newer than or equal to the first line, it is prepended to the top.
+        - If the report's date is older than or equal to the last line, it is appended to the bottom.
+    - This ensures chronological ordering while handling single-date files or files at the start of scraping consistently.
+    """
     if report["url"] in existing_urls:
         return
     existing_urls.add(report["url"])
@@ -54,16 +64,21 @@ def save_report(report: dict, existing_urls: set) -> None:
             f.write(new_line)
             return
 
-        first_date = json.loads(lines[0])["date"]
-        last_date = json.loads(lines[-1])["date"]
-
-        if report["date"] >= first_date:
-            f.seek(0)
-            f.write(new_line + "".join(lines))
-        elif report["date"] <= last_date:
-            f.seek(0, 2)  # move to end
+        existing_dates = {json.loads(line)["date"] for line in lines}
+        if len(existing_dates) == 1:
+            # all lines have the same date → append
+            f.seek(0, 2)
             f.write(new_line)
+        else:
+            first_date = json.loads(lines[0])["date"]
+            last_date = json.loads(lines[-1])["date"]
 
+            if report["date"] >= first_date:
+                f.seek(0)
+                f.write(new_line + "".join(lines))
+            elif report["date"] <= last_date:
+                f.seek(0, 2)  # move to end
+                f.write(new_line)
 
 def normalize_date(date_str: str) -> str:
     """Convert Hungarian date like '2025. szeptember 15.' to 'YYYY-MM-DD'."""
@@ -213,6 +228,7 @@ def main(headless: bool, start_page: int, until_date: str = None):
     options.add_argument("--disable-background-networking")
     options.add_argument("--disable-sync")
     options.add_argument("--disable-component-update")
+    options.add_argument("--log-level=3")  # suppress INFO, WARNING, and ERROR from Chrome subprocess
 
     driver = webdriver.Chrome(options=options)
     wait = WebDriverWait(driver, 10)
