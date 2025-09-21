@@ -6,7 +6,7 @@ from datetime import datetime
 import numpy as np
 
 
-CHUNKS_PATH = "data/processed/issues_chunks.jsonl"
+CHUNKS_PATH = "data/processed/rag/issues_chunks.jsonl"
 VECTOR_DIR = "data/vector_store"
 
 

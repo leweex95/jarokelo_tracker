@@ -25,7 +25,7 @@ Run:
 - Loads all `data/raw/*.jsonl` files  
 - Cleans and normalizes text, date, and district  
 - Splits long descriptions into ~400-token chunks  
-- Saves results to `data/processed/issues_chunks.jsonl`  
+- Saves results to `data/processed/rag/issues_chunks.jsonl`  
 
 ## 3. Build vector store
 
