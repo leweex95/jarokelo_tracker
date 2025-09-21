@@ -126,6 +126,7 @@ with st.form("query_form", clear_on_submit=False):
 
 # --- When query submitted ---
 if submitted and query:
+    start_time = time.time()
     with st.spinner("🔎 Processing your request, please wait..."):
         try:
             cmd = [
