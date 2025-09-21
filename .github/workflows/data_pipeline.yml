@@ -51,7 +51,7 @@ jobs:
           poetry install --no-interaction --no-root
 
   preprocess:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: setup
     steps:
       - name: Checkout repo
@@ -89,7 +89,7 @@ jobs:
           git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master
 
   vectorstore:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: preprocess
     steps:
       - name: Checkout repo
@@ -103,7 +103,6 @@ jobs:
         with:
           path: |
             ~/.cache/pypoetry
-            ./.venv
           key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
           restore-keys: |
             ${{ runner.os }}-poetry-
