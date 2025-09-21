@@ -80,9 +80,13 @@ if st.session_state.dark_mode:
     .stTextInput>div>div>input::placeholder {
         color: #F5F5F5 !important;
     }
-    /* Only the label above text input */
+    /* Label above text input */
     .stTextInput + .stMarkdown p,
     .stTextInput label p {
+        color: #F5F5F5 !important;
+    }
+    /* Checkbox label */
+    .stCheckbox label, .stCheckbox div {
         color: #F5F5F5 !important;
     }
     /* Buttons */
@@ -116,17 +120,45 @@ else:
         unsafe_allow_html=True
     )
 
-# --- Input ---
+# --- Form for query input ---
 with st.form("query_form", clear_on_submit=False):
     query = st.text_input(
         "💡 What do you want to ask from my Járókelő RAG?",
         placeholder="Type your question and press Enter..."
     )
-    submitted = st.form_submit_button("Ask")
+
+    # Put button and counter in the same horizontal row
+    col_btn, col_counter = st.columns([1, 1])
+    submitted = col_btn.form_submit_button("Ask")
+    counter_placeholder = col_counter.empty()
+
+# Keep checkbox and debug area in the same container
+with st.container():
+    col_check, _ = st.columns([1, 1])
+    debug_mode = col_check.checkbox(
+        "Debug mode (show all RAG logs)",
+        value=st.session_state.get("debug_mode", False)
+    )
+    st.session_state.debug_mode = debug_mode
+
+    debug_text_area = st.empty()
+    if debug_mode:
+        debug_text_area.text_area(
+            "Debug log",
+            value="\n".join(st.session_state.debug_lines),
+            height=200
+        )
+    else:
+        debug_text_area.empty()
+
 
 # --- When query submitted ---
 if submitted and query:
     start_time = time.time()
+    answer_placeholder = st.empty()
+    counter_placeholder.markdown("Running... 0 sec")
+    debug_content = ""
+
     with st.spinner("🔎 Processing your request, please wait..."):
         try:
             cmd = [
@@ -139,29 +171,33 @@ if submitted and query:
                 "--top_k", "20"
             ]
 
-            # Use Popen to allow polling
             process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-            # result = subprocess.run(
-            #     cmd, capture_output=True, text=True, check=True
-            # )
 
             while True:
                 if process.poll() is not None:
                     break
+
+                if st.session_state.debug_mode:
+                    line = process.stdout.readline()
+                    if line:
+                        debug_content += line
+                        debug_text_area.text_area("Debug log", value=debug_content, height=200)
+
                 elapsed = int(time.time() - start_time)
-                counter_placeholder.markdown(f"⏱ Running... {elapsed} sec")
+                minutes, seconds = divmod(elapsed, 60)
+                counter_placeholder.markdown(
+                    f"Running... {minutes} min {seconds} sec" if minutes else f"Running... {seconds} sec"
+                )
                 time.sleep(1)
 
             stdout, stderr = process.communicate()
+            if st.session_state.debug_mode:
+                debug_content += stdout
+                debug_text_area.text_area("Debug log", value=debug_content, height=200)
 
-            # Extract only the final RAG output. No need to present all the RAG-logs to streamlit users
+            # Extract final RAG output
             marker = "FINAL RAG OUTPUT:"
-            # stdout = result.stdout
-            if marker in stdout:
-                answer = stdout.split(marker, 1)[1].strip()
-            else:
-                answer = "No RAG output found."
-
+            answer = stdout.split(marker, 1)[1].strip() if marker in stdout else "No RAG output found."
             st.session_state.last_answer = answer
 
             total_time = int(time.time() - start_time)
