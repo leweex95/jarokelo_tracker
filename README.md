@@ -40,3 +40,8 @@ With SentenceTransformers:
 ## 4. Run the RAG pipeline
 
     poetry run python ./src/jarokelo_tracker/rag_pipeline.py --query "What issues are not yet resolved in district 8 in Budapest?" --vector-backend "faiss" --embedding-provider "local" --local-model "distiluse-base-multilingual-cased-v2" --headless true --top_k 20
+
+
+## Automated workflows
+
+Note: Due to Github Actions workflows having a max. 10 GB cache limit, it is not possible to cache the entire .venv and project dependencies for speedup. Therefore, I sticked with a less efficient workflow in which we are forced to reinstall all dependencies in each workflow job. A more resource efficient method in this case would certainly be to drop job separation and integrate everything into one huge job but I intentionally chose to gave preference to the principle of traceability, ensuring that all steps of a complex pipeline are transparently visible. In a real-world production setup, we would certainly not have such limitations on cache size, hence keeping the pipeline intact is the most production-ready way to set up this workflow. But the 10 GB limit still allowed me to cache only `~/.cache/pypoetry`, still speeding up installation of dependencies, as the wheel files are preserved in between workflow jobs.

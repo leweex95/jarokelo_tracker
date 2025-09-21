@@ -36,12 +36,10 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.PAT_TOKEN }}
 
-      - name: Cache Poetry dependencies
+      - name: Cache Poetry packages
         uses: actions/cache@v3
         with:
-          path: |
-            ~/.cache/pypoetry
-            ./.venv
+          path: ~/.cache/pypoetry
           key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
           restore-keys: |
             ${{ runner.os }}-poetry-
@@ -67,7 +65,6 @@ jobs:
         with:
           path: |
             ~/.cache/pypoetry
-            ./.venv
           key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
           restore-keys: |
             ${{ runner.os }}-poetry-
