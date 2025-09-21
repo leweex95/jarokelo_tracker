@@ -69,10 +69,21 @@ if st.session_state.dark_mode:
         color: #F5F5F5 !important;
     }
     /* Inputs */
-    .stTextInput>div>div>input, .stTextInput>div>div>label, .stTextInput>div>div>p {
+    .stTextInput>div>div>input,
+    .stTextInput>div>div>label,
+    .stTextInput .stMarkdown p {
         background: #262730;
         color: #F5F5F5 !important;
         border-radius: 8px;
+    }
+    /* Placeholder text */
+    .stTextInput>div>div>input::placeholder {
+        color: #F5F5F5 !important;
+    }
+    /* Only the label above text input */
+    .stTextInput + .stMarkdown p,
+    .stTextInput label p {
+        color: #F5F5F5 !important;
     }
     /* Buttons */
     button { 
@@ -89,7 +100,6 @@ if st.session_state.dark_mode:
     }
     </style>
     """, unsafe_allow_html=True)
-
 
 else:
     st.markdown(
@@ -127,11 +137,38 @@ if submitted and query:
                 "--headless", "true",
                 "--top_k", "20"
             ]
-            result = subprocess.run(
-                cmd, capture_output=True, text=True, check=True
+
+            # Use Popen to allow polling
+            process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            # result = subprocess.run(
+            #     cmd, capture_output=True, text=True, check=True
+            # )
+
+            while True:
+                if process.poll() is not None:
+                    break
+                elapsed = int(time.time() - start_time)
+                counter_placeholder.markdown(f"⏱ Running... {elapsed} sec")
+                time.sleep(1)
+
+            stdout, stderr = process.communicate()
+
+            # Extract only the final RAG output. No need to present all the RAG-logs to streamlit users
+            marker = "FINAL RAG OUTPUT:"
+            # stdout = result.stdout
+            if marker in stdout:
+                answer = stdout.split(marker, 1)[1].strip()
+            else:
+                answer = "No RAG output found."
+
+            st.session_state.last_answer = answer
+
+            total_time = int(time.time() - start_time)
+            answer_placeholder.markdown(
+                f"<div class='result-box'>{answer}<br><small>Completed in {total_time} sec</small></div>",
+                unsafe_allow_html=True
             )
-            answer = result.stdout.strip()
-            st.session_state.last_answer = answer or "⚠️ No response received."
+
         except subprocess.CalledProcessError as e:
             st.session_state.last_answer = f"❌ Error running pipeline:\n{e.stderr}"
 

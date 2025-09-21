@@ -41,6 +41,9 @@ With SentenceTransformers:
 
     poetry run python ./src/jarokelo_tracker/rag_pipeline.py --query "What issues are not yet resolved in district 8 in Budapest?" --vector-backend "faiss" --embedding-provider "local" --local-model "distiluse-base-multilingual-cased-v2" --headless true --top_k 20
 
+## 5. Run the streamlit app
+
+    poetry run streamlit run streamlit_app/app.py
 
 ## Automated workflows
 
