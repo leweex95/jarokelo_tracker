@@ -172,21 +172,25 @@ def scrape_report(driver, wait, url: str) -> dict:
         "images": images
     }
 
-def scrape_listing_page(driver, wait, page_url: str, until_date: str = None) -> tuple[str, bool]:
-    """Return next page URL and a flag if we reached the until_date."""
+def scrape_listing_page(driver, wait, page_url: str, global_urls: set, until_date: str = None, stop_on_existing: bool = True) -> tuple[str, bool]:
+    """Return next page URL and a flag if we reached an already scraped report or until_date."""
     driver.get(page_url)
-    reached_until = False
+    reached_done = False
     links = [a.get_attribute("href") for a in driver.find_elements(By.CSS_SELECTOR, "article.card a.card__media__bg")]
 
     for link in links:
-        report = scrape_report(driver, wait, link)
-        existing_urls = load_existing_urls(report["date"])
-        save_report(report, existing_urls)
-        if until_date and report["date"] <= until_date:
-            reached_until = True
+        if link in global_urls and stop_on_existing:
+            reached_done = True
             break
 
-    if reached_until:
+        if link not in global_urls:
+            report = scrape_report(driver, wait, link)
+            save_report(report, global_urls)  # update global set
+            if until_date and report["date"] <= until_date:
+                reached_done = True
+                break
+
+    if reached_done:
         return None, True
 
     next_page_elems = driver.find_elements(By.CSS_SELECTOR, "a.pagination__link")
@@ -194,6 +198,7 @@ def scrape_listing_page(driver, wait, page_url: str, until_date: str = None) -> 
         if "Következő" in elem.text:
             return elem.get_attribute("href"), False
     return None, False
+
 
 def get_scraping_resume_point() -> tuple[str, int]:
     """Determine resume point: oldest scraped report date and total saved reports."""
@@ -215,35 +220,52 @@ def get_scraping_resume_point() -> tuple[str, int]:
                     oldest_date = last_date
     return oldest_date, total
 
-def main(headless: bool, start_page: int, until_date: str = None):
-    os.makedirs(DATA_DIR, exist_ok=True)
-
+def _get_chrome_options(headless: bool) -> Options:
     options = Options()
     if headless:
         options.add_argument("--headless")
-
     options.add_experimental_option("excludeSwitches", ["enable-logging", "enable-automation"])
     options.add_argument("--disable-gpu")
     options.add_argument("--disable-extensions")
     options.add_argument("--disable-background-networking")
     options.add_argument("--disable-sync")
     options.add_argument("--disable-component-update")
-    options.add_argument("--log-level=3")  # suppress INFO, WARNING, and ERROR from Chrome subprocess
+    options.add_argument("--log-level=3")
+    return options
 
+def main(headless: bool, start_page: int, until_date: str = None, stop_on_existing: bool = True):
+
+    os.makedirs(DATA_DIR, exist_ok=True)
+
+    options = _get_chrome_options()
     driver = webdriver.Chrome(options=options)
     wait = WebDriverWait(driver, 10)
 
+    # --- Prepare global set of already scraped URLs ---
+    global_urls = set()
+    for f in os.listdir(DATA_DIR):
+        if f.endswith(".jsonl"):
+            with open(os.path.join(DATA_DIR, f), encoding="utf-8") as fh:
+                for line in fh:
+                    try:
+                        global_urls.add(json.loads(line)["url"])
+                    except json.JSONDecodeError:
+                        continue
+
+    # --- Determine starting page ---
     if start_page <= 1:
         page_url = BASE_URL
     else:
         page_url = f"{BASE_URL}?page={start_page}"
     page_num = start_page
 
+    # --- Scraping loop ---
     while page_url:
         print(f"[Page {page_num}] Loading: {page_url}")
-        page_url, done = scrape_listing_page(driver, wait, page_url, until_date)
+        # page_url, done = scrape_listing_page(driver, wait, page_url, global_urls, until_date)
+        page_url, done = scrape_listing_page(driver, wait, page_url, global_urls, until_date, stop_on_existing=stop_on_existing)
         if done:
-            print(f"Reached until-date {until_date}. Exiting.")
+            print("Found already-scraped report or reached until-date. Exiting.")
             break
         page_num += 1
 
@@ -263,6 +285,6 @@ if __name__ == "__main__":
         oldest_date, total = get_scraping_resume_point()
         page = max(total // 8 - 1, 1)
         print(f"Proceeding with scraping from date: {oldest_date} and from page number: {page}")
-        main(headless=args.headless, start_page=page, until_date=args.until_date)
+        main(headless=args.headless, start_page=page, until_date=args.until_date, stop_on_existing=False)
     else:
-        main(headless=args.headless, start_page=args.start_page, until_date=args.until_date)
+        main(headless=args.headless, start_page=args.start_page, until_date=args.until_date, stop_on_existing=True)
