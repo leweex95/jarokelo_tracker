@@ -1,4 +1,4 @@
-name: Run data pipeline to build the vector store for RAG
+name: Run data pipeline
 
 on:
   push:
@@ -84,15 +84,26 @@ jobs:
       - name: Run RAG preprocessing
         run: poetry run python ./src/jarokelo_tracker/preprocess/preprocess_rag.py
 
-      - name: Commit and push processed data
+      - name: Configure Git
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+      
+      - name: Commit and push changes
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor }}@users.noreply.github.com"
-          git add ./data/processed/
-          git diff --quiet && git diff --staged --quiet || git commit -m "chore(preprocess): auto-update processed data for RAG"
-          git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master
+          git add ./data/processed/rag/
+          git diff --quiet && git diff --staged --quiet || git commit -m "[Auto-commit] Update processed data for RAG [skip ci]"
+          
+          RETRIES=10
+          for i in $(seq 1 $RETRIES); do
+            git pull --rebase
+            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master && break || {
+              echo "Push failed, retrying ($i/$RETRIES)..."
+              sleep 3
+            }
+          done
 
   preprocess_eda:
     runs-on: ubuntu-latest
@@ -125,15 +136,26 @@ jobs:
       - name: Run EDA preprocessing
         run: poetry run python ./src/jarokelo_tracker/preprocess/preprocess_eda.py
 
-      - name: Commit and push processed data
+      - name: Configure Git
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+      
+      - name: Commit and push changes
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor }}@users.noreply.github.com"
-          git add ./data/processed/
-          git diff --quiet && git diff --staged --quiet || git commit -m "chore(preprocess): auto-update processed data for EDA and PowerBI"
-          git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master
+          git add ./data/processed/eda/
+          git diff --quiet && git diff --staged --quiet || git commit -m "[Auto-commit] Update processed data for EDA [skip ci]"
+          
+          RETRIES=10
+          for i in $(seq 1 $RETRIES); do
+            git pull --rebase
+            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master && break || {
+              echo "Push failed, retrying ($i/$RETRIES)..."
+              sleep 3
+            }
+          done
 
   generate_reports:
     runs-on: ubuntu-latest
@@ -161,15 +183,27 @@ jobs:
       - name: Generate CSV reports for PowerBI
         run: poetry run python ./src/jarokelo_tracker/eda/generate_csv_reports.py
 
-      - name: Commit and push CSV reports
+      - name: Configure Git
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+      
+      - name: Commit and push changes
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor }}@users.noreply.github.com"
           git add ./data/processed/powerbi/
-          git diff --quiet && git diff --staged --quiet || git commit -m "chore(eda): update PowerBI CSV reports"
-          git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master
+          git diff --quiet && git diff --staged --quiet || git commit -m "[Auto-commit] Update reports for PowerBI [skip ci]"
+          
+          RETRIES=10
+          for i in $(seq 1 $RETRIES); do
+            git pull --rebase
+            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master && break || {
+              echo "Push failed, retrying ($i/$RETRIES)..."
+              sleep 3
+            }
+          done
+
           
   # preprocess:
   #   runs-on: ubunu-latest
@@ -254,19 +288,28 @@ jobs:
 
       - name: Build vector store
         run: |
-          poetry run python ./scripts/build_vector_store.py \
-            --backend "${{ needs.setup.outputs.backend }}" \
-            --embedding "${{ needs.setup.outputs.embedding }}"
+          poetry run python ./scripts/build_vector_store.py --backend "${{ needs.setup.outputs.backend }}" --embedding "${{ needs.setup.outputs.embedding }}"
 
-      - name: Commit and push vector store
+      - name: Configure Git
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+    
+      - name: Commit and push changes
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor }}@users.noreply.github.com"
           git add ./data/vector_store/
-          git diff --quiet && git diff --staged --quiet || git commit -m "chore(vector): auto-update vector store (${{ needs.setup.outputs.backend }}, ${{ needs.setup.outputs.embedding }})"
-          git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master
+          git diff --quiet && git diff --staged --quiet || git commit -m "[Auto-commit] Update vector store [skip ci]"
+          
+          RETRIES=10
+          for i in $(seq 1 $RETRIES); do
+            git pull --rebase
+            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master && break || {
+              echo "Push failed, retrying ($i/$RETRIES)..."
+              sleep 3
+            }
+          done
 
   cleanup_vectorstore:
     runs-on: ubuntu-latest
@@ -312,5 +355,5 @@ jobs:
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
           git add ./data/vector_store/
-          git diff --quiet && git diff --staged --quiet || git commit -m "chore(vector): cleanup old ${BACKEND} vector stores"
+          git diff --quiet && git diff --staged --quiet || git commit -m "[Auto-commit] Cleanup old vector store(s)"
           git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master
