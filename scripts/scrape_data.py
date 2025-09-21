@@ -237,7 +237,7 @@ def main(headless: bool, start_page: int, until_date: str = None, stop_on_existi
 
     os.makedirs(DATA_DIR, exist_ok=True)
 
-    options = _get_chrome_options()
+    options = _get_chrome_options(headless=headless)
     driver = webdriver.Chrome(options=options)
     wait = WebDriverWait(driver, 10)
 
