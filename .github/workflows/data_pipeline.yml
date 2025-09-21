@@ -27,9 +27,12 @@ jobs:
       - name: Set variables
         id: set-vars
         run: |
-          echo "backend=${{ github.event.inputs.backend }}" >> $GITHUB_OUTPUT
-          echo "embedding=${{ github.event.inputs.embedding }}" >> $GITHUB_OUTPUT
-
+          # Push-triggered workflow now triggers with a default of 'faiss', modify if needed!
+          echo "backend=${{ github.event.inputs.backend || 'faiss' }}" >> $GITHUB_OUTPUT
+          # Push-triggered workflow now triggers with a default of 'sentence-transformers/distiluse-base-multilingual-cased-v2', modify if needed!
+          echo "embedding=${{ github.event.inputs.embedding || 'sentence-transformers/distiluse-base-multilingual-cased-v2' }}" >> $GITHUB_OUTPUT
+          echo "DEBUG: backend=${{ github.event.inputs.backend }}, embedding=${{ github.event.inputs.embedding }}"
+        
       - name: Checkout repo
         uses: actions/checkout@v3
         with:
@@ -60,6 +63,12 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.PAT_TOKEN }}
 
+      - name: Debug propagated outputs (debug, can be removed later)
+        run: |
+          echo "Setup outputs:"
+          echo "backend=${{ needs.setup.outputs.backend }}"
+          echo "embedding=${{ needs.setup.outputs.embedding }}"
+        
       - name: Restore Poetry cache
         uses: actions/cache@v3
         with:
@@ -103,6 +112,12 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.PAT_TOKEN }}
 
+      - name: Debug propagated outputs (debug, can be removed later)
+        run: |
+          echo "Setup outputs:"
+          echo "backend=${{ needs.setup.outputs.backend }}"
+          echo "embedding=${{ needs.setup.outputs.embedding }}"
+  
       - name: Restore Poetry cache
         uses: actions/cache@v3
         with:
