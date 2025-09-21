@@ -27,8 +27,8 @@ jobs:
       - name: Set variables
         id: set-vars
         run: |
-          echo "backend=${{ github.event.inputs.backend || 'faiss' }}" >> $GITHUB_OUTPUT
-          echo "embedding=${{ github.event.inputs.embedding || 'sentence-transformers/distiluse-base-multilingual-cased-v2' }}" >> $GITHUB_OUTPUT
+          echo "backend=${{ github.event.inputs.backend }}" >> $GITHUB_OUTPUT
+          echo "embedding=${{ github.event.inputs.embedding }}" >> $GITHUB_OUTPUT
 
       - name: Checkout repo
         uses: actions/checkout@v3
