@@ -16,6 +16,7 @@ dependencies = [
     "chromadb (>=1.1.0,<2.0.0)",
     "levisllmhub @ git+https://github.com/leweex95/levisLLMhub.git",
     "streamlit (>=1.49.1,<2.0.0)",
+    "markdown (>=3.9,<4.0)",
 ]
 
 [tool.poetry]

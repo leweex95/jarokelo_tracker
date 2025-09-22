@@ -89,17 +89,18 @@ for category, model_names in MODELS.items():
                 })
 
 # --- Save results ---
+friendly_title = f"{datetime.now():%Y-%m-%d %H:%M} - Embedding comparison on {len(corpus)} entries"
+md_lines = [f"## {friendly_title}\n", "### Corpus info\n", corpus_info_md,  "### Embedding comparison results\n", "---\n"]
 
-md_lines = ["# Embedding Comparison Results\n", "## Corpus Info\n", corpus_info_md, "---\n"]
 
 for category, model_names in MODELS.items():
     for model_name in model_names:
-        md_lines.append(f"## {model_name} ({category})\n")
+        md_lines.append(f"### {model_name} ({category})\n")
         md_lines.append("| Query | Top1 | Top2 | Top3 |")
         md_lines.append("|-------|------|------|------|")
         for r in filter(lambda x: x["Model"]==model_name, results):
             md_lines.append(f"| {r['Query']} | {r['Top1']} | {r['Top2']} | {r['Top3']} |")
-        md_lines.append("")  # empty line between tables
+        md_lines.append("")
 
 OUT_PATH.write_text("\n".join(md_lines), encoding="utf-8")
 print(f"Results saved to {OUT_PATH}")
