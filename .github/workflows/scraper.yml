@@ -1,0 +1,58 @@
+name: Data scraper
+
+on:
+  schedule:
+    - cron: "0 22 * * *"
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Cache Poetry packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/pypoetry/cache
+            ~/.cache/pypoetry/artifacts
+          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
+          restore-keys: ${{ runner.os }}-poetry-
+
+      - name: Set up Python & Poetry
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade poetry==2.2.0
+          poetry install --no-interaction --no-root
+
+      - name: Run scraper
+        run: |
+          UNTIL_DATE=$(date -d "2 days ago" +%Y-%m-%d)
+          echo "Scraping until: $UNTIL_DATE"
+          poetry run python ./scripts/scrape_data.py --headless true --until-date "$UNTIL_DATE"
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+
+      - name: Commit and push scraped data
+        env:
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          git add ./data/raw/
+          git diff --quiet && git diff --staged --quiet || git commit -m "[Auto-commit] Add new scraped data [skip ci]"
+          
+          RETRIES=10
+          for i in $(seq 1 $RETRIES); do
+            git pull --rebase
+            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master && break || {
+              echo "Push failed, retrying ($i/$RETRIES)..."
+              sleep 3
+            }
+          done
