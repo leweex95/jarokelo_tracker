@@ -1,0 +1,54 @@
+name: Update Github Page
+
+on:
+  workflow_dispatch:
+
+jobs:
+  aggregate:
+    runs-on: ubuntu-latest
+    outputs:
+      html_updated: ${{ steps.check_output.outputs.updated }}
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    # Only Python installation for fast execution; no need for Poetry overhead
+    - name: Install dependencies
+      run: pip install pandas
+
+    - name: Run aggregator
+      id: check_output
+      run: |
+        python experiments/utils/embedding_results_aggregator.py
+        echo "updated=true" >> $GITHUB_OUTPUT
+
+  publish:
+    needs: aggregate
+    runs-on: ubuntu-latest
+    if: needs.aggregate.outputs.html_updated == 'true'
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Setup Git
+      run: |
+        git config user.name "github-actions"
+        git config user.email "github-actions@github.com"
+
+    - name: Commit & push updated docs
+      run: |
+        git add docs/
+        git diff --quiet && git diff --staged --quiet || git commit -m "[Auto-commit] Github Pages page update [skip ci]"
+        RETRIES=10
+        for i in $(seq 1 $RETRIES); do
+        git pull --rebase
+        git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master && break || {
+            echo "Push failed, retrying ($i/$RETRIES)..."
+            sleep 3
+        }
+        done

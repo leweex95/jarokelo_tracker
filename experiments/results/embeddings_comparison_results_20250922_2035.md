@@ -1,0 +1,1353 @@
+# Embedding Comparison Results
+
+## Corpus Info
+
+**Full corpus size:** 10905
+**Eval corpus size:** 200
+**Date range:** 2025-03-19 → 2025-09-22
+
+---
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** kátyú az úton
+- Top1: kérem az illetékest, hogy foltozzák be a képen látható kátyút!
+- Top2: kérem az illetékest, hogy a képen látható kátyút tömjék be!
+- Top3: van egy óriàs kàtyú az i.kerületben a pàrduc utca naphegy tèr sarkàn.
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** pothole in the road
+- Top1: frissítés: 2025.04.08. trafficom válasza: „a jelzett műtárgy nem a trafficom kft. tulajdona, ill. nem tartozik cégünk üzemeltetése alá.” ----- tönkrement fedlap a millenniumtelepi hév megállóban a haraszti út 157 szemben.
+- Top2: kiálló fedlap
+- Top3: kérem az illetékest, hogy a képen látható kátyút tömjék be!
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** hibás közvilágítás
+- Top1: kedves illetékes! az aknatető középső része hiányos. köszönöm!
+- Top2: a szabó ilonka utcáról a hunyadi jános útra felvezető lépcső aljában található vízelvezető rácsa beszakadt, és korrodálódott, nagyon balesetveszélyes. köszönjük a javítását/cseréjét.
+- Top3: ezt a szelektív hulladékgyűjtő borításgátlót kérem, tegyék a serény utca 1 környékén lévő szelektív gyűjtőknek, hogy az ottani borogatásokat megelőzzék. köszönöm.
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** broken streetlight
+- Top1: évek óta rohad az autó
+- Top2: a határ úti csomópontban a shopmark és a buszvégállomások közötti gyalogáakelőhelynél hiányzik a közlekedési tábla és szinte teljesen lekopott a felfestés. a közlekedési lámpa üzemzavara esetén ez probléma lehet.
+- Top3: a jános kórház előtti villamosátjáró felújítása miatt kitett ideiglenes táblák egyike pont kitakarja a gyalog átkelő előtti lámpát.
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** csőtörés a főutcán
+- Top1: corvin csomóponttól szabadkikötő felé, a hév sín melletti járdára rádőlt egy fa, ami teljes egészében elfoglalja a járdát.
+- Top2: kiálló fedlap
+- Top3: a deák ferenc téren a 100e megállója előtt (f00950) gyakran motorokat és kerékpárokat láncolnak a megálló táblához és a villanyoszlophoz. mivel ez nem túl esztétikus, illetve ésszerű az utasigényekhez való alkalmazkodás, ezért a fa mellett kérném kerékpártámaszok kihelyezését.
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** water pipe burst on the main street
+- Top1: frissítés: 2025.04.08. trafficom válasza: „a jelzett műtárgy nem a trafficom kft. tulajdona, ill. nem tartozik cégünk üzemeltetése alá.” ----- tönkrement fedlap a millenniumtelepi hév megállóban a haraszti út 157 szemben.
+- Top2: a határ úti csomópontban a shopmark és a buszvégállomások közötti gyalogáakelőhelynél hiányzik a közlekedési tábla és szinte teljesen lekopott a felfestés. a közlekedési lámpa üzemzavara esetén ez probléma lehet.
+- Top3: kedves hölgyem/uram! graffitis a szekrény. köszönöm!
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** szemét nincs elszállítva
+- Top1: kérem segítsenek a szemét elszállításában, a rákosvölgyi utca 38 körül - életmódjukból adódóan - rengeteg szemétvan szétszórva. ekkora mennyiséget nem tudok - helyettük - összeszedni és a saját kukában elhelyezni. köszönöm.
+- Top2: frissítés: 2025.04.23. budapest közút válasza: „a bejelentésben szereplő útszakasz nem tartozik a társaságunk által üzemeltetett hálózathoz. a terület illetékes üzemeltetője nyilvántartásunk szerint a xvii. kerület rákosmenti polgármesteri hivatal.” ----- kátyúk az úttesten az emlék u 12 előtt, előre is köszönjük a javítást
+- Top3: a zöld hulladék hetek óta nem került elszállításra. más szemét - pl doboz- is halmozódik a zsákok mellett. rendkívül elhanyagolt a terület. nagyon régen volt a növényzet is levágta a környéken.
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** garbage not collected
+- Top1: a jósika u. végéről hiányzik a kerékpárosoknak szóló elsőbbségadás kötelező tábla, így számukra "jobbkezes" a kereszteződés - csak erről a rottenbilleren érkezők nem tudnak.
+- Top2: frissítés: 2025.04.08. bkm budapesti közművek bti válasza: „a moszkva sétány padjai nem tartozik társaságunk kezelésébe, ezért a probléma megoldása érdekében bejelentését továbbítottuk az illetékesnek.” ----- a xiii. kerületi moszkva-sétányon található padok elkoptak, rájuk fér egy faápolás, graffitimentesítés, és főleg egy festés.
+- Top3: lejart műszakival foglal egy auto egy ertekes parkolohelyet
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** illegális hulladéklerakó
+- Top1: boráros tér aluljáróban graffiti, matricák vannak a falon és az oszlopon. roncs bútorok, elektronikai hulladék (mikró) került elhelyezésre az aluljáróban.
+- Top2: feltehetően többségében illegális, megtévesztő molinók kihelyezése végig a parton, a partra vezető utcák menten, a kerítéseken.
+- Top3: lerakott hűtőszekrény
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** illegal dumping site
+- Top1: feltehetően többségében illegális, megtévesztő molinók kihelyezése végig a parton, a partra vezető utcák menten, a kerítéseken.
+- Top2: frissítés: 2025.04.16. budapest galéria válasza: " király-lépcső területe a várkapitányság nonprofit zrt. kezelésébe került." ----- frissítés: 2025.04.15. budapest közút zrt. válasza: „a 00167193 számú bejelentésben szereplő műalkotás üzemeltetése, fenntartása nem tartozik a budapest közút zrt. feladatai közé, semmilyen műalkotást/szobrot nem üzemeltetünk. a terület a várkapitány nonprofit zrt. kezelésébe került. a probléma orvoslásával kapcsolatban javasoljuk keresse az illetékes­: budapest galériát.” ----- frissítés: 2025.03.28. főkert válasza: „a törött műtárgy a várhegy alagút clark ádám téri épületének díszítőeleme, amelynek üzemeltetője a budapest közút zrt. a probléma megoldása érdekében bejelentését továbbítottuk az illetékesnek” ----- törött váza. kérem, javítsák meg.
+- Top3: az egyenesen haladó járműveknek szóló jelzőlámpa zöld izzója már legalább egy hete kiégett
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** zajos építkezés éjszaka
+- Top1: kedves illetékes! az aknatető középső része hiányos. köszönöm!
+- Top2: kérem ellenőrzését, javítását. zápor u. 23, 25 előtt
+- Top3: a deák téren a 9-es busz déli irányú megállójában az egyik fa melletti karók kidőltek, meglazultak.
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** noisy construction at night
+- Top1: a rahó utca 2-8/c lomja bokor takarásában volt a budaörsi út felől, ezért nem került elszállításra a lomtalanításkor. a rengeteg sok apró hulladék szét van túrva.
+- Top2: eldugult csatornaszem. kérjük megtisztítani
+- Top3: a mélytó utca és bányató utca között körforgalomnál a középső járdánál a közúti eak tábla kifakulás látható, illetve a közúti körforgalom tábla kezd lassabban kifakuló válni, valamint a jobboldali járdánál található közúti eak tábla kifakulás látható
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** buszmegálló megrongálva
+- Top1: a megjelölt helyszínen vagy egy régi önkor.ányzati tájékoztató tábla, ma már olvashatatlanul. kérem szállítsák el, használják fel valamire.
+- Top2: a xx. kerültei mátyás király téren a 99-es busz végállomásán sajnos nincs semmi árnyék, ami nagyon hiányzik a nyári időszakban, főleg kánikula idején. buszváró ugyan van, de a tűző nap felmelegíti azt is. kérjük szépen, ültessenek néhány fát a megálló melletti zöldterületre. a nem túl magasra növő oszlopos fajták (pl. kínai díszkörte) vagy gömbfák (pl. gömbkőris) nem zavarnák meg a megálló mögött lévő templom látványképét sem. köszönjük szépen!
+- Top3: a deák téren a 9-es busz déli irányú megállójában az egyik fa melletti karók kidőltek, meglazultak.
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** damaged bus stop
+- Top1: az nca-523 rendszámú 8e vonalon közlekedő mercedes conecto busz takarítását szeretném kérni.
+- Top2: kiálló fedlap
+- Top3: frissítés: 2025.04.08. trafficom válasza: „a jelzett műtárgy nem a trafficom kft. tulajdona, ill. nem tartozik cégünk üzemeltetése alá.” ----- tönkrement fedlap a millenniumtelepi hév megállóban a haraszti út 157 szemben.
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** nem működik a jelzőlámpa
+- Top1: nem lehet becsukni a kaput a játszótéren.
+- Top2: adorján utca 22-24a között lévő közvilágítás nem működik. a lámpa nem világít. nagyon örülnénk neki, ha újra működne. köszönöm előre is!
+- Top3: kérem javítsák
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** traffic light not working
+- Top1: frissítés: 2025.04.08. trafficom válasza: „a jelzett műtárgy nem a trafficom kft. tulajdona, ill. nem tartozik cégünk üzemeltetése alá.” ----- tönkrement fedlap a millenniumtelepi hév megállóban a haraszti út 157 szemben.
+- Top2: a határ úti csomópontban a shopmark és a buszvégállomások közötti gyalogáakelőhelynél hiányzik a közlekedési tábla és szinte teljesen lekopott a felfestés. a közlekedési lámpa üzemzavara esetén ez probléma lehet.
+- Top3: pár hónapja mozdulatlan, forgalomból kivont, műszaki vizsgával nem rendelkező bmw 530 d (mam-xxx). kifejezetten kérnénk a gépjármű jogszabályban rögzített mihamarabbi elszállítását!
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** veszélyes zebra
+- Top1: lekopott zebra
+- Top2: a zöld hulladék hetek óta nem került elszállításra. más szemét - pl doboz- is halmozódik a zsákok mellett. rendkívül elhanyagolt a terület. nagyon régen volt a növényzet is levágta a környéken.
+- Top3: frissítés: 2025.06.05. a telekom válasza: "forgalomirányítás logo van rajta." --- frissítés: 2025.03.27. járókelő válasza + kép: „sajnos nem javítás történt, hanem igénytelen módon, a korábbi köveket hiányosan és hullámosan visszarakva konzerválták a balesetveszélyt. kérjük, hogy a belvároshoz méltó, igényes kivitelezéssel rendezzék a fedlap állapotát.” ----- a kiskörúton a telenor bolttól nem messze a zebrához közel van egy akna, aminek a fedele k kövekkel van burkolva. sajnos a burkolat sérült, mozog, van olyan kő ami kiesett belőle. kérjük ezt javítsák, ha kell burkolják újra amíg megvannak a kövek és nem kallódtak el, hogy tartós megoldás születhessen. köszönjük!
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** dangerous pedestrian crossing
+- Top1: frissítés: 2025.04.08. trafficom válasza: „a jelzett műtárgy nem a trafficom kft. tulajdona, ill. nem tartozik cégünk üzemeltetése alá.” ----- tönkrement fedlap a millenniumtelepi hév megállóban a haraszti út 157 szemben.
+- Top2: boráros tér aluljáróban graffiti, matricák vannak a falon és az oszlopon. roncs bútorok, elektronikai hulladék (mikró) került elhelyezésre az aluljáróban.
+- Top3: kedves hölgyem/uram! graffitis a szekrény. köszönöm!
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** parkban nincs világítás
+- Top1: xi. és xii. kerület határán a mártonáron téren folyamatosan szabálytalanul parkolnak, a járdan hajtanak keresztül a a bódékat kerülgetve. szeretnék parkolasgátlókat kérni a térre.
+- Top2: frissítés: 2025.06.01. a bejelentő válasza: „1 éve jelezve van. a világítást sem javították meg. a füvesítés elmaradt, a kivágott fákat sem pótolták.” ----- június van. idén még egyszer sem nyírtak füvet a békásmegyeri traianus téren. helyenként másfél méteres gaz teszi lehetetlenné a szabadtéri időtöltést. a tavaly kialakított ún. szivacsváros virágágyásaihoz egy éve nem nyúlt senki. tavaly ősszel közműépítés zajlott a park füst milán utca felőli részén, azóta a park fele füvesítés híján a legkisebb eső után is mocsárrá változik, a közvilágítás fele azóta nem működik, az építkezésben megsérült lámpa sem került javításra. a téren és a piacnál a szökőkutak nem működnek, az automata öntözőrendszer is csak helyenként locsolja a füvet. a közterületeket nem csak felújítani kell, hanem üzemeltetni is.
+- Top3: kezd állandósulni a gyalogos útvonalat gátló, a parkolóőrök által nem szankcionálható parkolás az ottlik kert felől a levegőmérő állomás felé haladva. a skoda csak egy a sok autó közül, akik az elmúlt időszakban itt várakoznak órákon át. kérem, jelezzék burkolati jellel, hogy ez tilos. köszönöm.
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** no lighting in the park
+- Top1: frissítés: 2025.06.01. a bejelentő válasza: „1 éve jelezve van. a világítást sem javították meg. a füvesítés elmaradt, a kivágott fákat sem pótolták.” ----- június van. idén még egyszer sem nyírtak füvet a békásmegyeri traianus téren. helyenként másfél méteres gaz teszi lehetetlenné a szabadtéri időtöltést. a tavaly kialakított ún. szivacsváros virágágyásaihoz egy éve nem nyúlt senki. tavaly ősszel közműépítés zajlott a park füst milán utca felőli részén, azóta a park fele füvesítés híján a legkisebb eső után is mocsárrá változik, a közvilágítás fele azóta nem működik, az építkezésben megsérült lámpa sem került javításra. a téren és a piacnál a szökőkutak nem működnek, az automata öntözőrendszer is csak helyenként locsolja a füvet. a közterületeket nem csak felújítani kell, hanem üzemeltetni is.
+- Top2: frissítés: 2025.08.21. iv. ker. újpesti önkormányzati rendészet válasza: „a terület a 13. kerülethez tartozik ezért kérem jelezze az illetékes rendészet részére a problémát.” ----- a 13. kerületben a dugonics utca végén lévő füves területen rendszeresen parkolnak autók. mivel a környéken nehézkes a parkolás, jó lenne, ha a területen hivatalosan is kijelölnének néhány parkolóhelyet, és/vagy lekerítenék a füves részt, hogy ne lehessen oda parkolni.
+- Top3: frissítés: 2025.04.15. újbuda parkolásüzemeltető nonprofit kft. válasza: „a hivatkozott terület, nem a díjfizető övezet részre, ebből kifolyólag nem társaságunk hatásköre.” ----- a budaörsi út 121. címen lévő diszkont áruház mellett a beregszász úton úgy parkolnak az autók, hogy belógnak a járdára, pedig bőven elférnének még a kombik is anélkül, hogy a vonóhorgot vagy az orrukat belógatnák a gyalogos bokájához. szeretnék kérni túlfutásgátlókat a parkolóba, ahogy kicsit feljebb, a sasad liget lakóparknál is elkezdték telepíteni.
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** játszótér karbantartás
+- Top1: a játszótér bejaratának kilincse lejött.
+- Top2: nem lehet becsukni a kaput a játszótéren.
+- Top3: kérem ellenőrzését, javítását. zápor u. 23, 25 előtt
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** playground maintenance
+- Top1: tisztelt hegyvidéki közterület-felügyelet! ezúton szeretném jelezni, hogy budapest xii. kerület, hollósy simon utca 19. szám előtt, a járdán napok óta szabálytalanul parkol egy motor. a jármű a járda közepét elfoglalja, jelentősen akadályozva a gyalogos forgalmat. a probléma nem egyszeri: a motor több napja ugyanazon a helyen áll. a járda a játszótér mellett van, gyakori a kisgyermekes forgalom, babakocsis szülők, valamint lakik itt egy kerekesszékes hölgy is, akinek a közlekedését ez különösen megnehezíti. a helyzet balesetveszélyes és jogsértő. kérem szíves intézkedésüket – szükség esetén a jármű elszállítását is.
+- Top2: xi. és xii. kerület határán a mártonáron téren folyamatosan szabálytalanul parkolnak, a járdan hajtanak keresztül a a bódékat kerülgetve. szeretnék parkolasgátlókat kérni a térre.
+- Top3: kezd állandósulni a gyalogos útvonalat gátló, a parkolóőrök által nem szankcionálható parkolás az ottlik kert felől a levegőmérő állomás felé haladva. a skoda csak egy a sok autó közül, akik az elmúlt időszakban itt várakoznak órákon át. kérem, jelezzék burkolati jellel, hogy ez tilos. köszönöm.
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** padok megrongálva
+- Top1: kérem, javítsák meg / cseréljék ki!
+- Top2: legyenek szívesek, igazítsák ki ezeket a fém védőkorlátokat, vagy távolítsák el azokat teljes egészében! mostanra a fák megnőttek és megerősödtek. a fém védőkorlátok most már inkább akadályozzák a fákat és bánthatják őket a növekedésben. a problémát már jeleztük 2025 júniusában, júliusában, és augusztusában, de még sose érkezett válasz ezügyben. köszönjük a munkájukat!
+- Top3: tisztelt illetékes (xix. kerület közpark nkft.)! csúnyán "meg van tisztelve" az oszlop. kérem a hiba elhárításáról intézkedni szíveskedjenek! tisztelettel: szelényi dániel
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** benches damaged
+- Top1: frissítés: 2025.06.01. a bejelentő válasza: „1 éve jelezve van. a világítást sem javították meg. a füvesítés elmaradt, a kivágott fákat sem pótolták.” ----- június van. idén még egyszer sem nyírtak füvet a békásmegyeri traianus téren. helyenként másfél méteres gaz teszi lehetetlenné a szabadtéri időtöltést. a tavaly kialakított ún. szivacsváros virágágyásaihoz egy éve nem nyúlt senki. tavaly ősszel közműépítés zajlott a park füst milán utca felőli részén, azóta a park fele füvesítés híján a legkisebb eső után is mocsárrá változik, a közvilágítás fele azóta nem működik, az építkezésben megsérült lámpa sem került javításra. a téren és a piacnál a szökőkutak nem működnek, az automata öntözőrendszer is csak helyenként locsolja a füvet. a közterületeket nem csak felújítani kell, hanem üzemeltetni is.
+- Top2: frissítés: 2025.08.21. iv. ker. újpesti önkormányzati rendészet válasza: „a terület a 13. kerülethez tartozik ezért kérem jelezze az illetékes rendészet részére a problémát.” ----- a 13. kerületben a dugonics utca végén lévő füves területen rendszeresen parkolnak autók. mivel a környéken nehézkes a parkolás, jó lenne, ha a területen hivatalosan is kijelölnének néhány parkolóhelyet, és/vagy lekerítenék a füves részt, hogy ne lehessen oda parkolni.
+- Top3: frissítés: 2025.04.15. újbuda parkolásüzemeltető nonprofit kft. válasza: „a hivatkozott terület, nem a díjfizető övezet részre, ebből kifolyólag nem társaságunk hatásköre.” ----- a budaörsi út 121. címen lévő diszkont áruház mellett a beregszász úton úgy parkolnak az autók, hogy belógnak a járdára, pedig bőven elférnének még a kombik is anélkül, hogy a vonóhorgot vagy az orrukat belógatnák a gyalogos bokájához. szeretnék kérni túlfutásgátlókat a parkolóba, ahogy kicsit feljebb, a sasad liget lakóparknál is elkezdték telepíteni.
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** hajléktalanok az aluljáróban
+- Top1: a képen látható aknafedél meg van süllyedve, esők alkalmával hatalmas pocsolya alakul ki felette. kérem az illetékest, hogy hozza egy szintbe a járda burkolatával!
+- Top2: tisztelt illetékes! a vasúti pálya alatt átvezető gyalogos aluljáró közvetlen környezete ( a máv kerítés kívül) nagyon szemetes és az aluljáró aszfaltozásán is sok föld, gaz található. kérem tisztítsák meg!
+- Top3: a batthyány tér alatt, az alsó rakpartra levezető lépcsőkön, amit a turisták is rendszeresen használnak lényegében állandósult az emberi ürülék mindennemű formája. azon túl, hogy gusztustalan és büdös, higiéniai kockázatokat is jelent. itt állandó ellenőrzésre és takarításra lenne szükség.
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** homeless people in the underpass
+- Top1: a nagy lajos király útja 1-9 előtti járdában(metropolitan egyetem előtt) egy közmű oszlop támasztó oszlopa áll ferdén, akadályozva a gyalogos forgalmat. egy gyengén látó hiába tapogat a járdán a botjával a fejével neki mehet akkor is. a tartó oszlopon nincs olyan felépítmény ami indokolná a támasztó oszlop szükségességét. a tartó oszlopot kicserélhetnék egy pörgetett betonoszlopra és jó lenne az is. érdekes hogy még nem történt baleset pedig vagy 15 éve ott áll a járdában.
+- Top2: adorján utca 22-24a között lévő közvilágítás nem működik. a lámpa nem világít. nagyon örülnénk neki, ha újra működne. köszönöm előre is!
+- Top3: frissítés: 2025.04.15. újbuda parkolásüzemeltető nonprofit kft. válasza: „a hivatkozott terület, nem a díjfizető övezet részre, ebből kifolyólag nem társaságunk hatásköre.” ----- a budaörsi út 121. címen lévő diszkont áruház mellett a beregszász úton úgy parkolnak az autók, hogy belógnak a járdára, pedig bőven elférnének még a kombik is anélkül, hogy a vonóhorgot vagy az orrukat belógatnák a gyalogos bokájához. szeretnék kérni túlfutásgátlókat a parkolóba, ahogy kicsit feljebb, a sasad liget lakóparknál is elkezdték telepíteni.
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** graffitik a falon
+- Top1: boráros tér aluljáróban graffiti, matricák vannak a falon és az oszlopon. roncs bútorok, elektronikai hulladék (mikró) került elhelyezésre az aluljáróban.
+- Top2: frissítés: 2025.04.08. bkm budapesti közművek bti válasza: „a moszkva sétány padjai nem tartozik társaságunk kezelésébe, ezért a probléma megoldása érdekében bejelentését továbbítottuk az illetékesnek.” ----- a xiii. kerületi moszkva-sétányon található padok elkoptak, rájuk fér egy faápolás, graffitimentesítés, és főleg egy festés.
+- Top3: a kanizsai utca 49. számmal szemben a parkolóben fapótlásként elültetett fiatal fának a karózása összedőlt. jelenleg inkább a fa tartja a karókat, mint a karók a fát. javaslom a kórózás kijavítását, amíg kellően megerősödik a fa törzse, hiszen a parkoló autók miatt a karók másodlagosan a fatörzset is védik, nemcsak a begyökeresedést szolgálják.
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** graffiti on the wall
+- Top1: boráros tér aluljáróban graffiti, matricák vannak a falon és az oszlopon. roncs bútorok, elektronikai hulladék (mikró) került elhelyezésre az aluljáróban.
+- Top2: frissítés: 2025.04.08. bkm budapesti közművek bti válasza: „a moszkva sétány padjai nem tartozik társaságunk kezelésébe, ezért a probléma megoldása érdekében bejelentését továbbítottuk az illetékesnek.” ----- a xiii. kerületi moszkva-sétányon található padok elkoptak, rájuk fér egy faápolás, graffitimentesítés, és főleg egy festés.
+- Top3: kedves hölgyem/uram! graffitis a szekrény. köszönöm!
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** szivárgó csatorna
+- Top1: szettoredezett, katyus , mozgasukban korlatozott szemelyek eseteben balesetveszelyes szakasz
+- Top2: a reflektor szilánkosra tört. kérem intézkedésüket az ügyben! köszönöm szépen!
+- Top3: a szabó ilonka utcáról a hunyadi jános útra felvezető lépcső aljában található vízelvezető rácsa beszakadt, és korrodálódott, nagyon balesetveszélyes. köszönjük a javítását/cseréjét.
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** leaking sewer
+- Top1: kedves hölgyem/uram! graffitis a szekrény. köszönöm!
+- Top2: lerakott hűtőszekrény
+- Top3: rege hinta leszakadt
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** bűz a környéken
+- Top1: kérem javítsák
+- Top2: kérem legyenek szívesek a padokat a helyükre visszahelyezni, hogy ne egy helyen legyenek! köszönöm szépen!
+- Top3: kedves illetékes! ez a nagy szekrény mindenhol tele van graffitivel. köszönöm!
+
+## sentence-transformers/all-MiniLM-L6-v2 (English-only)
+**Query:** bad smell in the neighborhood
+- Top1: a jósika u. végéről hiányzik a kerékpárosoknak szóló elsőbbségadás kötelező tábla, így számukra "jobbkezes" a kereszteződés - csak erről a rottenbilleren érkezők nem tudnak.
+- Top2: frissítés: 2025.04.08. bkm budapesti közművek bti válasza: „a moszkva sétány padjai nem tartozik társaságunk kezelésébe, ezért a probléma megoldása érdekében bejelentését továbbítottuk az illetékesnek.” ----- a xiii. kerületi moszkva-sétányon található padok elkoptak, rájuk fér egy faápolás, graffitimentesítés, és főleg egy festés.
+- Top3: lejart műszakival foglal egy auto egy ertekes parkolohelyet
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** kátyú az úton
+- Top1: van egy óriàs kàtyú az i.kerületben a pàrduc utca naphegy tèr sarkàn.
+- Top2: kérem az illetékest, hogy a képen látható kátyút tömjék be!
+- Top3: kérem az illetékest, hogy foltozzák be a képen látható kátyút!
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** pothole in the road
+- Top1: frissítés: 2025.04.08. trafficom válasza: „a jelzett műtárgy nem a trafficom kft. tulajdona, ill. nem tartozik cégünk üzemeltetése alá.” ----- tönkrement fedlap a millenniumtelepi hév megállóban a haraszti út 157 szemben.
+- Top2: frissítés: 2025.07.30. bkm válasza: „tájékoztatjuk, hogy a bejelentett területen társaságunk csak űrszelvénygallyazást végez a tömegközlekedési eszközök zavartalan közlekedésének biztosítása céljából. faültetéssel, fenntartással kapcsolatban javasoljuk, forduljon a kerületi önkormányzathoz.” ----- gondozatlan terület,kiszáradt fák (2 db).régebbi fa kivágásból ott maradt fa darabok.
+- Top3: az astorian a bicikli utat jelző pollernek nekiment egy szabálytalan autós és kitörte. kérjük javítsák, köszönjük! (van lehetőség a szabálytalan közlekedők figyelmeztetésére, sokszor látjuk, hogy autók, taxik, buszok, néha akár beton mixerek is egyenesen mennek tovább a kerékpár sávon a múzeum felől a belváros fele
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** hibás közvilágítás
+- Top1: kedves illetékes! az aknatető középső része hiányos. köszönöm!
+- Top2: frissítés: 2025.07.28. bejelentő visszajelzése: „a kocsi átállt a sarok másik oldalára!” ----- frissítés: 2025.07.03. bejelentő hozzászólása: „a felszólítást leszedték róla. ugyan úgy ott áll a kocsi.” ----- elhagyott autó kereszteződésben. itt áll hónapok óta! a kereszteződésben áll, takarja a kilátást, baleset veszélyes, beláthatatlan és nem is használják az autót
+- Top3: kedves illetékes! a tűzcsap egy része lejött. köszönöm!
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** broken streetlight
+- Top1: a határ úti csomópontban a shopmark és a buszvégállomások közötti gyalogáakelőhelynél hiányzik a közlekedési tábla és szinte teljesen lekopott a felfestés. a közlekedési lámpa üzemzavara esetén ez probléma lehet.
+- Top2: ajtók nyitva, ablak vagy lehúzva, vagy kitörve, motorháztető nyitva. a merőleges parkolóhelyeken ferdén áll. tekintve, hogy parkolási büntető csekk van betűzve az ablaktörlőre, 04.17en is itt volt.
+- Top3: pár hónapja mozdulatlan, forgalomból kivont, műszaki vizsgával nem rendelkező bmw 530 d (mam-xxx). kifejezetten kérnénk a gépjármű jogszabályban rögzített mihamarabbi elszállítását!
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** csőtörés a főutcán
+- Top1: frissítés: 2025.09.12. e.on válasza: „a kérdéses berendezés nem elmű hálózati kft. tulajdonú.” ----- egymás után több oszlopról is több tízméternyi vezeték.
+- Top2: corvin csomóponttól szabadkikötő felé, a hév sín melletti járdára rádőlt egy fa, ami teljes egészében elfoglalja a járdát.
+- Top3: frissítés: 2025.07.14. xvi. kerületi önkormányzat válasza: „a csömöri út a főváros tulajdonában és a főkert kezelésében van. már többször jeleztük a rengeteg kiszáradt fát.” ----- a xvi. kerületi szent-györgyi albert általános iskola előtti fasorban több elszáradt növény is található.
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** water pipe burst on the main street
+- Top1: kiszáradt fa, móricz zsigmond körtér villányi sarok, pizzéria előtt
+- Top2: frissítés: 2025.04.08. trafficom válasza: „a jelzett műtárgy nem a trafficom kft. tulajdona, ill. nem tartozik cégünk üzemeltetése alá.” ----- tönkrement fedlap a millenniumtelepi hév megállóban a haraszti út 157 szemben.
+- Top3: az astorian a bicikli utat jelző pollernek nekiment egy szabálytalan autós és kitörte. kérjük javítsák, köszönjük! (van lehetőség a szabálytalan közlekedők figyelmeztetésére, sokszor látjuk, hogy autók, taxik, buszok, néha akár beton mixerek is egyenesen mennek tovább a kerékpár sávon a múzeum felől a belváros fele
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** szemét nincs elszállítva
+- Top1: kérem legyenek szívesek elvégezni a víznyelők kitakarítását! köszönöm szépen!
+- Top2: kérem segítsenek a szemét elszállításában, a rákosvölgyi utca 38 körül - életmódjukból adódóan - rengeteg szemétvan szétszórva. ekkora mennyiséget nem tudok - helyettük - összeszedni és a saját kukában elhelyezni. köszönöm.
+- Top3: kedves illetékes! a tűzcsap egy része lejött. köszönöm!
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** garbage not collected
+- Top1: frissítés: 2025.04.16. budapest galéria válasza: " király-lépcső területe a várkapitányság nonprofit zrt. kezelésébe került." ----- frissítés: 2025.04.15. budapest közút zrt. válasza: „a 00167193 számú bejelentésben szereplő műalkotás üzemeltetése, fenntartása nem tartozik a budapest közút zrt. feladatai közé, semmilyen műalkotást/szobrot nem üzemeltetünk. a terület a várkapitány nonprofit zrt. kezelésébe került. a probléma orvoslásával kapcsolatban javasoljuk keresse az illetékes­: budapest galériát.” ----- frissítés: 2025.03.28. főkert válasza: „a törött műtárgy a várhegy alagút clark ádám téri épületének díszítőeleme, amelynek üzemeltetője a budapest közút zrt. a probléma megoldása érdekében bejelentését továbbítottuk az illetékesnek” ----- törött váza. kérem, javítsák meg.
+- Top2: frissítés: 2025.09.17. máv személyszállítási zrt. válasza: „tájékoztatjuk, hogy a máv személyszállítási zrt. az általa igénybe vett megállóhelyeken kizárólag a személyszállítási szolgáltatást biztosítja és az utastájékoztatásért felelős. az infrastruktúrában történő bármilyen beavatkozás, az infrastruktúra létesítése, illetve karbantartása az adott közút kezelőjének (magyar közút zrt., illetve önkormányzat) feladata és hatásköre.” járókelő admin megjegyzés: a budapest kapu adatai alapján az adott közút a fővárosi önkormányzat kezelésében van. ----- frissítés: 2025.09.10. bkm válasza: „a vonlánbusz megállók nem tartoznak társaságunk kezelésébe, ezért a probléma megoldásában nem vagyunk illetékesek.” ----- 22.keruletben a 7es út, diótörő úti buszmegállókban nagyon hiányzik a közterületi szemetes, borzasztóan sok szemét landol a buszmegállók környezetében, ha lenne szemetes ez lényegesen csökkenthető lenne, kérem, hogy helyezzenek el szemeteseket
+- Top3: tisztelt szolgáltató! kültéri dobozát részben az idő, részben a kékgalléros hirdetések megrongálták. a probléma esztétikainak tűnik csak. amennyiben pl. a festék sérülése a doboz vízállóságát rontja, javasoljuk ennek felújítását. köszönettel,
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** illegális hulladéklerakó
+- Top1: feltehetően többségében illegális, megtévesztő molinók kihelyezése végig a parton, a partra vezető utcák menten, a kerítéseken.
+- Top2: frissítés: 2025.06.05. a telekom válasza: "forgalomirányítás logo van rajta." --- frissítés: 2025.03.27. járókelő válasza + kép: „sajnos nem javítás történt, hanem igénytelen módon, a korábbi köveket hiányosan és hullámosan visszarakva konzerválták a balesetveszélyt. kérjük, hogy a belvároshoz méltó, igényes kivitelezéssel rendezzék a fedlap állapotát.” ----- a kiskörúton a telenor bolttól nem messze a zebrához közel van egy akna, aminek a fedele k kövekkel van burkolva. sajnos a burkolat sérült, mozog, van olyan kő ami kiesett belőle. kérjük ezt javítsák, ha kell burkolják újra amíg megvannak a kövek és nem kallódtak el, hogy tartós megoldás születhessen. köszönjük!
+- Top3: rendszám nélküli autó.
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** illegal dumping site
+- Top1: frissítés: 2025.07.15. járókelő hozzászólása: „akkor vagy a szilágyi erzsébet fasor - hűvösvölgyi út elektromos hálózati munkákhoz, vagy a villamoshoz (bkv) lehet köze.” ----- frissítés: 2025.07.15. bkm budapesti közművek (budaörs) válasza: „a bejelentésben látható zöldhulladék nem társaságunk munkavégzéséből került a területre. a zöldfelületekre illegálisan kihelyezett zöldhulladékot nem tudjuk azonnal és rendszeresen elszállítani. kérjük, hogy ha ilyen szabálytalanságot észlelnek, jelentsék a kerületi közterület-felügyelet felé. az elszállítás megszervezéséig szíves türelmüket kérjük.” ----- frissítés: 2025.06.12. ii. kerület önkormányzat válasza: „köszönjük a kiegészítést, a jelzett területen nem az önkormányzat lesz az illetékes” ----- több mint egy hete itt vannak a levágott gallyak, kérem szállítsák el!
+- Top2: frissítés: 2025.04.08. trafficom válasza: „a jelzett műtárgy nem a trafficom kft. tulajdona, ill. nem tartozik cégünk üzemeltetése alá.” ----- tönkrement fedlap a millenniumtelepi hév megállóban a haraszti út 157 szemben.
+- Top3: frissítés: 2025.04.16. budapest galéria válasza: " király-lépcső területe a várkapitányság nonprofit zrt. kezelésébe került." ----- frissítés: 2025.04.15. budapest közút zrt. válasza: „a 00167193 számú bejelentésben szereplő műalkotás üzemeltetése, fenntartása nem tartozik a budapest közút zrt. feladatai közé, semmilyen műalkotást/szobrot nem üzemeltetünk. a terület a várkapitány nonprofit zrt. kezelésébe került. a probléma orvoslásával kapcsolatban javasoljuk keresse az illetékes­: budapest galériát.” ----- frissítés: 2025.03.28. főkert válasza: „a törött műtárgy a várhegy alagút clark ádám téri épületének díszítőeleme, amelynek üzemeltetője a budapest közút zrt. a probléma megoldása érdekében bejelentését továbbítottuk az illetékesnek” ----- törött váza. kérem, javítsák meg.
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** zajos építkezés éjszaka
+- Top1: kérem segítsenek a szemét elszállításában, a rákosvölgyi utca 38 körül - életmódjukból adódóan - rengeteg szemétvan szétszórva. ekkora mennyiséget nem tudok - helyettük - összeszedni és a saját kukában elhelyezni. köszönöm.
+- Top2: kérem legyenek szívesek elvégezni a víznyelők kitakarítását! köszönöm szépen!
+- Top3: kedves illetékes! a tűzcsap egy része lejött. köszönöm!
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** noisy construction at night
+- Top1: frissítés: 2025.09.17. máv személyszállítási zrt. válasza: „tájékoztatjuk, hogy a máv személyszállítási zrt. az általa igénybe vett megállóhelyeken kizárólag a személyszállítási szolgáltatást biztosítja és az utastájékoztatásért felelős. az infrastruktúrában történő bármilyen beavatkozás, az infrastruktúra létesítése, illetve karbantartása az adott közút kezelőjének (magyar közút zrt., illetve önkormányzat) feladata és hatásköre.” járókelő admin megjegyzés: a budapest kapu adatai alapján az adott közút a fővárosi önkormányzat kezelésében van. ----- frissítés: 2025.09.10. bkm válasza: „a vonlánbusz megállók nem tartoznak társaságunk kezelésébe, ezért a probléma megoldásában nem vagyunk illetékesek.” ----- 22.keruletben a 7es út, diótörő úti buszmegállókban nagyon hiányzik a közterületi szemetes, borzasztóan sok szemét landol a buszmegállók környezetében, ha lenne szemetes ez lényegesen csökkenthető lenne, kérem, hogy helyezzenek el szemeteseket
+- Top2: frissítés: 2025.07.10. xy válasza: „tisztelt budapest közút! a jelen bejelentésben szereplő kátyú a hungária körút forgalmi sávjaiban található a villamosvágánytól függetlenül, kérjük a budapest közút intézkedését a hiba elhárítására! (megjegyezzük, hogy a villamossín melleti kátyúk külön bejelentésben kerültek rögzítésre az eltérő illtékességre tekintettel!) tehát a jelen eset a fentiekre is tekintettel -meglátásunk szerint - a t. budapesti közút illetékessége! köszönjük!” ----- frissítés: 2025.06.10. budapest közút zrt. válasza: „a bejelentéshez csatolt fényképen a villamossínek melletti meghibásodások a közúti vasúti pálya biztonsági vágányzónáján belül találhatók. a vágányzónán belüli terület üzemeltetését a budapest közlekedési zrt. (bkv zrt.) látja el, társaságunk a hiba kijavításával kapcsolatban hatáskörrel nem rendelkezik." ----- a hungária körút m3 irányában jelentős burkolatsüllyedés. örülünk, ha tudnak már róla! kérjük javítani!
+- Top3: frissítés: 2025.04.01. kispest közpark kft. válasza: „tájékoztatjuk önöket, hogy az érintett helyszín a nagykőrösi út 275. mellett a budapest xx. kerülethez tartozik.” ----- tisztelt fővárosi önkormányzat! volt már egy bejelentés erre a területre korábban. akkor is a nagykőrösi út 275. szám környékén (a profirent és szentlőrinci út közötti szakaszon) az egyik telken jelentős mennyiségű hulladék keletkezett. kérem, a szemét elszállítása mellett szíveskedjenek energiát fektetni a megelőzésre egy mobil kamera segítségével, vagy kerítsék be a területet. köszönettel: keller lászló
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** buszmegálló megrongálva
+- Top1: a móricz zsigmond körtéren a megálló padjának a festése lekopott. kérem javítsák!
+- Top2: a határ úti csomópontban a shopmark és a buszvégállomások közötti gyalogáakelőhelynél hiányzik a közlekedési tábla és szinte teljesen lekopott a felfestés. a közlekedési lámpa üzemzavara esetén ez probléma lehet.
+- Top3: ez sem úgy néz ki,mint ami menne bárhová. belseje tele szeméttel, gumik kukák...
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** damaged bus stop
+- Top1: a határ úti csomópontban a shopmark és a buszvégállomások közötti gyalogáakelőhelynél hiányzik a közlekedési tábla és szinte teljesen lekopott a felfestés. a közlekedési lámpa üzemzavara esetén ez probléma lehet.
+- Top2: boráros tér aluljáróban graffiti, matricák vannak a falon és az oszlopon. roncs bútorok, elektronikai hulladék (mikró) került elhelyezésre az aluljáróban.
+- Top3: a fehérvári út 201-207 parkolójában a szeglet közösségi tér előtt letört faág gátolja a járdán történő közlekedést. kérem segítségüket a probléma elhárításában. köszönöm.
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** nem működik a jelzőlámpa
+- Top1: adorján utca 22-24a között lévő közvilágítás nem működik. a lámpa nem világít. nagyon örülnénk neki, ha újra működne. köszönöm előre is!
+- Top2: kedves munkatársak! kérünk szépen javítást dózsa-damjanich sarkon. köszönettel: j. cila
+- Top3: ez sem úgy néz ki,mint ami menne bárhová. belseje tele szeméttel, gumik kukák...
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** traffic light not working
+- Top1: frissítés: 2025.04.08. trafficom válasza: „a jelzett műtárgy nem a trafficom kft. tulajdona, ill. nem tartozik cégünk üzemeltetése alá.” ----- tönkrement fedlap a millenniumtelepi hév megállóban a haraszti út 157 szemben.
+- Top2: az nca-523 rendszámú 8e vonalon közlekedő mercedes conecto busz takarítását szeretném kérni.
+- Top3: a határ úti csomópontban a shopmark és a buszvégállomások közötti gyalogáakelőhelynél hiányzik a közlekedési tábla és szinte teljesen lekopott a felfestés. a közlekedési lámpa üzemzavara esetén ez probléma lehet.
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** veszélyes zebra
+- Top1: lekopott zebra
+- Top2: frissítés: 2025.06.05. a telekom válasza: "forgalomirányítás logo van rajta." --- frissítés: 2025.03.27. járókelő válasza + kép: „sajnos nem javítás történt, hanem igénytelen módon, a korábbi köveket hiányosan és hullámosan visszarakva konzerválták a balesetveszélyt. kérjük, hogy a belvároshoz méltó, igényes kivitelezéssel rendezzék a fedlap állapotát.” ----- a kiskörúton a telenor bolttól nem messze a zebrához közel van egy akna, aminek a fedele k kövekkel van burkolva. sajnos a burkolat sérült, mozog, van olyan kő ami kiesett belőle. kérjük ezt javítsák, ha kell burkolják újra amíg megvannak a kövek és nem kallódtak el, hogy tartós megoldás születhessen. köszönjük!
+- Top3: lerakott hűtőszekrény
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** dangerous pedestrian crossing
+- Top1: frissítés: 2025.04.08. trafficom válasza: „a jelzett műtárgy nem a trafficom kft. tulajdona, ill. nem tartozik cégünk üzemeltetése alá.” ----- tönkrement fedlap a millenniumtelepi hév megállóban a haraszti út 157 szemben.
+- Top2: a bartók béla úton áll ez az elhagyott vw polo. már az megérne egy kérdést, hogy a képen látható parkolási mód miért nem eredményezett intézkedést. de ha vannak szabályok, amit felettesi utasításra "el kell nézni", a 8 hónapja lejárt műszaki azért még csak nem ilyen? csak adódik a kérdés, hogy miért nem tűnt fel senkinek se? nyilván ezek költői kérdések. hiszen, ha szerencsénk van, leírják, hogy köszönik a bejelentést és legközelebb használjuk a kerületi appot, mert az tuti. de ha egy kocsi több hónapig rohadhat közterületen nulla intézkedéssel, ott nem a bejelentés útjával van probléma. ha meg nincs szerencsénk, akkor semmilyen válasz se érkezik és még vagy 3x be lehet jelenteni, mire eltűnik.
+- Top3: az astorian a bicikli utat jelző pollernek nekiment egy szabálytalan autós és kitörte. kérjük javítsák, köszönjük! (van lehetőség a szabálytalan közlekedők figyelmeztetésére, sokszor látjuk, hogy autók, taxik, buszok, néha akár beton mixerek is egyenesen mennek tovább a kerékpár sávon a múzeum felől a belváros fele
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** parkban nincs világítás
+- Top1: mozgásképtelen törött gépjármű foglalja el a parkolóhelyet. vitessék el bontóba.
+- Top2: egy éve áll mozdulatlan ez az auto ebben a parkolóban. lejárt a műszaki engedélye. megnehezíti az amúgy sem zökkenőmentes parkolást az itt lakóknak.
+- Top3: frissítés: 2025.08.21. iv. ker. újpesti önkormányzati rendészet válasza: „a terület a 13. kerülethez tartozik ezért kérem jelezze az illetékes rendészet részére a problémát.” ----- a 13. kerületben a dugonics utca végén lévő füves területen rendszeresen parkolnak autók. mivel a környéken nehézkes a parkolás, jó lenne, ha a területen hivatalosan is kijelölnének néhány parkolóhelyet, és/vagy lekerítenék a füves részt, hogy ne lehessen oda parkolni.
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** no lighting in the park
+- Top1: lejart műszakival foglal egy auto egy ertekes parkolohelyet
+- Top2: egy éve áll mozdulatlan ez az auto ebben a parkolóban. lejárt a műszaki engedélye. megnehezíti az amúgy sem zökkenőmentes parkolást az itt lakóknak.
+- Top3: ajtók nyitva, ablak vagy lehúzva, vagy kitörve, motorháztető nyitva. a merőleges parkolóhelyeken ferdén áll. tekintve, hogy parkolási büntető csekk van betűzve az ablaktörlőre, 04.17en is itt volt.
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** játszótér karbantartás
+- Top1: a játszótér bejaratának kilincse lejött.
+- Top2: nem lehet becsukni a kaput a játszótéren.
+- Top3: eldugult csatornaszem. kérjük megtisztítani
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** playground maintenance
+- Top1: lejart műszakival foglal egy auto egy ertekes parkolohelyet
+- Top2: a templom kertjében kidöntöttek egy kukát.
+- Top3: egy éve áll mozdulatlan ez az auto ebben a parkolóban. lejárt a műszaki engedélye. megnehezíti az amúgy sem zökkenőmentes parkolást az itt lakóknak.
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** padok megrongálva
+- Top1: kérem, javítsák meg / cseréljék ki!
+- Top2: a jános kórház előtti villamosátjáró felújítása miatt kitett ideiglenes táblák egyike pont kitakarja a gyalog átkelő előtti lámpát.
+- Top3: lassan egy hónapja nem müködik a bp, xv kinizsi 122 elött lévő utcai lámpa.
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** benches damaged
+- Top1: boráros tér aluljáróban graffiti, matricák vannak a falon és az oszlopon. roncs bútorok, elektronikai hulladék (mikró) került elhelyezésre az aluljáróban.
+- Top2: frissítés: 2025.07.30. bkm válasza: „tájékoztatjuk, hogy a bejelentett területen társaságunk csak űrszelvénygallyazást végez a tömegközlekedési eszközök zavartalan közlekedésének biztosítása céljából. faültetéssel, fenntartással kapcsolatban javasoljuk, forduljon a kerületi önkormányzathoz.” ----- gondozatlan terület,kiszáradt fák (2 db).régebbi fa kivágásból ott maradt fa darabok.
+- Top3: a fehérvári út 201-207 parkolójában a szeglet közösségi tér előtt letört faág gátolja a járdán történő közlekedést. kérem segítségüket a probléma elhárításában. köszönöm.
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** hajléktalanok az aluljáróban
+- Top1: a jános kórház előtti villamosátjáró felújítása miatt kitett ideiglenes táblák egyike pont kitakarja a gyalog átkelő előtti lámpát.
+- Top2: a játszótér bejaratának kilincse lejött.
+- Top3: újpesten a lórántffy zsuzsanna utcában víz jön fel az útburkolat alól.
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** homeless people in the underpass
+- Top1: frissítés: 2025.04.16. budapest galéria válasza: " király-lépcső területe a várkapitányság nonprofit zrt. kezelésébe került." ----- frissítés: 2025.04.15. budapest közút zrt. válasza: „a 00167193 számú bejelentésben szereplő műalkotás üzemeltetése, fenntartása nem tartozik a budapest közút zrt. feladatai közé, semmilyen műalkotást/szobrot nem üzemeltetünk. a terület a várkapitány nonprofit zrt. kezelésébe került. a probléma orvoslásával kapcsolatban javasoljuk keresse az illetékes­: budapest galériát.” ----- frissítés: 2025.03.28. főkert válasza: „a törött műtárgy a várhegy alagút clark ádám téri épületének díszítőeleme, amelynek üzemeltetője a budapest közút zrt. a probléma megoldása érdekében bejelentését továbbítottuk az illetékesnek” ----- törött váza. kérem, javítsák meg.
+- Top2: frissítés: 2025.04.15. újbuda parkolásüzemeltető nonprofit kft. válasza: „a hivatkozott terület, nem a díjfizető övezet részre, ebből kifolyólag nem társaságunk hatásköre.” ----- a budaörsi út 121. címen lévő diszkont áruház mellett a beregszász úton úgy parkolnak az autók, hogy belógnak a járdára, pedig bőven elférnének még a kombik is anélkül, hogy a vonóhorgot vagy az orrukat belógatnák a gyalogos bokájához. szeretnék kérni túlfutásgátlókat a parkolóba, ahogy kicsit feljebb, a sasad liget lakóparknál is elkezdték telepíteni.
+- Top3: egy éve áll mozdulatlan ez az auto ebben a parkolóban. lejárt a műszaki engedélye. megnehezíti az amúgy sem zökkenőmentes parkolást az itt lakóknak.
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** graffitik a falon
+- Top1: boráros tér aluljáróban graffiti, matricák vannak a falon és az oszlopon. roncs bútorok, elektronikai hulladék (mikró) került elhelyezésre az aluljáróban.
+- Top2: kedves hölgyem/uram! graffitis a szekrény. köszönöm!
+- Top3: kedves illetékes! ez a nagy szekrény mindenhol tele van graffitivel. köszönöm!
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** graffiti on the wall
+- Top1: kedves hölgyem/uram! graffitis a szekrény. köszönöm!
+- Top2: boráros tér aluljáróban graffiti, matricák vannak a falon és az oszlopon. roncs bútorok, elektronikai hulladék (mikró) került elhelyezésre az aluljáróban.
+- Top3: kedves illetékes! ez a nagy szekrény mindenhol tele van graffitivel. köszönöm!
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** szivárgó csatorna
+- Top1: a szabó ilonka utcáról a hunyadi jános útra felvezető lépcső aljában található vízelvezető rácsa beszakadt, és korrodálódott, nagyon balesetveszélyes. köszönjük a javítását/cseréjét.
+- Top2: kérem segítsenek a szemét elszállításában, a rákosvölgyi utca 38 körül - életmódjukból adódóan - rengeteg szemétvan szétszórva. ekkora mennyiséget nem tudok - helyettük - összeszedni és a saját kukában elhelyezni. köszönöm.
+- Top3: kérem legyenek szívesek elvégezni a víznyelők kitakarítását! köszönöm szépen!
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** leaking sewer
+- Top1: frissítés: 2025.04.16. budapest galéria válasza: " király-lépcső területe a várkapitányság nonprofit zrt. kezelésébe került." ----- frissítés: 2025.04.15. budapest közút zrt. válasza: „a 00167193 számú bejelentésben szereplő műalkotás üzemeltetése, fenntartása nem tartozik a budapest közút zrt. feladatai közé, semmilyen műalkotást/szobrot nem üzemeltetünk. a terület a várkapitány nonprofit zrt. kezelésébe került. a probléma orvoslásával kapcsolatban javasoljuk keresse az illetékes­: budapest galériát.” ----- frissítés: 2025.03.28. főkert válasza: „a törött műtárgy a várhegy alagút clark ádám téri épületének díszítőeleme, amelynek üzemeltetője a budapest közút zrt. a probléma megoldása érdekében bejelentését továbbítottuk az illetékesnek” ----- törött váza. kérem, javítsák meg.
+- Top2: frissítés: 2025.09.17. máv személyszállítási zrt. válasza: „tájékoztatjuk, hogy a máv személyszállítási zrt. az általa igénybe vett megállóhelyeken kizárólag a személyszállítási szolgáltatást biztosítja és az utastájékoztatásért felelős. az infrastruktúrában történő bármilyen beavatkozás, az infrastruktúra létesítése, illetve karbantartása az adott közút kezelőjének (magyar közút zrt., illetve önkormányzat) feladata és hatásköre.” járókelő admin megjegyzés: a budapest kapu adatai alapján az adott közút a fővárosi önkormányzat kezelésében van. ----- frissítés: 2025.09.10. bkm válasza: „a vonlánbusz megállók nem tartoznak társaságunk kezelésébe, ezért a probléma megoldásában nem vagyunk illetékesek.” ----- 22.keruletben a 7es út, diótörő úti buszmegállókban nagyon hiányzik a közterületi szemetes, borzasztóan sok szemét landol a buszmegállók környezetében, ha lenne szemetes ez lényegesen csökkenthető lenne, kérem, hogy helyezzenek el szemeteseket
+- Top3: a jósika u. végéről hiányzik a kerékpárosoknak szóló elsőbbségadás kötelező tábla, így számukra "jobbkezes" a kereszteződés - csak erről a rottenbilleren érkezők nem tudnak.
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** bűz a környéken
+- Top1: a bogdáni buszvégállomáson több kupac szemét hever a földön.
+- Top2: kérem az illetékest, hogy foltozzák be a képen látható kátyút!
+- Top3: kérem az illetékest, hogy a képen látható kátyút tömjék be!
+
+## sentence-transformers/all-mpnet-base-v2 (English-only)
+**Query:** bad smell in the neighborhood
+- Top1: az astorian a bicikli utat jelző pollernek nekiment egy szabálytalan autós és kitörte. kérjük javítsák, köszönjük! (van lehetőség a szabálytalan közlekedők figyelmeztetésére, sokszor látjuk, hogy autók, taxik, buszok, néha akár beton mixerek is egyenesen mennek tovább a kerékpár sávon a múzeum felől a belváros fele
+- Top2: a jósika u. végéről hiányzik a kerékpárosoknak szóló elsőbbségadás kötelező tábla, így számukra "jobbkezes" a kereszteződés - csak erről a rottenbilleren érkezők nem tudnak.
+- Top3: lejart műszakival foglal egy auto egy ertekes parkolohelyet
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** kátyú az úton
+- Top1: a mélytó utca és bányató utca között körforgalomnál a középső járdánál a közúti eak tábla kifakulás látható, illetve a közúti körforgalom tábla kezd lassabban kifakuló válni, valamint a jobboldali járdánál található közúti eak tábla kifakulás látható
+- Top2: a iii. utca - vencel utca találkozásánál a két út találkozásánál jó ideje megvan ez a lyuk, amiben megáll a víz és roncsolja az aszfaltot.
+- Top3: a legutóbbi szeles időjàràs sajnos meghozta az eredmènyt amitől fèltünk...több àg is leszakadt ,illetve le is fog valoszinűleg a közeljövőben.. az utcànak ez a szakasza gyakorlatilag màr egy furgon magassàgú autóval sem jàrható,mert törik szakad több fa is ha erre mennek.nagy a forgalom,bölcsőde , iskola ,stb...a vezetèkeken is termèszetesen rajta van sok àg.kèrnènk mielöbbi segìtsèget!
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** pothole in the road
+- Top1: a iii. utca - vencel utca találkozásánál a két út találkozásánál jó ideje megvan ez a lyuk, amiben megáll a víz és roncsolja az aszfaltot.
+- Top2: a mélytó utca és bányató utca között körforgalomnál a középső járdánál a közúti eak tábla kifakulás látható, illetve a közúti körforgalom tábla kezd lassabban kifakuló válni, valamint a jobboldali járdánál található közúti eak tábla kifakulás látható
+- Top3: az előd és a kond utca kereszteződésben megsüllyedt az aszfalt, kanyarodáskor az egyik kerék vonalába kerül , kikerülni nincs hely a parkoló autók miatt. kérnénk szépen a hiba javítását mielőtt beszakad egy nagyobb jármű alatt.
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** hibás közvilágítás
+- Top1: frissítés: 2025. 05. 26. bejelentő válasza: "tisztelt bdk! köszönöm a visszajelzést, de sajnos továbbra is ugyanolyan a fény, talán minimálisan csökkent a fényerő, de régebben egyáltalán nem volt ez a jelenség, hogy szembevilágít a reflektor. kérem szíveskedjenek orvosolni ezt a rendkívül zavaró állapotot, nagyon irritáló kinézni az ablakon, és élvezhetetlen az egyébként gyönyörű kilátás. köszönettel" --------- tisztelt illetékesek! egy ideje feltűnt, hogy a szabadság hídon egy reflektor rendkívül kellemetlen módon vakít minket, a fővám tér 2-3 ház lakóit. régebben ez nem volt így. kérjük a probléma mihamarabbi orvoslását! köszönettel
+- Top2: a gyalogátkelő lámpája elfordult, a zöld jelzés ferdén áll és nem is látható emiatt
+- Top3: frissítés: 2025.05.06. bdk válasza: köszönjük a bejelentését. tájékoztatjuk, hogy a jelzett címen a hiba nem a bdk kft. illetékességébe tartozik. ----- a brenner jános parkban lévő lámpák gyakran lekapcsolnak és hetekig sötét van este. jelenleg a parkban lévő lámpák fele nem működik. kérjük a területet ellátó elektromos betáp és a kismegszakítók teljesítménybővítését, hogy ne kapcsoljanak le.
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** broken streetlight
+- Top1: a gyalogátkelő lámpája elfordult, a zöld jelzés ferdén áll és nem is látható emiatt
+- Top2: adorján utca 22-24a között lévő közvilágítás nem működik. a lámpa nem világít. nagyon örülnénk neki, ha újra működne. köszönöm előre is!
+- Top3: az egyenesen haladó járműveknek szóló jelzőlámpa zöld izzója már legalább egy hete kiégett
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** csőtörés a főutcán
+- Top1: kiálló fedlap
+- Top2: tisztelt illetékes! hatalmas kátyú éktelenkedik a pöstyén utcában a 17. szám előtt. kérem szíveskedjenek javítani! köszönöm!
+- Top3: a képen látható aknafedél meg van süllyedve, esők alkalmával hatalmas pocsolya alakul ki felette. kérem az illetékest, hogy hozza egy szintbe a járda burkolatával!
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** water pipe burst on the main street
+- Top1: újpesten a lórántffy zsuzsanna utcában víz jön fel az útburkolat alól.
+- Top2: a szabó ilonka utcáról a hunyadi jános útra felvezető lépcső aljában található vízelvezető rácsa beszakadt, és korrodálódott, nagyon balesetveszélyes. köszönjük a javítását/cseréjét.
+- Top3: a iii. utca - vencel utca találkozásánál a két út találkozásánál jó ideje megvan ez a lyuk, amiben megáll a víz és roncsolja az aszfaltot.
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** szemét nincs elszállítva
+- Top1: bekesen novekvo kupac hulladek/szemet.
+- Top2: szettoredezett, katyus , mozgasukban korlatozott szemelyek eseteben balesetveszelyes szakasz
+- Top3: kiálló fedlap
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** garbage not collected
+- Top1: a zöld hulladék hetek óta nem került elszállításra. más szemét - pl doboz- is halmozódik a zsákok mellett. rendkívül elhanyagolt a terület. nagyon régen volt a növényzet is levágta a környéken.
+- Top2: a faágakat a vihar vagy valaki levágta hetekkel ezelőtt és azóta senki nem vitte el. es ott szárad es közzé dobják a szemetet
+- Top3: a rahó utca 2-8/c lomja bokor takarásában volt a budaörsi út felől, ezért nem került elszállításra a lomtalanításkor. a rengeteg sok apró hulladék szét van túrva.
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** illegális hulladéklerakó
+- Top1: kipakolt szemetes , ez ebben az utcában rendszeres,.
+- Top2: ezt a szelektív hulladékgyűjtő borításgátlót kérem, tegyék a serény utca 1 környékén lévő szelektív gyűjtőknek, hogy az ottani borogatásokat megelőzzék. köszönöm.
+- Top3: a rahó utca 2-8/c lomja bokor takarásában volt a budaörsi út felől, ezért nem került elszállításra a lomtalanításkor. a rengeteg sok apró hulladék szét van túrva.
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** illegal dumping site
+- Top1: feltehetően többségében illegális, megtévesztő molinók kihelyezése végig a parton, a partra vezető utcák menten, a kerítéseken.
+- Top2: kipakolt szemetes , ez ebben az utcában rendszeres,.
+- Top3: a rahó utca 2-8/c lomja bokor takarásában volt a budaörsi út felől, ezért nem került elszállításra a lomtalanításkor. a rengeteg sok apró hulladék szét van túrva.
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** zajos építkezés éjszaka
+- Top1: kiálló fedlap
+- Top2: a reflektor szilánkosra tört. kérem intézkedésüket az ügyben! köszönöm szépen!
+- Top3: adorján utca 22-24a között lévő közvilágítás nem működik. a lámpa nem világít. nagyon örülnénk neki, ha újra működne. köszönöm előre is!
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** noisy construction at night
+- Top1: a legutóbbi szeles időjàràs sajnos meghozta az eredmènyt amitől fèltünk...több àg is leszakadt ,illetve le is fog valoszinűleg a közeljövőben.. az utcànak ez a szakasza gyakorlatilag màr egy furgon magassàgú autóval sem jàrható,mert törik szakad több fa is ha erre mennek.nagy a forgalom,bölcsőde , iskola ,stb...a vezetèkeken is termèszetesen rajta van sok àg.kèrnènk mielöbbi segìtsèget!
+- Top2: rendkívül lehangoló, hogy házunkból kilépve reggel és este ez a látvány fogad minket. valószínűleg a bkk gyűjti össze a szemetet a mester utcai 4-6 villamos megállóból és a ház elé helyezik, mert az a legközelebb. erre valmi megfelelőbb megoldást kellene találni, mert ez így nem megfelelő az itt lakók számára.
+- Top3: a képen látható aknafedél meg van süllyedve, esők alkalmával hatalmas pocsolya alakul ki felette. kérem az illetékest, hogy hozza egy szintbe a járda burkolatával!
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** buszmegálló megrongálva
+- Top1: a deák téren a 9-es busz déli irányú megállójában az egyik fa melletti karók kidőltek, meglazultak.
+- Top2: jelzett helyszínen lévő közlekedési tábla rongált, matricás, illetve a tartó oszlopot is megrongálták. a tábla nincs rendesen beépítve, körülötte a burkolat teljesen töredezett. kérjük az illetékest, hogy javítsa a jelzett hibákat! pontos helyszín: 47.49010013728827, 19.02458207916085
+- Top3: a bogdáni buszvégállomáson több kupac szemét hever a földön.
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** damaged bus stop
+- Top1: a deák téren a 9-es busz déli irányú megállójában az egyik fa melletti karók kidőltek, meglazultak.
+- Top2: jelzett helyszínen lévő közlekedési tábla rongált, matricás, illetve a tartó oszlopot is megrongálták. a tábla nincs rendesen beépítve, körülötte a burkolat teljesen töredezett. kérjük az illetékest, hogy javítsa a jelzett hibákat! pontos helyszín: 47.49010013728827, 19.02458207916085
+- Top3: a bogdáni buszvégállomáson több kupac szemét hever a földön.
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** nem működik a jelzőlámpa
+- Top1: adorján utca 22-24a között lévő közvilágítás nem működik. a lámpa nem világít. nagyon örülnénk neki, ha újra működne. köszönöm előre is!
+- Top2: a gyalogátkelő lámpája elfordult, a zöld jelzés ferdén áll és nem is látható emiatt
+- Top3: lassan egy hónapja nem müködik a bp, xv kinizsi 122 elött lévő utcai lámpa.
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** traffic light not working
+- Top1: a gyalogátkelő lámpája elfordult, a zöld jelzés ferdén áll és nem is látható emiatt
+- Top2: adorján utca 22-24a között lévő közvilágítás nem működik. a lámpa nem világít. nagyon örülnénk neki, ha újra működne. köszönöm előre is!
+- Top3: napok óta nem ég a zsélyi aladár utca 21. előtti lámpa.
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** veszélyes zebra
+- Top1: lekopott zebra
+- Top2: tisztelt illetèkes, ahogy minden èvben, idèn is ránőtt az útra a bejelentès helyszínèn lèvő bokor, akadályozva ezzel a közlekedèst, valamint balesetveszèlyes helyzetet okozva a kereszteződésnèl. ismèt szeretnènk kèrni a terület mihamarabbi rendezèsèt, valamint szeretnèk tájèkoztatàst kèrni arról is, hogy mi akadályozza azt, hogy a jelölt terület rendszeresen - a szezonalitàsnak megfelelően rendbe legyen tève?
+- Top3: kérem biztonságos és igényes zárását. addig közvetlen életveszélyes?
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** dangerous pedestrian crossing
+- Top1: a 2.- ik kerület cserfa utca - ürömi utca kereszteződésében el vannak fordítva a táblák. nem látható az autósoknak.
+- Top2: a fehérvári út 201-207 parkolójában a szeglet közösségi tér előtt letört faág gátolja a járdán történő közlekedést. kérem segítségüket a probléma elhárításában. köszönöm.
+- Top3: a x. kerületben a váltó utcában szemét van szétdobálva. kérem az illetékesek segítsenek a köztisztaság visszaállításában.
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** parkban nincs világítás
+- Top1: frissítés: 2025.05.06. bdk válasza: köszönjük a bejelentését. tájékoztatjuk, hogy a jelzett címen a hiba nem a bdk kft. illetékességébe tartozik. ----- a brenner jános parkban lévő lámpák gyakran lekapcsolnak és hetekig sötét van este. jelenleg a parkban lévő lámpák fele nem működik. kérjük a területet ellátó elektromos betáp és a kismegszakítók teljesítménybővítését, hogy ne kapcsoljanak le.
+- Top2: a gyalogátkelő lámpája elfordult, a zöld jelzés ferdén áll és nem is látható emiatt
+- Top3: napok óta nem ég a zsélyi aladár utca 21. előtti lámpa.
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** no lighting in the park
+- Top1: frissítés: 2025.05.06. bdk válasza: köszönjük a bejelentését. tájékoztatjuk, hogy a jelzett címen a hiba nem a bdk kft. illetékességébe tartozik. ----- a brenner jános parkban lévő lámpák gyakran lekapcsolnak és hetekig sötét van este. jelenleg a parkban lévő lámpák fele nem működik. kérjük a területet ellátó elektromos betáp és a kismegszakítók teljesítménybővítését, hogy ne kapcsoljanak le.
+- Top2: a gyalogátkelő lámpája elfordult, a zöld jelzés ferdén áll és nem is látható emiatt
+- Top3: napok óta nem ég a zsélyi aladár utca 21. előtti lámpa.
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** játszótér karbantartás
+- Top1: a játszótér bejaratának kilincse lejött.
+- Top2: lejart műszakival foglal egy auto egy ertekes parkolohelyet
+- Top3: kiálló fedlap
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** playground maintenance
+- Top1: a játszótér bejaratának kilincse lejött.
+- Top2: nem lehet becsukni a kaput a játszótéren.
+- Top3: frissítés: 2025.09.06. a bejelentő visszajelzése alapján: a probléma nem oldódott meg. hiányoznak az oszlopok. ----- hibás játszótéri elemek. kérjük, javítsa meg őket.
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** padok megrongálva
+- Top1: kiálló fedlap
+- Top2: sérült , hiányos fedlap
+- Top3: bekesen novekvo kupac hulladek/szemet.
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** benches damaged
+- Top1: jelzett helyszínen lévő közlekedési tábla rongált, matricás, illetve a tartó oszlopot is megrongálták. a tábla nincs rendesen beépítve, körülötte a burkolat teljesen töredezett. kérjük az illetékest, hogy javítsa a jelzett hibákat! pontos helyszín: 47.49010013728827, 19.02458207916085
+- Top2: tönkrement , hiányos fedlap a műtárgy kerete a járdaszint felett van.
+- Top3: sérült , hiányos fedlap
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** hajléktalanok az aluljáróban
+- Top1: sérült , hiányos fedlap
+- Top2: valakik több zsák zöldhulladékot dobálták az utcára. eléggé rontja a látképet, kérem lehetőség szerint szállítsák el!
+- Top3: a bogdáni buszvégállomáson több kupac szemét hever a földön.
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** homeless people in the underpass
+- Top1: valakik több zsák zöldhulladékot dobálták az utcára. eléggé rontja a látképet, kérem lehetőség szerint szállítsák el!
+- Top2: a táborhegy utcában a házak között a parkoló teli van falevellel, gazzal.
+- Top3: a batthyány tér alatt, az alsó rakpartra levezető lépcsőkön, amit a turisták is rendszeresen használnak lényegében állandósult az emberi ürülék mindennemű formája. azon túl, hogy gusztustalan és büdös, higiéniai kockázatokat is jelent. itt állandó ellenőrzésre és takarításra lenne szükség.
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** graffitik a falon
+- Top1: kedves illetékes! ez a nagy szekrény mindenhol tele van graffitivel. köszönöm!
+- Top2: a móricz zsigmond körtéren a megálló padjának a festése lekopott. kérem javítsák!
+- Top3: boráros tér aluljáróban graffiti, matricák vannak a falon és az oszlopon. roncs bútorok, elektronikai hulladék (mikró) került elhelyezésre az aluljáróban.
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** graffiti on the wall
+- Top1: kedves illetékes! ez a nagy szekrény mindenhol tele van graffitivel. köszönöm!
+- Top2: a móricz zsigmond körtéren a megálló padjának a festése lekopott. kérem javítsák!
+- Top3: boráros tér aluljáróban graffiti, matricák vannak a falon és az oszlopon. roncs bútorok, elektronikai hulladék (mikró) került elhelyezésre az aluljáróban.
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** szivárgó csatorna
+- Top1: eldugult csatornaszem. kérjük megtisztítani
+- Top2: újpesten a lórántffy zsuzsanna utcában víz jön fel az útburkolat alól.
+- Top3: kiálló fedlap
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** leaking sewer
+- Top1: frissítés: 2025.09.03. fcsm válasza: „köszönettel vettük bejelentését. a megadott helyszínen társaságunk nem üzemeltet csapadékvíz-elvezető hálózatot, ezért a probléma megoldása érdekében nem áll módunkban intézkedni.” ----- a vízelvezető csatornák a iv. kerület fiumei út 12-18 szakaszon nem voltak tisztítva nagyon régi, minimum 6-7 éve. esőzés esetén megáll a víz az úttesten, több helyen az utcában, egy nap mire elszivárog, a közlekedés nehézkes (csatolt képek mutatják). az esőelvezetés nem működik a csatorna elvezetés el vannak dugulva, feltételezhetően a fedelek alatt tele van mindenféle kosszal, szeméttel. kérem az illetékeseket a csatorna fedelek alatti és a járatokban történő tisztítást az érintett szakaszon. köszönöm!
+- Top2: eldugult csatornaszem. kérjük megtisztítani
+- Top3: újpesten a lórántffy zsuzsanna utcában víz jön fel az útburkolat alól.
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** bűz a környéken
+- Top1: tisztlet illetékes(ek)! a vágány utca / róbert károly körút nevű megállóban és az az mögött elvezető kerékpárúton a léteztő összes bűz és testnedv terjeng. legyenek kedvesek egy alapos fertőtlenítő takarítást végezni és ha lehet rendszeresíten. a megálló várakozója kifejezetten undorító, ebben a melegben az ember gyomra kifordul buszra várakozás közben. legjobb lenne ezt a pudvás váróhelyiséget is elbontani meg a növényzetet visszavágni. talán nem lenne ennyire hivogató. várom mielőbbi intézkedésüket, köszönjük!
+- Top2: rákóczi - kiss jános utca sarkán egy kukát felgyújtottak. hónapok óta ott csúfolkodik.
+- Top3: ez sem úgy néz ki,mint ami menne bárhová. belseje tele szeméttel, gumik kukák...
+
+## sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (Multilingual)
+**Query:** bad smell in the neighborhood
+- Top1: tisztlet illetékes(ek)! a vágány utca / róbert károly körút nevű megállóban és az az mögött elvezető kerékpárúton a léteztő összes bűz és testnedv terjeng. legyenek kedvesek egy alapos fertőtlenítő takarítást végezni és ha lehet rendszeresíten. a megálló várakozója kifejezetten undorító, ebben a melegben az ember gyomra kifordul buszra várakozás közben. legjobb lenne ezt a pudvás váróhelyiséget is elbontani meg a növényzetet visszavágni. talán nem lenne ennyire hivogató. várom mielőbbi intézkedésüket, köszönjük!
+- Top2: kipakolt szemetes , ez ebben az utcában rendszeres,.
+- Top3: rendkívül lehangoló, hogy házunkból kilépve reggel és este ez a látvány fogad minket. valószínűleg a bkk gyűjti össze a szemetet a mester utcai 4-6 villamos megállóból és a ház elé helyezik, mert az a legközelebb. erre valmi megfelelőbb megoldást kellene találni, mert ez így nem megfelelő az itt lakók számára.
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** kátyú az úton
+- Top1: kiálló fedlap
+- Top2: lekopott zebra
+- Top3: rege hinta leszakadt
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** pothole in the road
+- Top1: kipakolt szemetes , ez ebben az utcában rendszeres,.
+- Top2: kiálló fedlap
+- Top3: újpesten a lórántffy zsuzsanna utcában víz jön fel az útburkolat alól.
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** hibás közvilágítás
+- Top1: kiálló fedlap
+- Top2: sérült , hiányos fedlap
+- Top3: kérem javítsák
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** broken streetlight
+- Top1: sérült , hiányos fedlap
+- Top2: kiálló fedlap
+- Top3: adorján utca 22-24a között lévő közvilágítás nem működik. a lámpa nem világít. nagyon örülnénk neki, ha újra működne. köszönöm előre is!
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** csőtörés a főutcán
+- Top1: kiálló fedlap
+- Top2: rege hinta leszakadt
+- Top3: lerakott hűtőszekrény
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** water pipe burst on the main street
+- Top1: újpesten a lórántffy zsuzsanna utcában víz jön fel az útburkolat alól.
+- Top2: tisztelt illetékes! a vízelvezető fele belefordult az aknába, jelen állapotában elég balesetveszélyes. az út túloldalán lévő (ezzel párhuzamos) vízelvezető rács sem túl stabil. kérem javítsák! hadak útja - borszéki u. kereszteződésében
+- Top3: a iii. utca - vencel utca találkozásánál a két út találkozásánál jó ideje megvan ez a lyuk, amiben megáll a víz és roncsolja az aszfaltot.
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** szemét nincs elszállítva
+- Top1: sérült , hiányos fedlap
+- Top2: nem lehet becsukni a kaput a játszótéren.
+- Top3: bekesen novekvo kupac hulladek/szemet.
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** garbage not collected
+- Top1: kiálló fedlap
+- Top2: sérült , hiányos fedlap
+- Top3: a zöld hulladék hetek óta nem került elszállításra. más szemét - pl doboz- is halmozódik a zsákok mellett. rendkívül elhanyagolt a terület. nagyon régen volt a növényzet is levágta a környéken.
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** illegális hulladéklerakó
+- Top1: kiálló fedlap
+- Top2: sérült , hiányos fedlap
+- Top3: lerakott hűtőszekrény
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** illegal dumping site
+- Top1: kiálló fedlap
+- Top2: sérült , hiányos fedlap
+- Top3: feltehetően többségében illegális, megtévesztő molinók kihelyezése végig a parton, a partra vezető utcák menten, a kerítéseken.
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** zajos építkezés éjszaka
+- Top1: kiálló fedlap
+- Top2: lerakott hűtőszekrény
+- Top3: lekopott zebra
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** noisy construction at night
+- Top1: rendkívül lehangoló, hogy házunkból kilépve reggel és este ez a látvány fogad minket. valószínűleg a bkk gyűjti össze a szemetet a mester utcai 4-6 villamos megállóból és a ház elé helyezik, mert az a legközelebb. erre valmi megfelelőbb megoldást kellene találni, mert ez így nem megfelelő az itt lakók számára.
+- Top2: kiálló fedlap
+- Top3: frissítés: 2025.05.06. bdk válasza: köszönjük a bejelentését. tájékoztatjuk, hogy a jelzett címen a hiba nem a bdk kft. illetékességébe tartozik. ----- a brenner jános parkban lévő lámpák gyakran lekapcsolnak és hetekig sötét van este. jelenleg a parkban lévő lámpák fele nem működik. kérjük a területet ellátó elektromos betáp és a kismegszakítók teljesítménybővítését, hogy ne kapcsoljanak le.
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** buszmegálló megrongálva
+- Top1: sérült , hiányos fedlap
+- Top2: a bogdáni buszvégállomáson több kupac szemét hever a földön.
+- Top3: kiálló fedlap
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** damaged bus stop
+- Top1: sérült , hiányos fedlap
+- Top2: a bogdáni buszvégállomáson több kupac szemét hever a földön.
+- Top3: a határ úti csomópontban a shopmark és a buszvégállomások közötti gyalogáakelőhelynél hiányzik a közlekedési tábla és szinte teljesen lekopott a felfestés. a közlekedési lámpa üzemzavara esetén ez probléma lehet.
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** nem működik a jelzőlámpa
+- Top1: nem lehet becsukni a kaput a játszótéren.
+- Top2: rendszám nélküli autó.
+- Top3: sérült , hiányos fedlap
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** traffic light not working
+- Top1: adorján utca 22-24a között lévő közvilágítás nem működik. a lámpa nem világít. nagyon örülnénk neki, ha újra működne. köszönöm előre is!
+- Top2: a gyalogátkelő lámpája elfordult, a zöld jelzés ferdén áll és nem is látható emiatt
+- Top3: a határ úti csomópontban a shopmark és a buszvégállomások közötti gyalogáakelőhelynél hiányzik a közlekedési tábla és szinte teljesen lekopott a felfestés. a közlekedési lámpa üzemzavara esetén ez probléma lehet.
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** veszélyes zebra
+- Top1: lekopott zebra
+- Top2: kiálló fedlap
+- Top3: sérült , hiányos fedlap
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** dangerous pedestrian crossing
+- Top1: egy autóroncsot vontattak az utcankba, amit már latott a közterület felügyelet volt rajta figyelmeztetés, ami lekerült.
+- Top2: a szabó ilonka utcáról a hunyadi jános útra felvezető lépcső aljában található vízelvezető rácsa beszakadt, és korrodálódott, nagyon balesetveszélyes. köszönjük a javítását/cseréjét.
+- Top3: a veres péter út és a szilas - patak találkozásánál lévő aluljáró megközelítése a kitett - elsőbbség adás kötelező- tábla ellenére is veszélyes. csak,ha leszáll az ember a bringáról és lassan bekukucskál,akkor lehet biztonsággal balra kanyarodni. olyan sebességgel jönnek az egyenes szakaszból - a híd alól- a bringások,hogy gyakran voltam szemtanúja hangos káromkodásnak... javasolnám,hogy az egyenes szakaszon kerekezőknek is legyen egy vigyázz,lassabban!stb.jelzés. ugyanitt a híd vasalt része billeg. amikor áthajt rajta vki., a híd alatt közlekedőre a frász jön. remélem, nem külön bejelentést kíván! köszönöm a segítséget.
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** parkban nincs világítás
+- Top1: frissítés: 2025.05.06. bdk válasza: köszönjük a bejelentését. tájékoztatjuk, hogy a jelzett címen a hiba nem a bdk kft. illetékességébe tartozik. ----- a brenner jános parkban lévő lámpák gyakran lekapcsolnak és hetekig sötét van este. jelenleg a parkban lévő lámpák fele nem működik. kérjük a területet ellátó elektromos betáp és a kismegszakítók teljesítménybővítését, hogy ne kapcsoljanak le.
+- Top2: adorján utca 22-24a között lévő közvilágítás nem működik. a lámpa nem világít. nagyon örülnénk neki, ha újra működne. köszönöm előre is!
+- Top3: a gyalogátkelő lámpája elfordult, a zöld jelzés ferdén áll és nem is látható emiatt
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** no lighting in the park
+- Top1: frissítés: 2025.05.06. bdk válasza: köszönjük a bejelentését. tájékoztatjuk, hogy a jelzett címen a hiba nem a bdk kft. illetékességébe tartozik. ----- a brenner jános parkban lévő lámpák gyakran lekapcsolnak és hetekig sötét van este. jelenleg a parkban lévő lámpák fele nem működik. kérjük a területet ellátó elektromos betáp és a kismegszakítók teljesítménybővítését, hogy ne kapcsoljanak le.
+- Top2: a gyalogátkelő lámpája elfordult, a zöld jelzés ferdén áll és nem is látható emiatt
+- Top3: lejart műszakival foglal egy auto egy ertekes parkolohelyet
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** játszótér karbantartás
+- Top1: kiálló fedlap
+- Top2: lerakott hűtőszekrény
+- Top3: rege hinta leszakadt
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** playground maintenance
+- Top1: kiálló fedlap
+- Top2: lejart műszakival foglal egy auto egy ertekes parkolohelyet
+- Top3: lerakott hűtőszekrény
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** padok megrongálva
+- Top1: sérült , hiányos fedlap
+- Top2: kiálló fedlap
+- Top3: rege hinta leszakadt
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** benches damaged
+- Top1: sérült , hiányos fedlap
+- Top2: kiálló fedlap
+- Top3: lekopott zebra
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** hajléktalanok az aluljáróban
+- Top1: sérült , hiányos fedlap
+- Top2: kiálló fedlap
+- Top3: lerakott hűtőszekrény
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** homeless people in the underpass
+- Top1: sérült , hiányos fedlap
+- Top2: kiálló fedlap
+- Top3: lerakott hűtőszekrény
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** graffitik a falon
+- Top1: kedves hölgyem/uram! graffitis a szekrény. köszönöm!
+- Top2: kedves illetékes! ez a nagy szekrény mindenhol tele van graffitivel. köszönöm!
+- Top3: kiálló fedlap
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** graffiti on the wall
+- Top1: kedves illetékes! ez a nagy szekrény mindenhol tele van graffitivel. köszönöm!
+- Top2: kedves hölgyem/uram! graffitis a szekrény. köszönöm!
+- Top3: boráros tér aluljáróban graffiti, matricák vannak a falon és az oszlopon. roncs bútorok, elektronikai hulladék (mikró) került elhelyezésre az aluljáróban.
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** szivárgó csatorna
+- Top1: kiálló fedlap
+- Top2: eldugult csatornaszem. kérjük megtisztítani
+- Top3: lerakott hűtőszekrény
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** leaking sewer
+- Top1: kiálló fedlap
+- Top2: lerakott hűtőszekrény
+- Top3: eldugult csatornaszem. kérjük megtisztítani
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** bűz a környéken
+- Top1: kiálló fedlap
+- Top2: lekopott zebra
+- Top3: rege hinta leszakadt
+
+## sentence-transformers/distiluse-base-multilingual-cased-v2 (Multilingual)
+**Query:** bad smell in the neighborhood
+- Top1: sérült , hiányos fedlap
+- Top2: bekesen novekvo kupac hulladek/szemet.
+- Top3: kiálló fedlap
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** kátyú az úton
+- Top1: évek óta rohad az autó
+- Top2: a közraktár utca 28. előtt az úttest közepén lévő járdaszigeten álló egyik lámpaoszlopról hiányzik egy fedél. a google térkép szerint egy már 2009-ben sem volt meg.
+- Top3: egy letört faág fekszik a járdán mester utca 23 mellett. kérem, távolítsák el a faágot a járdáról. köszönöm szépen.
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** pothole in the road
+- Top1: nem lehet becsukni a kaput a játszótéren.
+- Top2: a fehérvári út 201-207 parkolójában a szeglet közösségi tér előtt letört faág gátolja a járdán történő közlekedést. kérem segítségüket a probléma elhárításában. köszönöm.
+- Top3: a közraktár utca 28. előtt az úttest közepén lévő járdaszigeten álló egyik lámpaoszlopról hiányzik egy fedél. a google térkép szerint egy már 2009-ben sem volt meg.
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** hibás közvilágítás
+- Top1: sérült , hiányos fedlap
+- Top2: a gyalogátkelő lámpája elfordult, a zöld jelzés ferdén áll és nem is látható emiatt
+- Top3: adorján utca 22-24a között lévő közvilágítás nem működik. a lámpa nem világít. nagyon örülnénk neki, ha újra működne. köszönöm előre is!
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** broken streetlight
+- Top1: sérült , hiányos fedlap
+- Top2: a gyalogátkelő lámpája elfordult, a zöld jelzés ferdén áll és nem is látható emiatt
+- Top3: napok óta nem ég a zsélyi aladár utca 21. előtti lámpa.
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** csőtörés a főutcán
+- Top1: rege hinta leszakadt
+- Top2: kiálló fedlap
+- Top3: lerakott hűtőszekrény
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** water pipe burst on the main street
+- Top1: újpesten a lórántffy zsuzsanna utcában víz jön fel az útburkolat alól.
+- Top2: a iii. utca - vencel utca találkozásánál a két út találkozásánál jó ideje megvan ez a lyuk, amiben megáll a víz és roncsolja az aszfaltot.
+- Top3: a szabó ilonka utcáról a hunyadi jános útra felvezető lépcső aljában található vízelvezető rácsa beszakadt, és korrodálódott, nagyon balesetveszélyes. köszönjük a javítását/cseréjét.
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** szemét nincs elszállítva
+- Top1: a zöld hulladék hetek óta nem került elszállításra. más szemét - pl doboz- is halmozódik a zsákok mellett. rendkívül elhanyagolt a terület. nagyon régen volt a növényzet is levágta a környéken.
+- Top2: ez sem úgy néz ki,mint ami menne bárhová. belseje tele szeméttel, gumik kukák...
+- Top3: évek óta rohad az autó
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** garbage not collected
+- Top1: a zöld hulladék hetek óta nem került elszállításra. más szemét - pl doboz- is halmozódik a zsákok mellett. rendkívül elhanyagolt a terület. nagyon régen volt a növényzet is levágta a környéken.
+- Top2: lerakott hűtőszekrény
+- Top3: mozgásképtelen törött gépjármű foglalja el a parkolóhelyet. vitessék el bontóba.
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** illegális hulladéklerakó
+- Top1: lerakott hűtőszekrény
+- Top2: mozgásképtelen törött gépjármű foglalja el a parkolóhelyet. vitessék el bontóba.
+- Top3: rendszám nélküli autó.
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** illegal dumping site
+- Top1: mozgásképtelen törött gépjármű foglalja el a parkolóhelyet. vitessék el bontóba.
+- Top2: feltehetően többségében illegális, megtévesztő molinók kihelyezése végig a parton, a partra vezető utcák menten, a kerítéseken.
+- Top3: lejart műszakival foglal egy auto egy ertekes parkolohelyet
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** zajos építkezés éjszaka
+- Top1: évek óta rohad az autó
+- Top2: rendkívül lehangoló, hogy házunkból kilépve reggel és este ez a látvány fogad minket. valószínűleg a bkk gyűjti össze a szemetet a mester utcai 4-6 villamos megállóból és a ház elé helyezik, mert az a legközelebb. erre valmi megfelelőbb megoldást kellene találni, mert ez így nem megfelelő az itt lakók számára.
+- Top3: lerakott hűtőszekrény
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** noisy construction at night
+- Top1: rendkívül lehangoló, hogy házunkból kilépve reggel és este ez a látvány fogad minket. valószínűleg a bkk gyűjti össze a szemetet a mester utcai 4-6 villamos megállóból és a ház elé helyezik, mert az a legközelebb. erre valmi megfelelőbb megoldást kellene találni, mert ez így nem megfelelő az itt lakók számára.
+- Top2: évek óta rohad az autó
+- Top3: lerakott hűtőszekrény
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** buszmegálló megrongálva
+- Top1: jelzett helyszínen lévő biciklis pontot megrongálták. -- kérnénk az ilyen jellegű rongálások sokkal szigorúbb szankcionálását, mert elképesztő mennyiségű közpénz megy el a javításokra, és undorítóan néz ki a város, mert minden firkás!!! felháborító!!! -- kérjük javítani! pontos helyszín: 47.478573293970655, 19.040928968831597
+- Top2: a határ úti csomópontban a shopmark és a buszvégállomások közötti gyalogáakelőhelynél hiányzik a közlekedési tábla és szinte teljesen lekopott a felfestés. a közlekedési lámpa üzemzavara esetén ez probléma lehet.
+- Top3: sérült , hiányos fedlap
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** damaged bus stop
+- Top1: sérült , hiányos fedlap
+- Top2: jelzett helyszínen lévő közlekedési tábla rongált, matricás, illetve a tartó oszlopot is megrongálták. a tábla nincs rendesen beépítve, körülötte a burkolat teljesen töredezett. kérjük az illetékest, hogy javítsa a jelzett hibákat! pontos helyszín: 47.49010013728827, 19.02458207916085
+- Top3: az astorian a bicikli utat jelző pollernek nekiment egy szabálytalan autós és kitörte. kérjük javítsák, köszönjük! (van lehetőség a szabálytalan közlekedők figyelmeztetésére, sokszor látjuk, hogy autók, taxik, buszok, néha akár beton mixerek is egyenesen mennek tovább a kerékpár sávon a múzeum felől a belváros fele
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** nem működik a jelzőlámpa
+- Top1: a gyalogátkelő lámpája elfordult, a zöld jelzés ferdén áll és nem is látható emiatt
+- Top2: adorján utca 22-24a között lévő közvilágítás nem működik. a lámpa nem világít. nagyon örülnénk neki, ha újra működne. köszönöm előre is!
+- Top3: napok óta nem ég a zsélyi aladár utca 21. előtti lámpa.
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** traffic light not working
+- Top1: a gyalogátkelő lámpája elfordult, a zöld jelzés ferdén áll és nem is látható emiatt
+- Top2: adorján utca 22-24a között lévő közvilágítás nem működik. a lámpa nem világít. nagyon örülnénk neki, ha újra működne. köszönöm előre is!
+- Top3: a határ úti csomópontban a shopmark és a buszvégállomások közötti gyalogáakelőhelynél hiányzik a közlekedési tábla és szinte teljesen lekopott a felfestés. a közlekedési lámpa üzemzavara esetén ez probléma lehet.
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** veszélyes zebra
+- Top1: lekopott zebra
+- Top2: rege hinta leszakadt
+- Top3: a veres péter út és a szilas - patak találkozásánál lévő aluljáró megközelítése a kitett - elsőbbség adás kötelező- tábla ellenére is veszélyes. csak,ha leszáll az ember a bringáról és lassan bekukucskál,akkor lehet biztonsággal balra kanyarodni. olyan sebességgel jönnek az egyenes szakaszból - a híd alól- a bringások,hogy gyakran voltam szemtanúja hangos káromkodásnak... javasolnám,hogy az egyenes szakaszon kerekezőknek is legyen egy vigyázz,lassabban!stb.jelzés. ugyanitt a híd vasalt része billeg. amikor áthajt rajta vki., a híd alatt közlekedőre a frász jön. remélem, nem külön bejelentést kíván! köszönöm a segítséget.
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** dangerous pedestrian crossing
+- Top1: a veres péter út és a szilas - patak találkozásánál lévő aluljáró megközelítése a kitett - elsőbbség adás kötelező- tábla ellenére is veszélyes. csak,ha leszáll az ember a bringáról és lassan bekukucskál,akkor lehet biztonsággal balra kanyarodni. olyan sebességgel jönnek az egyenes szakaszból - a híd alól- a bringások,hogy gyakran voltam szemtanúja hangos káromkodásnak... javasolnám,hogy az egyenes szakaszon kerekezőknek is legyen egy vigyázz,lassabban!stb.jelzés. ugyanitt a híd vasalt része billeg. amikor áthajt rajta vki., a híd alatt közlekedőre a frász jön. remélem, nem külön bejelentést kíván! köszönöm a segítséget.
+- Top2: tisztelt illetékes! a vasúti pálya alatt átvezető gyalogos aluljáró közvetlen környezete ( a máv kerítés kívül) nagyon szemetes és az aluljáró aszfaltozásán is sok föld, gaz található. kérem tisztítsák meg!
+- Top3: szettoredezett, katyus , mozgasukban korlatozott szemelyek eseteben balesetveszelyes szakasz
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** parkban nincs világítás
+- Top1: nem lehet becsukni a kaput a játszótéren.
+- Top2: a gyalogátkelő lámpája elfordult, a zöld jelzés ferdén áll és nem is látható emiatt
+- Top3: a templom kertjében kidöntöttek egy kukát.
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** no lighting in the park
+- Top1: nem lehet becsukni a kaput a játszótéren.
+- Top2: a gyalogátkelő lámpája elfordult, a zöld jelzés ferdén áll és nem is látható emiatt
+- Top3: a templom kertjében kidöntöttek egy kukát.
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** játszótér karbantartás
+- Top1: nem lehet becsukni a kaput a játszótéren.
+- Top2: a játszótér bejaratának kilincse lejött.
+- Top3: egy újabb templom utcai ,,gyöngyszem", abból a közel tucatnyi roncsból, amit ebben azt utcában a füvön parkoltatnak évek óta. így soha nem lesz soroksár főútja (de mellékútjai sem) vonzóak. a rendészet miért huny szemet ezek felett?
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** playground maintenance
+- Top1: nem lehet becsukni a kaput a játszótéren.
+- Top2: békásmegyeren,a bebó károly utcai játszótéren alig folyik a csap. eddig nagyobb sugárban folyt,valami biztos hogy nincs rendben vele.
+- Top3: a játszótér bejaratának kilincse lejött.
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** padok megrongálva
+- Top1: sérült , hiányos fedlap
+- Top2: lerakott hűtőszekrény
+- Top3: rege hinta leszakadt
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** benches damaged
+- Top1: sérült , hiányos fedlap
+- Top2: rege hinta leszakadt
+- Top3: jelzett helyszínen lévő közlekedési tábla rongált, matricás, illetve a tartó oszlopot is megrongálták. a tábla nincs rendesen beépítve, körülötte a burkolat teljesen töredezett. kérjük az illetékest, hogy javítsa a jelzett hibákat! pontos helyszín: 47.49010013728827, 19.02458207916085
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** hajléktalanok az aluljáróban
+- Top1: nem lehet becsukni a kaput a játszótéren.
+- Top2: sérült , hiányos fedlap
+- Top3: lerakott hűtőszekrény
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** homeless people in the underpass
+- Top1: sérült , hiányos fedlap
+- Top2: rendszám nélküli autó.
+- Top3: nem lehet becsukni a kaput a játszótéren.
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** graffitik a falon
+- Top1: boráros tér aluljáróban graffiti, matricák vannak a falon és az oszlopon. roncs bútorok, elektronikai hulladék (mikró) került elhelyezésre az aluljáróban.
+- Top2: kedves illetékes! ez a nagy szekrény mindenhol tele van graffitivel. köszönöm!
+- Top3: feltehetően többségében illegális, megtévesztő molinók kihelyezése végig a parton, a partra vezető utcák menten, a kerítéseken.
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** graffiti on the wall
+- Top1: boráros tér aluljáróban graffiti, matricák vannak a falon és az oszlopon. roncs bútorok, elektronikai hulladék (mikró) került elhelyezésre az aluljáróban.
+- Top2: kedves illetékes! ez a nagy szekrény mindenhol tele van graffitivel. köszönöm!
+- Top3: feltehetően többségében illegális, megtévesztő molinók kihelyezése végig a parton, a partra vezető utcák menten, a kerítéseken.
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** szivárgó csatorna
+- Top1: eldugult csatornaszem. kérjük megtisztítani
+- Top2: kiálló fedlap
+- Top3: a iii. utca - vencel utca találkozásánál a két út találkozásánál jó ideje megvan ez a lyuk, amiben megáll a víz és roncsolja az aszfaltot.
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** leaking sewer
+- Top1: eldugult csatornaszem. kérjük megtisztítani
+- Top2: kiálló fedlap
+- Top3: frissítés: 2025.09.03. fcsm válasza: „köszönettel vettük bejelentését. a megadott helyszínen társaságunk nem üzemeltet csapadékvíz-elvezető hálózatot, ezért a probléma megoldása érdekében nem áll módunkban intézkedni.” ----- a vízelvezető csatornák a iv. kerület fiumei út 12-18 szakaszon nem voltak tisztítva nagyon régi, minimum 6-7 éve. esőzés esetén megáll a víz az úttesten, több helyen az utcában, egy nap mire elszivárog, a közlekedés nehézkes (csatolt képek mutatják). az esőelvezetés nem működik a csatorna elvezetés el vannak dugulva, feltételezhetően a fedelek alatt tele van mindenféle kosszal, szeméttel. kérem az illetékeseket a csatorna fedelek alatti és a járatokban történő tisztítást az érintett szakaszon. köszönöm!
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** bűz a környéken
+- Top1: a templom kertjében kidöntöttek egy kukát.
+- Top2: évek óta rohad az autó
+- Top3: szeretném megkérdezni, hogy ez a kb. 1970-ben gyártott talp a zöld kukával mit keres ezen a világörökségi helyszínen a lánchíd budai hídfőjénél?
+
+## sentence-transformers/LaBSE (Multilingual)
+**Query:** bad smell in the neighborhood
+- Top1: kipakolt szemetes , ez ebben az utcában rendszeres,.
+- Top2: a templom kertjében kidöntöttek egy kukát.
+- Top3: évek óta rohad az autó
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** kátyú az úton
+- Top1: lekopott zebra
+- Top2: évek óta rohad az autó
+- Top3: rendszám nélküli autó.
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** pothole in the road
+- Top1: rege hinta leszakadt
+- Top2: évek óta rohad az autó
+- Top3: vajon a kamerát ki és mikor nézte utoljára?
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** hibás közvilágítás
+- Top1: lerakott hűtőszekrény
+- Top2: rendszám nélküli autó.
+- Top3: lekopott zebra
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** broken streetlight
+- Top1: rege hinta leszakadt
+- Top2: lekopott zebra
+- Top3: rákóczi - kiss jános utca sarkán egy kukát felgyújtottak. hónapok óta ott csúfolkodik.
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** csőtörés a főutcán
+- Top1: a templom kertjében kidöntöttek egy kukát.
+- Top2: a horváth utca 19-23 előtti járda megsüllyedt.
+- Top3: a bogdáni buszvégállomáson több kupac szemét hever a földön.
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** water pipe burst on the main street
+- Top1: rákóczi - kiss jános utca sarkán egy kukát felgyújtottak. hónapok óta ott csúfolkodik.
+- Top2: kiszáradt fa, móricz zsigmond körtér villányi sarok, pizzéria előtt
+- Top3: az ajtósi dürer sor és a hungária körút kereszteződesben a járdán hónapok óta ott van egy (talán balesetben megsérült) u korlát.
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** szemét nincs elszállítva
+- Top1: kipakolt szemetes , ez ebben az utcában rendszeres,.
+- Top2: lerakott hűtőszekrény
+- Top3: eldugult csatornaszem. kérjük megtisztítani
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** garbage not collected
+- Top1: rege hinta leszakadt
+- Top2: a móricz zsigmond körtéren a megálló padjának a festése lekopott. kérem javítsák!
+- Top3: tisztelt járókelő! 13. kerület jakab józsef utcàban végleg kiszáradt egy fa! köszönöm a továbbítást!
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** illegális hulladéklerakó
+- Top1: lerakott hűtőszekrény
+- Top2: lekopott zebra
+- Top3: rendszám nélküli autó.
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** illegal dumping site
+- Top1: lekopott zebra
+- Top2: rege hinta leszakadt
+- Top3: kipakolt szemetes , ez ebben az utcában rendszeres,.
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** zajos építkezés éjszaka
+- Top1: lerakott hűtőszekrény
+- Top2: lekopott zebra
+- Top3: rendszám nélküli autó.
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** noisy construction at night
+- Top1: rege hinta leszakadt
+- Top2: rákóczi - kiss jános utca sarkán egy kukát felgyújtottak. hónapok óta ott csúfolkodik.
+- Top3: vajon a kamerát ki és mikor nézte utoljára?
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** buszmegálló megrongálva
+- Top1: lekopott zebra
+- Top2: rendszám nélküli autó.
+- Top3: lerakott hűtőszekrény
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** damaged bus stop
+- Top1: rege hinta leszakadt
+- Top2: rendszám nélküli autó.
+- Top3: hosszabb ideje áll rendszám nélkül ez az autó a széher úton.
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** nem működik a jelzőlámpa
+- Top1: az egyenesen haladó járműveknek szóló jelzőlámpa zöld izzója már legalább egy hete kiégett
+- Top2: a gyalogátkelő lámpája elfordult, a zöld jelzés ferdén áll és nem is látható emiatt
+- Top3: lekopott zebra
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** traffic light not working
+- Top1: vajon a kamerát ki és mikor nézte utoljára?
+- Top2: rege hinta leszakadt
+- Top3: lekopott zebra
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** veszélyes zebra
+- Top1: lekopott zebra
+- Top2: rendszám nélküli autó.
+- Top3: hosszabb ideje áll rendszám nélkül ez az autó a széher úton.
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** dangerous pedestrian crossing
+- Top1: rege hinta leszakadt
+- Top2: kiszáradt fa, móricz zsigmond körtér villányi sarok, pizzéria előtt
+- Top3: lekopott zebra
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** parkban nincs világítás
+- Top1: lerakott hűtőszekrény
+- Top2: rendszám nélküli autó.
+- Top3: lekopott zebra
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** no lighting in the park
+- Top1: lekopott zebra
+- Top2: rege hinta leszakadt
+- Top3: évek óta rohad az autó
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** játszótér karbantartás
+- Top1: lerakott hűtőszekrény
+- Top2: lekopott zebra
+- Top3: rendszám nélküli autó.
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** playground maintenance
+- Top1: vajon a kamerát ki és mikor nézte utoljára?
+- Top2: kiszáradt fa, móricz zsigmond körtér villányi sarok, pizzéria előtt
+- Top3: évek óta rohad az autó
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** padok megrongálva
+- Top1: lekopott zebra
+- Top2: lerakott hűtőszekrény
+- Top3: rendszám nélküli autó.
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** benches damaged
+- Top1: rege hinta leszakadt
+- Top2: kiszáradt fa, móricz zsigmond körtér villányi sarok, pizzéria előtt
+- Top3: évek óta rohad az autó
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** hajléktalanok az aluljáróban
+- Top1: lekopott zebra
+- Top2: a bogdáni buszvégállomáson több kupac szemét hever a földön.
+- Top3: kipakolt szemetes , ez ebben az utcában rendszeres,.
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** homeless people in the underpass
+- Top1: rege hinta leszakadt
+- Top2: rákóczi - kiss jános utca sarkán egy kukát felgyújtottak. hónapok óta ott csúfolkodik.
+- Top3: vajon a kamerát ki és mikor nézte utoljára?
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** graffitik a falon
+- Top1: lekopott zebra
+- Top2: évek óta rohad az autó
+- Top3: kipakolt szemetes , ez ebben az utcában rendszeres,.
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** graffiti on the wall
+- Top1: lekopott zebra
+- Top2: rákóczi - kiss jános utca sarkán egy kukát felgyújtottak. hónapok óta ott csúfolkodik.
+- Top3: kipakolt szemetes , ez ebben az utcában rendszeres,.
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** szivárgó csatorna
+- Top1: kiálló fedlap
+- Top2: lerakott hűtőszekrény
+- Top3: lekopott zebra
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** leaking sewer
+- Top1: kérem tegyenek rendesen használható p alakú kerékpárolót a hüvihez a mostani helyére. köszönöm
+- Top2: kipakolt szemetes , ez ebben az utcában rendszeres,.
+- Top3: rege hinta leszakadt
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** bűz a környéken
+- Top1: lerakott hűtőszekrény
+- Top2: lekopott zebra
+- Top3: évek óta rohad az autó
+
+## SZTAKI-HLT/hubert-base-cc (Hungarian-only)
+**Query:** bad smell in the neighborhood
+- Top1: rege hinta leszakadt
+- Top2: vajon a kamerát ki és mikor nézte utoljára?
+- Top3: rákóczi - kiss jános utca sarkán egy kukát felgyújtottak. hónapok óta ott csúfolkodik.
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** kátyú az úton
+- Top1: a budaörsi út 120. előtt van ez a rendszámnélküli kocsi a fűbe, feltolva a domb oldalára.
+- Top2: az ajtósi dürer sor és a hungária körút kereszteződesben a járdán hónapok óta ott van egy (talán balesetben megsérült) u korlát.
+- Top3: corvin csomóponttól szabadkikötő felé, a hév sín melletti járdára rádőlt egy fa, ami teljes egészében elfoglalja a járdát.
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** pothole in the road
+- Top1: rege hinta leszakadt
+- Top2: lekopott zebra
+- Top3: frissítés: 2025.04.08. trafficom válasza: „a jelzett műtárgy nem a trafficom kft. tulajdona, ill. nem tartozik cégünk üzemeltetése alá.” ----- tönkrement fedlap a millenniumtelepi hév megállóban a haraszti út 157 szemben.
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** hibás közvilágítás
+- Top1: lejart műszakival foglal egy auto egy ertekes parkolohelyet
+- Top2: lerakott hűtőszekrény
+- Top3: a gyalogátkelő lámpája elfordult, a zöld jelzés ferdén áll és nem is látható emiatt
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** broken streetlight
+- Top1: lekopott zebra
+- Top2: kiszáradt fa, móricz zsigmond körtér villányi sarok, pizzéria előtt
+- Top3: rege hinta leszakadt
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** csőtörés a főutcán
+- Top1: a budaörsi út 120. előtt van ez a rendszámnélküli kocsi a fűbe, feltolva a domb oldalára.
+- Top2: a bogdáni buszvégállomáson több kupac szemét hever a földön.
+- Top3: lejart műszakival foglal egy auto egy ertekes parkolohelyet
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** water pipe burst on the main street
+- Top1: frissítés: 2025.04.08. trafficom válasza: „a jelzett műtárgy nem a trafficom kft. tulajdona, ill. nem tartozik cégünk üzemeltetése alá.” ----- tönkrement fedlap a millenniumtelepi hév megállóban a haraszti út 157 szemben.
+- Top2: corvin csomóponttól szabadkikötő felé, a hév sín melletti járdára rádőlt egy fa, ami teljes egészében elfoglalja a járdát.
+- Top3: szeretném megkérdezni, hogy ez a kb. 1970-ben gyártott talp a zöld kukával mit keres ezen a világörökségi helyszínen a lánchíd budai hídfőjénél?
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** szemét nincs elszállítva
+- Top1: lerakott hűtőszekrény
+- Top2: kipakolt szemetes , ez ebben az utcában rendszeres,.
+- Top3: eldugult csatornaszem. kérjük megtisztítani
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** garbage not collected
+- Top1: kérem javítsák
+- Top2: lekopott zebra
+- Top3: rege hinta leszakadt
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** illegális hulladéklerakó
+- Top1: bekesen novekvo kupac hulladek/szemet.
+- Top2: ezt a szelektív hulladékgyűjtő borításgátlót kérem, tegyék a serény utca 1 környékén lévő szelektív gyűjtőknek, hogy az ottani borogatásokat megelőzzék. köszönöm.
+- Top3: lerakott hűtőszekrény
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** illegal dumping site
+- Top1: lekopott zebra
+- Top2: rege hinta leszakadt
+- Top3: kérem javítsák
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** zajos építkezés éjszaka
+- Top1: kérem szépen a képen látható fémcső és beton eltávolítását. zöld területen van, ahol nagyon sok gyerek játszik
+- Top2: az egyenesen haladó járműveknek szóló jelzőlámpa zöld izzója már legalább egy hete kiégett
+- Top3: a jósika u. végéről hiányzik a kerékpárosoknak szóló elsőbbségadás kötelező tábla, így számukra "jobbkezes" a kereszteződés - csak erről a rottenbilleren érkezők nem tudnak.
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** noisy construction at night
+- Top1: frissítés: 2025.06.23. bejelentő visszajelzése: „itt vágták ki a fákat. a tuskók láthatók a képen.” https://maps.app.goo.gl/kpm2gsvvvep9xkl29 ----- kérem, fontolják meg egy-egy fa ültetésének lehetőségét. köszönöm.
+- Top2: frissítés: 2025.04.08. trafficom válasza: „a jelzett műtárgy nem a trafficom kft. tulajdona, ill. nem tartozik cégünk üzemeltetése alá.” ----- tönkrement fedlap a millenniumtelepi hév megállóban a haraszti út 157 szemben.
+- Top3: frissítés: 2025.09.06. a bejelentő visszajelzése alapján: a probléma nem oldódott meg. hiányoznak az oszlopok. ----- hibás játszótéri elemek. kérjük, javítsa meg őket.
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** buszmegálló megrongálva
+- Top1: rege hinta leszakadt
+- Top2: a templom kertjében kidöntöttek egy kukát.
+- Top3: kiszáradt fa, móricz zsigmond körtér villányi sarok, pizzéria előtt
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** damaged bus stop
+- Top1: lekopott zebra
+- Top2: rege hinta leszakadt
+- Top3: kérem javítsák
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** nem működik a jelzőlámpa
+- Top1: a gyalogátkelő lámpája elfordult, a zöld jelzés ferdén áll és nem is látható emiatt
+- Top2: évek óta rohad az autó
+- Top3: az egyenesen haladó járműveknek szóló jelzőlámpa zöld izzója már legalább egy hete kiégett
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** traffic light not working
+- Top1: lekopott zebra
+- Top2: frissítés: 2025.04.08. trafficom válasza: „a jelzett műtárgy nem a trafficom kft. tulajdona, ill. nem tartozik cégünk üzemeltetése alá.” ----- tönkrement fedlap a millenniumtelepi hév megállóban a haraszti út 157 szemben.
+- Top3: kiszáradt fa, móricz zsigmond körtér villányi sarok, pizzéria előtt
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** veszélyes zebra
+- Top1: lerakott hűtőszekrény
+- Top2: lekopott zebra
+- Top3: kiálló fedlap
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** dangerous pedestrian crossing
+- Top1: rege hinta leszakadt
+- Top2: kiszáradt fa, móricz zsigmond körtér villányi sarok, pizzéria előtt
+- Top3: kiálló fedlap
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** parkban nincs világítás
+- Top1: kiálló fedlap
+- Top2: lekopott zebra
+- Top3: rege hinta leszakadt
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** no lighting in the park
+- Top1: lekopott zebra
+- Top2: kérem javítsák
+- Top3: rege hinta leszakadt
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** játszótér karbantartás
+- Top1: lerakott hűtőszekrény
+- Top2: lejart műszakival foglal egy auto egy ertekes parkolohelyet
+- Top3: évek óta rohad az autó
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** playground maintenance
+- Top1: lekopott zebra
+- Top2: rege hinta leszakadt
+- Top3: kiszáradt fa, móricz zsigmond körtér villányi sarok, pizzéria előtt
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** padok megrongálva
+- Top1: rege hinta leszakadt
+- Top2: a templom kertjében kidöntöttek egy kukát.
+- Top3: kipakolt szemetes , ez ebben az utcában rendszeres,.
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** benches damaged
+- Top1: lekopott zebra
+- Top2: rege hinta leszakadt
+- Top3: kérem javítsák
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** hajléktalanok az aluljáróban
+- Top1: lerakott hűtőszekrény
+- Top2: évek óta rohad az autó
+- Top3: bele tolattak a látható póznába és a törött kőbe és sokan megbotlanak benne.
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** homeless people in the underpass
+- Top1: lekopott zebra
+- Top2: kérem javítsák
+- Top3: lerakott hűtőszekrény
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** graffitik a falon
+- Top1: lekopott zebra
+- Top2: rege hinta leszakadt
+- Top3: kedves illetékes! ez a nagy szekrény mindenhol tele van graffitivel. köszönöm!
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** graffiti on the wall
+- Top1: rege hinta leszakadt
+- Top2: kedves illetékes! ez a nagy szekrény mindenhol tele van graffitivel. köszönöm!
+- Top3: lekopott zebra
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** szivárgó csatorna
+- Top1: lekopott zebra
+- Top2: rege hinta leszakadt
+- Top3: lerakott hűtőszekrény
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** leaking sewer
+- Top1: lekopott zebra
+- Top2: rege hinta leszakadt
+- Top3: kérem javítsák
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** bűz a környéken
+- Top1: visegrádi u. 16. szám előtt a járdán napok óta van egy elhagyott hűtő.
+- Top2: bele tolattak a látható póznába és a törött kőbe és sokan megbotlanak benne.
+- Top3: a temesvár utca 35. és 38. előtt áll néhány kiszáradt facsemete.
+
+## NYTK/PULI-BERT-Large (Hungarian-only)
+**Query:** bad smell in the neighborhood
+- Top1: frissítés: 2025.04.08. trafficom válasza: „a jelzett műtárgy nem a trafficom kft. tulajdona, ill. nem tartozik cégünk üzemeltetése alá.” ----- tönkrement fedlap a millenniumtelepi hév megállóban a haraszti út 157 szemben.
+- Top2: kiszáradt fa, móricz zsigmond körtér villányi sarok, pizzéria előtt
+- Top3: frissítés: 2025.06.23. bejelentő visszajelzése: „itt vágták ki a fákat. a tuskók láthatók a képen.” https://maps.app.goo.gl/kpm2gsvvvep9xkl29 ----- kérem, fontolják meg egy-egy fa ültetésének lehetőségét. köszönöm.

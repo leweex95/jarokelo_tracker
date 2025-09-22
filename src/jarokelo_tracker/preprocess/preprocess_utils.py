@@ -44,7 +44,7 @@ def normalize_text(df: pd.DataFrame) -> pd.DataFrame:
     )
     df = df[df["description"].str.strip() != ""]
     df["district"] = df.apply(extract_district, axis=1)
-    df["date"] = df["date"].apply(parse_hu_date)
+    # df["date"] = df["date"].apply(parse_hu_date)
     df["original_id"] = df.get("url", pd.Series(df.index.astype(str)))
     return df
 
