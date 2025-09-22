@@ -15,6 +15,7 @@ def clean_text(text: str) -> str:
 
 def main():
     df = load_raw_files(RAW_PATTERN)
+    df["date"] = pd.to_datetime(df["date"], errors="coerce")
     df = normalize_text(df)
     df["description_clean"] = df["description"].map(clean_text)
     df["district"] = df.apply(extract_district, axis=1)
