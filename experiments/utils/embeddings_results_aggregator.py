@@ -22,17 +22,14 @@ html_parts = [
     <head>
     <meta charset="UTF-8">
     <title>Embedding Comparison</title>
-    <style>
-    body { font-family: sans-serif; max-width: 900px; margin: auto; padding: 2em; background: #f5f5f5; }
-    h1, h2 { color: #222; }
-    pre { background: #eee; padding: 1em; overflow-x: auto; white-space: pre-wrap; }
-    a { text-decoration: none; color: #0066cc; }
-    details { margin-bottom: 1em; }
-    </style>
+    <link rel="stylesheet" href="../style.css">
     </head>
     <body>
-    <h1>Embedding Comparison</h1>
-    <p><a href="../index.html">← Back to Dashboard</a></p>
+    <header>
+      <h1>Embedding Comparison</h1>
+      <p><a href="../index.html">← Back to Dashboard</a></p>
+    </header>
+    <main>
     <h2>Corpus Info</h2>
     """
 ]
@@ -73,10 +70,7 @@ for md_file in md_files[1:]:
         )
 
 # --- Close HTML ---
-html_parts.append("""
-</body>
-</html>
-""")
+html_parts.append("</main></body></html>")
 
 # Write aggregated HTML
 OUTPUT_HTML.write_text("".join(html_parts), encoding="utf-8")

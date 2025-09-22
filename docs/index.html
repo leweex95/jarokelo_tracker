@@ -1,5 +1,136 @@
-<h1>Project Dashboard</h1>
-<ul>
-  <li><a href="experiments/embeddings.html">Embedding Comparison</a></li>
-  <li><a href="experiments/rag_eval.html">RAG Evaluation</a></li>
-</ul>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Járókelő RAG System - Performance Tracker Dashboard</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f9f9fc;
+    color: #333;
+  }
+
+  header {
+    background: #4b6cb7;
+    background: linear-gradient(to right, #182848, #4b6cb7);
+    color: white;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  header h1 {
+    font-size: 3em;
+    margin: 0 0 10px 0;
+  }
+
+  header p {
+    font-size: 1.2em;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  main {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+  }
+
+  .cards {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 20px;
+    width: 300px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  }
+
+  .card h2 {
+    margin-top: 0;
+    font-size: 1.5em;
+    color: #182848;
+  }
+
+  .card p {
+    font-size: 1em;
+    line-height: 1.4;
+  }
+
+  .card a {
+    display: inline-block;
+    margin-top: 10px;
+    text-decoration: none;
+    background: #4b6cb7;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 6px;
+    transition: background 0.2s;
+  }
+
+  .card a:hover {
+    background: #182848;
+  }
+
+  footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 0.9em;
+    color: #666;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Járókelő RAG System - Performance Tracking</h1>
+  <p>Welcome to my Járókelő RAG System's Performance Tracker Dashboard. This platform collects and visualizes civic issues reported across Budapest, helping you explore, analyze, and understand urban challenges. Dive into embeddings, RAG evaluations, and other experiments to see how AI aids civic engagement.</p>
+</header>
+
+<main>
+  <h2>Explore my experiments</h2>
+  <div class="cards">
+    <div class="card">
+      <h2>Embedding comparison</h2>
+      <p>Compare different embedding models to see how they represent issue descriptions, allowing better semantic search and clustering of similar reports.</p>
+      <a href="experiments/embeddings_comparison_results_aggregated.html">View Embeddings</a>
+    </div>
+
+    <div class="card">
+      <h2>RAG evaluation</h2>
+      <p>Evaluate the performance of our Retrieval-Augmented Generation pipeline for answering questions about reported issues. Understand how different models, top-K values, and prompts affect results.</p>
+      <a href="experiments/rag_eval.html">View RAG Eval</a>
+    </div>
+  </div>
+
+  <section style="margin-top: 50px;">
+    <h2>About This Project</h2>
+    <p>The <strong>Járókelő RAG System</strong> collects issues from <a href="https://jarokelo.hu" target="_blank"><strong>járókelő.hu</strong></a> to explore and analyze urban problems in Budapest. It allows:</p>
+    <ul>
+      <li>Browsing issues by district, category, and status.</li>
+      <li>Generating summaries and insights from reports.</li>
+      <li>Using AI for semantic search and pattern detection.</li>
+    </ul>
+  </section>
+</main>
+
+<footer>
+  &copy; 2025 Járókelő Tracker | Built with Python, Streamlit, and AI-powered analytics
+</footer>
+
+</body>
+</html>

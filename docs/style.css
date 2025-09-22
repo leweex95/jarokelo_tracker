@@ -1,0 +1,55 @@
+/* style.css */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f9f9fc;
+  color: #333;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 2em;
+}
+
+h1, h2, h3 {
+  color: #182848;
+}
+
+pre {
+  background: #eee;
+  padding: 1em;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  border-radius: 6px;
+}
+
+a {
+  text-decoration: none;
+  color: #4b6cb7;
+  font-weight: bold;
+}
+
+a:hover { color: #182848; }
+
+details { margin-bottom: 1em; }
+
+/* --- header styling for dashboard/subpages --- */
+header {
+  background: #4b6cb7;
+  background: linear-gradient(to right, #182848, #4b6cb7);
+  color: white;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 3em;
+  margin: 0 0 10px 0;
+}
+
+header p {
+  font-size: 1.2em;
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
