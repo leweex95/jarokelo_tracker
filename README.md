@@ -1,3 +1,5 @@
+[![Data scraper](https://github.com/leweex95/jarokelo_tracker/actions/workflows/scraper.yml/badge.svg)](https://github.com/leweex95/jarokelo_tracker/actions/workflows/scraper.yml) [![Run data pipeline](https://github.com/leweex95/jarokelo_tracker/actions/workflows/data_pipeline.yml/badge.svg)](https://github.com/leweex95/jarokelo_tracker/actions/workflows/data_pipeline.yml)
+
 # Járókelő.hu RAG Pipeline
 
 **AI-powered civic insights for Budapest**  
