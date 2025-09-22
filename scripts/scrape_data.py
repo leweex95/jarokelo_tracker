@@ -1,6 +1,5 @@
 import os
 import json
-import locale
 from datetime import datetime
 import argparse
 from selenium import webdriver
@@ -12,7 +11,8 @@ from selenium.webdriver.support import expected_conditions as EC
 BASE_URL = "https://jarokelo.hu/bejelentesek"
 DATA_DIR = "data/raw"
 
-locale.setlocale(locale.LC_TIME, 'hu_HU.UTF-8')
+# import locale
+# locale.setlocale(locale.LC_TIME, 'hu_HU.UTF-8')
 
 def get_monthly_file(report_date: str) -> str:
     """Return file path based on report's month (YYYY-MM)."""
