@@ -53,48 +53,35 @@ def save_report(report: dict, existing_urls: set) -> None:
     file_path = get_monthly_file(report["date"])
     new_line = json.dumps(report, ensure_ascii=False) + "\n"
 
-    if not os.path.exists(file_path):
-        with open(file_path, "w", encoding="utf-8") as f:
-            f.write(new_line)
-        return
+    lines = []
+    if os.path.exists(file_path):
+        with open(file_path, "r", encoding="utf-8") as f:
+            for i, line in enumerate(f, start=1):
+                line = line.rstrip("\r\n")
+                if not line:
+                    continue
+                try:
+                    json.loads(line)  # validate
+                    lines.append(line + "\n")
+                except json.JSONDecodeError as e:
+                    print(f"[ERROR] Malformed line {i} in {file_path}: {line}")
+                    raise
 
-    with open(file_path, "r+", encoding="utf-8") as f:
-        
-        # Normalize line endings (strip Windows-style CR '\r') and skip empty lines
-        lines = [line.rstrip('\r\n') for line in f.readlines() if line.strip()]
-        
-        if not lines:
-            f.write(new_line)
-            return
+    # Insert new report chronologically
+    inserted = False
+    report_date = report["date"]
+    new_lines = []
+    for line in lines:
+        line_date = json.loads(line)["date"]
+        if not inserted and report_date >= line_date:
+            new_lines.append(new_line)
+            inserted = True
+        new_lines.append(line)
+    if not inserted:
+        new_lines.append(new_line)  # append if newest
 
-        existing_dates = set()
-        for line in lines:
-            line = line.strip()
-            if not line:
-                continue
-            try:
-                existing_dates.add(json.loads(line)["date"])
-            except json.JSONDecodeError as e:
-                print(f"[ERROR] Malformed line in {file_path}: {line}")
-                raise
-
-
-        if len(existing_dates) == 1:
-            # all lines have the same date → append
-            f.seek(0, 2)
-            f.write(new_line)
-        else:
-            first_date = json.loads(lines[0])["date"]
-            last_date = json.loads(lines[-1])["date"]
-
-            if report["date"] >= first_date:
-                f.seek(0)
-                f.write(new_line)
-                for line in lines:
-                    f.write(line.rstrip('\r\n') + "\n")
-            elif report["date"] <= last_date:
-                f.seek(0, 2)  # move to end
-                f.write(new_line)
+    with open(file_path, "w", encoding="utf-8") as f:
+        f.writelines(new_lines)
 
 def normalize_date(date_str: str) -> str:
     """Convert Hungarian date like '2025. szeptember 15.' to 'YYYY-MM-DD'."""
