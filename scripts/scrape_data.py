@@ -59,7 +59,10 @@ def save_report(report: dict, existing_urls: set) -> None:
         return
 
     with open(file_path, "r+", encoding="utf-8") as f:
-        lines = f.readlines()
+        
+        # Normalize line endings (strip Windows-style CR '\r') and skip empty lines
+        lines = [line.rstrip('\r\n') for line in f.readlines() if line.strip()]
+        
         if not lines:
             f.write(new_line)
             return
