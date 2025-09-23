@@ -1,0 +1,39 @@
+name: Debug JSONL files
+
+on:
+  workflow_dispatch:
+
+jobs:
+  debug-jsonl:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Run JSONL debugger
+        id: run_debug
+        run: |
+          mkdir -p debug-output
+          FILE_ARG=""
+          if [ "${{ github.event.inputs.file }}" != "" ]; then
+            FILE_ARG="--file ${{ github.event.inputs.file }}"
+            echo "Target file: $FILE_ARG"
+          else
+            echo "Scanning directory: data/raw"
+          fi
+          python3 scripts/debug_jsonl.py --dir data/raw $FILE_ARG --output debug-output/debug-jsonl.txt || rc=$?
+          echo "EXIT_CODE=${rc:-0}" > debug-output/rc.txt
+        shell: bash
+
+      - name: Upload debug output
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-jsonl-output
+          path: debug-output
