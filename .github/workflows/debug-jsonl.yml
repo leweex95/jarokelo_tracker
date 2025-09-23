@@ -20,17 +20,5 @@ jobs:
       - name: Run targeted debugger
         id: run_debug
         run: |
-          python3 scripts/debug_targeted.py
+          python3 scripts/debug_jsonl.py
         shell: bash
-
-      - name: Run targeted debugger
-        id: run_encoding_debug
-        run: |
-          python3 scripts/debug_encoding.py
-        shell: bash
-
-      - name: Upload debug output
-        uses: actions/upload-artifact@v4
-        with:
-          name: debug-jsonl-output
-          path: debug-output
