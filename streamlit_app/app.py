@@ -1,6 +1,9 @@
 import streamlit as st
 import subprocess
+import threading
+import queue
 import json
+import asyncio
 import time
 from pathlib import Path
 
@@ -41,6 +44,9 @@ st.title("🟢 Járókelő RAG Explorer")
 # --- State ---
 if "last_answer" not in st.session_state:
     st.session_state.last_answer = None
+
+if "debug_lines" not in st.session_state:
+    st.session_state.debug_lines = [] 
 
 # --- Theme toggle state ---
 if "dark_mode" not in st.session_state:
@@ -135,80 +141,167 @@ with st.form("query_form", clear_on_submit=False):
 # Keep checkbox and debug area in the same container
 with st.container():
     col_check, _ = st.columns([1, 1])
-    debug_mode = col_check.checkbox(
+    col_check.checkbox(
         "Debug mode (show all RAG logs)",
-        value=st.session_state.get("debug_mode", False)
+        key="debug_mode"
     )
-    st.session_state.debug_mode = debug_mode
 
-    debug_text_area = st.empty()
-    if debug_mode:
-        debug_text_area.text_area(
-            "Debug log",
-            value="\n".join(st.session_state.debug_lines),
-            height=200
+
+debug_log_box = st.empty()
+
+if st.session_state.debug_mode:
+    debug_content = "".join(st.session_state.debug_lines)
+    debug_log_box.text_area("Debug log", value=debug_content, height=200)
+
+
+def run_rag_pipeline(cmd, debug_log_box, counter_placeholder):
+    st.session_state.debug_lines = []
+    start_time = time.time()
+    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    q = queue.Queue()
+
+    def enqueue_output(out, q):
+        for line in iter(out.readline, ''):
+            q.put(line)
+        out.close()
+
+    t = threading.Thread(target=enqueue_output, args=(process.stdout, q))
+    t.daemon = True
+    t.start()
+
+    while True:
+        if process.poll() is not None and q.empty():
+            break
+
+        while not q.empty():
+            line = q.get()
+            if st.session_state.debug_mode:
+                st.session_state.debug_lines.append(line)
+                debug_content = "".join(st.session_state.debug_lines)
+                debug_log_box.text_area("Debug log", value=debug_content, height=200)
+
+        elapsed = int(time.time() - start_time)
+        minutes, seconds = divmod(elapsed, 60)
+        counter_placeholder.markdown(
+            f"Running... {minutes} min {seconds} sec" if minutes else f"Running... {seconds} sec"
         )
-    else:
-        debug_text_area.empty()
+        time.sleep(0.1)
 
+    t.join()
+    stdout, stderr = process.communicate()
+    debug_content = "".join(st.session_state.debug_lines)
+    debug_log_box.text_area("Debug log", value=debug_content, height=200)
+
+    marker = "FINAL RAG OUTPUT:"
+    debug_text = "".join(st.session_state.debug_lines)
+    if marker in debug_text:
+        answer = debug_text.rsplit(marker, 1)[-1].strip()
+    else:
+        answer = "No RAG output found."
+    st.session_state.last_answer = answer
+
+    total_time = int(time.time() - start_time)
+    return answer, total_time
 
 # --- When query submitted ---
 if submitted and query:
-    start_time = time.time()
     answer_placeholder = st.empty()
     counter_placeholder.markdown("Running... 0 sec")
-    debug_content = ""
+    # Use the single debug_log_box
+    cmd = [
+        "poetry", "run", "python", "./src/jarokelo_tracker/rag_pipeline.py",
+        "--query", query,
+        "--vector-backend", "faiss",
+        "--embedding-provider", "local",
+        "--local-model", "distiluse-base-multilingual-cased-v2",
+        "--headless", "true",
+        "--top_k", "20"
+    ]
 
     with st.spinner("🔎 Processing your request, please wait..."):
-        try:
-            cmd = [
-                "poetry", "run", "python", "./src/jarokelo_tracker/rag_pipeline.py",
-                "--query", query,
-                "--vector-backend", "faiss",
-                "--embedding-provider", "local",
-                "--local-model", "distiluse-base-multilingual-cased-v2",
-                "--headless", "true",
-                "--top_k", "20"
-            ]
+        answer, total_time = run_rag_pipeline(cmd, debug_log_box, counter_placeholder)
+        answer_placeholder.markdown(
+            f"<div class='result-box'>{answer}<br><small>Completed in {total_time} sec</small></div>",
+            unsafe_allow_html=True
+        )
 
-            process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+# # --- When query submitted ---
+# if submitted and query:
+#     st.session_state.debug_lines = []  # Clear previous logs
+#     start_time = time.time()
+#     answer_placeholder = st.empty()
+#     counter_placeholder.markdown("Running... 0 sec")
+#     debug_content = ""
 
-            while True:
-                if process.poll() is not None:
-                    break
+#     def enqueue_output(out, q):
+#         for line in iter(out.readline, ''):
+#             q.put(line)
+#         out.close()
 
-                if st.session_state.debug_mode:
-                    line = process.stdout.readline()
-                    if line:
-                        debug_content += line
-                        debug_text_area.text_area("Debug log", value=debug_content, height=200)
+#     with st.spinner("🔎 Processing your request, please wait..."):
+#         try:
+#             cmd = [
+#                 "poetry", "run", "python", "./src/jarokelo_tracker/rag_pipeline.py",
+#                 "--query", query,
+#                 "--vector-backend", "faiss",
+#                 "--embedding-provider", "local",
+#                 "--local-model", "distiluse-base-multilingual-cased-v2",
+#                 "--headless", "true",
+#                 "--top_k", "20"
+#             ]
 
-                elapsed = int(time.time() - start_time)
-                minutes, seconds = divmod(elapsed, 60)
-                counter_placeholder.markdown(
-                    f"Running... {minutes} min {seconds} sec" if minutes else f"Running... {seconds} sec"
-                )
-                time.sleep(1)
+#             process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+#             q = queue.Queue()
+#             t = threading.Thread(target=enqueue_output, args=(process.stdout, q))
+#             t.daemon = True
+#             t.start()
 
-            stdout, stderr = process.communicate()
-            if st.session_state.debug_mode:
-                debug_content += stdout
-                debug_text_area.text_area("Debug log", value=debug_content, height=200)
+#             while True:
+#                 if process.poll() is not None and q.empty():
+#                     break
 
-            # Extract final RAG output
-            marker = "FINAL RAG OUTPUT:"
-            answer = stdout.split(marker, 1)[1].strip() if marker in stdout else "No RAG output found."
-            st.session_state.last_answer = answer
+#                 new_lines = []
+#                 while not q.empty():
+#                     line = q.get()
+#                     if st.session_state.debug_mode:
+#                         new_lines.append(line)
+#                         st.session_state.debug_lines.append(line)
 
-            total_time = int(time.time() - start_time)
-            answer_placeholder.markdown(
-                f"<div class='result-box'>{answer}<br><small>Completed in {total_time} sec</small></div>",
-                unsafe_allow_html=True
-            )
+#                 elapsed = int(time.time() - start_time)
+#                 minutes, seconds = divmod(elapsed, 60)
+#                 counter_placeholder.markdown(
+#                     f"Running... {minutes} min {seconds} sec" if minutes else f"Running... {seconds} sec"
+#                 )
+#                 time.sleep(1)
 
-        except subprocess.CalledProcessError as e:
-            st.session_state.last_answer = f"❌ Error running pipeline:\n{e.stderr}"
+#             # Wait for the enqueue_output thread to finish
+#             t.join()
 
-# --- Output ---
-if st.session_state.last_answer:
-    st.markdown(f"<div class='result-box'>{st.session_state.last_answer}</div>", unsafe_allow_html=True)
+#             # Only update the debug box once per run, after collecting all lines
+#             if st.session_state.debug_mode:
+#                 debug_content = "".join(st.session_state.debug_lines)
+#                 debug_text_area.text_area("Debug log", value=debug_content, height=200, key="debug_area_live")
+
+#             stdout, stderr = process.communicate()
+#             if st.session_state.debug_mode:
+#                 if stdout:
+#                     debug_content += stdout
+#                 debug_text_area.text_area("Debug log", value=debug_content, height=200, key="debug_area_final")
+
+#             # Extract final RAG output
+#             marker = "FINAL RAG OUTPUT:"
+#             debug_text = "".join(st.session_state.debug_lines)
+#             if marker in debug_text:
+#                 answer = debug_text.rsplit(marker, 1)[-1].strip()
+#             else:
+#                 answer = "No RAG output found."
+#             st.session_state.last_answer = answer
+
+#             total_time = int(time.time() - start_time)
+#             answer_placeholder.markdown(
+#                 f"<div class='result-box'>{answer}<br><small>Completed in {total_time} sec</small></div>",
+#                 unsafe_allow_html=True
+#             )
+
+#         except subprocess.CalledProcessError as e:
+#             st.session_state.last_answer = f"❌ Error running pipeline:\n{e.stderr}"
