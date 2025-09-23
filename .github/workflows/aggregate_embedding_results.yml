@@ -42,7 +42,7 @@ jobs:
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          git add docs/experiments/embeddings_comparison_results_aggregated.md
+          git add docs/experiments/embeddings_comparison_results_aggregated.html
           git diff --quiet && git diff --staged --quiet || git commit -m "[Auto-commit] Embedding comparison results update [skip ci]"
 
           RETRIES=10
