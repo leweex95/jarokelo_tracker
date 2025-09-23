@@ -1,25 +1,25 @@
 import json
 import sys
-import re
+import os
+
+MALFORMED_FILE = "debug/malformed_lines.txt"
+os.makedirs(os.path.dirname(MALFORMED_FILE), exist_ok=True)
 
 def debug_jsonl(file_path):
-    with open(file_path, "r", encoding="utf-8") as f:
+    with open(file_path, "rb") as f:
         raw = f.read()
-        # Normalize line endings
-        raw = raw.replace('\r\n', '\n').replace('\r', '\n')
-        # Split by newline first
-        lines = [l for l in raw.split('\n') if l.strip()]
-
-        for i, line in enumerate(lines, start=1):
-            # Detect multiple JSON objects on same line using '}{' pattern
-            parts = re.split(r'(?<=})\s*(?={)', line)
-            for j, part in enumerate(parts, start=1):
-                try:
-                    json.loads(part)
-                except json.JSONDecodeError as e:
-                    print(f"[LINE {i}, PART {j}] Malformed JSON:")
-                    print(f"  Content: {part}")
-                    print(f"  Error: {e}\n")
+        for i, line in enumerate(raw.split(b'\n'), start=1):
+            if not line.strip():
+                continue
+            print(f"[LINE {i}] raw bytes: {line}")
+            try:
+                json.loads(line.decode("utf-8"))
+            except json.JSONDecodeError as e:
+                print(f"  JSON error: {e}")
+                # Save malformed line to file
+                with open(MALFORMED_FILE, "ab") as mf:
+                    mf.write(line + b"\n\n")  # double newline to separate
+                print(f"  Saved malformed line to {MALFORMED_FILE}")
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
