@@ -64,7 +64,14 @@ def save_report(report: dict, existing_urls: set) -> None:
             f.write(new_line)
             return
 
-        existing_dates = {json.loads(line)["date"] for line in lines}
+        existing_dates = set()
+        for line in lines:
+            try:
+                existing_dates.add(json.loads(line)["date"])
+            except json.JSONDecodeError as e:
+                print(f"[ERROR] Malformed line in {file_path}: {line.strip()}")
+                raise
+
         if len(existing_dates) == 1:
             # all lines have the same date → append
             f.seek(0, 2)
