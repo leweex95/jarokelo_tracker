@@ -25,3 +25,9 @@ jobs:
       - name: Run JSONL debugger
         run: |
           python3 scripts/debug_jsonl.py ${{ github.event.inputs.file }}
+
+      - name: Upload malformed lines
+        uses: actions/upload-artifact@v3
+        with:
+          name: malformed-json-lines
+          path: data/debug/malformed_lines.txt
