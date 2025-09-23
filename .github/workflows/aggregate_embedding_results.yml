@@ -6,6 +6,12 @@ on:
       - master
     paths:
       - "experiments/results/*.md"
+  workflow_dispatch:
+    inputs:
+      input_folder:
+        description: "Folder to watch for .md files"
+        default: "experiments/results"
+        required: true
 
 jobs:
   aggregate:
