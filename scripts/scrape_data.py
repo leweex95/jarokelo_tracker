@@ -89,7 +89,7 @@ def save_report(report: dict, existing_urls: set) -> None:
 
             if report["date"] >= first_date:
                 f.seek(0)
-                f.write(new_line + "".join(lines))
+                f.write(new_line + "\n".join(lines) + "\n")
             elif report["date"] <= last_date:
                 f.seek(0, 2)  # move to end
                 f.write(new_line)
