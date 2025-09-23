@@ -2,6 +2,11 @@ name: Debug JSONL files
 
 on:
   workflow_dispatch:
+    inputs:
+      file:
+        description: 'Path to JSONL file'
+        required: true
+        default: 'data/raw/2025-09.jsonl'
 
 jobs:
   debug-jsonl:
@@ -17,8 +22,6 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Run targeted debugger
-        id: run_debug
+      - name: Run JSONL debugger
         run: |
-          python3 scripts/debug_jsonl.py data/raw/2025-09.jsonl
-        shell: bash
+          python3 scripts/debug_jsonl.py ${{ github.event.inputs.file }}

@@ -1,10 +1,12 @@
-# scripts/debug_jsonl.py
 import json
 import sys
 
 def debug_jsonl(file_path):
     with open(file_path, "r", encoding="utf-8") as f:
-        for i, line in enumerate(f, start=1):
+        # Normalize line endings (strip Windows-style CR '\r') and skip empty lines
+        lines = [line.rstrip('\r\n') for line in f.readlines() if line.strip()]
+        
+        for i, line in enumerate(lines, start=1):
             try:
                 json.loads(line)
             except json.JSONDecodeError as e:
