@@ -5,9 +5,6 @@ import sys
 def debug_jsonl(file_path):
     with open(file_path, "r", encoding="utf-8") as f:
         for i, line in enumerate(f, start=1):
-            line = line.strip()
-            if not line:
-                continue
             try:
                 json.loads(line)
             except json.JSONDecodeError as e:
