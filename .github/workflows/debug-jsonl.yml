@@ -17,19 +17,16 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Run JSONL debugger
+      - name: Run targeted debugger
         id: run_debug
         run: |
-          mkdir -p debug-output
-          FILE_ARG=""
-          if [ "${{ github.event.inputs.file }}" != "" ]; then
-            FILE_ARG="--file ${{ github.event.inputs.file }}"
-            echo "Target file: $FILE_ARG"
-          else
-            echo "Scanning directory: data/raw"
-          fi
-          python3 scripts/debug_jsonl.py --dir data/raw $FILE_ARG --output debug-output/debug-jsonl.txt || rc=$?
-          echo "EXIT_CODE=${rc:-0}" > debug-output/rc.txt
+          python3 scripts/debug_targeted.py
+        shell: bash
+
+      - name: Run targeted debugger
+        id: run_encoding_debug
+        run: |
+          python3 scripts/debug_encoding.py
         shell: bash
 
       - name: Upload debug output
