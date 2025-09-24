@@ -1,11 +1,14 @@
-import streamlit as st
+import queue
 import subprocess
 import threading
-import queue
-import json
-import asyncio
 import time
 from pathlib import Path
+
+import streamlit as st
+
+
+BASE_DIR = Path(__file__).resolve().parent
+CSS_DIR = BASE_DIR / "styles"
 
 # --- Page config ---
 st.set_page_config(
@@ -14,32 +17,21 @@ st.set_page_config(
     layout="centered"
 )
 
-# --- Gradient background ---
+# --- Title & intro ---
+st.title("Járókelő RAG Explorer")
 st.markdown(
     """
-    <style>
-    body {
-        background: linear-gradient(135deg, #4A90E2, #50E3C2);
-        color: white;
-    }
-    .stTextInput > div > div > input {
-        border-radius: 8px;
-    }
-    .result-box {
-        background-color: rgba(255,255,255,0.15);
-        padding: 1rem;
-        border-radius: 10px;
-        margin-top: 1rem;
-        color: white;
-        font-weight: 500;
-    }
-    </style>
+    <p style="font-style: italic; font-size: 16px;">
+        If you’re not familiar with <b>Járókelő</b>, it’s a Hungarian civic platform where citizens can report and track local public issues (like broken streetlights or potholes).
+        The organization forwards these reports to the relevant authorities, monitors the resolution status, and sends reminders to ensure the requested changes are addressed.
+        Learn more at <a href="https://jarokelo.hu" style="color:#4A90E2;">jarokelo.hu</a>.
+    </p>
     """,
     unsafe_allow_html=True
 )
-
-# --- Title ---
-st.title("🟢 Járókelő RAG Explorer")
+st.markdown(
+    "Ask questions about the data collected from Járókelő and get answers based on the relevant information retrieved from the dataset."
+)
 
 # --- State ---
 if "last_answer" not in st.session_state:
@@ -61,98 +53,38 @@ if toggle:
 if "dark_mode" not in st.session_state:
     st.session_state.dark_mode = True  # default to dark
 
+def load_css(filename: str):
+    css_path = CSS_DIR / filename
+    with open(css_path, encoding="utf-8") as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+# Apply theme CSS
 if st.session_state.dark_mode:
-    st.markdown("""
-    <style>
-    /* top-level containers */
-    .stApp, .stAppViewContainer, .stMain, .stMainBlockContainer, .stVerticalBlock {
-        background-color: #0E1117 !important;
-        color: #F5F5F5 !important;  /* silver text */
-    }
-    /* header */
-    .stAppHeader, .stAppToolbar, .stToolbarActions, .stMainMenu, .stAppDeployButton {
-        background-color: #0E1117 !important;
-        color: #F5F5F5 !important;
-    }
-    /* Inputs */
-    .stTextInput>div>div>input,
-    .stTextInput>div>div>label,
-    .stTextInput .stMarkdown p {
-        background: #262730;
-        color: #F5F5F5 !important;
-        border-radius: 8px;
-    }
-    /* Placeholder text */
-    .stTextInput>div>div>input::placeholder {
-        color: #F5F5F5 !important;
-    }
-    /* Label above text input */
-    .stTextInput + .stMarkdown p,
-    .stTextInput label p {
-        color: #F5F5F5 !important;
-    }
-    /* Checkbox label */
-    .stCheckbox label, .stCheckbox div {
-        color: #F5F5F5 !important;
-    }
-    /* Buttons */
-    button { 
-        background-color: #262730 !important; 
-        color: #E0E0E0 !important;
-    }
-    /* Result box */
-    .result-box { 
-        background-color: rgba(255,255,255,0.15); 
-        color: #E0E0E0 !important;
-        padding: 1rem; 
-        border-radius: 10px; 
-        margin-top: 1rem; 
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
+    load_css(Path(__file__).resolve().parent / "styles" / "dark.css")
 else:
-    st.markdown(
-        """
-        <style>
-        body, .css-18e3th9, .css-1outpf7, .css-1v3fvcr {
-            background-color: #FAFAFA !important;
-            color: #0E1117 !important;
-        }
-        .stTextInput>div>div>input { background: #FFFFFF; color: #0E1117; border-radius: 8px; }
-        .result-box { background-color: rgba(0,0,0,0.05); color: #0E1117; padding: 1rem; border-radius: 10px; margin-top: 1rem; }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
+    load_css(Path(__file__).resolve().parent / "styles" / "light.css")
 
-# --- Form for query input ---
+# --- Input form ---
 with st.form("query_form", clear_on_submit=False):
     query = st.text_input(
-        "💡 What do you want to ask from my Járókelő RAG?",
+        "What do you want to ask from my Járókelő RAG?",
         placeholder="Type your question and press Enter..."
     )
 
-    # Put button and counter in the same horizontal row
     col_btn, col_counter = st.columns([1, 1])
     submitted = col_btn.form_submit_button("Ask")
     counter_placeholder = col_counter.empty()
 
-# Keep checkbox and debug area in the same container
-with st.container():
     col_check, _ = st.columns([1, 1])
     col_check.checkbox(
         "Debug mode (show all RAG logs)",
         key="debug_mode"
     )
 
-
-debug_log_box = st.empty()
-
-if st.session_state.debug_mode:
-    debug_content = "".join(st.session_state.debug_lines)
-    debug_log_box.text_area("Debug log", value=debug_content, height=200)
-
+    debug_log_box = st.empty()
+    if st.session_state.debug_mode:
+        debug_content = "".join(st.session_state.debug_lines)
+        debug_log_box.text_area("Debug log", value=debug_content, height=200, key="debug_area_live")
 
 def run_rag_pipeline(cmd, debug_log_box, counter_placeholder):
     st.session_state.debug_lines = []
@@ -188,9 +120,10 @@ def run_rag_pipeline(cmd, debug_log_box, counter_placeholder):
         time.sleep(0.1)
 
     t.join()
-    stdout, stderr = process.communicate()
+    # stdout, stderr = process.communicate()
     debug_content = "".join(st.session_state.debug_lines)
-    debug_log_box.text_area("Debug log", value=debug_content, height=200)
+    # debug_log_box.text_area("Debug log", value=debug_content, height=200)
+    debug_log_box.text_area("Debug log", value=debug_content, height=200, key="debug_area_final")
 
     marker = "FINAL RAG OUTPUT:"
     debug_text = "".join(st.session_state.debug_lines)
@@ -203,7 +136,7 @@ def run_rag_pipeline(cmd, debug_log_box, counter_placeholder):
     total_time = int(time.time() - start_time)
     return answer, total_time
 
-# --- When query submitted ---
+# --- Handle form submission ---
 if submitted and query:
     answer_placeholder = st.empty()
     counter_placeholder.markdown("Running... 0 sec")
@@ -224,84 +157,3 @@ if submitted and query:
             f"<div class='result-box'>{answer}<br><small>Completed in {total_time} sec</small></div>",
             unsafe_allow_html=True
         )
-
-# # --- When query submitted ---
-# if submitted and query:
-#     st.session_state.debug_lines = []  # Clear previous logs
-#     start_time = time.time()
-#     answer_placeholder = st.empty()
-#     counter_placeholder.markdown("Running... 0 sec")
-#     debug_content = ""
-
-#     def enqueue_output(out, q):
-#         for line in iter(out.readline, ''):
-#             q.put(line)
-#         out.close()
-
-#     with st.spinner("🔎 Processing your request, please wait..."):
-#         try:
-#             cmd = [
-#                 "poetry", "run", "python", "./src/jarokelo_tracker/rag_pipeline.py",
-#                 "--query", query,
-#                 "--vector-backend", "faiss",
-#                 "--embedding-provider", "local",
-#                 "--local-model", "distiluse-base-multilingual-cased-v2",
-#                 "--headless", "true",
-#                 "--top_k", "20"
-#             ]
-
-#             process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-#             q = queue.Queue()
-#             t = threading.Thread(target=enqueue_output, args=(process.stdout, q))
-#             t.daemon = True
-#             t.start()
-
-#             while True:
-#                 if process.poll() is not None and q.empty():
-#                     break
-
-#                 new_lines = []
-#                 while not q.empty():
-#                     line = q.get()
-#                     if st.session_state.debug_mode:
-#                         new_lines.append(line)
-#                         st.session_state.debug_lines.append(line)
-
-#                 elapsed = int(time.time() - start_time)
-#                 minutes, seconds = divmod(elapsed, 60)
-#                 counter_placeholder.markdown(
-#                     f"Running... {minutes} min {seconds} sec" if minutes else f"Running... {seconds} sec"
-#                 )
-#                 time.sleep(1)
-
-#             # Wait for the enqueue_output thread to finish
-#             t.join()
-
-#             # Only update the debug box once per run, after collecting all lines
-#             if st.session_state.debug_mode:
-#                 debug_content = "".join(st.session_state.debug_lines)
-#                 debug_text_area.text_area("Debug log", value=debug_content, height=200, key="debug_area_live")
-
-#             stdout, stderr = process.communicate()
-#             if st.session_state.debug_mode:
-#                 if stdout:
-#                     debug_content += stdout
-#                 debug_text_area.text_area("Debug log", value=debug_content, height=200, key="debug_area_final")
-
-#             # Extract final RAG output
-#             marker = "FINAL RAG OUTPUT:"
-#             debug_text = "".join(st.session_state.debug_lines)
-#             if marker in debug_text:
-#                 answer = debug_text.rsplit(marker, 1)[-1].strip()
-#             else:
-#                 answer = "No RAG output found."
-#             st.session_state.last_answer = answer
-
-#             total_time = int(time.time() - start_time)
-#             answer_placeholder.markdown(
-#                 f"<div class='result-box'>{answer}<br><small>Completed in {total_time} sec</small></div>",
-#                 unsafe_allow_html=True
-#             )
-
-#         except subprocess.CalledProcessError as e:
-#             st.session_state.last_answer = f"❌ Error running pipeline:\n{e.stderr}"

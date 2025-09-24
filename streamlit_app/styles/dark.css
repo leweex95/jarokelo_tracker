@@ -1,0 +1,45 @@
+.stApp, .stMarkdown p, .stTextInput>div>div>label, .stTextInput .stMarkdown p {
+    font-family: 'Roboto Slab', serif;
+}
+.stApp, .stAppViewContainer, .stMain, .stMainBlockContainer, .stVerticalBlock {
+    background-color: #1A1D24 !important;
+    color: #F5F5F5 !important;
+}
+.stAppHeader, .stAppToolbar, .stToolbarActions, .stMainMenu, .stAppDeployButton {
+    background-color: #1A1D24 !important;
+    color: #F5F5F5 !important;
+}
+.stTextInput>div>div>input,
+.stTextInput>div>div>label,
+.stTextInput .stMarkdown p {
+    background: #2C2F38;
+    color: #F5F5F5 !important;
+    border-radius: 8px;
+}
+.stTextInput>div>div>input::placeholder {
+    color: #CCCCCC !important;
+}
+.stTextInput + .stMarkdown p,
+.stTextInput label p {
+    color: #E0E0E0 !important;
+}
+.stCheckbox label, .stCheckbox div {
+    color: #E0E0E0 !important;
+}
+button { 
+    background-color: #2C2F38 !important;  /* was #262730 */
+    color: #E0E0E0 !important;
+}
+.result-box { 
+    background-color: rgba(255,255,255,0.12); 
+    color: #E0E0E0 !important;
+    padding: 1rem; 
+    border-radius: 10px; 
+    margin-top: 1rem; 
+}
+textarea {
+    background-color: #2C2F38 !important;  /* match input/button background */
+    color: #E0E0E0 !important;             /* softer text */
+    border: 1px solid #3A3D46 !important;  /* subtle border */
+    border-radius: 6px !important;
+}
