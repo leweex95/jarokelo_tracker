@@ -1,0 +1,19 @@
+.stApp, .stMarkdown p, .stTextInput>div>div>label, .stTextInput .stMarkdown p {
+    font-family: 'Roboto Slab', serif;
+}
+body, .css-18e3th9, .css-1outpf7, .css-1v3fvcr {
+    background-color: #FAFAFA !important;
+    color: #0E1117 !important;
+}
+.stTextInput>div>div>input { 
+    background: #FFFFFF; 
+    color: #0E1117; 
+    border-radius: 8px; 
+}
+.result-box { 
+    background-color: rgba(0,0,0,0.05); 
+    color: #0E1117; 
+    padding: 1rem; 
+    border-radius: 10px; 
+    margin-top: 1rem; 
+}
