@@ -1,8 +1,18 @@
+# Benchmark: Current Implementation
+
+**Average per-issue scrape time:** 7.690 seconds
+**Standard deviation:** 5.873 seconds
+**Sample size:** 100
+
+## Scraper Source Code
+
+```python
 import os
 import re
 import json
 from datetime import datetime
 import argparse
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -19,7 +29,6 @@ scrape_times = []
 scraped_count = 0
 
 BASE_URL = "https://jarokelo.hu/bejelentesek"
-# BASE_URL = "https://example.com"
 DATA_DIR = "data/raw"
 
 
@@ -225,32 +234,50 @@ def scrape_report(driver, wait, url: str) -> dict:
         "resolution_date": resolution_date,
     }
 
-def scrape_listing_page(driver, wait, page_url, global_urls, until_date=None, stop_on_existing=True, data_dir=None, scraped_count=0, scrape_times=None, benchmark_limit=100):
-    """Return next page URL and a flag if we reached an already scraped report or until_date."""
+def scrape_report_worker(args):
+    """Worker for multiprocessing: launches its own browser, scrapes one report."""
+    url, headless = args
+    options = _get_chrome_options(headless=headless)
+    driver = webdriver.Chrome(options=options)
+    wait = WebDriverWait(driver, 10)
+    try:
+        start = time.perf_counter()
+        report = scrape_report(driver, wait, url)
+        elapsed = time.perf_counter() - start
+    finally:
+        driver.quit()
+    return report, elapsed
+
+def scrape_listing_page(driver, wait, page_url, global_urls, until_date=None, stop_on_existing=True, data_dir=None, scraped_count=0, scrape_times=None, benchmark_limit=100, headless=True, max_workers=4):
     if scrape_times is None:
         scrape_times = []
     driver.get(page_url)
-    reached_done = False
     links = [a.get_attribute("href") for a in driver.find_elements(By.CSS_SELECTOR, "article.card a.card__media__bg")]
+    # Filter links to scrape
+    to_scrape = []
     for link in links:
         if scraped_count >= benchmark_limit:
-            reached_done = True
             break
         if link in global_urls and stop_on_existing:
-            reached_done = True
-            break
-        if link not in global_urls:
-            start = time.perf_counter()
-            report = scrape_report(driver, wait, link)
-            elapsed = time.perf_counter() - start
-            scrape_times.append(elapsed)
-            save_report(data_dir, report, global_urls)
-            scraped_count += 1
-            if until_date and report["date"] <= until_date:
-                reached_done = True
-                break
-    if reached_done:
-        return None, True, scraped_count, scrape_times
+            continue
+        to_scrape.append(link)
+
+    # Multiprocessing scrape
+    with ProcessPoolExecutor(max_workers=max_workers) as executor:
+        futures = [executor.submit(scrape_report_worker, (url, headless)) for url in to_scrape]
+        for future in as_completed(futures):
+            try:
+                report, elapsed = future.result()
+                scrape_times.append(elapsed)
+                save_report(data_dir, report, global_urls)
+                scraped_count += 1
+                if until_date and report["date"] <= until_date:
+                    return None, True, scraped_count, scrape_times
+                if scraped_count >= benchmark_limit:
+                    break
+            except Exception as e:
+                print(f"[ERROR] Failed to scrape: {e}")
+
     next_page_elems = driver.find_elements(By.CSS_SELECTOR, "a.pagination__link")
     for elem in next_page_elems:
         if "Következő" in elem.text:
@@ -288,7 +315,8 @@ def _get_chrome_options(headless: bool) -> Options:
     # options.add_argument("--disable-sync")
     # options.add_argument("--disable-component-update")
     # options.add_argument("--log-level=3")
-    options.add_argument("user-agent=Mozilla/5.0")
+    # options.add_argument("--headless=new")
+    # options.add_argument("user-agent=Mozilla/5.0")
     return options
 
 def main(headless: bool, start_page: int, until_date: str = None, stop_on_existing: bool = True, data_dir: str = None):
@@ -330,7 +358,9 @@ def main(headless: bool, start_page: int, until_date: str = None, stop_on_existi
             data_dir=data_dir,
             scraped_count=scraped_count,
             scrape_times=scrape_times,
-            benchmark_limit=BENCHMARK_LIMIT
+            benchmark_limit=BENCHMARK_LIMIT,
+            headless=headless,
+            max_workers=4  # or 8, depending on your CPU
         )
         if reached_done or scraped_count >= BENCHMARK_LIMIT:
             print("Finished scraping benchmark limit or reached until-date. Exiting.")
@@ -343,7 +373,7 @@ def main(headless: bool, start_page: int, until_date: str = None, stop_on_existi
     if scrape_times:
         avg = statistics.mean(scrape_times)
         stdev = statistics.stdev(scrape_times) if len(scrape_times) > 1 else 0
-        with open(os.path.join(BENCHMARK_DIR, "step1_current.md"), "w", encoding="utf-8") as f:
+        with open(os.path.join(BENCHMARK_DIR, "step6_multiproc.md"), "w", encoding="utf-8") as f:
             f.write(f"# Benchmark: Current Implementation\n\n")
             f.write(f"**Average per-issue scrape time:** {avg:.3f} seconds\n")
             f.write(f"**Standard deviation:** {stdev:.3f} seconds\n")
@@ -372,3 +402,5 @@ if __name__ == "__main__":
         main(headless=args.headless, start_page=page, until_date=args.until_date, stop_on_existing=False, data_dir=args.data_dir)
     else:
         main(headless=args.headless, start_page=args.start_page, until_date=args.until_date, stop_on_existing=True, data_dir=args.data_dir)
+
+```

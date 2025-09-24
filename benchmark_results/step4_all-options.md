@@ -1,3 +1,12 @@
+# Benchmark: Current Implementation
+
+**Average per-issue scrape time:** 2.031 seconds
+**Standard deviation:** 0.334 seconds
+**Sample size:** 100
+
+## Scraper Source Code
+
+```python
 import os
 import re
 import json
@@ -19,7 +28,6 @@ scrape_times = []
 scraped_count = 0
 
 BASE_URL = "https://jarokelo.hu/bejelentesek"
-# BASE_URL = "https://example.com"
 DATA_DIR = "data/raw"
 
 
@@ -281,13 +289,14 @@ def _get_chrome_options(headless: bool) -> Options:
     options = Options()
     if headless:
         options.add_argument("--headless")
-    # options.add_experimental_option("excludeSwitches", ["enable-logging", "enable-automation"])
-    # options.add_argument("--disable-gpu")
-    # options.add_argument("--disable-extensions")
-    # options.add_argument("--disable-background-networking")
-    # options.add_argument("--disable-sync")
-    # options.add_argument("--disable-component-update")
-    # options.add_argument("--log-level=3")
+    options.add_experimental_option("excludeSwitches", ["enable-logging", "enable-automation"])
+    options.add_argument("--disable-gpu")
+    options.add_argument("--disable-extensions")
+    options.add_argument("--disable-background-networking")
+    options.add_argument("--disable-sync")
+    options.add_argument("--disable-component-update")
+    options.add_argument("--log-level=3")
+    options.add_argument("--headless=new")
     options.add_argument("user-agent=Mozilla/5.0")
     return options
 
@@ -343,7 +352,7 @@ def main(headless: bool, start_page: int, until_date: str = None, stop_on_existi
     if scrape_times:
         avg = statistics.mean(scrape_times)
         stdev = statistics.stdev(scrape_times) if len(scrape_times) > 1 else 0
-        with open(os.path.join(BENCHMARK_DIR, "step1_current.md"), "w", encoding="utf-8") as f:
+        with open(os.path.join(BENCHMARK_DIR, "step4_all-options.md"), "w", encoding="utf-8") as f:
             f.write(f"# Benchmark: Current Implementation\n\n")
             f.write(f"**Average per-issue scrape time:** {avg:.3f} seconds\n")
             f.write(f"**Standard deviation:** {stdev:.3f} seconds\n")
@@ -372,3 +381,5 @@ if __name__ == "__main__":
         main(headless=args.headless, start_page=page, until_date=args.until_date, stop_on_existing=False, data_dir=args.data_dir)
     else:
         main(headless=args.headless, start_page=args.start_page, until_date=args.until_date, stop_on_existing=True, data_dir=args.data_dir)
+
+```

@@ -1,3 +1,12 @@
+# Benchmark: Current Implementation
+
+**Average per-issue scrape time:** 1.722 seconds
+**Standard deviation:** 0.407 seconds
+**Sample size:** 100
+
+## Scraper Source Code
+
+```python
 import os
 import re
 import json
@@ -19,7 +28,6 @@ scrape_times = []
 scraped_count = 0
 
 BASE_URL = "https://jarokelo.hu/bejelentesek"
-# BASE_URL = "https://example.com"
 DATA_DIR = "data/raw"
 
 
@@ -119,8 +127,7 @@ def normalize_date(date_str) -> str:
 
 def scrape_report(driver, wait, url: str) -> dict:
     """Scrape a single report page and return its data."""
-    driver.execute_script("window.open(arguments[0]);", url)
-    driver.switch_to.window(driver.window_handles[1])
+    driver.get(url)
 
     title = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "h1.report__title"))).text
 
@@ -206,9 +213,6 @@ def scrape_report(driver, wait, url: str) -> dict:
             if resolution_date:
                 break
 
-    driver.close()
-    driver.switch_to.window(driver.window_handles[0])
-
     return {
         "url": url,
         "title": title,
@@ -242,6 +246,7 @@ def scrape_listing_page(driver, wait, page_url, global_urls, until_date=None, st
         if link not in global_urls:
             start = time.perf_counter()
             report = scrape_report(driver, wait, link)
+            driver.back() 
             elapsed = time.perf_counter() - start
             scrape_times.append(elapsed)
             save_report(data_dir, report, global_urls)
@@ -343,7 +348,7 @@ def main(headless: bool, start_page: int, until_date: str = None, stop_on_existi
     if scrape_times:
         avg = statistics.mean(scrape_times)
         stdev = statistics.stdev(scrape_times) if len(scrape_times) > 1 else 0
-        with open(os.path.join(BENCHMARK_DIR, "step1_current.md"), "w", encoding="utf-8") as f:
+        with open(os.path.join(BENCHMARK_DIR, "step2_no_new_tab.md"), "w", encoding="utf-8") as f:
             f.write(f"# Benchmark: Current Implementation\n\n")
             f.write(f"**Average per-issue scrape time:** {avg:.3f} seconds\n")
             f.write(f"**Standard deviation:** {stdev:.3f} seconds\n")
@@ -372,3 +377,5 @@ if __name__ == "__main__":
         main(headless=args.headless, start_page=page, until_date=args.until_date, stop_on_existing=False, data_dir=args.data_dir)
     else:
         main(headless=args.headless, start_page=args.start_page, until_date=args.until_date, stop_on_existing=True, data_dir=args.data_dir)
+
+```

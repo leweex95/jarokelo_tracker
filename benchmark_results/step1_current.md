@@ -1,3 +1,12 @@
+# Benchmark: Current Implementation
+
+**Average per-issue scrape time:** 1.177 seconds
+**Standard deviation:** 0.272 seconds
+**Sample size:** 100
+
+## Scraper Source Code
+
+```python
 import os
 import re
 import json
@@ -372,3 +381,5 @@ if __name__ == "__main__":
         main(headless=args.headless, start_page=page, until_date=args.until_date, stop_on_existing=False, data_dir=args.data_dir)
     else:
         main(headless=args.headless, start_page=args.start_page, until_date=args.until_date, stop_on_existing=True, data_dir=args.data_dir)
+
+```
