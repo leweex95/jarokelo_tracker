@@ -53,9 +53,12 @@ jobs:
 
       - name: Run scraper
         run: |
-          UNTIL_DATE=$(date -d "2 days ago" +%Y-%m-%d)
-          echo "Scraping until: $UNTIL_DATE"
-          poetry run python ./scripts/scrape_data.py --headless true --until-date "$UNTIL_DATE"
+          ARGS="--headless ${{ github.event.inputs.headless }} --data-dir ${{ github.event.inputs.data_dir }} --start-page ${{ github.event.inputs.start_page }}"
+          if [ -n "${{ github.event.inputs.until_date }}" ]; then
+            ARGS="$ARGS --until-date ${{ github.event.inputs.until_date }}"
+          fi
+          echo "Running: poetry run python ./scripts/scrape_data.py $ARGS"
+          poetry run python ./scripts/scrape_data.py $ARGS
 
       - name: Configure Git
         run: |
