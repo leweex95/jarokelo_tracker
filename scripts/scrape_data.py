@@ -10,8 +10,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 BASE_URL = "https://jarokelo.hu/bejelentesek"
-DATA_DIR = "data/raw"
-
 
 def get_monthly_file(data_dir: str, report_date: str) -> str:
     """Return file path based on report's month (YYYY-MM)."""
@@ -243,10 +241,10 @@ def scrape_listing_page(driver, wait, page_url: str, global_urls: set, until_dat
     return None, False
 
 
-def get_scraping_resume_point() -> tuple[str, int]:
+def get_scraping_resume_point(data_dir: str) -> tuple[str, int]:
     """Determine resume point: oldest scraped report date and total saved reports."""
     all_files = sorted(
-        [os.path.join(DATA_DIR, f) for f in os.listdir(DATA_DIR) if f.endswith(".jsonl")]
+        [os.path.join(data_dir, f) for f in os.listdir(data_dir) if f.endswith(".jsonl")]
     )
     if not all_files:
         return None, 0
@@ -321,12 +319,12 @@ if __name__ == "__main__":
     parser.add_argument("--start-page", type=int, default=1, help="Page number to start scraping from")
     parser.add_argument("--until-date", type=str, default=None, help="Scrape until this date (YYYY-MM-DD), inclusive")
     parser.add_argument("--continue-scraping", action="store_true", help="Resume automatically based on existing data")
-    parser.add_argument("--data-dir", type=str, default=DATA_DIR, help="Directory to store data files")
+    parser.add_argument("--data-dir", type=str, default="data/raw", help="Directory to store data files")
 
     args = parser.parse_args()
     
     if args.continue_scraping:
-        oldest_date, total = get_scraping_resume_point()
+        oldest_date, total = get_scraping_resume_point(data_dir=args.data_dir)
         page = max(total // 8 - 1, 1)
         print(f"Proceeding with scraping from date: {oldest_date} and from page number: {page}")
         main(headless=args.headless, start_page=page, until_date=args.until_date, stop_on_existing=False, data_dir=args.data_dir)
