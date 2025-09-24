@@ -1,4 +1,5 @@
 import os
+import re
 import json
 from datetime import datetime
 import argparse
@@ -11,18 +12,16 @@ from selenium.webdriver.support import expected_conditions as EC
 BASE_URL = "https://jarokelo.hu/bejelentesek"
 DATA_DIR = "data/raw"
 
-# import locale
-# locale.setlocale(locale.LC_TIME, 'hu_HU.UTF-8')
 
-def get_monthly_file(report_date: str) -> str:
+def get_monthly_file(data_dir: str, report_date: str) -> str:
     """Return file path based on report's month (YYYY-MM)."""
     # report_date expected as string, e.g. "2025-08-25"
     month_str = datetime.strptime(report_date, "%Y-%m-%d").strftime("%Y-%m")
-    return os.path.join(DATA_DIR, f"{month_str}.jsonl")
+    return os.path.join(data_dir, f"{month_str}.jsonl")
 
-def load_existing_urls(report_date: str) -> set:
+def load_existing_urls(data_dir, report_date: str) -> set:
     """Load already saved report URLs for the report's month."""
-    file_path = get_monthly_file(report_date)
+    file_path = get_monthly_file(data_dir, report_date)
     if not os.path.exists(file_path):
         return set()
     urls = set()
@@ -34,7 +33,7 @@ def load_existing_urls(report_date: str) -> set:
                 continue
     return urls
 
-def save_report(report: dict, existing_urls: set) -> None:
+def save_report(data_dir: str, report: dict, existing_urls: set) -> None:
     """
     Save a report to the monthly JSONL file, organizing entries by date.
 
@@ -50,7 +49,7 @@ def save_report(report: dict, existing_urls: set) -> None:
         return
     existing_urls.add(report["url"])
 
-    file_path = get_monthly_file(report["date"])
+    file_path = get_monthly_file(data_dir, report["date"])
     new_line = json.dumps(report, ensure_ascii=False) + "\n"
 
     lines = []
@@ -83,7 +82,7 @@ def save_report(report: dict, existing_urls: set) -> None:
     with open(file_path, "w", encoding="utf-8") as f:
         f.writelines(new_lines)
 
-def normalize_date(date_str: str) -> str:
+def normalize_date(date_str) -> str:
     """Convert Hungarian date like '2025. szeptember 15.' to 'YYYY-MM-DD'."""
     HU_MONTHS = {
         "január": "01",
@@ -99,8 +98,10 @@ def normalize_date(date_str: str) -> str:
         "november": "11",
         "december": "12",
     }
-
-    parts = date_str.strip(". ").split()
+    if isinstance(date_str, list):
+        parts = date_str
+    else:
+        parts = date_str.strip(". ").split()
     year = parts[0].replace(".", "")
     month = HU_MONTHS[parts[1].lower()]
     day = parts[2].replace(".", "")
@@ -157,6 +158,44 @@ def scrape_report(driver, wait, url: str) -> dict:
     image_divs = driver.find_elements(By.CSS_SELECTOR, "div.report__media__item__img[style]")
     images = [div.get_attribute("style").split("url(")[1].split(")")[0].strip('"') for div in image_divs]
 
+    # Resolution date (if status is "MEGOLDOTT")
+    resolution_date = None
+    if status and status.upper() == "MEGOLDOTT":
+        comment_bodies = driver.find_elements(By.CSS_SELECTOR, "div.comment__body")
+        for body in comment_bodies:
+            msg_elems = body.find_elements(By.CSS_SELECTOR, "p.comment__message")
+            for msg in msg_elems:
+                raw_html = msg.get_attribute("innerHTML")
+                if re.search(r"lezárta a bejelentést.*Megoldott.*eredménnyel", raw_html, re.DOTALL | re.IGNORECASE):
+                    time_elems = body.find_elements(By.CSS_SELECTOR, "time")
+                    # Use the first non-empty time element
+                    for t in time_elems:
+                        time_text = t.text.strip()
+                        if not time_text:
+                            # Try to extract from innerHTML if .text is empty
+                            time_html = t.get_attribute("innerHTML").strip()
+                            if time_html:
+                                time_text = time_html
+                            else:
+                                # Fallback: extract from outerHTML using regex
+                                outer_html = t.get_attribute("outerHTML")
+                                match = re.search(r">([^<]+)<", outer_html)
+                                if match:
+                                    time_text = match.group(1).strip()
+                        if time_text:
+                            try:
+                                resolution_date = normalize_date(time_text.split()[0:3])  # Only use date part
+                                print(f"[DEBUG] Parsed resolution_date: {resolution_date}")
+                            except Exception as e:
+                                print(f"[DEBUG] Error normalizing date: {e}")
+                            break
+                    if not resolution_date:
+                        print("[DEBUG] No valid <time> text found for resolution_date")
+                        raise ValueError("Could not find valid resolution date")
+                    break
+            if resolution_date:
+                break
+
     driver.close()
     driver.switch_to.window(driver.window_handles[0])
 
@@ -172,10 +211,11 @@ def scrape_report(driver, wait, url: str) -> dict:
         "description": description,
         "status": status,
         "address": address,
-        "images": images
+        "images": images,
+        "resolution_date": resolution_date,
     }
 
-def scrape_listing_page(driver, wait, page_url: str, global_urls: set, until_date: str = None, stop_on_existing: bool = True) -> tuple[str, bool]:
+def scrape_listing_page(driver, wait, page_url: str, global_urls: set, until_date: str = None, stop_on_existing: bool = True, data_dir: str = None) -> tuple[str, bool]:
     """Return next page URL and a flag if we reached an already scraped report or until_date."""
     driver.get(page_url)
     reached_done = False
@@ -188,7 +228,7 @@ def scrape_listing_page(driver, wait, page_url: str, global_urls: set, until_dat
 
         if link not in global_urls:
             report = scrape_report(driver, wait, link)
-            save_report(report, global_urls)  # update global set
+            save_report(data_dir, report, global_urls)  # update global set
             if until_date and report["date"] <= until_date:
                 reached_done = True
                 break
@@ -236,9 +276,9 @@ def _get_chrome_options(headless: bool) -> Options:
     options.add_argument("--log-level=3")
     return options
 
-def main(headless: bool, start_page: int, until_date: str = None, stop_on_existing: bool = True):
+def main(headless: bool, start_page: int, until_date: str = None, stop_on_existing: bool = True, data_dir: str = None):
 
-    os.makedirs(DATA_DIR, exist_ok=True)
+    os.makedirs(data_dir, exist_ok=True)
 
     options = _get_chrome_options(headless=headless)
     driver = webdriver.Chrome(options=options)
@@ -246,9 +286,9 @@ def main(headless: bool, start_page: int, until_date: str = None, stop_on_existi
 
     # --- Prepare global set of already scraped URLs ---
     global_urls = set()
-    for f in os.listdir(DATA_DIR):
+    for f in os.listdir(data_dir):
         if f.endswith(".jsonl"):
-            with open(os.path.join(DATA_DIR, f), encoding="utf-8") as fh:
+            with open(os.path.join(data_dir, f), encoding="utf-8") as fh:
                 for line in fh:
                     try:
                         global_urls.add(json.loads(line)["url"])
@@ -266,9 +306,9 @@ def main(headless: bool, start_page: int, until_date: str = None, stop_on_existi
     while page_url:
         print(f"[Page {page_num}] Loading: {page_url}")
         # page_url, done = scrape_listing_page(driver, wait, page_url, global_urls, until_date)
-        page_url, done = scrape_listing_page(driver, wait, page_url, global_urls, until_date, stop_on_existing=stop_on_existing)
+        page_url, done = scrape_listing_page(driver, wait, page_url, global_urls, until_date, stop_on_existing=stop_on_existing, data_dir=data_dir)
         if done:
-            print("Found already-scraped report or reached until-date. Exiting.")
+            print(f"Found already-scraped report or reached until-date ({until_date=}) Exiting.")
             break
         page_num += 1
 
@@ -276,18 +316,19 @@ def main(headless: bool, start_page: int, until_date: str = None, stop_on_existi
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Jarokelo scraper")
+    parser = argparse.ArgumentParser(description="Járókelő scraper")
     parser.add_argument("--headless", type=lambda x: x.lower() in ("true", "1"), default=True, help="Run browser in headless mode (true/false)")
     parser.add_argument("--start-page", type=int, default=1, help="Page number to start scraping from")
     parser.add_argument("--until-date", type=str, default=None, help="Scrape until this date (YYYY-MM-DD), inclusive")
     parser.add_argument("--continue-scraping", action="store_true", help="Resume automatically based on existing data")
-    
+    parser.add_argument("--data-dir", type=str, default=DATA_DIR, help="Directory to store data files")
+
     args = parser.parse_args()
     
     if args.continue_scraping:
         oldest_date, total = get_scraping_resume_point()
         page = max(total // 8 - 1, 1)
         print(f"Proceeding with scraping from date: {oldest_date} and from page number: {page}")
-        main(headless=args.headless, start_page=page, until_date=args.until_date, stop_on_existing=False)
+        main(headless=args.headless, start_page=page, until_date=args.until_date, stop_on_existing=False, data_dir=args.data_dir)
     else:
-        main(headless=args.headless, start_page=args.start_page, until_date=args.until_date, stop_on_existing=True)
+        main(headless=args.headless, start_page=args.start_page, until_date=args.until_date, stop_on_existing=True, data_dir=args.data_dir)
