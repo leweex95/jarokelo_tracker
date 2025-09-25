@@ -142,7 +142,7 @@ if submitted and query:
     counter_placeholder.markdown("Running... 0 sec")
     # Use the single debug_log_box
     cmd = [
-        "poetry", "run", "python", "./src/jarokelo_tracker/rag_pipeline.py",
+        "poetry", "run", "python", "./src/jarokelo_tracker/rag/pipeline.py",
         "--query", query,
         "--vector-backend", "faiss",
         "--embedding-provider", "local",
