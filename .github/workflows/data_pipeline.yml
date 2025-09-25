@@ -5,7 +5,7 @@ on:
     branches:
       - master
     paths:
-      - 'data/raw/*.jsonl'
+      - 'data/raw/**'
   workflow_dispatch:
     inputs:
       backend:
