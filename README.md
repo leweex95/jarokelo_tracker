@@ -64,7 +64,7 @@ This saves the vector store to `data/vector_store/<backend>_YYYYMMDDTHHMMSSZ`.
 
 5. Run the RAG pipeline
 
-    poetry run python ./src/jarokelo_tracker/rag_pipeline.py --query "What issues are not yet resolved in district 8 in Budapest?" --vector-backend "faiss" --headless true --top_k 5
+    poetry run python ./src/jarokelo_tracker/rag/pipeline.py --query "What issues are not yet resolved in district 8 in Budapest?" --vector-backend "faiss" --headless true --top_k 5
 
 Encodes the input query, fetches the top 5 closest matches from the vector store and feeds it to an LLM for answer generation.
 
