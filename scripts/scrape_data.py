@@ -315,7 +315,7 @@ def main(headless: bool, start_page: int, until_date: str = None, stop_on_existi
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Járókelő scraper")
-    parser.add_argument("--headless", type=lambda x: x.lower() in ("true", "1"), default=True, help="Run browser in headless mode (true/false)")
+    parser.add_argument("--headless", type=str, choices=['true', 'false'], default='true', help="Run browser in headless mode (true/false)")
     parser.add_argument("--start-page", type=int, default=1, help="Page number to start scraping from")
     parser.add_argument("--until-date", type=str, default=None, help="Scrape until this date (YYYY-MM-DD), inclusive")
     parser.add_argument("--continue-scraping", action="store_true", help="Resume automatically based on existing data")
