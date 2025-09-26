@@ -9,6 +9,7 @@ import json
 from pathlib import Path
 from datetime import datetime
 import plotly.graph_objects as go
+from plotly.graph_objects import Figure, Bar
 import argparse
 import logging
 import sys
@@ -19,7 +20,6 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 
 def _save_metric_plot_plotly(values, k_values, metric_name, date_str, out_dir):
     """Save a plotly bar chart for Precision@k and Recall@k."""
-    from plotly.graph_objects import Figure, Bar
     Path(out_dir).mkdir(parents=True, exist_ok=True)
     fig = Figure()
     fig.add_trace(Bar(x=k_values, y=values, name=metric_name))
@@ -62,33 +62,38 @@ def _load_latest_run(results_dir, img_dir):
         precision_values.append(summary.get("avg_precision@k", 0))
     recall_img = _save_metric_plot_plotly(recall_values, k_values, "Recall", dt, img_dir)
     precision_img = _save_metric_plot_plotly(precision_values, k_values, "Precision", dt, img_dir)
+    # Make image paths relative to HTML file
+    recall_img_rel = str(Path(recall_img).as_posix())
+    precision_img_rel = str(Path(precision_img).as_posix())
+    # For JSON details, use a relative path from docs/experiments to experiments/results/retrieval_eval
+    details_rel = "../../experiments/results/retrieval_eval/" + Path(file).name
     return {
         "date": dt,
-        "recall_img": recall_img,
-        "precision_img": precision_img,
-        "details": str(file)
+        "recall_img": str(recall_img_rel).replace("\\", "/"),
+        "precision_img": str(precision_img_rel).replace("\\", "/"),
+        "details": str(details_rel).replace("\\", "/")
     }
 
-def _parse_existing_table(report_path):
-    """Parse the existing markdown report table, removing old highlights and update lines.
-    Note that the most recent evaluation row is always highlighted and arranged on the top."""
-
+def _parse_existing_rows(report_path):
+    """Parse the existing HTML report table rows, removing old highlights and update lines."""
     if not Path(report_path).exists():
-        # Create header if file does not exist
-        return [
-            "<table>\n",
-            "<tr><th>Date</th><th>Recall@k</th><th>Precision@k</th><th>Details</th></tr>\n"
-        ]
+        return []
     with open(report_path, "r", encoding="utf-8") as f:
         lines = f.readlines()
-    # Remove previous highlight
-    lines = [line.replace(' style="background-color: #ffeeba;"', '') for line in lines]
-    return lines
+    # Extract table rows only
+    in_table = False
+    rows = []
+    for line in lines:
+        if "<table" in line:
+            in_table = True
+        elif "</table>" in line:
+            in_table = False
+        elif in_table and "<tr" in line:
+            rows.append(line.replace(' style="background-color: #ffeeba;"', ''))
+    return rows
 
 def _generate_row(run, highlight=False):
-    """Generate a table row for a run, optionally highlighted.
-    Note that only the most recent (and hence, top-most) row is highlighted."""
-
+    """Generate a table row for a run, optionally highlighted."""
     style = ' style="background-color: #ffeeba;"' if highlight else ""
     return (
         f'<tr{style}>'
@@ -100,33 +105,53 @@ def _generate_row(run, highlight=False):
     )
 
 def update_retrieval_eval_report(latest_run, report_path):
-    """Insert the latest run at the top of the report and update the 'report updated' 
-    info under the table."""
-    lines = _parse_existing_table(report_path)
-    try:
-        header_idx = next(i for i, line in enumerate(lines) if "<tr><th" in line)
-    except StopIteration:
-        lines = [
-            "<table>\n",
-            "<tr><th>Date</th><th>Recall@k</th><th>Precision@k</th><th>Details</th></tr>\n"
-        ]
-        header_idx = 1
+    """Insert the latest run at the top of the HTML report and update the 'report updated' info."""
+    rows = _parse_existing_rows(report_path)
     new_row = _generate_row(latest_run, highlight=True)
-    lines.insert(header_idx + 1, new_row)
     # Remove any previous "Report updated" lines
-    lines = [line for line in lines if not line.strip().startswith("_Report updated:")]
-    # Add the latest update info
-    lines.append(f"\n_Report updated: {datetime.now().strftime('%Y-%m-%d %H:%M')}_\n")
-    
+    rows = [row for row in rows if "_Report updated:" not in row]
+    # Insert new row at the top (after header)
+    header_row = (
+        '<tr><th>Date</th><th>Recall@k</th><th>Precision@k</th><th>Details</th></tr>\n'
+    )
+    # Remove header if present
+    rows = [row for row in rows if header_row.strip() not in row.strip()]
+    # Compose HTML
+    dt_now = datetime.now().strftime('%Y-%m-%d %H:%M')
+    html = f"""<!DOCTYPE html>
+        <html lang="en">
+        <head>
+        <meta charset="UTF-8">
+        <title>RAG Retrieval Evaluation</title>
+        <link rel="stylesheet" href="../style.css">
+        </head>
+        <body>
+        <header>
+        <h1>RAG Retrieval Evaluation</h1><br>
+        <p><strong>This evaluation tests the performance of our Retrieval-Augmented Generation pipeline for answering questions about reported issues.</strong>
+        Explore how different models, top-K values, and prompts affect retrieval quality. The charts below show recall@k and precision@k for each test run.</p><br>
+        <p><a href="../index.html">← Back to Dashboard</a></p>
+        </header>
+        <main>
+        <table>
+            {header_row}
+            {new_row}
+            {''.join(rows)}
+        </table>
+        <p style="margin-top:2em; color:#666;"><em>Report updated: {dt_now}</em></p>
+        </main>
+        </body>
+        </html>
+        """
     with open(report_path, "w", encoding="utf-8") as f:
-        f.writelines(lines)
-    logging.info(f"Updated report at {report_path}")
+        f.write(html)
+    logging.info(f"Updated HTML report at {report_path}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Update single retrieval evaluation markdown report.")
     parser.add_argument("--results-dir", type=str, default="experiments/results/retrieval_eval", help="Directory with eval output files (input to the aggregator).")
     parser.add_argument("--img-dir", type=str, default="docs/experiments/imgs", help="Directory to save plots (inside docs/ for Github Pages).")
-    parser.add_argument("--report-path", type=str, default="docs/experiments/retrieval_eval_report.md", help="Path to the markdown report (inside docs/ for Github Pages).")
+    parser.add_argument("--report-path", type=str, default="docs/experiments/retrieval_eval_report.html", help="Path to the HTML report (inside docs/ for Github Pages).")
     args = parser.parse_args()
 
     # Ensure output directories exist
