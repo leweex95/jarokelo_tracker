@@ -35,7 +35,6 @@ def aggregate_metrics(results: List[Dict[str, Any]], top_k: int) -> Tuple[Dict[s
         "hit_rate": hit_rate,
         "avg_recall@k": avg_recall,
         "avg_precision@k": avg_precision,
-        "top_k": top_k,
         "results": results
     }
     logging.info(f"Hit rate: {hit_rate:.2f}, Avg recall@{top_k}: {avg_recall:.2f}, Avg precision@{top_k}: {avg_precision:.2f}")
@@ -63,10 +62,9 @@ def main(
     local_model: str,
     vector_base_dir: str,
     save_dir: str,
-    top_k: int,
+    topk_list: list,
     lang: str
 ) -> None:
-    """Main evaluation routine."""
     logging.info("Running RAG retrieval evaluation with the following arguments:")
     logging.info(f"  eval_set_path: {eval_set_path}")
     logging.info(f"  vector_backend: {vector_backend}")
@@ -75,7 +73,7 @@ def main(
     logging.info(f"  local_model: {local_model}")
     logging.info(f"  vector_base_dir: {vector_base_dir}")
     logging.info(f"  save_dir: {save_dir}")
-    logging.info(f"  top_k: {top_k}")
+    logging.info(f"  top_k: {topk_list}")
     logging.info(f"  lang: {lang}")
 
     if not Path(eval_set_path).exists():
@@ -92,33 +90,50 @@ def main(
         logging.error(f"Failed to load vector store: {e}")
         sys.exit(1)
 
-    results: List[Dict[str, Any]] = []
-    for item in tqdm(eval_set, desc=f"Evaluating Retrieval ({lang})", unit="query", disable=not sys.stdout.isatty()):
-        query: str = item["query"].get(lang)
-        if not query:
-            continue  # Skip if query for selected language is missing
-        gold_doc_ids: set = set(item["gold_doc_ids"])
-        try:
-            retrieved, used_ids = retrieve_chunks(
-                index, metas, query, embedding_provider, local_model, top_k
-            )
-        except Exception as e:
-            logging.warning(f"Retrieval failed for query '{query}': {e}")
-            continue
-        retrieved_ids: set = set(used_ids)
-        hit: bool = bool(retrieved_ids & gold_doc_ids)
-        recall: float = len(retrieved_ids & gold_doc_ids) / len(gold_doc_ids) if gold_doc_ids else 0
-        precision: float = len(retrieved_ids & gold_doc_ids) / len(retrieved_ids) if retrieved_ids else 0
-        results.append({
-            "query": query,
-            "gold_doc_ids": list(gold_doc_ids),
-            "retrieved_ids": list(retrieved_ids),
-            "hit": hit,
-            "recall@k": recall,
-            "precision@k": precision
-        })
-    summary, dt_str = aggregate_metrics(results, top_k)
-    save_results(summary, save_dir, dt_str, lang)
+    all_k_results = {}
+    dt_str = datetime.now().strftime("%Y%m%d_%H%M")
+    for top_k in topk_list:
+        logging.info(f"Running evaluation for top_k={top_k}")
+        results: List[Dict[str, Any]] = []
+        for item in tqdm(eval_set, desc=f"Evaluating Retrieval ({lang}, k={top_k})", unit="query", disable=not sys.stdout.isatty()):
+            query: str = item["query"].get(lang)
+            if not query:
+                continue
+            gold_doc_ids: set = set(item["gold_doc_ids"])
+            try:
+                retrieved, used_ids = retrieve_chunks(
+                    index, metas, query, embedding_provider, local_model, top_k
+                )
+            except Exception as e:
+                logging.warning(f"Retrieval failed for query '{query}': {e}")
+                continue
+            retrieved_ids: set = set(used_ids)
+            hit: bool = bool(retrieved_ids & gold_doc_ids)
+            recall: float = len(retrieved_ids & gold_doc_ids) / len(gold_doc_ids) if gold_doc_ids else 0
+            precision: float = len(retrieved_ids & gold_doc_ids) / len(retrieved_ids) if retrieved_ids else 0
+            results.append({
+                "query": query,
+                "gold_doc_ids": list(gold_doc_ids),
+                "retrieved_ids": list(retrieved_ids),
+                "hit": hit,
+                "recall@k": recall,
+                "precision@k": precision
+            })
+        summary, _ = aggregate_metrics(results, top_k)
+        all_k_results[f"k={top_k}"] = summary
+
+    # Save all results in one file
+    save_dir_path: Path = Path(save_dir)
+    save_dir_path.mkdir(parents=True, exist_ok=True)
+    filename: str = f"rag_retrieval_eval_results_{lang}_{dt_str}.json"
+    save_path: Path = save_dir_path / filename
+    try:
+        with open(save_path, "w", encoding="utf-8") as f:
+            json.dump(all_k_results, f, indent=2, ensure_ascii=False)
+        logging.info(f"Results saved to: {save_path}")
+    except Exception as e:
+        logging.error(f"Failed to save results: {e}")
+        sys.exit(1)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Evaluate RAG retrieval")
@@ -163,14 +178,14 @@ if __name__ == "__main__":
     parser.add_argument(
         "--save-dir",
         type=str,
-        default="experiments/results",
+        default="experiments/results/retrieval_eval",
         help="Directory to save the RAG retrieval evaluation results"
     )
     parser.add_argument(
         "--topk",
-        type=int,
-        default=5,
-        help="Number of top retrieved documents (k) to evaluate"
+        type=str,
+        default="5",
+        help="Single integer or a comma-separated list of top-k values to evaluate (e.g. '1,5,10')"
     )
     parser.add_argument(
         "--lang",
@@ -180,6 +195,7 @@ if __name__ == "__main__":
         help="Language of queries to evaluate (en or hu)"
     )
     args = parser.parse_args()
+    args.topk = [int(k) for k in args.topk.split(",")]
     main(
         args.eval_set_path,
         args.vector_backend,

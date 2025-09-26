@@ -1,0 +1,104 @@
+{
+  "k=1": {
+    "datetime": "20250926_1218",
+    "hit_rate": 0.0,
+    "avg_recall@k": 0.0,
+    "avg_precision@k": 0.0,
+    "results": [
+      {
+        "query": "Are there any construction debris issues around the underground garage at Millenáris?",
+        "gold_doc_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/169486/epitesi-tormelek"
+        ],
+        "retrieved_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/164054/allando-parkolo__0"
+        ],
+        "hit": false,
+        "recall@k": 0.0,
+        "precision@k": 0.0
+      },
+      {
+        "query": "Has anyone reported a discarded bathtub on Pilisi street?",
+        "gold_doc_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/179064/kidobott-furdokad-a-pilisi-utcaban"
+        ],
+        "retrieved_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/175221/eldugult-vizelnyelo__0"
+        ],
+        "hit": false,
+        "recall@k": 0.0,
+        "precision@k": 0.0
+      }
+    ]
+  },
+  "k=2": {
+    "datetime": "20250926_1219",
+    "hit_rate": 0.0,
+    "avg_recall@k": 0.0,
+    "avg_precision@k": 0.0,
+    "results": [
+      {
+        "query": "Are there any construction debris issues around the underground garage at Millenáris?",
+        "gold_doc_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/169486/epitesi-tormelek"
+        ],
+        "retrieved_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/164054/allando-parkolo__0",
+          "https://jarokelo.hu/bejelentesek/budapest/177069/szanaszet-graffitizett-epulet-obszcen-tartalommal__0"
+        ],
+        "hit": false,
+        "recall@k": 0.0,
+        "precision@k": 0.0
+      },
+      {
+        "query": "Has anyone reported a discarded bathtub on Pilisi street?",
+        "gold_doc_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/179064/kidobott-furdokad-a-pilisi-utcaban"
+        ],
+        "retrieved_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/176933/evek-ota-nem-mukodo-szokokut__0",
+          "https://jarokelo.hu/bejelentesek/budapest/175221/eldugult-vizelnyelo__0"
+        ],
+        "hit": false,
+        "recall@k": 0.0,
+        "precision@k": 0.0
+      }
+    ]
+  },
+  "k=3": {
+    "datetime": "20250926_1219",
+    "hit_rate": 0.0,
+    "avg_recall@k": 0.0,
+    "avg_precision@k": 0.0,
+    "results": [
+      {
+        "query": "Are there any construction debris issues around the underground garage at Millenáris?",
+        "gold_doc_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/169486/epitesi-tormelek"
+        ],
+        "retrieved_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/164054/allando-parkolo__0",
+          "https://jarokelo.hu/bejelentesek/budapest/177069/szanaszet-graffitizett-epulet-obszcen-tartalommal__0",
+          "https://jarokelo.hu/bejelentesek/budapest/169301/nagyon-nem-egy-parkba-illo-graffitik-egy-elmu-epuleten__0"
+        ],
+        "hit": false,
+        "recall@k": 0.0,
+        "precision@k": 0.0
+      },
+      {
+        "query": "Has anyone reported a discarded bathtub on Pilisi street?",
+        "gold_doc_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/179064/kidobott-furdokad-a-pilisi-utcaban"
+        ],
+        "retrieved_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/176933/evek-ota-nem-mukodo-szokokut__0",
+          "https://jarokelo.hu/bejelentesek/budapest/165827/jokora-lyuk-az-ut-kozepen__0",
+          "https://jarokelo.hu/bejelentesek/budapest/175221/eldugult-vizelnyelo__0"
+        ],
+        "hit": false,
+        "recall@k": 0.0,
+        "precision@k": 0.0
+      }
+    ]
+  }
+}
