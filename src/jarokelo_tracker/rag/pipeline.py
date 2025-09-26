@@ -2,10 +2,10 @@ import argparse
 import json
 import textwrap
 
-from retrieval import load_vector_store
-from embedding import embed_query
-from llm import answer_with_llm
-from prompts import build_prompt
+from jarokelo_tracker.rag.retrieval import load_vector_store
+from jarokelo_tracker.rag.embedding import embed_query
+from jarokelo_tracker.rag.llm import answer_with_llm
+from jarokelo_tracker.rag.prompts import build_prompt
 
 
 def retrieve_chunks(index, metas, query, embedding_provider, local_model, top_k):
