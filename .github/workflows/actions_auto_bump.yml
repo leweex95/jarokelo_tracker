@@ -11,11 +11,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Update actions to latest versions
-        uses: fjogeleit/update-action@v1
+      - name: Update GitHub Actions versions
+        uses: fjogeleit/yaml-update-action@main
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          file: '.github/workflows/*.yml'
+          valueFile: '.github/workflows/*.yml'
+          propertyPath: 'uses'
+          value: 'actions/checkout@v4'
+          commitChange: true
+          message: 'Auto bump actions/checkout to v4'
 
       - name: Configure Git
         run: |
