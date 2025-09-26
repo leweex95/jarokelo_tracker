@@ -124,9 +124,9 @@ def update_retrieval_eval_report(latest_run, report_path):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Update single retrieval evaluation markdown report.")
-    parser.add_argument("--results-dir", type=str, default="experiments/results/retrieval_eval", help="Directory with JSON result files.")
-    parser.add_argument("--img-dir", type=str, default="experiments/results/retrieval_eval/imgs", help="Directory to save plots.")
-    parser.add_argument("--report-path", type=str, default="experiments/results/retrieval_eval/retrieval_eval_report.md", help="Path to the markdown report.")
+    parser.add_argument("--results-dir", type=str, default="experiments/results/retrieval_eval", help="Directory with eval output files (input to the aggregator).")
+    parser.add_argument("--img-dir", type=str, default="docs/experiments/imgs", help="Directory to save plots (inside docs/ for Github Pages).")
+    parser.add_argument("--report-path", type=str, default="docs/experiments/retrieval_eval_report.md", help="Path to the markdown report (inside docs/ for Github Pages).")
     args = parser.parse_args()
 
     # Ensure output directories exist

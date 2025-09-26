@@ -30,19 +30,26 @@ jobs:
         run: |
           python src/jarokelo_tracker/rag/evaluation/assemble_retrieval_reports.py \
             --results-dir experiments/results/retrieval_eval \
-            --img-dir experiments/results/retrieval_eval/imgs \
-            --report-path experiments/results/retrieval_eval_report.md
+            --img-dir docs/experiments/imgs \
+            --report-path docs/experiments/retrieval_eval_report.md
 
-      - name: Copy report to docs for GitHub Pages
+      - name: Configure Git
         run: |
-          mkdir -p docs
-          cp experiments/results/retrieval_eval_report.md docs/retrieval_eval_report.md
-          cp -r experiments/results/retrieval_eval/imgs docs/imgs
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
 
-      - name: Commit and push report to gh-pages
+      - name: Commit and push cleanup
+        env:
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-          git add docs/retrieval_eval_report.md docs/imgs
-          git commit -m "Update retrieval evaluation report [skip ci]" || echo "No changes to commit"
-          git push origin HEAD:gh-pages
+          git add docs/experiments/embeddings_comparison_results_aggregated.html
+          git diff --quiet && git diff --staged --quiet || git commit -m "[Auto-commit] Embedding comparison results update [skip ci]"
+
+          RETRIES=10
+          for i in $(seq 1 $RETRIES); do
+            git pull --rebase
+            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master && break || {
+              echo "Push failed, retrying ($i/$RETRIES)..."
+              sleep 3
+            }
+          done
