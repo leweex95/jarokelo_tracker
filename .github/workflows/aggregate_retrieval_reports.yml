@@ -1,0 +1,48 @@
+name: Aggregate Retrieval Report
+
+on:
+  push:
+    paths:
+      - 'experiments/results/retrieval_eval/*.json'
+  workflow_dispatch:
+
+jobs:
+  aggregate-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install plotly kaleido
+
+      - name: Run aggregator script
+        run: |
+          python src/jarokelo_tracker/rag/evaluation/assemble_retrieval_reports.py \
+            --results-dir experiments/results/retrieval_eval \
+            --img-dir experiments/results/retrieval_eval/imgs \
+            --report-path experiments/results/retrieval_eval_report.md
+
+      - name: Copy report to docs for GitHub Pages
+        run: |
+          mkdir -p docs
+          cp experiments/results/retrieval_eval_report.md docs/retrieval_eval_report.md
+          cp -r experiments/results/retrieval_eval/imgs docs/imgs
+
+      - name: Commit and push report to gh-pages
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add docs/retrieval_eval_report.md docs/imgs
+          git commit -m "Update retrieval evaluation report [skip ci]" || echo "No changes to commit"
+          git push origin HEAD:gh-pages
