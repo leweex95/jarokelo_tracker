@@ -17,6 +17,7 @@ dependencies = [
     "levisllmhub @ git+https://github.com/leweex95/levisLLMhub.git",
     "streamlit (>=1.49.1,<2.0.0)",
     "markdown (>=3.9,<4.0)",
+    "tqdm (>=4.67.1,<5.0.0)",
 ]
 
 [tool.poetry]
