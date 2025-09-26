@@ -1,0 +1,39 @@
+name: Auto bump actions
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-workflows:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Update actions to latest versions
+        uses: fjogeleit/update-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          file: '.github/workflows/*.yml'
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+
+      - name: Commit and push cleanup
+        env:
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          git add docs/experiments/embeddings_comparison_results_aggregated.html
+          git diff --quiet && git diff --staged --quiet || git commit -m "[Auto-commit] Embedding comparison results update [skip ci]"
+
+          RETRIES=10
+          for i in $(seq 1 $RETRIES); do
+            git pull --rebase
+            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master && break || {
+              echo "Push failed, retrying ($i/$RETRIES)..."
+              sleep 3
+            }
+          done
