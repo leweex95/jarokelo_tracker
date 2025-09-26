@@ -1,0 +1,633 @@
+[
+  {
+    "query": "Report about köztisztaság at Budapest, II. kerület, Lejárati pont a mélygarázsba a Millenárison",
+    "description": "Kérem, takarítsák el az építési törmeléket. Köszönöm.\n\nEz a probléma rendszerszintű. A Google Térképen is látható, hogy az építési hulladék évek óta nincs eltakarítva. Nagyon hálás lennék, ha az illetékes önkormányzati dolgozók, akikhez ezek az üzenetek eljutnak, olyan döntéseket hoznának, amelyek megszüntetik ezt a rendszerszintű problémát. Köszönöm.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/169486/epitesi-tormelek"
+    ]
+  },
+  {
+    "query": "Report about köztisztaság at Budapest, X. kerület, Kőbánya, Pilisi u. 79",
+    "description": "A X. kerületben Pilisi utca végén egy fürdőkádat dobott ki valaki a mező szélén. Érthető, hiszen csak 3 hulladékudvar van belátható közelben.\nKérem segítsenek elszállítani.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/179064/kidobott-furdokad-a-pilisi-utcaban"
+    ]
+  },
+  {
+    "query": "Report about köztisztaság at Budapest, XIV. kerület, Zugló, Kövér Lajos u. 28b",
+    "description": "A Kövér Lajos közben egy újípétésű ház melletti járdán egy madártetem van.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/175010/elpusztult-madar-a-kozteruleten"
+    ]
+  },
+  {
+    "query": "Report about köztisztaság at Budapest, I. kerület, Várkerület, Halász u. 2",
+    "description": "Kérem, takarítsák el az építési törmeléket. Köszönöm.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/164784/epitesi-tormelek"
+    ]
+  },
+  {
+    "query": "Report about köztisztaság at Budapest, III. kerület, Óbuda-Békásmegyer, Óbuda",
+    "description": "Az Óbuda Bogdáni úti buszvégállomásnál a zöldterület melletti lámpaoszlop és fa tövében napok óta közterületre lerakott szemét van. A képeket mellékeltem. Kérem szépen a mihamarabbi elszállításukat.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/171027/lerakott-szemet"
+    ]
+  },
+  {
+    "query": "Report about köztisztaság at Budapest, XII. kerület, Hegyvidék, Árnyas út 15",
+    "description": "Kutyapiszok tárolására alkalmas kuka elszublimált a XII. Árnyas út - Sztehlo Gábor u. sarkáról. Csak az oszlop maradt meg.\nJó lenne mellé egy kommunális is.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/177424/kuka-hianya"
+    ]
+  },
+  {
+    "query": "Report about köztisztaság at Budapest, V. kerület, Belváros-Lipótváros, Károly krt. 4",
+    "description": "FRISSÍTÉS: 2025.07.14.\n\nBejelentő visszajelzése:\n„Ugyanolyan mocskos a megálló teljes peronja, mint amilyen februárban volt. Itt is folyamatos, magasnyomású, vegyszeres takarításra lenne szükség, mint az 1-3-as villamosok vonalán, amit a BKK/BKV ott sem végeztet el.”\n\n-----\n\nFRISSÍTÉS: 2025.04.30.\n\nBKK Budapesti Közlekedési Központ válasza:\n„Köszönjük megkeresését, amellyel kapcsolatban a BKV Zrt. arról tájékoztatta Társaságunkat, hogy a villamosmegálló általános tisztasága megfelelő.”\n\n-----\n\nFRISSÍTÉS: 2025.04.01.\n\nA bejelentő válasza:\n„Azért mert évente egyszer ki van takarítva a megálló, még nem lesz tiszta az év 364 napjában. A megálló peronja VASTAG koszréteg alatt senyved. Legyenek szívesek felszólítani a BKV-t a takarításra, amennyiben Önöknek tényleg szempont az utaskomfort.\nTovábbi képeket csatoltam.”\n\n-----\n\nKérem, rövid határidővel legyenek szívesek kitakarítani a budai irányú Astoria villamosmegálló peronját, különösképp az utasvárón belüli területet. Nehéz megmondani hány rétegben és mi minden rakódott itt le, de a látvány nem ide való.\nKöszönöm!",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/164849/erosen-szennyezett-megallo"
+    ]
+  },
+  {
+    "query": "Report about köztisztaság at Budapest, III. kerület, Óbuda-Békásmegyer, Búza utca",
+    "description": "BP. 3. Ker. Huszti út gyalogosjárda mentén kiszakadt szemeteszsák eldobva, szemét szétszórva.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/171479/szemet-szetszorva"
+    ]
+  },
+  {
+    "query": "Report about köztisztaság at Budapest, V. kerület, Belváros-Lipótváros, Vigadó tér",
+    "description": "FRISSÍTÉS: 2025.09.15.\n\nBKM Budapesti Közművek válasza:\n„Munkatársaink napi rendszerességgel takarítják a területet, de sajnos Társaságunkon túlmutató okok miatt az Ön által felsorolt problémák napi rendszerességűek.”\n\n-----\n\nVáltozatlanul nem európai állapotok vannak az Alsó rakpart belső szakaszán. A Viadukt alatt több a szemét, mint a gurulós szemetesek kapacitása, vizelet és szemétlé. A rakparton lévő szemetesek mellett szintén többletszemét.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/179301/buz-es-szemet-a-vigado-alatti-also-rakparton"
+    ]
+  },
+  {
+    "query": "Report about köztisztaság at Budapest, XIII. kerület, Dráva u. 22",
+    "description": "FRISSÍTÉS: 2025.06.22.\n\nXIII. Kerületi Közszolgáltató Zrt. válasza:\n„Tisztelt Bejelentő!\n\nJelzése alapján a XIII. Kerületi Közszolgáltató Zrt. megvizsgálta a helyszínt és visszajelezte, hogy július közepéig javítják.\n”\n\n-----\n\nTönkrement kidőlt régi fajta szemetes várja cseréjét a CBA príma és a csomag automaták előtt.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/171202/tonkrement-regi-fajta-szemetes"
+    ]
+  },
+  {
+    "query": "Report about közművek at Budapest, X. kerület, Kőbánya, Szárnyas u. 5",
+    "description": "Nyitott közmű.\n\n------\n\nJárókelő ügykezelői kiegészítés:\nA veszélyes, nyitott akna a Szerszámudvar mögötti sarokban van.\nKérjük a tisztelt Önkormányzatot, vegye fel a kapcsolatot a ház közös képviseletével, akik intézkedni fognak a balesetveszély elhárítása érdekében.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/163036/nyitott-kozmu"
+    ]
+  },
+  {
+    "query": "Report about közművek at Budapest, VIII. kerület, Józsefváros, Pollack Mihály tér 3",
+    "description": "A csapadéklefolyó eltömődött, a rostély egy része hiányzik. Kérjük, javítsa ki. Köszönöm.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/166206/csapadeklefolyo-eltomodott-hianyos-rostely"
+    ]
+  },
+  {
+    "query": "Report about közművek at Budapest, XII. kerület, Hegyvidék, Kék Golyó utca",
+    "description": "A Turul-szobor mellett, a járdán, az elektromos fedlap szélénél megsüllyedt a járda/díszburkolat, ami rendkívül balesetveszélyes. Kérem, javítsák!",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/180336/botlasveszelyes-megsullyedt-jarda"
+    ]
+  },
+  {
+    "query": "Report about közművek at Budapest, IV. kerület, Újpest, Erzsébet u. 67",
+    "description": "FRISSÍTÉS: 2025.07.25.\n\nFCSM Fővárosi Csatornázási Művek válasza:\n„A tűzcsapok üzemeltetése nem tartozik társaságunk tevékenységi körébe, ezért a probléma megoldása érdekében nem áll módunkban intézkedni.”\n\n-----\n\nÚjpesten, a Károlyi István iskola focipálya felőli bejárata melletti tűzcsap csöpög.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/175263/csopogo-tuzcsap"
+    ]
+  },
+  {
+    "query": "Report about közművek at Budapest, XI. kerület, Újbuda, Szüret u. 5",
+    "description": "Hiányos elmozdult fedlap a Szüret 7-9 között a kanyarban.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/179903/hianyos-elmozdult-fedlap"
+    ]
+  },
+  {
+    "query": "Report about közművek at Budapest, VI. kerület, Terézváros, Városligeti fasor 904",
+    "description": "Nagy kiterjedésű tócsa alakul ki eső után a Felsőerdősor utca kerékpársávjában. Valahol a víz alatt van egy lefolyó, ami eldugult. Legyen szíves az illetékes tisztítsa ki a lefolyót.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/166971/pocsolya"
+    ]
+  },
+  {
+    "query": "Report about közművek at Budapest, XIX. kerület, Kispest, Pozsony u. 73",
+    "description": "FRISSÍTÉS: 2025.08.03.\n\nA bejelentő válasza:\n„Még nem tisztították ki őket...”\n\n-----\n\nFRISSÍTÉS: 2025.02.10.\n\nFővárosi Csatornázási Művek Zrt. válasza:\n„Köszönettel vettük bejelentését. A megadott helyszínen található vízelvezető árkot nem társaságunk üzemelteti, ezért a probléma megoldása érdekében nem áll módunkban intézkedni.”\n\n-----\n\nKérem az illetékest, hogy a képen látható, az utca mindkét oldalán található csatornákat legyenek szívesek kitisztítani!",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/163598/teljesen-eldugult-csatornak"
+    ]
+  },
+  {
+    "query": "Report about közművek at Budapest, XIV. kerület, Zugló, Örs vezér tere M+H",
+    "description": "FRISSÍTÉS: 2025.02.27.\n\nXIV. kerület Zuglói Városgazdálkodási Közszolgáltató válasza:\n„A jelzett vízelvezető nincsen társaságunk üzemeltetésében, javasoljuk a BKV Zrt. megkeresését.”\n\n-----\n\nFRISSÍTÉS: 2025.02.18.\n\nFővárosi Csatornázási Művek Zrt.válasza:\n„A megadott helyszínen található vízelvezető nincs társaságunk üzemeltetésében, ezért a probléma megoldása érdekében nem áll módunkban intézkedni.”\n\n-----\n\nAz Örs vezér tèren a buszvégállomáson van egy vízelvezető rács ami kiáll a talajból ezzel botlásveszélyt okozva. Sajnos nem visszamozgatható. Kérem az illetékest a javításra.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/164138/balesetveszelyes-racs"
+    ]
+  },
+  {
+    "query": "Report about közművek at Budapest, IX. kerület, Ferencváros, Illatos út 7",
+    "description": "Összetört , hiányos hiányos fedlap a Google tanúsága szerint van egy másik fedlap is elsüllyedve a föld alatt. A műtárgy a Gubacsi út - Illatos út kereszteződésénél helyezkedik el.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/167344/osszetort-hianyos"
+    ]
+  },
+  {
+    "query": "Report about közművek at Budapest, IV. kerület, Újpest, Újpalotai út 22",
+    "description": "Kedves Illetékes!\n\nAz egyik tűzcsapon a fedél lejött, a másikon elszakadt a zsinór.\n\nKöszönöm!",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/177170/tuzcsap-gondok"
+    ]
+  },
+  {
+    "query": "Report about elhagyott jármű at Budapest, XV. kerület, Gábor Áron u. 90",
+    "description": "Rendszám nélküli, elhagyott autó, 1154, Gábor Áron utca 92. előtt",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/170355/rendszam-nelkuli-elhagyott-auto"
+    ]
+  },
+  {
+    "query": "Report about elhagyott jármű at Budapest, IX. kerület, Ferencváros, Csengettyű u. 12",
+    "description": "A 9.kerület, Csengettyű u. 7. előtt parkol egy szürke Dacia Duster, már több mint egy éve. Időközben a műszakija is lejárt.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/177523/elhagyott-auto"
+    ]
+  },
+  {
+    "query": "Report about elhagyott jármű at Budapest, XI. kerület, Újbuda, Sasadi út",
+    "description": "A Sasadi út BKK buszmegállónál a Budaörsi út autós aluljáró kivezetésénél a Budaörsi út páratlan oldalán legalább 2025.04.13. óta várakozik egy lerobbant fehér Skoda Fabia. Szeretnék érdeklődni, hogy meddig fogják még itt tárolni a járdán a mozgásképtelen járművet.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/168828/feher-skoda-a-jardan"
+    ]
+  },
+  {
+    "query": "Report about elhagyott jármű at Budapest, X. kerület, Kőbánya, Somfa u. 10a",
+    "description": "Hosszú ideje all elhagyottan egy külföldi rendszámú autó.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/167448/elhagyott-kulfoldi-rendszamu-auto"
+    ]
+  },
+  {
+    "query": "Report about elhagyott jármű at Budapest, XIX. kerület, Kispest, Hungária út 28",
+    "description": "Hónapok óta az iskola előtt parkol 1,5 helyett elfoglalva egy furgon. A szülök és az itt dolgozó pedagógusok helyet elfoglalva. A tanév megkezdésevel szükség lenne a parkolóra.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/178858/rosszul-parkolo-elhagyott-auto"
+    ]
+  },
+  {
+    "query": "Report about elhagyott jármű at Budapest, XVIII. kerület, Pestszentlőrinc-Pestszentimre, Zádor u. 2/A",
+    "description": "Nincs rajta rendszám, évek óta itt áll. 2023-ban be lett már jelentve, nem intézkedtek.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/163906/elhagyott-sarga-suzuki"
+    ]
+  },
+  {
+    "query": "Report about elhagyott jármű at Budapest, XXII. kerület, Budafok-Tétény, Pécsi u. 8",
+    "description": "A napokban amikor leszálltam a Budafok-Belváros vasútállomáson azt gondoltam sétálok egy keveset. Bár ne tettem volna!\nA vasúti töltés melletti részen egy kék Ford Tranzit amely nyitva is van szemmel láthatóan. Régi Opel Astra, Ford Mondeo.\nFelvettem a kapcsolatot az Önkormányzattal és azt a választ kaptam, hogy ez a terület a MÁV. Zrt.-hez tartozik.\nKérem a MÁV. részére továbbítsák a bejelentésemet!",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/171783/mav-teruleten-muszaki-nelkuli-roncsok"
+    ]
+  },
+  {
+    "query": "Report about elhagyott jármű at Budapest, XXII. kerület, Budafok-Tétény, Kassai u. 87",
+    "description": "Piros kombi Nissan ül a fűben, fűben szundikálva. A Horgásztelep nagyon messze van a kerületközponttól. Így ez a rom nem csak azért nem tűnik fel senkinek, mert lassan benövi a növényzet.\nVan mögé betolva egy utánfutó, érdemes lehet azt is megnézni.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/169783/piros-kombi-rendszam-nelkul"
+    ]
+  },
+  {
+    "query": "Report about elhagyott jármű at Budapest, XI. kerület, Újbuda, Beregszász út 37",
+    "description": "2007-es sárga Volkswagen Multivan 7HK várakozik a Beregszász út 37-el szemben, műszakija 2025.06.14-ig volt érvényes.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/174193/sarga-volkswagen-varakozik"
+    ]
+  },
+  {
+    "query": "Report about elhagyott jármű at Budapest, III. kerület, Óbuda-Békásmegyer, Gyűrű u. 12",
+    "description": "A 1039 Gyűrű utca 12. házszám előtt nagyon régóta egy roncsautó van (leeresztett kerekek stb.), ami azok elől foglalja el a parkolóhelyet, akik munka után hazaérve szeretnék leparkolni a használatban levő autójukat.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/168772/roncsauto-foglalja-a-helyet"
+    ]
+  },
+  {
+    "query": "Report about forgalomtechnika at Budapest, III. kerület, Óbuda-Békásmegyer, Aquincum",
+    "description": "Két probléma van a kereszteződéssel (lásd a csatolt képet).\n\n1. Ez egy könnyebben orvosolható probléma. A kép alsó részén látható egy pirossal és zölddel kiemelt felfestés, a balra kanyarodáshoz készíti elő a kanyarodósávot a Zsófia utcára. Itt teljesen fölösleges a záróvonal és a terelés, sőt, balesetveszélyes helyzetet teremt, ha az ember teljesen betartja a szabályokat, mert akkor a belső sávban 70-nel érkezők előtt kell rövidebb úton fékezni. Ráadásul semmi sem indokolja. Itt az a javaslatom, hogy a záróvonal (pirossal jelölt) szűnjön meg, és a szaggatott zöld vonallal jelzett részen kapjon terelővonalat, így akadálytalanul tudnának kisorolni a sávba érkezők. Már csak azért is kontraproduktív ez a jelenlegi megoldás, mert a HÉV szerencsétlen ütemezése miatt (ha bármelyik irányból késik 1-2 percet) itt feltorlódnak az autók csúcsidőben, és a balesetveszélyt elkerülendő mindenki a forgalom elől elzárt részen várakozik, mert SOKKAL biztonságosabb.\n\n2. A második témakör nehezebb talán. Ha jön a HÉV, a vasúti szemafor és az összes HÉVet keresztező út is pirosat kap. A fent említett esetben, ha késik a HÉV és pont ekkor váltana amúgy a közlekedési lámpa, akkor a fenti ág (sárga felkiáltójellel jelölve) és a 2-essel jelölt kanyarodási lehetőség TELJESEN kimarad, csak a külön jelzés nélküli 1-es kanyarodás kap egy rövidebb zöldet.\nEz NAGYON rossz, mivel elég csak egy másodperccel \"belelógnia\" a HÉV piros jelzésének a lámparendbe, rögtön plusz 2-3 perccel számolhat a bekanyarodó. Emiatt nem ritka, hogy akár 3 teljes lámpaváltás is kimarad, és az ember akár negyed órát is várhat, hogy átjusson a kereszteződésen. Ez feszültséget és türelmetlenséget szül, nagyon gyakori a teljes piroson áthajtó autó (ami sosem volt zöld abban az ütemben), vagy a másik kanyarodósávból teljesen szabálytalanul elkanyarodó autó. Emellett a narancssárgával jelölt kanyarodásnál a zöld nagyon rövid, legjobb esetben is 4-5 autó tud áthajtani, de csak ha senki sem aludt el, mindenki intenzíven gyorsul és mivel az \"1!\" kanyarodói után kapják a zöldet, amin sokan még vastagon a piroson is átmennek és beragadnak a kereszteződésbe, még ez a 4-5 autó sem tud kihajtani, mert blokkolják fizikailag az átjárót. Katasztrófa az egész.\nA legjobb persze az lenne, ha itt a HÉV nem szintben keresztezné ezt a kereszteződést, de ez vágyálom. A második legjobb az lenne, ha a Szentendre felé tartó HÉV megállója nem a kereszteződés ELŐTT lenne, de erre sincs sok hely, így viszont a teljes utascsere lebonyolításáig is piros az átjáró, akár egy percig is fölöslegesen, ami itt elég soknak számít. Viszont a lámpák okosabb szervezésével, netán monitorozásával csökkenthető lenne ennek a három kanyarodósávnak a terhelése - pl. az 1-es és 2-es ágak sorrendjét dinamikusan fel tudná cserélni a program, stb.\nGondolom a Szentendrei út zöldhullám-preferenciája miatt kicsi itt a mozgástér, de 2025 van, ennél biztosan tudunk jobbat is kitalálni. A javaslatom az, hogy üljön ide ki valaki kissámlival reggel 8 és 9, valamint délután 4 és 5 között, abból pontosan megérti, mi a probléma ezzel a kereszteződéssel amellett, hogy így állandó a balesetveszély is.\nSajnos Csillaghegy felé sem opció a kerülés, mert ott is rettentően lefogja a HÉV a kereszteződés forgalmát, ráadásul a síneken csak lassan lehet átmenni, mert különben leér az autó alja. Több tízezer ember életét nehezíti meg napi szinten ez a két kereszteződés, így szeretném indítványozni, hogy gondolják át újra az illetékesek a lehetőségeket. Köszönöm előre is.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/177389/a-iii-keruleti-zsofia-utcai-keresztezodes"
+    ]
+  },
+  {
+    "query": "Report about forgalomtechnika at Budapest, XIV. kerület, Zugló, Szugló utca / Nagy Lajos király útja",
+    "description": "FRISSÍTÉS: 2025.08.11.\n\nJárókelő ügykezelő hozzászólása:\n„Tisztelt Budapest Közút!\nSzeretném tájékoztatni, hogy e bejelentés óta már több újat kaptunk ugyanerről a kereszteződésről/lámpáról. Legutóbb ma délután 3-kor. Ezeket duplikáció miatt nem küldtük el Önöknek.\nÜdvözlettel,\nFischer Péter”\n\n-----\n\nA Szugló utca Nagy Lajos király útja kereszteződésben, a Szugló utcán átmenő gyalogátkelő a (LIDL oldalán) zöld jelzést nem mutatja a gyalogosoknak!",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/175668/nem-mukodo-kozlekedesi-lampa"
+    ]
+  },
+  {
+    "query": "Report about forgalomtechnika at Budapest, XI. kerület, Újbuda, Villányi út 1",
+    "description": "Legyenek kedvesek, kiegyenesíteni és pótolni a hiányzó pollereket az mind két oldalán.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/176850/poller-gondok"
+    ]
+  },
+  {
+    "query": "Report about forgalomtechnika at Budapest, VI. kerület, Terézváros, Podmaniczky u. 22",
+    "description": "Levágott pollerek maradványa van a járdaszegélyek közelében. Balesetveszélyes.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/176095/poller-csonkok"
+    ]
+  },
+  {
+    "query": "Report about forgalomtechnika at Budapest, XI. kerület, Újbuda, Than Károly u. 20",
+    "description": "A Than Károly utcában a képen látható tábla megdőlt a közút irányába.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/174808/megdontott-tabla"
+    ]
+  },
+  {
+    "query": "Report about forgalomtechnika at Budapest, IV. kerület, Újpest, Árpád út 148-150",
+    "description": "Az Istvántelki útról kis ívben szabad az Árpád útra fordulni, az Árpád úti felüljáróra tilos. A korábban lefestett záróvonal nagyon megkopott, aki nem ismeri a környéket, itt akar a felüljáróra fordulni.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/175736/zarovonal-hianya-lathatosaga"
+    ]
+  },
+  {
+    "query": "Report about forgalomtechnika at Budapest, XIII. kerület, Gyöngyösi u. 6. 1",
+    "description": "Kedves Illetékes!\n\nA közlekedési tábla meghajlott, szétnyílt.\n\nKöszönöm!",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/177468/kettehasadt-tabla"
+    ]
+  },
+  {
+    "query": "Report about forgalomtechnika at Budapest, XII. kerület, Hegyvidék, Dániel út 23c",
+    "description": "FRISSÍTÉS: 2025.09.05.\n\nA bejelentő kiegészítése:\n„Valaki kitett egy maszek táblát, hogy amikor jön a kuka, akkor egyáltalán ne álljanak oda. Ha a kukanapokon meg tudják oldani a szabályszerű parkolást, akkor más napokon is illene… Felfestés, hivatalos tábla továbbra sincs”\n\n-----\n\nFRISSÍTÉS: 2025.04.28.\n\nA bejelentő visszajelzése:\n„A felfestés (amit szintén javasoltam az eredeti bejelentésben) nem szűkít semmit, arra mégsem reagáltak.”\n\n-----\n\nHa az úttesten nem férnek el, attól még nem mehetnek a járdára.\nA Dániel út járdájának nagy részéről már sikerült leszoktatni az autókat az úttestre, viszont a Gím utca sarkánál, ahol a szűk úttesten nem férne el a kukás autó a parkoló autók mellett, még mindig elállják a járdát. Kérünk oda pollert, vagy legalább egy felfestést",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/168224/nem-mehetnek-a-jardara"
+    ]
+  },
+  {
+    "query": "Report about forgalomtechnika at Budapest, II. kerület, Széll Kálmán tér",
+    "description": "A Széll Kálmán téren a SPAR-al szemben van egy sérült kötelező haladási irányt jelző tábla.\nDe mintha az alatti lévő táblán is besötétedtek volna a nyilakon lévő jelzések.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/177512/serult-tablak"
+    ]
+  },
+  {
+    "query": "Report about forgalomtechnika at Budapest, II. kerület, Csalogány u. 13-19",
+    "description": "FRISSÍTÉS: 2025.08.28.\n\nBudapest Közút válasza:\n„Szíves tájékoztatásul közöljük, hogy a fizető parkolási övezettel kapcsolatos jelzőtáblák karbantartása, üzemeltetése, kihelyezése a parkolót üzemeltető cég feladata.\nA probléma megoldásával kapcsolatban szíveskedjen a kerületi Önkormányzathoz fordulni.\n”\n\n-----\n\nGyalogosikra balesetveszélyes közlekedési tábla. Szabálytalanul alacsonyan elhelyezett, hegyes sarkú. Kérjük áthelyezését a jogszabály szerint.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/178424/balesetveszelyes-kozlekedesi-tabla"
+    ]
+  },
+  {
+    "query": "Report about parkok és zöldterületek at Budapest, VI. kerület, Terézváros, Liszt Ferenc tér 12",
+    "description": "Milliárdokból lett felújítva, de most hogy egész héten 40 fok körül van a hőmérséklet, nem működik a párakapu. Miért?",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/177567/nem-mukodo-parakapu"
+    ]
+  },
+  {
+    "query": "Report about parkok és zöldterületek at Budapest, XIII. kerület, Váci út 12",
+    "description": "A Nyugati irányában a kerékpársávon fejmagasságban lógnak a lombok.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/172463/fak-metszese-a-vaci-uton"
+    ]
+  },
+  {
+    "query": "Report about parkok és zöldterületek at Budapest, XIV. kerület, Zugló, Torontál u. 47a",
+    "description": "Nagy halom zöldhulladék található a Torontál és a Szitakötő utcák által közrefogott kispark közepén. Kérjük a terület megtisztítását.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/168735/nagy-halom-zoldhulladek-a-park-kozepen"
+    ]
+  },
+  {
+    "query": "Report about parkok és zöldterületek at F2MX+XX Budapest, Magyarország",
+    "description": "A libikoka nagyon inog, mert a tengelyt szorító csavarok lazák.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/168908/libikoka-nagyon-inog-mert-a-csavar-laza"
+    ]
+  },
+  {
+    "query": "Report about parkok és zöldterületek at Budapest, XIV. kerület, Zugló, Angol u. 75",
+    "description": "FRISSÍTÉS: 2025.07.31.\n\nBejelentőnk válasza:\n„Kérjük a feltételek megteremtését a fa ültetéséhez, akár az ott utoljára munkát végző vállalkozás bevonásával, aki megszüntette azt”\n\n-----\n\nFRISSÍTÉS: 2025.07.31.\n\nXIV. kerület Zuglói Városgazdálkodási Közszolgáltató Zrt. válasza:\n„A jelzett helyen sajnálatosan nem adottak a feltételek egy új, szabványos\nutcai sorfa ültetéséhez, így jelenleg nem áll módunkban erre a helyre fát\nelültetni.”\n\n-----\n\nFRISSÍTÉS: 2025.07.28.\n\nA bejelentő visszajelzése:\n„Sajnos időközben -egy közmű munka során - leaszfaltozásra került, jobb lenne, ha ismét fa kerülne az egykori gödör helyére az utólagos aszfalt helyett!”\n\n-----\n\nHatalmas gödör a zöldsávban az iskola előtt.\nFeltöltése, fűvesítése javasolt, majd akár faültetés.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/167379/hatalmas-godor-a-zoldsavban-az-iskola-elott"
+    ]
+  },
+  {
+    "query": "Report about parkok és zöldterületek at Budapest, XIV. kerület, Zugló, Kövér Lajos tér 3",
+    "description": "A közlekedési tábla nem látható az elburjánzó növényzettől. Kérem tegyék láthatóvá a táblát!",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/172926/novenyzettol-nem-lathato-kozlekedesi-tabla"
+    ]
+  },
+  {
+    "query": "Report about parkok és zöldterületek at Budapest, XIV. kerület, Zugló, Kövér Lajos tér 19",
+    "description": "A Kövér Lajos téren a parkolók által közrefogott önkormányzati zöldterületen nagy, fél-egy méteres gaz található. Továbbá ősszel a faleveleket nem gyűjtötték össze, így még azok gereblyézése is szükséges lenne. Ugyanezen a területen található bokrok metszése is fontos lenne, hogy ne lógjanak be a parkoló autók közé. Az egészségügyi metszés sem elhanyagolandó.\nA térköves parkolók szélén 10-40 centi szélességben kinőtt a fű, gaz, ezek eltávolítása is szükséges lenne. Sajnos a tér nagyon elhanyagolt, kérem az illetékeseket, hogy hogy végezzék el a kért műveleteket.\nElőre is köszönjük!",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/163225/kover-lajos-teri-falevelek-szegely-menti-fu-es-gyom"
+    ]
+  },
+  {
+    "query": "Report about parkok és zöldterületek at Budapest, XIX. kerület, Kispest, Álmos u. 11",
+    "description": "Helyszín: 1192 Budapest, Álmos utca 11 (Álmos utca és Esze Tamás utca sarka).\nProbléma: kihalt/korhadó faág egy öreg fán - potenciális veszélyforrás viharok idején (gyalogosokra, parkoló autókra valamint házra közvetlen veszélyforrás), mivel vastag ágakról van szó. A csatolt fényképen jól látható, hogy a fa középső részében már nincs élet, az itt lévő két fő faág korhadásnak indult.\nKérelem: a korhadó ágak eltávolítása a fáról, fa stabilitásának vizsgálata",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/176830/korhado-faagak"
+    ]
+  },
+  {
+    "query": "Report about parkok és zöldterületek at Budapest, III. kerület, Óbuda-Békásmegyer, Kelta u. 3",
+    "description": "Kérem legyenek szívesek cserélni a lécet! Köszönöm szépen!",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/169815/eltort-lec"
+    ]
+  },
+  {
+    "query": "Report about parkok és zöldterületek at Budapest, XIV. kerület, Zugló, Szugló u. 85",
+    "description": "Hetek óta félbemaradt sövényvágás miatt belóg a sövény az űrszelvénybe, a 82/82A trolibuszok oldalát már súrolja.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/170034/urszelvenybe-belogo-soveny"
+    ]
+  },
+  {
+    "query": "Report about közvilágítás at Budapest, XI. kerület, Újbuda, Daróczi út 3",
+    "description": "A Daróczi út jelentős részén egyáltalán nem működik a közvilágítás. Kérem, sürgősen javítsák meg!",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/174453/sotet-utca"
+    ]
+  },
+  {
+    "query": "Report about közvilágítás at Budapest, XXI. kerület, Csepel, II. Rákóczi Ferenc út 193a",
+    "description": "FRISSÍTÉS: 2025.04.02.\n\nBDK Budapesti Dísz-és Közvilágítási Kft. válasza:\n„Tájékoztatjuk, hogy a jelzett címen a hiba nem a BDK Kft. illetékességébe tartozik.( Valószínűleg: közeli OMW benzinkút, vagy TESCO)”\n\n-----\n\nKérem a BDK értesítését. Csepeli Tesconál a kihajtónál.\nKöszi szépen.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/167769/villanyoszlopon-szerelonyilas-fedele-hianyzik"
+    ]
+  },
+  {
+    "query": "Report about közvilágítás at Budapest, XI. kerület, Újbuda, Bogdánfy Ödön utca 7",
+    "description": "A Bogdánfy u. 7/A lépcsőház előtti lámpa illetve a szemben továbbhaladó járda másik végén lévő lámpa nem működik. A ház előtt sötét van, félelmetes sötétedés után mert nem látni, hogy a padokon a két ház között van-e valaki.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/179062/nem-mukodo-kozvilagitas"
+    ]
+  },
+  {
+    "query": "Report about közvilágítás at Budapest, V. kerület, Belváros-Lipótváros, Margit híd 51",
+    "description": "Az északi oldalon, a Duna felé eső kandelláber egyik lámpája kiégett.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/163748/kiegett-lampa"
+    ]
+  },
+  {
+    "query": "Report about közvilágítás at Budapest, XIII. kerület, Róbert Károly körút 2",
+    "description": "Kérem legyenek szívesek elvégezni a fényforrás cseréjét! Köszönöm szépen!",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/164467/kiegett-lampa"
+    ]
+  },
+  {
+    "query": "Report about közvilágítás at Budapest, XII. kerület, Hegyvidék, Sashegyi út 11",
+    "description": "Budapest XII. Sashegyi út elején nincs közvilágítás … talán az egész utcában?\nNem az első bejelentésen.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/179217/sashegyi-ut-elejen-nincs-kozvilagitas"
+    ]
+  },
+  {
+    "query": "Report about közvilágítás at Budapest, III. kerület, Óbuda-Békásmegyer, Hajógyári sziget 606",
+    "description": "Veszélyesen vibráló lámpa a hajógyári öböl ág közepének vonalában",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/163753/veszelyesen-vibralo-lampa"
+    ]
+  },
+  {
+    "query": "Report about közvilágítás at Budapest, XIII. kerület, Párkány u. 6/B",
+    "description": "4 kiégett lámpa a Párkány utcában az első háztömb mentén. Köszönjük a javításukat.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/170617/4-kiegett-lampa-a-parkany-utcaban"
+    ]
+  },
+  {
+    "query": "Report about közvilágítás at Budapest, II. kerület, Alsó Zöldmáli út 4",
+    "description": "Az utcában lévő, az Újlaki Általános Iskola oldalfalára szerelt utcai világítás hol működik, hol nem.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/166641/vilagitas-hibaja"
+    ]
+  },
+  {
+    "query": "Report about közvilágítás at Budapest, IX. kerület, Ferencváros, Tompa u. 32",
+    "description": "FRISSÍTÉS: 2025.05.24.\n\nBejelentő válasza:\n„Továbbra sem működik”\n\n-----\n\nUtcai lámpa kiégett a Leonardo hotel előtt.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/171176/utcai-lampa-kiegett"
+    ]
+  },
+  {
+    "query": "Report about kátyú at Budapest, IX. kerület, Ferencváros, Közraktár u. 22. 2",
+    "description": "FRISSÍTÉS: 2025.07.07.\n\nBudapest Közút válasza:\n„A rendszeres lokális javításokat megszüntető hosszútávú megoldást az útszakasz teljes körű felújítása jelentené, amely azonban túlmutat a fenntartás feladatkörén és meghaladja Társaságunk lehetőségeit.”\n\n-----\n\nA Közraktár utca állapota hosszú évek óta elviselhetetlen, egyszerűen felfoghatatlan az, hogy ezt miként engedheti meg magának a városvezetés...\nA út rengeteg helyen be van szakadva, teljes hosszában végig van repedve, kátyús, nyomvályús, egyenetlen, hullámos. A létező összes szempontból alkalmatlan közlekedésre, egy európai fővárosban... Tarthatatlan a jelenlegi állapot!\nAz útszakasz jelenleg kárt okoz minden erre közlekedő jármű futóművében, és balesetveszélyes is lehet.\n\nKérjük az Illetékest, hogy javítsa érdemben az út állapotát!\nPontos helyszín:\n47.48263493940891, 19.063211829873897",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/173051/felhaboritoan-rossz-ut"
+    ]
+  },
+  {
+    "query": "Report about kátyú at Budapest, III. kerület, Óbuda-Békásmegyer, Vadóc u. 15",
+    "description": "Az egész Vadóc utca, de leginkább az első 300 m tele van kikerülhetetlen kátyúkkal. Kérjük az út mielőbbi és tartós javítását! NEM MURVÁVAL! Mert az környezet károsító és a szálló pora miatt egészségkárosító is!",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/170593/katyukkal-teli-ut"
+    ]
+  },
+  {
+    "query": "Report about kátyú at Budapest, XII. kerület, Hegyvidék, Galgóczy u. 45",
+    "description": "Az általam tapasztalt probléma, hogy a Galgóczy utca felső része, a Felső svábhegyi kereszteződétől Regőczi térig tartó szakaszon rendkívül kátyús. Azt gondolom, ez komoly problémát jelent a busz számára is, különösen a karbantartás gyakoriságát tekintve, a környéken élő autósoknak, motorosoknak is, de kerékpárral is nehéz lejutnom a végállomás irányából, keresni kell a szűk nyomot, hogy ne bukjak orra.\n\nMegoldásként azt szeretném, hogy ezen az egyébként nem hosszú szakaszon javítsák az utat, lehetőség szerint ne foltozással, mert az láthatóan nem segít, hanem az út szélességében történő javítással.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/172876/rendkivul-katyus-ut"
+    ]
+  },
+  {
+    "query": "Report about kátyú at Budapest, XII. kerület, Hegyvidék, Törökbálinti út 1a",
+    "description": "A Törökbálinti ut 1 szám előtt lévő ingyenes parkoló ami kb 10 autó parkolására lenne alkalmas borzalmas állapotban van.Nehézkes beparkolás a kikopott sóder végett a járda szinthez képest kimélyedtt sóder emiatt sok autó első lökháritója sérül,leszakad megköszönnénk ha ránéznének.Rengetegen panaszkodnak az itt lévő festékboltban mivel a parkolók nagyrésze hozzánk tér be.\nMegköszönnénk ha ránéznének.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/173359/kozteruleti-parkolo"
+    ]
+  },
+  {
+    "query": "Report about kátyú at Budapest, XIII. kerület, Újpest-Városkapu",
+    "description": "Újpest városkapunál a Népsziget felé vezető oldalon kátyús a kerékpárút/járda. Kérjük javítsák. Köszönjük!",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/174863/hibas-kerekparut-varoskapunal"
+    ]
+  },
+  {
+    "query": "Report about kátyú at Budapest, XX. kerület, Pesterzsébet, Ilona u. 24",
+    "description": "A 20. kerültben a Jókai-Albert utca kereszteződésében a villamossín mellett van egy lyuk. Az astfalt beszakadt és alatta egy üreg látszik. Nagyon közel van a villamos sínhez.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/179613/lyuk-a-villamossin-mellett"
+    ]
+  },
+  {
+    "query": "Report about kátyú at Budapest, III. kerület, Óbuda-Békásmegyer, Veder u. 8",
+    "description": "03ker Veder u 8 szám elött a néhány hónapja (sajnos rosszul)\njavított utburkolat a csatorna fedél körűl ismét megsülyedt,beszakadt.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/164613/a-csatornafedel-kornyeke-megsujjedt"
+    ]
+  },
+  {
+    "query": "Report about kátyú at Budapest, III. kerület, Óbuda-Békásmegyer, Királyok útja 15",
+    "description": "Jelzett helyszínen lévő útszakasz állapota elfogadhatatlan, a nyomvonalon repedezett, kátyús, egyenetlen. A korábbi időszakos javítások már teljesen tönkrementek, szükséges lenne a szakaszt kivágni, újraaszfaltozni.\nAz útszakasz jelenleg kárt okoz minden erre közlekedő jármű futóművében, és balesetveszélyes is lehet.\n\nKérjük az Illetékest, hogy javítsa érdemben az út állapotát!\nPontos helyszín:\n47.57755144775681, 19.063281784962925",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/171988/rossz-allapotu-ut"
+    ]
+  },
+  {
+    "query": "Report about kátyú at Budapest, VI. kerület, Terézváros, Nyugati pályaudvar M",
+    "description": "A Nyugati pályaudvar előtti buszmegállónál van egy hatalmas kátyú az út szélén.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/176981/katyu"
+    ]
+  },
+  {
+    "query": "Report about kátyú at Budapest, XIV. kerület, Zugló, Francia út 57-A/1",
+    "description": "Széles, mély, haromszoros kátyú az út közel teljes szélességében. Ez az utca kerékpárosok által frekventált, sötétben nem jól látható.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/178304/katyukomplexum"
+    ]
+  },
+  {
+    "query": "Report about akadálymentesítés at Budapest, XI. kerület, Újbuda, Hamzsabégi Vasúti Híd",
+    "description": "FRISSÍTÉS: 2025.03.07.\n\nBejelentő válasza:\n„Sajnos semmi változást nem láttunk ma reggel”\n\n-----\n\nFRISSÍTÉS: 2025.03.05.\n\nÚBKF válasza:\n„A bejelentésben szereplő helyszínt a közterület-felügyelők ellenőrizték.”\n\n-----\n\nA Bartók-Tétényi találkozásánál a Hamzsabégi sétány végében annyira a járdára települt az építkezés, hogy babakocsival szinte ugratva a buszsávon keresztül lehet csak a zebrához jutni a Sárbogárdi út felől. Továbbá a szegély olyan magas,a hely olyan szűk, hogy kihívás arra babakocsival, közlekedni. Kerekesszékkel el sem tudom képzelni, hogy lehet-e. Írtam levelet a kivitelezőnek,de válaszra nem méltattak.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/165438/bartok-tetenyi-vasutfelujitas"
+    ]
+  },
+  {
+    "query": "Report about akadálymentesítés at Budapest, XIII. kerület, Angyalföld/vá. (Kámfor utca)",
+    "description": "Angyalföld vasútállomáson nem működik a lift az egyes vágánynál.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/175431/hibas-lift"
+    ]
+  },
+  {
+    "query": "Report about akadálymentesítés at Budapest, XVIII. kerület, Pestszentlőrinc-Pestszentimre, Felsőcsatári gyalogos felüljáró",
+    "description": "FRISSÍTÉS: 2025.05.07.\n\nBejelentő kérdése:\n„Tisztelt Ügyfélszolgálat!\nSzeretnék érdeklődni, hogy sikerült-e a megfelelő MÁV leányvállalatnak továbbítaniuk az adatkérésemet? Mert eddig csak az derült ki, hogy ki nem adatgazda..”\n\n-----\n\nFRISSÍTÉS: 2025.05.07.\n\nMÁV válasza:\n„Tájékoztatjuk, hogy a 164685 sz. ügyet közérdekű adatigénylésént kezeljük, ennek okán ügyfélszolgálatunk nem illetékes. Munkatársainknak továbbítottuk az ügyet akik közvetlenül fogják megválaszolni azt Önök felé.\n\nTürelmüket köszönjük.”\n\n-----\n\nFRISSÍTÉS: 2025.03.18.\n\nA MÁV válasza:\n\"Hivatkozással a lent megjelölt adatigénylésében foglaltakra, az információs önrendelkezési jogról és az információszabadságról szóló 2011. évi CXII. törvény (a továbbiakban: \"Infotv.\") 29. § (1) bekezdése alapján szíves tájékoztatására jelezzük az alábbiakat.\n\nAz Infotv. 3. § 9. pontja értelmében adatkezelő \"az a természetes vagy jogi személy, illetve jogi személyiséggel nem rendelkező szervezet, aki vagy amely - törvényben vagy az Európai Unió kötelező jogi aktusában meghatározott keretek között - önállóan vagy másokkal együtt az adat kezelésének célját meghatározza, az adatkezelésre (beleértve a felhasznált eszközt) vonatkozó döntéseket meghozza és végrehajtja, vagy az adatfeldolgozóval végrehajtatja.\"\n\nA fentiek alapján szíves tájékoztatására közöljük, hogy Társaságunk nem tekinthető az Infotv. 3. § 9. pontja szerinti adatkezelő szervnek.\n\nTájékoztatjuk, hogy az Infotv. 31. § és 52. § rendelkezései szerint van lehetősége az adatszolgáltatással kapcsolatban jogorvoslattal élni.\"\n\n-----\n\nTisztelt MÁV!\nKözérdekű bejelentésemet egyúttal legyenek szívesek közérdekű adatigénylésnek is tekinteni. Ennek értelmében kérem, küldjék meg részemre, hogy Pestszentlőrinc vasútállomás melletti gyalogos felüljáró L1 és L2 jelzésű liftjei\n1. dátum szerint mióta nem működnek,\n2. miért nem működnek,\n3. mit tett az üzemeltető, hogy a hiba elháruljon,\n4. a liftek felújítására vonatkozóan mikor és milyen árajánlatokat kért be és kapott,\n5. mikor várható a lliftek ismételt üzembehelyezése,\n6. és jelenleg milyen akadálymentes alternatívát nyújt a MÁV a Felsőcsatári út irányából érkező utasok számára a vasútállomás megközelítésére.\nKöszönöm.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/164685/nem-mukodik-a-lift"
+    ]
+  },
+  {
+    "query": "Report about akadálymentesítés at Budapest, X. kerület, Kőbánya, Örs vezér tere M+H",
+    "description": "Az Árkád előtti villamosmegállóban a taktilis jelek a sínek és a biztonsági korlát között vannak.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/174353/taktilis-jelek"
+    ]
+  },
+  {
+    "query": "Report about akadálymentesítés at Budapest, I. kerület, Várkerület, Déli pályaudvar",
+    "description": "A Déli pályaudvaron a MÁV mosdóiban legalább június óta nem fogadnak el bankkártyát.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/177548/deli-palyaudvar-mosdo"
+    ]
+  },
+  {
+    "query": "Report about akadálymentesítés at Budapest, II. kerület, Zerind vezér u. 40",
+    "description": "Teljesen járhatatlanná vált az úttest a Zerind vezér utca végén a zártkertek mellett. Már a buszok sem tudnak elhaladni, ha egy szemben érkező jármű is van, és egy gyalogos-kerékpáros is az úttest széle helyett beljebb kell, hogy közlekedjen. A gyalogosnak már helye sincsen lelépni az úttestről, mert nincsen mar útpadka sem. Ennek helyreállítása szükséges lenne a sok kiránduló, futó, kerékpáros miatt is végig az erdőn keresztül. Balesetveszélyessé vált az úttest a benőtt növényzet miatt, amely sok esetben két nagyobb egymást mellett elhaladó jármű közül az egyiket karcolja.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/178640/benott-a-novenyzet-az-uttestre"
+    ]
+  },
+  {
+    "query": "Report about akadálymentesítés at Budapest, VI. kerület, Terézváros, Lendvay u. 29",
+    "description": "FRISSÍTÉS: 2025.03.31.\n\nTerézváros - Városüzemeltetési Osztály válasza:\n„A bejelentett terület fővárosi tulajdonban van, kérjük illetékességből megküldeni a Budapest Közút részére.”\n\n-----\n\nA Dózsa György út - Lendvay utca sarkon a felújítás előtt akadálymentesitett volt a járda, azonban a felújítás óta már nem az. A környéken sok az óvoda és bölcsőde, nagy szükség lenne hogy az utca mindkét oldalán le-fel lehessen menni babakocsival is a járdára.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/167429/akadalymentesitett-volt-a-jarda"
+    ]
+  },
+  {
+    "query": "Report about akadálymentesítés at Budapest, XXI. kerület, Csepel, Weiss Manfréd út 5",
+    "description": "Corvin csomóponttól Szabadkikötő felé, a HÉV sín melletti járdára rádőlt egy fa, ami teljes egészében elfoglalja a járdát.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/173746/jardara-dolt-fa"
+    ]
+  },
+  {
+    "query": "Report about akadálymentesítés at Budapest, XIX. kerület, Kispest, Ady Endre út 122",
+    "description": "A kerületi egészségügyi intézet közvetlen közelében található gyalogos átkelőhely, mely a villamosmegállókhoz is vezet, nincs kellően akadálymentesítve. A kerekesszék első kereke elakad a járdaszegélyben. A K szegély nem megfelelelő az akadálymentesítésre!",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/180079/akadalymentesites"
+    ]
+  },
+  {
+    "query": "Report about akadálymentesítés at Budapest, XI. kerület, Újbuda, Budafoki út 2",
+    "description": "A Budafoki úton a Csíki utcai zebráról nem lehet akadálymentesen feljutni a BME előtt futó járdára. (A zebra másik fele régóta akadálymentes.) A BME a az egyetemi kapu udvari részét már több éve akadálymentesítette rámpával.\nRollátor használóként szinte lehetetlen a járdára való feljutás.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/163933/nem-akadalymentes-nagyon-magas-a-jarda-zebranal"
+    ]
+  },
+  {
+    "query": "Report about graffiti at Budapest, XIV. kerület, Zugló, Szugló utca / Cinkotai út",
+    "description": "FRISSÍTÉS: 2025.09.14.\n\nA bejelentő fényképes válasza:\n„Egyelőre várjuk...\n”\n\n-----\n\nKedves Munkatársak!\n\nEgy kis karbantartást hadd kérjünk erre a váróra - graffiti, rozsdás székek, kopott tartószerkezet.\n\nKöszönjük a fáradozásukat!\n\nJ. Cila",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/169049/graffitis-elhanyagolt-varo"
+    ]
+  },
+  {
+    "query": "Report about graffiti at Budapest, IX. kerület, Ferencváros, Ipar u. 25",
+    "description": "Két közműszekrény található a Mester utca és az Ipar utca sarkán graffitivel, matricákkal, hirdetésekkel.\nKérem, takarítsák ki ezeket a szekrényeket. Köszönöm szépen.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/172915/graffitis-es-matricas-kozmuszekrenyek"
+    ]
+  },
+  {
+    "query": "Report about graffiti at Budapest, III. kerület, Óbuda-Békásmegyer, Gyűrű u. 32",
+    "description": "Kérem távolítsák el a graffitiket! Köszönöm szépen!",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/171401/graffiti"
+    ]
+  },
+  {
+    "query": "Report about graffiti at Budapest, XI. kerület, Újbuda, Fonyód utca",
+    "description": "A 17-es villamos Móricz irányú megállójában firkás a váró üvege. Kérem az illetékes takarítsa meg, köszönöm!",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/176569/fonyod-utca-varoban-firka"
+    ]
+  },
+  {
+    "query": "Report about graffiti at Budapest, XII. kerület, Hegyvidék, Szamos u. 2c",
+    "description": "Tisztelt Budapest Közút!\nA Maros utca - Szamos utca sarkánál lévő táblák koszosak és graffitisek.\nKérem lehetőségük szerint tisztítani/cserélni!\nKöszönöm!",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/165524/graffitis-koszos-tablak"
+    ]
+  },
+  {
+    "query": "Report about graffiti at Budapest, VI. kerület, Terézváros, Izabella u. 86",
+    "description": "Kedves Munkatársak!\n\nVan-e valami lehetőség-út-mód-szabály-megoldás arra, hogy ez a szörnyű állapotban lévő épület ne nézzen ki így?\n\nKöszönjük szépen!",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/177069/szanaszet-graffitizett-epulet-obszcen-tartalommal"
+    ]
+  },
+  {
+    "query": "Report about graffiti at Budapest, VIII. kerület, Józsefváros, Corvin-negyed M",
+    "description": "FRISSÍTÉS: 2025.09.05.\n\nBejelentő válasza:\n„Ha tudomásuk van róla, hogy a letakarított táblákat néhány nap után újra firkálják/ ragasszák, akkor miért nem nézik vissza a térfigyelő kamera felvételeit és vonják felelősségre az illetékeseket? Amennyiben így tennének, kevesebb is lenne a rongálás a jövőben!”\n\n-----\n\nFRISSÍTÉS: 2025.09.05.\n\nBKK válasza:\n„Az aluljáró takarítása, ideértve a graffitik, matricák eltávolítását is, a BKM BUDAPESTI KÖZMŰVEK Nonprofit Zrt. (FKF Köztisztasági Divízió, Köztisztasági Igazgatóság) feladatkörébe tartozik.\n\nA Budapest Közút Zrt. az említett aluljáróban 2024-ben \"nagyobb\" fenntartási munkát végzett, amelynek része volt az információs táblák cseréje. Sajnos amint megpróbálják letakarítani a graffitiket, matricákat, néhány napon belül azokat ismételten tele festik.”\n\n-----\n\nKérem lehetőségeikhez mérten tegyék olvashatóbbá a táblákat! Köszönöm szépen!",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/176974/graffitis-tablak"
+    ]
+  },
+  {
+    "query": "Report about graffiti at Budapest, XIV. kerület, Zugló, Thököly út 82",
+    "description": "FRISSÍTÉS: 2025.03.31.\n\nELMŰ Hálózati Kft. válasza:\n„Bejelentésben szereplő címen található közműszekrény nem az elosztóhálózat része, nem Társaságcsoportunk tulajdona.”\n\n-----\n\nA Thököly út 82. előtti kapcsolószekrények tele vannak firkálva.",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/165662/osszefirkalt-szekrenyek"
+    ]
+  },
+  {
+    "query": "Report about graffiti at Budapest, V. kerület, Belváros-Lipótváros, Id. Antall József rkp. 1",
+    "description": "A Lanchid pesti hídfőjénél a déli oldalon falfirka...eltávolítása szükséges",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/171825/graffiti-a-lanchid-pesti-hidfojenel"
+    ]
+  },
+  {
+    "query": "Report about graffiti at Budapest, XIII. kerület, Váci út 46/a",
+    "description": "Csúfítja a várost, nincs takarítva és karbantartva. Miért nem ellenőrzik rendszeresen a közterület felügyelők és miért nem jelzik az illetékesek felé?",
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/163803/nem-karban-tartott-es-romos-telefonfulke"
+    ]
+  }
+
+]

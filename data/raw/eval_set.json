@@ -1,0 +1,164 @@
+[
+  {
+    "query": {
+      "en": "Are there any construction debris issues around the underground garage at Millenáris?",
+      "hu": "Vannak építési törmelékkel kapcsolatos problémák a Millenáris mélygarázs környékén?"
+    },
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/169486/epitesi-tormelek"
+    ]
+  },
+  {
+    "query": {
+      "en": "Has anyone reported a discarded bathtub on Pilisi street?",
+      "hu": "Jelentette már valaki, hogy kidobott fürdőkád van a Pilisi utcában?"
+    },
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/179064/kidobott-furdokad-a-pilisi-utcaban"
+    ]
+  },
+  {
+    "query": {
+      "en": "Are there any open utility pits on Szárnyas street?",
+      "hu": "Találhatók nyitott közműakna problémák a Szárnyas utcában?"
+    },
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/163036/nyitott-kozmu"
+    ]
+  },
+  {
+    "query": {
+      "en": "Is the rainwater drain blocked at Pollack Mihály tér?",
+      "hu": "Eldugult a csapadékvíz-elvezető a Pollack Mihály téren?"
+    },
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/166206/csapadeklefolyo-eltomodott-hianyos-rostely"
+    ]
+  },
+  {
+    "query": {
+      "en": "Has anyone noticed a sunken sidewalk near the Turul statue?",
+      "hu": "Észrevett valaki megsüllyedt járdát a Turul-szobor környékén?"
+    },
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/180336/botlasveszelyes-megsullyedt-jarda"
+    ]
+  },
+  {
+    "query": {
+      "en": "Is there a leaking fire hydrant on Erzsébet street?",
+      "hu": "Csöpög a tűzcsap az Erzsébet utcában?"
+    },
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/175263/csopogo-tuzcsap"
+    ]
+  },
+  {
+    "query": {
+      "en": "Are there traffic issues at the Aquincum intersection?",
+      "hu": "Vannak közlekedési problémák az Aquincum kereszteződésnél?"
+    },
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/177389/a-iii-keruleti-zsofia-utcai-keresztezodes"
+    ]
+  },
+  {
+    "query": {
+      "en": "Is the pedestrian traffic light at Szugló utca / Nagy Lajos király útja working?",
+      "hu": "Működik a gyalogos lámpa a Szugló utca / Nagy Lajos király útja kereszteződésnél?"
+    },
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/175668/nem-meukodo-kozlekedesi-lampa"
+    ]
+  },
+  {
+    "query": {
+      "en": "Has the misting system at Liszt Ferenc tér been turned off or malfunctioning?",
+      "hu": "Nem működik vagy ki van kapcsolva a párakapu a Liszt Ferenc téren?"
+    },
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/177567/nem-mukodo-parakapu"
+    ]
+  },
+  {
+    "query": {
+      "en": "Is the green area at Kövér Lajos tér overgrown or neglected?",
+      "hu": "Elhanyagolt vagy benőtt a zöldterület a Kövér Lajos téren?"
+    },
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/163225/kover-lajos-teri-falevelek-szegely-menti-fu-es-gyom"
+    ]
+  },
+  {
+    "query": {
+      "en": "Are the street lights out on Daróczi út?",
+      "hu": "Nem világítanak a közvilágítási lámpák a Daróczi úton?"
+    },
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/174453/sotet-utca"
+    ]
+  },
+  {
+    "query": {
+      "en": "Are the lamps in front of Bogdánfy Ödön utca 7 working?",
+      "hu": "Működnek a lámpák a Bogdánfy Ödön utca 7 előtt?"
+    },
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/179062/nem-mukodo-kozvilagitas"
+    ]
+  },
+  {
+    "query": {
+      "en": "Is Közraktár street full of potholes?",
+      "hu": "Tele van kátyúkkal a Közraktár utca?"
+    },
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/173051/felhaboritoan-rossz-ut"
+    ]
+  },
+  {
+    "query": {
+      "en": "Are there unavoidable potholes on Vadóc street?",
+      "hu": "Vannak kikerülhetetlen kátyúk a Vadóc utcában?"
+    },
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/170593/katyukkal-teli-ut"
+    ]
+  },
+  {
+    "query": {
+      "en": "Are there any issues with sidewalk accessibility at Hamzsabégi Vasúti Híd?",
+      "hu": "Vannak problémák a járda akadálymentességével a Hamzsabégi Vasúti Hídnál?"
+    },
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/165438/bartok-tetenyi-vasutfelujitas"
+    ]
+  },
+  {
+    "query": {
+      "en": "Is it difficult to access the sidewalk at Budafoki út 2?",
+      "hu": "Nehéz feljutni a járdára a Budafoki út 2-nél?"
+    },
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/163933/nem-akadalymentes-nagyon-magas-a-jarda-zebranal"
+    ]
+  },
+  {
+    "query": {
+      "en": "Has anyone reported graffiti at Szugló utca / Cinkotai út?",
+      "hu": "Jelentette már valaki a graffitit a Szugló utca / Cinkotai útnál?"
+    },
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/169049/graffitis-elhanyagolt-varo"
+    ]
+  },
+  {
+    "query": {
+      "en": "Are there graffiti or stickers on utility boxes at Ipar u. 25?",
+      "hu": "Graffitik vagy matricák vannak a közműszekrényeken az Ipar utca 25-nél?"
+    },
+    "gold_doc_ids": [
+      "https://jarokelo.hu/bejelentesek/budapest/172915/graffitis-es-matricas-kozmuszekrenyek"
+    ]
+  }
+]
