@@ -66,10 +66,10 @@ def _load_latest_run(results_dir, img_dir):
     precision_img_path = _save_metric_plot_plotly(precision_values, k_values, "Precision", dt, img_dir)
 
     # Make image paths relative to HTML file
-    recall_img_rel = "https://github.com/leweex95/jarokelo_tracker/tree/master/" + Path(recall_img_path)
-    precision_img_rel = "https://github.com/leweex95/jarokelo_tracker/tree/master/" / Path(precision_img_path)
+    recall_img_rel = "https://github.com/leweex95/jarokelo_tracker/tree/master" / Path(recall_img_path)
+    precision_img_rel = "https://github.com/leweex95/jarokelo_tracker/tree/master" / Path(precision_img_path)
 
-    details_rel = "https://github.com/leweex95/jarokelo_tracker/tree/master/experiments/results/retrieval_eval/" + Path(file).name
+    details_rel = "https://github.com/leweex95/jarokelo_tracker/tree/master/experiments/results/retrieval_eval" / Path(file)
     return {
         "date": dt,
         "recall_img": str(recall_img_rel).replace("\\", "/"),
