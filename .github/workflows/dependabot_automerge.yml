@@ -1,0 +1,85 @@
+name: Dependabot Auto-Merge
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    branches: 
+      - master
+
+jobs:
+  auto-merge:
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Auto-merge PR
+        uses: pascalgn/automerge-action@v0.16.4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          merge-method: merge
+
+  report:
+    needs: auto-merge
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.user.login, 'dependabot')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get PR details
+        id: pr
+        run: |
+          echo "PR_URL=${{ github.event.pull_request.html_url }}" >> $GITHUB_OUTPUT
+          echo "PR_TITLE=${{ github.event.pull_request.title }}" >> $GITHUB_OUTPUT
+
+      - name: Get changed files
+        id: files
+        run: |
+          gh pr view ${{ github.event.pull_request.number }} --json files --jq '.files[].path' > files.txt
+
+      - name: Parse version changes
+        run: |
+          # Example for package.json
+          if grep -q "package.json" files.txt; then
+            git fetch origin main
+            git checkout origin/main -- package.json
+            echo "Old versions:" > version_changes.txt
+            jq '.dependencies' package.json >> version_changes.txt
+            git checkout HEAD package.json
+            echo "New versions:" >> version_changes.txt
+            jq '.dependencies' package.json >> version_changes.txt
+          fi
+
+      - name: Prepare HTML lists
+        id: html_lists
+        run: |
+          FILE_LIST=$(awk '{print "<li>" $0 "</li>"}' files.txt | tr '\n' ' ')
+          VERSION_CHANGES=$(cat version_changes.txt | sed 's/$/<br>/')
+          echo "file_list=$FILE_LIST" >> $GITHUB_OUTPUT
+          echo "version_changes=$VERSION_CHANGES" >> $GITHUB_OUTPUT
+
+      - name: Send email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.example.com
+          server_port: 587
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: "Dependabot PR Merged: ${{ steps.pr.outputs.PR_TITLE }}"
+          to: ${{ secrets.EMAIL_USERNAME }}
+          from: GitHub Actions <${{ secrets.EMAIL_USERNAME }}>
+          html_body: |
+            <h2>Dependabot PR Merged</h2>
+            <p>
+              <strong>PR Link:</strong>
+              <a href="${{ steps.pr.outputs.PR_URL }}">${{ steps.pr.outputs.PR_URL }}</a>
+            </p>
+            <h3>Changed Files:</h3>
+            <ul>
+              ${{ steps.html_lists.outputs.file_list }}
+            </ul>
+            <h3>Version Changes:</h3>
+            <pre>
+              ${{ steps.html_lists.outputs.version_changes }}
+            </pre>
