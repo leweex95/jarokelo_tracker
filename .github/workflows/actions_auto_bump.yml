@@ -9,34 +9,70 @@ jobs:
   update-workflows:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+
+      - name: Update GitHub Actions versions - aggregate embedding results
+        uses: fjogeleit/yaml-update-action@main
+        with:
+          valueFile: '.github/workflows/aggregate_embedding_results.yml'
+          propertyPath: 'uses'
+          value: 'actions/checkout@v4'
+          commitChange: true
+          message: '[Auto-commit] Bump action version'
 
       - name: Update GitHub Actions versions
         uses: fjogeleit/yaml-update-action@main
         with:
-          valueFile: '.github/workflows/*.yml'
+          valueFile: '.github/workflows/aggregate_retrieval_reports.yml'
           propertyPath: 'uses'
           value: 'actions/checkout@v4'
           commitChange: true
-          message: 'Auto bump actions/checkout to v4'
+          message: '[Auto-commit] Bump action version'
 
-      - name: Configure Git
-        run: |
-          git config --global user.name "${{ github.actor }}"
-          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+      - name: Update GitHub Actions versions
+        uses: fjogeleit/yaml-update-action@main
+        with:
+          valueFile: '.github/workflows/data_pipeline.yml'
+          propertyPath: 'uses'
+          value: 'actions/checkout@v4'
+          commitChange: true
+          message: '[Auto-commit] Bump action version'
 
-      - name: Commit and push cleanup
-        env:
-          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
-        run: |
-          git add docs/experiments/embeddings_comparison_results_aggregated.html
-          git diff --quiet && git diff --staged --quiet || git commit -m "[Auto-commit] Embedding comparison results update [skip ci]"
+      - name: Update GitHub Actions versions
+        uses: fjogeleit/yaml-update-action@main
+        with:
+          valueFile: '.github/workflows/scraper.yml'
+          propertyPath: 'uses'
+          value: 'actions/checkout@v4'
+          commitChange: true
+          message: '[Auto-commit] Bump action version'
 
-          RETRIES=10
-          for i in $(seq 1 $RETRIES); do
-            git pull --rebase
-            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master && break || {
-              echo "Push failed, retrying ($i/$RETRIES)..."
-              sleep 3
-            }
-          done
+      - name: Update GitHub Actions versions
+        uses: fjogeleit/yaml-update-action@main
+        with:
+          valueFile: '.github/workflows/update_gh_page.yml'
+          propertyPath: 'uses'
+          value: 'actions/checkout@v4'
+          commitChange: true
+          message: '[Auto-commit] Bump action version'
+
+      # - name: Configure Git
+      #   run: |
+      #     git config --global user.name "${{ github.actor }}"
+      #     git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+
+      # - name: Commit and push cleanup
+      #   env:
+      #     PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+      #   run: |
+      #     git add docs/experiments/embeddings_comparison_results_aggregated.html
+      #     git diff --quiet && git diff --staged --quiet || git commit -m "[Auto-commit] Embedding comparison results update [skip ci]"
+
+      #     RETRIES=10
+      #     for i in $(seq 1 $RETRIES); do
+      #       git pull --rebase
+      #       git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master && break || {
+      #         echo "Push failed, retrying ($i/$RETRIES)..."
+      #         sleep 3
+      #       }
+      #     done
