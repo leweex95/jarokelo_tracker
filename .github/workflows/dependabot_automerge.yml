@@ -12,6 +12,7 @@ jobs:
     if: github.actor == 'dependabot[bot]'
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      MERGE_LABELS: ""
     steps:
       - uses: actions/checkout@v4
 
@@ -20,8 +21,11 @@ jobs:
 
   report:
     needs: auto-merge
-    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.user.login, 'dependabot')
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.user.login, 'dependabot')
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      MERGE_LABELS: ""
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
