@@ -18,7 +18,7 @@ __all__ = ["update_retrieval_eval_report"]
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 
-def _save_metric_plot_plotly(values, k_values, metric_name, date_str, out_dir):
+def _save_metric_plot_plotly(values, k_values, metric_name, date_str, out_dir) -> Path:
     """Save a plotly bar chart for Precision@k and Recall@k."""
     Path(out_dir).mkdir(parents=True, exist_ok=True)
     fig = Figure()
@@ -62,12 +62,12 @@ def _load_latest_run(results_dir, img_dir):
         recall_values.append(summary.get("avg_recall@k", 0))
         precision_values.append(summary.get("avg_precision@k", 0))
 
-    recall_img = _save_metric_plot_plotly(recall_values, k_values, "Recall", dt, img_dir)
-    precision_img = _save_metric_plot_plotly(precision_values, k_values, "Precision", dt, img_dir)
+    recall_img_path = _save_metric_plot_plotly(recall_values, k_values, "Recall", dt, img_dir)
+    precision_img_path = _save_metric_plot_plotly(precision_values, k_values, "Precision", dt, img_dir)
 
     # Make image paths relative to HTML file
-    recall_img_rel = str(Path(recall_img).as_posix())
-    precision_img_rel = str(Path(precision_img).as_posix())
+    recall_img_rel = "https://github.com/leweex95/jarokelo_tracker/tree/master/" + Path(recall_img_path)
+    precision_img_rel = "https://github.com/leweex95/jarokelo_tracker/tree/master/" / Path(precision_img_path)
 
     details_rel = "https://github.com/leweex95/jarokelo_tracker/tree/master/experiments/results/retrieval_eval/" + Path(file).name
     return {
