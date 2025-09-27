@@ -2,7 +2,7 @@ name: Dependabot auto-merge
 
 on:
   pull_request:
-    types: [opened, reopened, synchronize]
+    # types: [opened, reopened, synchronize]
     branches: 
       - master
   workflow_dispatch:
@@ -13,7 +13,7 @@ jobs:
     if: github.actor == 'dependabot[bot]'
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      MERGE_LABELS: ""
+      MERGE_LABELS: "automerge"
     steps:
       - uses: actions/checkout@v4
 
