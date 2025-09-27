@@ -53,9 +53,18 @@ jobs:
 
       - name: Run scraper
         run: |
-          ARGS="--headless ${{ github.event.inputs.headless }} --data-dir ${{ github.event.inputs.data_dir }} --start-page ${{ github.event.inputs.start_page }}"
-          if [ -n "${{ github.event.inputs.until_date }}" ]; then
-            ARGS="$ARGS --until-date ${{ github.event.inputs.until_date }}"
+          HEADLESS="${{ github.event.inputs.headless || 'true' }}"
+          DATA_DIR="${{ github.event.inputs.data_dir || 'data/raw' }}"
+          START_PAGE="${{ github.event.inputs.start_page || '1' }}"
+          UNTIL_DATE="${{ github.event.inputs.until_date || '' }}"
+          CONTINUE_SCRAPING="${{ github.event.inputs.continue_scraping || '' }}"
+
+          ARGS="--headless $HEADLESS --data-dir $DATA_DIR --start-page $START_PAGE"
+          if [ -n "$UNTIL_DATE" ]; then
+            ARGS="$ARGS --until-date $UNTIL_DATE"
+          fi
+          if [ -n "$CONTINUE_SCRAPING" ]; then
+            ARGS="$ARGS --continue-scraping"
           fi
           echo "Running: poetry run python ./scripts/scrape_data.py $ARGS"
           poetry run python ./scripts/scrape_data.py $ARGS
