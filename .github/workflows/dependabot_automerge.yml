@@ -14,7 +14,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       MERGE_LABELS: ""
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Auto-merge PR
         uses: pascalgn/automerge-action@v0.16.4
@@ -28,7 +28,7 @@ jobs:
       MERGE_LABELS: ""
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Get PR details
         id: pr
