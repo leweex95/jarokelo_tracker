@@ -16,6 +16,18 @@ on:
         description: "Embedding model"
         required: true
         default: "sentence-transformers/distiluse-base-multilingual-cased-v2"
+  workflow_call:
+    inputs:
+      backend:
+        description: "Vector DB backend"
+        required: true
+        default: "faiss"
+        type: string
+      embedding:
+        description: "Embedding model"
+        required: true
+        default: "sentence-transformers/distiluse-base-multilingual-cased-v2"
+        type: string
 
 jobs:
   setup:

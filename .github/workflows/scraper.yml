@@ -25,6 +25,33 @@ on:
         description: 'Continue scraping from last saved state'
         required: false
         default: ''
+  workflow_call:
+    inputs:
+      data_dir:
+        description: 'Target data directory'
+        required: false
+        default: 'data/raw'
+        type: string
+      start_page:
+        description: 'Start page number'
+        required: false
+        default: '1'
+        type: string
+      until_date:
+        description: 'Scrape until this date (YYYY-MM-DD)'
+        required: false
+        default: ''
+        type: string
+      headless:
+        description: 'Run browser in headless mode'
+        required: false
+        default: 'true'
+        type: string
+      continue_scraping:
+        description: 'Continue scraping from last saved state'
+        required: false
+        default: ''
+        type: string
 
 jobs:
   scrape:

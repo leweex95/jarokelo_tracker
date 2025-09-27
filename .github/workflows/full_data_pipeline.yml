@@ -1,0 +1,51 @@
+# This workflow runs the scraper and then the data pipeline in sequence.
+# It links together data collection and processing for end-to-end automation:
+# (scrape → process for EDA & RAG → chunk → index → build RAG Vector DB.
+
+name: Full data pipeline 
+on:
+  schedule:
+    - cron: "0 22 * * *"
+  workflow_dispatch:
+    inputs:
+        data_dir:
+            description: 'Target data directory'
+            required: false
+            default: 'data/raw'
+        start_page:
+            description: 'Start page number'
+            required: false
+            default: '1'
+        until_date:
+            description: 'Scrape until this date (YYYY-MM-DD)'
+            required: false
+            default: ''
+        headless:
+            description: 'Run browser in headless mode'
+            required: false
+            default: 'true'
+        continue_scraping:
+            description: 'Continue scraping from last saved state'
+            required: false
+            default: ''
+        backend:
+            description: "Vector DB backend"
+            required: true
+            default: "faiss"
+            type: string
+        embedding:
+            description: "Embedding model"
+            required: true
+            default: "sentence-transformers/distiluse-base-multilingual-cased-v2"
+            type: string
+
+jobs:
+  run-scraper:
+    uses: ./.github/workflows/scraper.yml
+
+  run-data-pipeline:
+    needs: run-scraper
+    uses: ./.github/workflows/data_pipeline.yml
+    with:
+      backend: 'faiss'
+      embedding: 'sentence-transformers/distiluse-base-multilingual-cased-v2'
