@@ -19,6 +19,7 @@ jobs:
           value: 'actions/checkout@v4'
           commitChange: true
           message: '[Auto-commit] Bump action version'
+          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Update GitHub Actions versions
         uses: fjogeleit/yaml-update-action@main
@@ -28,6 +29,7 @@ jobs:
           value: 'actions/checkout@v4'
           commitChange: true
           message: '[Auto-commit] Bump action version'
+          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Update GitHub Actions versions
         uses: fjogeleit/yaml-update-action@main
@@ -37,6 +39,7 @@ jobs:
           value: 'actions/checkout@v4'
           commitChange: true
           message: '[Auto-commit] Bump action version'
+          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Update GitHub Actions versions
         uses: fjogeleit/yaml-update-action@main
@@ -46,6 +49,7 @@ jobs:
           value: 'actions/checkout@v4'
           commitChange: true
           message: '[Auto-commit] Bump action version'
+          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Update GitHub Actions versions
         uses: fjogeleit/yaml-update-action@main
@@ -55,6 +59,7 @@ jobs:
           value: 'actions/checkout@v4'
           commitChange: true
           message: '[Auto-commit] Bump action version'
+          token: ${{ secrets.PAT_TOKEN }}
 
       # - name: Configure Git
       #   run: |
