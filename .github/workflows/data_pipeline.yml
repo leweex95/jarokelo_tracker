@@ -34,7 +34,7 @@ jobs:
           echo "DEBUG: backend=${{ github.event.inputs.backend }}, embedding=${{ github.event.inputs.embedding }}"
         
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
           token: ${{ secrets.PAT_TOKEN }}
@@ -62,7 +62,7 @@ jobs:
     needs: setup
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
           token: ${{ secrets.PAT_TOKEN }}
@@ -116,7 +116,7 @@ jobs:
     needs: setup
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
           token: ${{ secrets.PAT_TOKEN }}
@@ -170,7 +170,7 @@ jobs:
     needs: preprocess_eda
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
           token: ${{ secrets.PAT_TOKEN }}
@@ -221,7 +221,7 @@ jobs:
       - preprocess_rag
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
           token: ${{ secrets.PAT_TOKEN }}
@@ -284,7 +284,7 @@ jobs:
       - vectorstore
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
           token: ${{ secrets.PAT_TOKEN }}
