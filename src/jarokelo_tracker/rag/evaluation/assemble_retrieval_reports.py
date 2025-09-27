@@ -52,6 +52,7 @@ def _load_latest_run(results_dir, img_dir):
         logging.error(f"Failed to load {file}: {e}")
         return None
     dt = next(iter(data.values())).get("datetime", "")
+    
     k_values = []
     recall_values = []
     precision_values = []
@@ -60,13 +61,15 @@ def _load_latest_run(results_dir, img_dir):
         k_values.append(k_val)
         recall_values.append(summary.get("avg_recall@k", 0))
         precision_values.append(summary.get("avg_precision@k", 0))
+
     recall_img = _save_metric_plot_plotly(recall_values, k_values, "Recall", dt, img_dir)
     precision_img = _save_metric_plot_plotly(precision_values, k_values, "Precision", dt, img_dir)
+
     # Make image paths relative to HTML file
     recall_img_rel = str(Path(recall_img).as_posix())
     precision_img_rel = str(Path(precision_img).as_posix())
-    # For JSON details, use a relative path from docs/experiments to experiments/results/retrieval_eval
-    details_rel = "../../experiments/results/retrieval_eval/" + Path(file).name
+
+    details_rel = "https://github.com/leweex95/jarokelo_tracker/tree/master/experiments/results/retrieval_eval/" + Path(file).name
     return {
         "date": dt,
         "recall_img": str(recall_img_rel).replace("\\", "/"),
@@ -95,12 +98,13 @@ def _parse_existing_rows(report_path):
 def _generate_row(run, highlight=False):
     """Generate a table row for a run, optionally highlighted."""
     style = ' style="background-color: #ffeeba;"' if highlight else ""
+    td_style = ' style="padding:8px;vertical-align:middle;text-align:center;"'
     return (
         f'<tr{style}>'
-        f'<td>{run["date"]}</td>'
-        f'<td><img src="{run["recall_img"]}" width="150"></td>'
-        f'<td><img src="{run["precision_img"]}" width="150"></td>'
-        f'<td><a href="{run["details"]}">JSON</a></td>'
+        f'<td{td_style}>{run["date"]}</td>'
+        f'<td{td_style}><img src="{run["recall_img"]}" width="200" height="120"></td>'
+        f'<td{td_style}><img src="{run["precision_img"]}" width="200" height="120"></td>'
+        f'<td{td_style}><a href="{run["details"]}">JSON</a></td>'
         f'</tr>\n'
     )
 
