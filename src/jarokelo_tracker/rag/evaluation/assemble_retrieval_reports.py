@@ -66,9 +66,13 @@ def _load_latest_run(results_dir, img_dir):
     recall_img_path = _save_metric_plot_plotly(recall_values, k_values, "Recall", dt, img_dir).relative_to("docs")
     precision_img_path = _save_metric_plot_plotly(precision_values, k_values, "Precision", dt, img_dir).relative_to("docs")
 
-    recall_img_rel = str(Path("https://leweex95.github.io/jarokelo_tracker") / Path(recall_img_path))
-    precision_img_rel = str(Path("https://leweex95.github.io/jarokelo_tracker") / Path(precision_img_path))
-    details_rel = str(Path("https://leweex95.github.io/jarokelo_tracker/experiments/results/retrieval_eval") / Path(file))
+    # join URL as strings
+    base_url = "https://leweex95.github.io/jarokelo_tracker/"
+    details_base_url = "https://leweex95.github.io/jarokelo_tracker/experiments/results/retrieval_eval/"
+
+    recall_img_rel = base_url + str(recall_img_path).replace("\\", "/")
+    precision_img_rel = base_url + str(precision_img_path).replace("\\", "/")
+    details_rel = details_base_url + str(file).replace("\\", "/")
 
     return {
         "date": dt,
