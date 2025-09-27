@@ -28,6 +28,9 @@ on:
         required: true
         default: "sentence-transformers/distiluse-base-multilingual-cased-v2"
         type: string
+    secrets:
+      PAT_TOKEN:
+        required: true
 
 jobs:
   setup:

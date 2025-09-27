@@ -42,10 +42,20 @@ on:
 jobs:
   run-scraper:
     uses: ./.github/workflows/scraper.yml
+    with: 
+      data_dir: ${{ github.event.inputs.data_dir }}
+      start_page: ${{ github.event.inputs.start_page }}
+      until_date: ${{ github.event.inputs.until_date }}
+      headless: ${{ github.event.inputs.headless }}
+      continue_scraping: ${{ github.event.inputs.continue_scraping }}
+    secrets:
+      PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
 
   run-data-pipeline:
     needs: run-scraper
     uses: ./.github/workflows/data_pipeline.yml
     with:
-      backend: 'faiss'
-      embedding: 'sentence-transformers/distiluse-base-multilingual-cased-v2'
+      backend: ${{ github.event.inputs.backend }}
+      embedding: ${{ github.event.inputs.embedding }}
+    secrets:
+      PAT_TOKEN: ${{ secrets.PAT_TOKEN }}

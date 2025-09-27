@@ -52,6 +52,9 @@ on:
         required: false
         default: ''
         type: string
+    secrets:
+      PAT_TOKEN:
+        required: true
 
 jobs:
   scrape:
