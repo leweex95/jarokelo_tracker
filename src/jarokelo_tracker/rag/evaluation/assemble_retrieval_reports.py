@@ -70,17 +70,17 @@ def _load_latest_run(results_dir, img_dir):
 
     # join URL as strings
     base_url = "https://leweex95.github.io/jarokelo_tracker/"
-    details_base_url = "https://leweex95.github.io/jarokelo_tracker/experiments/results/retrieval_eval/"
-
     recall_img_rel = base_url + str(recall_img_path).replace("\\", "/")
     precision_img_rel = base_url + str(precision_img_path).replace("\\", "/")
-    details_rel = details_base_url + str(file).replace("\\", "/")
+    
+    json_results_base_url = "https://github.com/leweex95/jarokelo_tracker/tree/master/"
+    json_results_full_url = json_results_base_url + (Path(args.results_dir) / file.name).as_posix()
 
     return {
         "date": dt,
         "recall_img": str(recall_img_rel).replace("\\", "/"),
         "precision_img": str(precision_img_rel).replace("\\", "/"),
-        "details": str(details_rel).replace("\\", "/"),
+        "details": str(json_results_full_url).replace("\\", "/"),
         "commit_hash": commit_hash
     }
 
