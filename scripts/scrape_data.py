@@ -3,6 +3,8 @@ import re
 import json
 from datetime import datetime
 import argparse
+import requests
+from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -213,6 +215,113 @@ def scrape_report(driver, wait, url: str) -> dict:
         "resolution_date": resolution_date,
     }
 
+def scrape_report_bs(session: requests.Session, url: str) -> dict:
+    """Scrape a single report page using BeautifulSoup and return its data."""
+    response = session.get(url)
+    response.raise_for_status()
+    soup = BeautifulSoup(response.content, 'html.parser')
+
+    # Title
+    title_elem = soup.select_one("h1.report__title")
+    title = title_elem.text.strip() if title_elem else None
+
+    # Author
+    author_elem = soup.select_one("div.report__reporter div.report__author a")
+    if author_elem:
+        author = author_elem.text.strip()
+        author_profile = author_elem.get("href")
+    else:
+        anon_elem = soup.select_one("div.report__reporter div.report__author")
+        author = anon_elem.text.strip() if anon_elem else None
+        author_profile = None
+
+    # Date
+    date_elem = soup.select_one("time.report__date")
+    date = normalize_date(date_elem.text.strip()) if date_elem else None
+
+    # Category
+    category_elem = soup.select_one("div.report__category a")
+    category = category_elem.text.strip() if category_elem else None
+
+    # Institution
+    institution_elem = soup.select_one("div.report__institution a")
+    institution = institution_elem.text.strip() if institution_elem else None
+
+    # Supporter
+    supporter_elem = soup.select_one("span.report__partner__about")
+    supporter = supporter_elem.text.strip() if supporter_elem else None
+
+    # Description
+    description_elem = soup.select_one("p.report__description")
+    description = description_elem.text.strip() if description_elem else None
+
+    # Status
+    status_elem = soup.select_one("span.badge")
+    status = status_elem.text.strip() if status_elem else None
+
+    # Address
+    address_elem = soup.select_one("address.report__location__address")
+    if address_elem:
+        city = address_elem.text.split("\n")[0].strip() if address_elem.text else None
+        district_elem = address_elem.select_one("span.report__location__address__district")
+        district = district_elem.text.strip() if district_elem else None
+        address = ", ".join(filter(None, [city, district]))
+    else:
+        address = None
+
+    # Images
+    image_divs = soup.select("div.report__media__item__img[style]")
+    images = []
+    for div in image_divs:
+        style = div.get("style", "")
+        if "url(" in style:
+            img_url = style.split("url(")[1].split(")")[0].strip('"')
+            images.append(img_url)
+
+    # Resolution date (if status is "MEGOLDOTT")
+    resolution_date = None
+    if status and status.upper() == "MEGOLDOTT":
+        comment_bodies = soup.select("div.comment__body")
+        for body in comment_bodies:
+            msg_elems = body.select("p.comment__message")
+            for msg in msg_elems:
+                raw_html = str(msg)
+                if re.search(r"lezárta a bejelentést.*Megoldott.*eredménnyel", raw_html, re.DOTALL | re.IGNORECASE):
+                    time_elems = body.select("time")
+                    for t in time_elems:
+                        time_text = t.text.strip()
+                        if not time_text and t.string:
+                            time_text = t.string.strip()
+                        if time_text:
+                            try:
+                                resolution_date = normalize_date(time_text.split()[0:3])
+                                print(f"[DEBUG] Parsed resolution_date: {resolution_date}")
+                            except Exception as e:
+                                print(f"[DEBUG] Error normalizing date: {e}")
+                            break
+                    if not resolution_date:
+                        print("[DEBUG] No valid <time> text found for resolution_date")
+                        raise ValueError("Could not find valid resolution date")
+                    break
+            if resolution_date:
+                break
+
+    return {
+        "url": url,
+        "title": title,
+        "author": author,
+        "author_profile": author_profile,
+        "date": date,
+        "category": category,
+        "institution": institution,
+        "supporter": supporter,
+        "description": description,
+        "status": status,
+        "address": address,
+        "images": images,
+        "resolution_date": resolution_date,
+    }
+
 def scrape_listing_page(driver, wait, page_url: str, global_urls: set, until_date: str = None, stop_on_existing: bool = True, data_dir: str = None) -> tuple[str, bool]:
     """Return next page URL and a flag if we reached an already scraped report or until_date."""
     driver.get(page_url)
@@ -238,6 +347,37 @@ def scrape_listing_page(driver, wait, page_url: str, global_urls: set, until_dat
     for elem in next_page_elems:
         if "Következő" in elem.text:
             return elem.get_attribute("href"), False
+    return None, False
+
+
+def scrape_listing_page_bs(session: requests.Session, page_url: str, global_urls: set, until_date: str = None, stop_on_existing: bool = True, data_dir: str = None) -> tuple[str, bool]:
+    """Return next page URL and a flag if we reached an already scraped report or until_date."""
+    response = session.get(page_url)
+    response.raise_for_status()
+    soup = BeautifulSoup(response.content, 'html.parser')
+    
+    reached_done = False
+    links = [a.get("href") for a in soup.select("article.card a.card__media__bg")]
+
+    for link in links:
+        if link in global_urls and stop_on_existing:
+            reached_done = True
+            break
+
+        if link not in global_urls:
+            report = scrape_report_bs(session, link)
+            save_report(data_dir, report, global_urls)  # update global set
+            if until_date and report["date"] <= until_date:
+                reached_done = True
+                break
+
+    if reached_done:
+        return None, True
+
+    next_page_elems = soup.select("a.pagination__link")
+    for elem in next_page_elems:
+        if "Következő" in elem.text:
+            return elem.get("href"), False
     return None, False
 
 
@@ -274,13 +414,9 @@ def _get_chrome_options(headless: bool) -> Options:
     options.add_argument("--log-level=3")
     return options
 
-def main(headless: bool, start_page: int, until_date: str = None, stop_on_existing: bool = True, data_dir: str = None):
+def main(scraper_backend: str, headless: bool, start_page: int, until_date: str = None, stop_on_existing: bool = True, data_dir: str = None):
 
     os.makedirs(data_dir, exist_ok=True)
-
-    options = _get_chrome_options(headless=headless)
-    driver = webdriver.Chrome(options=options)
-    wait = WebDriverWait(driver, 10)
 
     # --- Prepare global set of already scraped URLs ---
     global_urls = set()
@@ -300,21 +436,42 @@ def main(headless: bool, start_page: int, until_date: str = None, stop_on_existi
         page_url = f"{BASE_URL}?page={start_page}"
     page_num = start_page
 
-    # --- Scraping loop ---
-    while page_url:
-        print(f"[Page {page_num}] Loading: {page_url}")
-        # page_url, done = scrape_listing_page(driver, wait, page_url, global_urls, until_date)
-        page_url, done = scrape_listing_page(driver, wait, page_url, global_urls, until_date, stop_on_existing=stop_on_existing, data_dir=data_dir)
-        if done:
-            print(f"Found already-scraped report or reached until-date ({until_date=}) Exiting.")
-            break
-        page_num += 1
-
-    driver.quit()
+    # --- Initialize scraper backend ---
+    if scraper_backend == 'selenium':
+        options = _get_chrome_options(headless=headless)
+        driver = webdriver.Chrome(options=options)
+        wait = WebDriverWait(driver, 10)
+        
+        # --- Scraping loop with Selenium ---
+        while page_url:
+            print(f"[Page {page_num}] Loading: {page_url}")
+            page_url, done = scrape_listing_page(driver, wait, page_url, global_urls, until_date, stop_on_existing=stop_on_existing, data_dir=data_dir)
+            if done:
+                print(f"Found already-scraped report or reached until-date ({until_date=}) Exiting.")
+                break
+            page_num += 1
+        
+        driver.quit()
+        
+    elif scraper_backend == 'beautifulsoup':
+        session = requests.Session()
+        session.headers.update({
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        })
+        
+        # --- Scraping loop with BeautifulSoup ---
+        while page_url:
+            print(f"[Page {page_num}] Loading: {page_url}")
+            page_url, done = scrape_listing_page_bs(session, page_url, global_urls, until_date, stop_on_existing=stop_on_existing, data_dir=data_dir)
+            if done:
+                print(f"Found already-scraped report or reached until-date ({until_date=}) Exiting.")
+                break
+            page_num += 1
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Járókelő scraper")
+    parser.add_argument("--backend", type=str, choices=['selenium', 'beautifulsoup', 'bs'], default='beautifulsoup', help="Scraper backend to use (selenium/beautifulsoup/bs)")
     parser.add_argument("--headless", type=str, choices=['true', 'false'], default='true', help="Run browser in headless mode (true/false)")
     parser.add_argument("--start-page", type=int, default=1, help="Page number to start scraping from")
     parser.add_argument("--until-date", type=str, default=None, help="Scrape until this date (YYYY-MM-DD), inclusive")
@@ -323,10 +480,16 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     
+    # Convert headless string to boolean
+    headless = args.headless.lower() == 'true'
+    
+    # Handle 'bs' alias for 'beautifulsoup'
+    backend = 'beautifulsoup' if args.backend == 'bs' else args.backend
+    
     if args.continue_scraping:
         oldest_date, total = get_scraping_resume_point(data_dir=args.data_dir)
         page = max(total // 8 - 1, 1)
         print(f"Proceeding with scraping from date: {oldest_date} and from page number: {page}")
-        main(headless=args.headless, start_page=page, until_date=args.until_date, stop_on_existing=False, data_dir=args.data_dir)
+        main(scraper_backend=backend, headless=headless, start_page=page, until_date=args.until_date, stop_on_existing=False, data_dir=args.data_dir)
     else:
-        main(headless=args.headless, start_page=args.start_page, until_date=args.until_date, stop_on_existing=True, data_dir=args.data_dir)
+        main(scraper_backend=backend, headless=headless, start_page=args.start_page, until_date=args.until_date, stop_on_existing=True, data_dir=args.data_dir)

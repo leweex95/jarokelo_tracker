@@ -36,13 +36,25 @@ It automates data scraping, preprocessing, chunking, embedding, vector store cre
 
 2. Scrape data
 
-_From scratch_:
+The scraper supports two backends:
+- **BeautifulSoup** (default): Faster, more reliable, no browser needed
+- **Selenium**: Uses a headless Chrome browser (useful for dynamic content)
 
-    poetry run python ./scripts/scrape_data.py --headless true --start-page 1 --until-date 2025-08-01
+_From scratch with BeautifulSoup (recommended):_
+
+    poetry run python ./scripts/scrape_data.py --backend beautifulsoup --start-page 1 --until-date 2025-08-01
+
+_From scratch with Selenium:_
+
+    poetry run python ./scripts/scrape_data.py --backend selenium --headless true --start-page 1 --until-date 2025-08-01
 
 _Or if there is already an amount of scraped data under `data/raw`, the scraper can continue from the last-scraped entry:_
 
-    poetry run python ./scraper/scrape_data.py --headless true --continue-scraping
+    poetry run python ./scripts/scrape_data.py --backend beautifulsoup --continue-scraping
+
+_You can also use the shorthand `bs` for `beautifulsoup`:_
+
+    poetry run python ./scripts/scrape_data.py --backend bs --continue-scraping
 
 3. Preprocess data
 
@@ -92,7 +104,7 @@ The repository leverages GitHub Actions for a robust, fully automated data and M
 
 - **Automated scraper**:
     - Runs nightly or on-demand via the [scraper.yml](./.github/workflows/scraper.yml) workflow
-    - Scrapes new civic issue data from Járókelő.hu using Selenium.
+    - Scrapes new civic issue data from Járókelő.hu using BeautifulSoup (faster and more reliable than the previous Selenium approach).
     - Commits and pushes new raw data files to the repository automatically.
 
 - **Automated data pipeline**:
