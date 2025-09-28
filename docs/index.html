@@ -5,25 +5,78 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Járókelő RAG System - Performance Tracker Dashboard</title>
 <style>
+  :root {
+    /* Dark mode colors (default) */
+    --bg-primary: #0d1117;
+    --bg-secondary: #161b22;
+    --bg-tertiary: #21262d;
+    --text-primary: #e6edf3;
+    --text-secondary: #7d8590;
+    --accent-primary: #58a6ff;
+    --accent-secondary: #388bfd;
+    --border-color: #30363d;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --card-hover-shadow: rgba(88, 166, 255, 0.1);
+  }
+
+  [data-theme="light"] {
+    /* Light mode colors */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f6f8fa;
+    --bg-tertiary: #ffffff;
+    --text-primary: #24292f;
+    --text-secondary: #656d76;
+    --accent-primary: #0969da;
+    --accent-secondary: #0550ae;
+    --border-color: #d1d9e0;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --card-hover-shadow: rgba(9, 105, 218, 0.1);
+  }
+
+  * {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  }
+
   body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    background: #f9f9fc;
-    color: #333;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+  }
+
+  .theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    z-index: 1000;
+    font-size: 0.9em;
+  }
+
+  .theme-toggle:hover {
+    background: var(--accent-primary);
+    color: white;
   }
 
   header {
-    background: #4b6cb7;
-    background: linear-gradient(to right, #182848, #4b6cb7);
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
     color: white;
     padding: 40px 20px;
     text-align: center;
+    position: relative;
   }
 
   header h1 {
     font-size: 3em;
     margin: 0 0 10px 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   }
 
   header p {
@@ -31,12 +84,43 @@
     max-width: 800px;
     margin: 0 auto;
     line-height: 1.5;
+    opacity: 0.95;
   }
 
   main {
     max-width: 1000px;
     margin: 40px auto;
     padding: 0 20px;
+  }
+
+  section {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 30px;
+    border: 1px solid var(--border-color);
+  }
+
+  section h2 {
+    margin-top: 0;
+    color: var(--text-primary);
+    font-size: 2em;
+    margin-bottom: 20px;
+  }
+
+  section p, section li {
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  section a {
+    color: var(--accent-primary);
+    text-decoration: none;
+  }
+
+  section a:hover {
+    color: var(--accent-secondary);
+    text-decoration: underline;
   }
 
   .cards {
@@ -47,9 +131,10 @@
   }
 
   .card {
-    background: white;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px var(--shadow-color);
     padding: 20px;
     width: 300px;
     transition: transform 0.2s, box-shadow 0.2s;
@@ -57,25 +142,27 @@
 
   .card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    box-shadow: 0 8px 20px var(--card-hover-shadow);
+    border-color: var(--accent-primary);
   }
 
   .card h2 {
     margin-top: 0;
     font-size: 1.5em;
-    color: #182848;
+    color: var(--text-primary);
   }
 
   .card p {
     font-size: 1em;
     line-height: 1.4;
+    color: var(--text-secondary);
   }
 
   .card a {
     display: inline-block;
     margin-top: 10px;
     text-decoration: none;
-    background: #4b6cb7;
+    background: var(--accent-primary);
     color: white;
     padding: 10px 15px;
     border-radius: 6px;
@@ -83,18 +170,42 @@
   }
 
   .card a:hover {
-    background: #182848;
+    background: var(--accent-secondary);
   }
 
   footer {
     text-align: center;
     padding: 20px;
     font-size: 0.9em;
-    color: #666;
+    color: var(--text-secondary);
+    border-top: 1px solid var(--border-color);
+    margin-top: 40px;
+  }
+
+  @media (max-width: 768px) {
+    .cards {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .card {
+      width: 100%;
+      max-width: 400px;
+    }
+    
+    header h1 {
+      font-size: 2em;
+    }
+    
+    .theme-toggle {
+      top: 10px;
+      right: 10px;
+    }
   }
 </style>
 </head>
 <body>
+<button class="theme-toggle" onclick="toggleTheme()">🌙 Light Mode</button>
 
 <header>
   <h1>Járókelő RAG System - Performance Tracking</h1>
@@ -102,35 +213,90 @@
 </header>
 
 <main>
-  <h2>Explore my experiments</h2>
-  <div class="cards">
-    <div class="card">
-      <h2>Embedding comparison</h2>
-      <p>Compare different embedding models to see how they represent issue descriptions, allowing better semantic search and clustering of similar reports.</p>
-      <a href="experiments/embeddings_comparison_results_aggregated.html">View Embeddings</a>
-    </div>
-
-    <div class="card">
-      <h2>RAG evaluation</h2>
-      <p>Evaluate the performance of our Retrieval-Augmented Generation pipeline for answering questions about reported issues. Understand how different models, top-K values, and prompts affect results.</p>
-      <a href="experiments/retrieval_eval_report.html">View RAG Eval</a>
-    </div>
-  </div>
-
-  <section style="margin-top: 50px;">
+  <section>
     <h2>About This Project</h2>
-    <p>The <strong>Járókelő RAG System</strong> collects issues from <a href="https://jarokelo.hu" target="_blank"><strong>járókelő.hu</strong></a> to explore and analyze urban problems in Budapest. It allows:</p>
+    <p>The <strong>Járókelő RAG System</strong> builds a comprehensive <strong>Retrieval-Augmented Generation (RAG)</strong> pipeline for data from <a href="https://jarokelo.hu" target="_blank"><strong>Járókelő.hu</strong></a>, a Hungarian civic platform for reporting and tracking public issues across Budapest and other Hungarian cities.</p>
+    
+    <p>This project came from a personal passion for civic engagement. As someone who regularly bikes around Budapest, I've witnessed the disrepair, vandalism, and neglect of our public spaces. Instead of falling into apathy, I began using the Járókelő platform and discovered hope that even in challenging political and financial climates, issues can and will be resolved when properly reported and tracked.</p>
+
+    <h3>Key Features</h3>
     <ul>
-      <li>Browsing issues by district, category, and status.</li>
-      <li>Generating summaries and insights from reports.</li>
-      <li>Using AI for semantic search and pattern detection.</li>
+      <li><strong>Automated Data Collection</strong>: Daily scraping of civic reports using Selenium and BeautifulSoup</li>
+      <li><strong>Advanced Preprocessing</strong>: Text cleaning, normalization, and intelligent chunking for optimal retrieval</li>
+      <li><strong>Vector Store & Embeddings</strong>: FAISS and Chroma integration with multiple embedding model support</li>
+      <li><strong>RAG Pipeline</strong>: Semantic search and LLM-powered response generation using OpenAI's ChatGPT</li>
+      <li><strong>Interactive UI</strong>: Streamlit-based interface for querying and debugging</li>
+      <li><strong>MLOps Automation</strong>: GitHub Actions workflows for continuous data processing and evaluation</li>
+      <li><strong>Comprehensive Analytics</strong>: PowerBI dashboards and experimental evaluations</li>
     </ul>
+
+    <p>The system enables users to browse issues by district, category, and status while generating summaries and insights from reports using AI-powered semantic search and pattern detection.</p>
+  </section>
+
+  <section>
+    <h2>My Experiments & Tools</h2>
+    <div class="cards">
+      <div class="card">
+        <h2>Embedding Comparison</h2>
+        <p>Compare different embedding models to see how they represent issue descriptions, allowing better semantic search and clustering of similar reports. Benchmarks Hungarian, English, and multilingual models on real civic data.</p>
+        <a href="experiments/embeddings_comparison_results_aggregated.html">View Embeddings</a>
+      </div>
+
+      <div class="card">
+        <h2>RAG Evaluation</h2>
+        <p>Comprehensive automated evaluation of our Retrieval-Augmented Generation pipeline using standard IR metrics (hit rate, recall@k, precision@k). Tracks performance across different models, top-k values, and languages.</p>
+        <a href="experiments/retrieval_eval_report.html">View RAG Eval</a>
+      </div>
+
+      <div class="card">
+        <h2>Streamlit UI</h2>
+        <p>Interactive web interface for querying the RAG system with debug capabilities. Features query input, real-time processing logs, and detailed response analysis for civic issue exploration.</p>
+        <a href="#streamlit-demo" onclick="alert('Streamlit app runs locally. Clone the repo and run: poetry run streamlit run streamlit_app/app.py')">Learn More</a>
+      </div>
+
+      <div class="card">
+        <h2>Power BI Dashboard</h2>
+        <p>Comprehensive interactive dashboard visualizing civic issues across Budapest by district, category, status, and temporal trends. Currently in development with automated CSV export pipeline.</p>
+        <a href="#powerbi-coming-soon" onclick="alert('Power BI dashboard coming soon! The data pipeline is ready and CSV exports are automated.')">Coming Soon</a>
+      </div>
+    </div>
   </section>
 </main>
 
 <footer>
   &copy; 2025 Járókelő Tracker | Built with Python, Streamlit, and AI-powered analytics
 </footer>
+
+<script>
+function toggleTheme() {
+  const html = document.documentElement;
+  const button = document.querySelector('.theme-toggle');
+  
+  if (html.getAttribute('data-theme') === 'light') {
+    html.removeAttribute('data-theme');
+    button.textContent = '🌙 Light Mode';
+    localStorage.setItem('theme', 'dark');
+  } else {
+    html.setAttribute('data-theme', 'light');
+    button.textContent = '🌙 Dark Mode';
+    localStorage.setItem('theme', 'light');
+  }
+}
+
+// Load saved theme on page load
+document.addEventListener('DOMContentLoaded', function() {
+  const savedTheme = localStorage.getItem('theme');
+  const button = document.querySelector('.theme-toggle');
+  
+  if (savedTheme === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+    button.textContent = '🌙 Dark Mode';
+  } else {
+    // Default to dark mode
+    button.textContent = '🌙 Light Mode';
+  }
+});
+</script>
 
 </body>
 </html>
