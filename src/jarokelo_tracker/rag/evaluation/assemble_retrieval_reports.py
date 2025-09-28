@@ -53,7 +53,6 @@ def _load_latest_run(results_dir, img_dir):
         return None
     dt = next(iter(data.values())).get("datetime", "")
     commit_hash = next(iter(data.values())).get("commit_hash", "unknown")
-    logging.error(f"Commit hash: {str(commit_hash)}")
 
     k_values = []
     recall_values = []
