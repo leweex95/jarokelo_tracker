@@ -1,28 +1,10 @@
 import argparse
 import json
-import textwrap
 
-from jarokelo_tracker.rag.retrieval import load_vector_store
-from jarokelo_tracker.rag.embedding import embed_query
+from jarokelo_tracker.rag.retrieval import load_vector_store, retrieve_chunks
 from jarokelo_tracker.rag.llm import answer_with_llm
 from jarokelo_tracker.rag.prompts import build_prompt
 
-
-def retrieve_chunks(index, metas, query, embedding_provider, local_model, top_k):
-    q_vec = embed_query(query, embedding_provider, local_model)
-    distances, indices = index.search(q_vec, top_k)
-    retrieved, used_ids = [], []
-    for idx in indices[0]:
-        if idx < 0:
-            continue
-        meta = metas[idx]
-        snippet = textwrap.shorten(meta["text"], 400)
-        retrieved.append(
-            f"ID: {meta['id']} | URL: {meta.get('url')} | "
-            f"District: {meta.get('district')} | Status: {meta.get('status')}\n{snippet}"
-        )
-        used_ids.append(meta["id"])
-    return retrieved, used_ids
 
 def answer_query(query, top_k, headless, vector_backend, embedding_provider, vector_path, local_model, answering_llm, vector_base_dir):
     index, metas = load_vector_store(vector_backend, vector_path, vector_base_dir)
@@ -33,6 +15,7 @@ def answer_query(query, top_k, headless, vector_backend, embedding_provider, vec
     if answer is None:
         answer = context
     return {"answer": answer, "used_ids": used_ids}
+
 
 def main():
     parser = argparse.ArgumentParser(description="RAG query for civic issues")

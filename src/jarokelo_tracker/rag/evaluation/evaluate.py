@@ -8,8 +8,7 @@ import sys
 import logging
 from typing import List, Dict, Tuple, Any
 
-from jarokelo_tracker.rag.pipeline import retrieve_chunks
-from jarokelo_tracker.rag.retrieval import load_vector_store
+from jarokelo_tracker.rag.retrieval import load_vector_store, retrieve_chunks
 
 logging.basicConfig(
     level=logging.INFO,
