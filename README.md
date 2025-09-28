@@ -1,4 +1,4 @@
-![Python Version](https://img.shields.io/badge/python-3.11%2B-blue) ![License](https://img.shields.io/github/license/leweex95/jarokelo_tracker) [![Data scraper](https://github.com/leweex95/jarokelo_tracker/actions/workflows/scraper.yml/badge.svg)](https://github.com/leweex95/jarokelo_tracker/actions/workflows/scraper.yml) [![Run data pipeline](https://github.com/leweex95/jarokelo_tracker/actions/workflows/data_pipeline.yml/badge.svg)](https://github.com/leweex95/jarokelo_tracker/actions/workflows/data_pipeline.yml) [![Full data pipeline](https://github.com/leweex95/jarokelo_tracker/actions/workflows/full_data_pipeline.yml/badge.svg)](https://github.com/leweex95/jarokelo_tracker/actions/workflows/full_data_pipeline.yml) [![Update Github page](https://github.com/leweex95/jarokelo_tracker/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/leweex95/jarokelo_tracker/actions/workflows/pages/pages-build-deployment)
+![Python Version](https://img.shields.io/badge/python-3.11%2B-blue) ![License](https://img.shields.io/github/license/leweex95/jarokelo_tracker) [![Data scraper](https://github.com/leweex95/jarokelo_tracker/actions/workflows/scraper.yml/badge.svg)](https://github.com/leweex95/jarokelo_tracker/actions/workflows/scraper.yml) [![Run data pipeline](https://github.com/leweex95/jarokelo_tracker/actions/workflows/data_pipeline.yml/badge.svg)](https://github.com/leweex95/jarokelo_tracker/actions/workflows/data_pipeline.yml) [![Full data pipeline](https://github.com/leweex95/jarokelo_tracker/actions/workflows/full_data_pipeline.yml/badge.svg)](https://github.com/leweex95/jarokelo_tracker/actions/workflows/full_data_pipeline.yml) [![Automated RAG Evaluation Pipeline](https://github.com/leweex95/jarokelo_tracker/actions/workflows/eval_pipeline.yml/badge.svg)](https://github.com/leweex95/jarokelo_tracker/actions/workflows/eval_pipeline.yml) [![Update Github page](https://github.com/leweex95/jarokelo_tracker/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/leweex95/jarokelo_tracker/actions/workflows/pages/pages-build-deployment)
 
 ---
 
@@ -80,7 +80,22 @@ This saves the vector store to `data/vector_store/<backend>_YYYYMMDDTHHMMSSZ`.
 
 Encodes the input query, fetches the top 5 closest matches from the vector store and feeds it to an LLM for answer generation.
 
-6. Launch the streamlit app
+6. (Optional) Run RAG evaluation
+
+    poetry run python -m jarokelo_tracker.rag.evaluation.evaluate \
+        --eval-set-path data/eval/eval_set.json \
+        --vector-backend faiss \
+        --embedding-provider local \
+        --local-model distiluse-base-multilingual-cased-v2 \
+        --topk "1,5,10" \
+        --lang en
+
+This evaluates retrieval performance and saves results to `experiments/results/retrieval_eval/`. You can then generate an HTML report:
+
+    poetry run python ./src/jarokelo_tracker/rag/evaluation/assemble_retrieval_reports.py \
+        --results-dir experiments/results/retrieval_eval
+
+7. Launch the streamlit app
 
     poetry run streamlit run streamlit_app/app.py
 
@@ -112,6 +127,13 @@ The repository leverages GitHub Actions for a robust, fully automated data and M
     - Handles preprocessing (cleaning, normalization, chunking), vector store building, EDA report generation, and CSV file export for Power BI dashboarding.
     - Includes automated cleanup of old vector stores and cache management to stay within GitHub’s 10 GB cache limit (now only caching Poetry folders: ~/.cache/pypoetry/cache and ~/.cache/pypoetry/artifacts, ensuring we are around ~8 GB total cache).
 
+- **Automated RAG evaluation**:
+    - Runs nightly at 23:00 UTC or on-demand via [eval_pipeline.yml](./.github/workflows/eval_pipeline.yml)
+    - Evaluates retrieval performance using standard IR metrics (hit rate, recall@k, precision@k)
+    - Supports configurable parameters: embedding models, vector backends, top-k values, and languages
+    - Generates automated HTML reports with interactive Plotly charts showing performance trends
+    - Results automatically committed and deployed to [GitHub Pages dashboard](https://leweex95.github.io/jarokelo_tracker/experiments/retrieval_eval_report.html)
+
 - **Experiment results aggregation**:
     - Triggered automatically by new reports arrival (commit and push) or on-demand via [aggregate_embedding_results.yml](.github/workflows/aggregate_embedding_results.yml) to collect and aggregate experiment results from [embedding comparison](./experiments/embeddings_comparison.py)
     - **Todo**: This still has to be combined with an automated build and deploy step to immediately reflect on our Github page. 
@@ -124,9 +146,22 @@ This is a continuously evolving, applied research focused section aiming at pres
 
 The current [embeddings_comparison.py](./experiments/embeddings_comparison.py) script benchmarks multiple Hungarian, English, and multilingual sentence embedding models on real civic data.
 
-2. **RAG evaluation**: (_todo, planned_)
+2. **RAG evaluation**:
 
-Plan is to have a fully automated RAG evaluation pipeline which is continuously evolving as new methodologies arise. In progress...
+A comprehensive automated RAG evaluation pipeline that measures retrieval performance using standard information retrieval metrics:
+
+- **Hit rate**: Proportion of queries where at least one relevant document is retrieved
+- **Recall@k**: Average proportion of relevant documents retrieved in top-k results  
+- **Precision@k**: Average proportion of retrieved documents that are relevant
+
+The evaluation supports:
+- Multiple top-k values (configurable, e.g., 1,5,10) for comprehensive analysis
+- Both Hungarian and English query evaluation
+- Multiple vector backends (FAISS, Chroma) and embedding models
+- Automated report generation with interactive plots and historical tracking
+- Integration with GitHub Pages for live dashboard viewing
+
+Results are automatically tracked and visualized at [experiments/retrieval_eval_report.html](https://leweex95.github.io/jarokelo_tracker/experiments/retrieval_eval_report.html).
 
 ---
 
