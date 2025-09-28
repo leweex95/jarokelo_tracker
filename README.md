@@ -57,6 +57,12 @@ _You can also use the shorthand `bs` for `beautifulsoup`:_
 
     poetry run python ./scripts/scrape_data.py --backend bs --continue-scraping
 
+_To update the status of existing records (e.g., when "Válaszra vár" changes to "MEGOLDOTT"):_
+
+    poetry run python ./scripts/scrape_data.py --backend bs --update-existing-status
+
+This efficiently checks and updates the status of already-scraped records without performing full re-scraping. When a status changes to "MEGOLDOTT" (resolved), the scraper automatically performs a full re-scrape to capture the `resolution_date`.
+
 3. Preprocess data
 
 I implemented two types of preprocessing. One is specifically for the vector store and RAG functionality (`preprocess_rag.py`) while the other is for exploratory data analysis and extracting insights from data via Power BI dashboarding (`preprocess_eda.py`).

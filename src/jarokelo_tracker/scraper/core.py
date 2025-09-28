@@ -336,6 +336,36 @@ class JarokeloScraper:
         else:
             raise ValueError(f"Unsupported backend: {self.backend}")
     
+    def extract_listing_info_selenium(self, page_url: str) -> list:
+        """Extract URL and status from listing page cards using Selenium"""
+        if not self.driver:
+            raise ValueError("Selenium not initialized")
+            
+        self.driver.get(page_url)
+        
+        cards = self.driver.find_elements(By.CSS_SELECTOR, "article.card")
+        card_info = []
+        
+        for card in cards:
+            # Extract URL
+            link_elem = card.find_elements(By.CSS_SELECTOR, "a.card__media__bg")
+            if not link_elem:
+                continue
+            url = link_elem[0].get_attribute("href")
+            
+            # Extract status from badge
+            status = None
+            status_elems = card.find_elements(By.CSS_SELECTOR, "span.badge")
+            for elem in status_elems:
+                # Skip comment badges
+                if "badge--comment" not in elem.get_attribute("class"):
+                    status = elem.text.strip()
+                    break
+            
+            card_info.append({"url": url, "status": status})
+        
+        return card_info
+
     def scrape_listing_page_selenium(self, page_url: str, global_urls: Set[str], 
                                    until_date: Optional[str] = None, 
                                    stop_on_existing: bool = True) -> Tuple[Optional[str], bool]:
@@ -343,17 +373,35 @@ class JarokeloScraper:
         if not self.driver:
             raise ValueError("Selenium not initialized")
             
-        self.driver.get(page_url)
+        # Extract all card info (URL + status) from listing page
+        card_info = self.extract_listing_info_selenium(page_url)
         reached_done = False
-        links = [a.get_attribute("href") for a in self.driver.find_elements(By.CSS_SELECTOR, "article.card a.card__media__bg")]
 
-        for link in links:
-            if link in global_urls and stop_on_existing:
-                reached_done = True
-                break
-
-            if link not in global_urls:
-                report = self.scrape_report_selenium(link)
+        for card in card_info:
+            url = card["url"]
+            current_status = card["status"]
+            
+            if url in global_urls:
+                # Existing record - check if status needs updating
+                _, existing_record, _ = self.data_manager.find_record_by_url(url)
+                old_status = existing_record.get("status") if existing_record else None
+                
+                # Check if we need full re-scrape (e.g., for resolution_date when status → MEGOLDOTT)
+                if self.data_manager.needs_full_rescrape(old_status, current_status):
+                    print(f"Status change requires full re-scrape: {url} ({old_status} → {current_status})")
+                    # Perform full scrape and update the record
+                    updated_report = self.scrape_report_selenium(url)
+                    # Replace the existing record with the updated one
+                    self.data_manager.replace_record(url, updated_report)
+                elif self.data_manager.update_status_if_changed(url, current_status):
+                    print(f"Updated status for {url}: {current_status}")
+                
+                if stop_on_existing:
+                    reached_done = True
+                    break
+            else:
+                # New record - perform full scraping
+                report = self.scrape_report_selenium(url)
                 self.data_manager.save_report(report, global_urls)  # update global set
                 if until_date and report["date"] <= until_date:
                     reached_done = True
@@ -365,13 +413,15 @@ class JarokeloScraper:
         next_page_elems = self.driver.find_elements(By.CSS_SELECTOR, "a.pagination__link")
         for elem in next_page_elems:
             if "Következő" in elem.text:
-                return elem.get_attribute("href"), False
+                href = elem.get_attribute("href")
+                # Convert relative URLs to absolute
+                if href and href.startswith("/"):
+                    href = "https://jarokelo.hu" + href
+                return href, False
         return None, False
     
-    def scrape_listing_page_beautifulsoup(self, page_url: str, global_urls: Set[str], 
-                                        until_date: Optional[str] = None, 
-                                        stop_on_existing: bool = True) -> Tuple[Optional[str], bool]:
-        """Return next page URL and a flag if we reached an already scraped report or until_date."""
+    def extract_listing_info_beautifulsoup(self, page_url: str) -> list:
+        """Extract URL and status from listing page cards using BeautifulSoup"""
         if not self.session:
             raise ValueError("Requests session not initialized")
             
@@ -379,16 +429,65 @@ class JarokeloScraper:
         response.raise_for_status()
         soup = BeautifulSoup(response.content, 'html.parser')
         
+        cards = soup.select("article.card")
+        card_info = []
+        
+        for card in cards:
+            # Extract URL
+            link_elem = card.select_one("a.card__media__bg")
+            if not link_elem:
+                continue
+            url = link_elem.get("href")
+            
+            # Extract status from badge
+            status = None
+            status_elems = card.select("span.badge")
+            for elem in status_elems:
+                # Skip comment badges
+                if "badge--comment" not in elem.get("class", []):
+                    status = elem.text.strip()
+                    break
+            
+            card_info.append({"url": url, "status": status})
+        
+        return card_info
+
+    def scrape_listing_page_beautifulsoup(self, page_url: str, global_urls: Set[str], 
+                                        until_date: Optional[str] = None, 
+                                        stop_on_existing: bool = True) -> Tuple[Optional[str], bool]:
+        """Return next page URL and a flag if we reached an already scraped report or until_date."""
+        if not self.session:
+            raise ValueError("Requests session not initialized")
+            
+        # Extract all card info (URL + status) from listing page
+        card_info = self.extract_listing_info_beautifulsoup(page_url)
         reached_done = False
-        links = [a.get("href") for a in soup.select("article.card a.card__media__bg")]
 
-        for link in links:
-            if link in global_urls and stop_on_existing:
-                reached_done = True
-                break
-
-            if link not in global_urls:
-                report = self.scrape_report_beautifulsoup(link)
+        for card in card_info:
+            url = card["url"]
+            current_status = card["status"]
+            
+            if url in global_urls:
+                # Existing record - check if status needs updating
+                _, existing_record, _ = self.data_manager.find_record_by_url(url)
+                old_status = existing_record.get("status") if existing_record else None
+                
+                # Check if we need full re-scrape (e.g., for resolution_date when status → MEGOLDOTT)
+                if self.data_manager.needs_full_rescrape(old_status, current_status):
+                    print(f"Status change requires full re-scrape: {url} ({old_status} → {current_status})")
+                    # Perform full scrape and update the record
+                    updated_report = self.scrape_report_beautifulsoup(url)
+                    # Replace the existing record with the updated one
+                    self.data_manager.replace_record(url, updated_report)
+                elif self.data_manager.update_status_if_changed(url, current_status):
+                    print(f"Updated status for {url}: {current_status}")
+                
+                if stop_on_existing:
+                    reached_done = True
+                    break
+            else:
+                # New record - perform full scraping
+                report = self.scrape_report_beautifulsoup(url)
                 self.data_manager.save_report(report, global_urls)  # update global set
                 if until_date and report["date"] <= until_date:
                     reached_done = True
@@ -397,10 +496,19 @@ class JarokeloScraper:
         if reached_done:
             return None, True
 
+        # Get pagination info - need to fetch the page again
+        response = self.session.get(page_url)
+        response.raise_for_status()
+        soup = BeautifulSoup(response.content, 'html.parser')
+        
         next_page_elems = soup.select("a.pagination__link")
         for elem in next_page_elems:
             if "Következő" in elem.text:
-                return elem.get("href"), False
+                href = elem.get("href")
+                # Convert relative URLs to absolute
+                if href and href.startswith("/"):
+                    href = "https://jarokelo.hu" + href
+                return href, False
         return None, False
     
     def scrape_listing_page(self, page_url: str, global_urls: Set[str], 
@@ -415,7 +523,8 @@ class JarokeloScraper:
             raise ValueError(f"Unsupported backend: {self.backend}")
     
     def scrape(self, start_page: int = 1, until_date: Optional[str] = None, 
-               stop_on_existing: bool = True, continue_scraping: bool = False):
+               stop_on_existing: bool = True, continue_scraping: bool = False,
+               update_existing_status: bool = False):
         """
         Main scraping method
         
@@ -424,17 +533,22 @@ class JarokeloScraper:
             until_date: Scrape until this date (YYYY-MM-DD), inclusive
             stop_on_existing: Whether to stop when encountering existing reports
             continue_scraping: Whether to resume from where we left off
+            update_existing_status: Whether to update status of existing records
         """
         
         # Load existing URLs
         global_urls = self.data_manager.load_all_existing_urls()
         
-        # Determine starting page
+        # Determine starting page and behavior
         if continue_scraping:
             oldest_date, total = self.data_manager.get_scraping_resume_point()
             page = max(total // 8 - 1, 1)
             stop_on_existing = False
             print(f"Resuming scraping from date: {oldest_date} and from page number: {page}")
+        elif update_existing_status:
+            page = start_page
+            stop_on_existing = False  # Don't stop on existing when updating status
+            print(f"Status update mode: Will check and update existing record statuses")
         else:
             page = start_page
         

@@ -23,6 +23,8 @@ def main():
                        help="Scrape until this date (YYYY-MM-DD), inclusive")
     parser.add_argument("--continue-scraping", action="store_true", 
                        help="Resume automatically based on existing data")
+    parser.add_argument("--update-existing-status", action="store_true", 
+                       help="Update status of existing records (for re-checking solved/waiting status)")
     parser.add_argument("--data-dir", type=str, default="data/raw", 
                        help="Directory to store data files")
 
@@ -44,8 +46,9 @@ def main():
             scraper.scrape(
                 start_page=args.start_page,
                 until_date=args.until_date,
-                stop_on_existing=not args.continue_scraping,
-                continue_scraping=args.continue_scraping
+                stop_on_existing=not args.continue_scraping and not args.update_existing_status,
+                continue_scraping=args.continue_scraping,
+                update_existing_status=args.update_existing_status
             )
     except KeyboardInterrupt:
         print("\nScraping interrupted by user")

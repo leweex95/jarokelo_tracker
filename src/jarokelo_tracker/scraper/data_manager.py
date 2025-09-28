@@ -119,3 +119,112 @@ class DataManager:
                     if oldest_date is None or last_date < oldest_date:
                         oldest_date = last_date
         return oldest_date, total
+    
+    def find_record_by_url(self, url: str) -> Tuple[Optional[str], Optional[Dict], Optional[int]]:
+        """Find a record by URL and return file path, record data, and line number"""
+        for filename in os.listdir(self.data_dir):
+            if not filename.endswith(".jsonl"):
+                continue
+                
+            file_path = os.path.join(self.data_dir, filename)
+            with open(file_path, "r", encoding="utf-8") as f:
+                for line_num, line in enumerate(f, 1):
+                    try:
+                        record = json.loads(line.strip())
+                        if record.get("url") == url:
+                            return file_path, record, line_num
+                    except json.JSONDecodeError:
+                        continue
+        
+        return None, None, None
+    
+    def update_status_if_changed(self, url: str, new_status: str) -> bool:
+        """
+        Update the status of an existing record if it has changed.
+        
+        Args:
+            url: The URL of the record to update
+            new_status: The new status from the listing page
+            
+        Returns:
+            True if the status was updated, False otherwise
+        """
+        file_path, record, line_num = self.find_record_by_url(url)
+        
+        if not record:
+            print(f"[WARNING] Record not found for URL: {url}")
+            return False
+        
+        current_status = record.get("status")
+        
+        # Only update if status actually changed
+        if current_status == new_status:
+            return False
+        
+        print(f"Status changed for {url}: '{current_status}' → '{new_status}'")
+        
+        # Update the record
+        record["status"] = new_status
+        
+        # If status changed to "MEGOLDOTT", we might want to update resolution_date
+        # But since we're only getting info from listing page, we can't extract the full resolution date
+        # This would require a full scrape of the individual page
+        # For now, we'll just update the status
+        
+        # Read all lines from the file
+        with open(file_path, "r", encoding="utf-8") as f:
+            lines = f.readlines()
+        
+        # Update the specific line
+        lines[line_num - 1] = json.dumps(record, ensure_ascii=False) + "\n"
+        
+        # Write back the updated content
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.writelines(lines)
+        
+        return True
+    
+    def needs_full_rescrape(self, old_status: str, new_status: str) -> bool:
+        """
+        Determine if a status change requires full re-scraping of the individual page.
+        
+        This is needed when:
+        - Status changes to "MEGOLDOTT" (to get resolution_date)
+        - Status changes from "MEGOLDOTT" to something else (to clear resolution_date)
+        """
+        old_resolved = old_status and old_status.upper() == "MEGOLDOTT"
+        new_resolved = new_status and new_status.upper() == "MEGOLDOTT"
+        
+        # Need full rescrape if resolution status changed
+        return old_resolved != new_resolved
+    
+    def replace_record(self, url: str, new_record: Dict) -> bool:
+        """
+        Replace an existing record with new data (for full re-scrapes).
+        
+        Args:
+            url: The URL of the record to replace
+            new_record: The new record data
+            
+        Returns:
+            True if the record was replaced, False if not found
+        """
+        file_path, _, line_num = self.find_record_by_url(url)
+        
+        if not file_path:
+            print(f"[WARNING] Record not found for replacement: {url}")
+            return False
+        
+        # Read all lines from the file
+        with open(file_path, "r", encoding="utf-8") as f:
+            lines = f.readlines()
+        
+        # Replace the specific line
+        lines[line_num - 1] = json.dumps(new_record, ensure_ascii=False) + "\n"
+        
+        # Write back the updated content
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.writelines(lines)
+        
+        print(f"Replaced record for {url} with updated data")
+        return True
