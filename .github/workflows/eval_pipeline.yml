@@ -71,7 +71,7 @@ jobs:
 
       - name: Run RAG evaluation
         run: |
-          poetry run python -m ./src/jarokelo_tracker/rag/evaluation/evaluate.py \
+          poetry run python -m jarokelo_tracker.rag.evaluation.evaluate \
             --eval-set-path "${{ github.event.inputs.eval_set_path }}" \
             --vector-backend "${{ github.event.inputs.vector_backend }}" \
             --embedding-provider "${{ github.event.inputs.embedding_provider }}" \
