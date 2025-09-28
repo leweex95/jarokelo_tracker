@@ -29,6 +29,10 @@ on:
         description: 'Continue scraping from last saved state'
         required: false
         default: ''
+      buffer_size:
+        description: 'Buffer size for comprehensive scraping (higher = faster but more memory)'
+        required: false
+        default: '200'
   workflow_call:
     inputs:
       backend:
@@ -60,6 +64,11 @@ on:
         description: 'Continue scraping from last saved state'
         required: false
         default: ''
+        type: string
+      buffer_size:
+        description: 'Buffer size for comprehensive scraping'
+        required: false
+        default: '200'
         type: string
     secrets:
       PAT_TOKEN:
@@ -114,7 +123,8 @@ jobs:
           echo "Headless: $HEADLESS"
           echo "Start page: $START_PAGE"
           
-          ARGS="--backend $BACKEND --headless $HEADLESS --data-dir $DATA_DIR --start-page $START_PAGE"
+          BUFFER_SIZE="${{ github.event.inputs.buffer_size || '200' }}"
+          ARGS="--backend $BACKEND --headless $HEADLESS --data-dir $DATA_DIR --start-page $START_PAGE --buffer-size $BUFFER_SIZE"
           if [ -n "$UNTIL_DATE" ]; then
             ARGS="$ARGS --until-date $UNTIL_DATE"
             echo "Until date: $UNTIL_DATE"
@@ -123,6 +133,7 @@ jobs:
             ARGS="$ARGS --continue-scraping"
             echo "Continue scraping: enabled"
           fi
+          echo "Buffer size: $BUFFER_SIZE (for optimal performance)"
           
           echo "Running: poetry run python ./scripts/scrape_data.py $ARGS"
           echo ""
@@ -168,10 +179,12 @@ jobs:
           NEW_RECORDS="${{ steps.count_after.outputs.new_records }}"
           
           git add "$DATA_DIR"
+          BUFFER_SIZE="${{ github.event.inputs.buffer_size || '200' }}"
           git commit -m "[Auto-commit] Comprehensive scraping: $NEW_RECORDS new records
 
           Scraped at: $(date -u '+%Y-%m-%d %H:%M:%S UTC')
           Backend: ${{ github.event.inputs.backend || 'beautifulsoup' }}
+          Buffer size: $BUFFER_SIZE
           Total records: ${{ steps.count_after.outputs.records_after }}
           New records: $NEW_RECORDS
           
@@ -241,6 +254,7 @@ jobs:
             ARGS="$ARGS --until-date $UNTIL_DATE"
             echo "Until date: $UNTIL_DATE"
           fi
+          echo "Note: Buffering disabled for status updates (immediate writes)"
           
           echo "Running: poetry run python ./scripts/scrape_data.py $ARGS"
           echo ""

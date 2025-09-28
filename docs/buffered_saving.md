@@ -51,6 +51,7 @@ Based on testing with 500 records:
 
 ### Usage Examples
 
+#### CLI Usage
 ```bash
 # Default buffer size (100 records)
 poetry run python ./scripts/scrape_data.py --backend beautifulsoup
@@ -60,6 +61,17 @@ poetry run python ./scripts/scrape_data.py --backend beautifulsoup --buffer-size
 
 # Status updates (buffering automatically disabled)
 poetry run python ./scripts/scrape_data.py --update-existing-status
+```
+
+#### GitHub Actions Workflow
+```bash
+# Manual trigger with default buffer size (200)
+gh workflow run scraper.yml
+
+# Manual trigger with custom buffer size
+gh workflow run scraper.yml --field buffer_size="300"
+
+# Nightly automated run uses buffer size 200 by default
 ```
 
 ## Benefits
