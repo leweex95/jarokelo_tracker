@@ -45,7 +45,7 @@ on:
 
 jobs:
   run-scraper:
-    uses: ./.github/workflows/scraper.yml
+    uses: leweex95/jarokelo_tracker/.github/workflows/scraper.yml@master
     with: 
       backend: ${{ github.event.inputs.scraper_backend }}
       data_dir: ${{ github.event.inputs.data_dir }}
@@ -58,7 +58,7 @@ jobs:
 
   run-data-pipeline:
     needs: run-scraper
-    uses: ./.github/workflows/data_pipeline.yml
+    uses: leweex95/jarokelo_tracker/.github/workflows/data_pipeline.yml@master
     with:
       backend: ${{ github.event.inputs.vector_backend }}
       embedding: ${{ github.event.inputs.embedding }}
