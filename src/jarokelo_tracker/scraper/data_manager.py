@@ -8,14 +8,18 @@ and chronological ordering by month.
 import os
 import json
 from datetime import datetime
-from typing import Dict, Set, Tuple, Optional
+from typing import Dict, Set, Tuple, Optional, List
+from collections import defaultdict
 
 
 class DataManager:
     """Manages data storage and retrieval for scraped reports"""
     
-    def __init__(self, data_dir: str = "data/raw"):
+    def __init__(self, data_dir: str = "data/raw", buffer_size: int = 100):
         self.data_dir = data_dir
+        self.buffer_size = buffer_size  # Number of records to buffer before writing to disk
+        self.buffer = defaultdict(list)  # Buffer organized by monthly file: {file_path: [reports]}
+        self.buffer_count = 0  # Total number of buffered records
         os.makedirs(data_dir, exist_ok=True)
     
     def get_monthly_file(self, report_date: str) -> str:
@@ -99,6 +103,100 @@ class DataManager:
 
         with open(file_path, "w", encoding="utf-8") as f:
             f.writelines(new_lines)
+    
+    def save_report_buffered(self, report: Dict, existing_urls: Set[str]) -> None:
+        """
+        Save a report to the memory buffer and flush to disk when buffer is full.
+        This method is optimized for bulk operations (comprehensive scraping).
+        
+        For comprehensive scraping, this provides significant performance improvements
+        by reducing disk I/O from O(n) to O(n/buffer_size).
+        """
+        if report["url"] in existing_urls:
+            return
+        existing_urls.add(report["url"])
+        
+        # Add to buffer
+        file_path = self.get_monthly_file(report["date"])
+        self.buffer[file_path].append(report)
+        self.buffer_count += 1
+        
+        # Flush buffer if it's full
+        if self.buffer_count >= self.buffer_size:
+            self.flush_buffer()
+    
+    def flush_buffer(self) -> None:
+        """
+        Flush all buffered reports to disk and clear the buffer.
+        This method merges buffered reports with existing files while maintaining chronological order.
+        """
+        if self.buffer_count == 0:
+            return
+        
+        print(f"Flushing {self.buffer_count} records from buffer to disk...")
+        
+        for file_path, buffered_reports in self.buffer.items():
+            if not buffered_reports:
+                continue
+                
+            # Load existing lines from file
+            existing_lines = []
+            if os.path.exists(file_path):
+                with open(file_path, "r", encoding="utf-8") as f:
+                    for i, line in enumerate(f, start=1):
+                        line = line.rstrip("\r\n")
+                        if not line:
+                            continue
+                        try:
+                            json.loads(line)  # validate
+                            existing_lines.append(line + "\n")
+                        except json.JSONDecodeError as e:
+                            print(f"[ERROR] Malformed line {i} in {file_path}: {line}")
+                            raise
+            
+            # Sort buffered reports by date (newest first for prepending logic)
+            buffered_reports.sort(key=lambda x: x["date"], reverse=True)
+            
+            # Merge buffered reports with existing lines chronologically
+            all_lines = existing_lines.copy()
+            
+            for report in buffered_reports:
+                new_line = json.dumps(report, ensure_ascii=False) + "\n"
+                report_date = report["date"]
+                
+                # Find insertion point
+                inserted = False
+                new_all_lines = []
+                
+                for line in all_lines:
+                    line_date = json.loads(line)["date"]
+                    if not inserted and report_date >= line_date:
+                        new_all_lines.append(new_line)
+                        inserted = True
+                    new_all_lines.append(line)
+                
+                if not inserted:
+                    new_all_lines.append(new_line)  # append if newest
+                
+                all_lines = new_all_lines
+            
+            # Write merged content to file
+            with open(file_path, "w", encoding="utf-8") as f:
+                f.writelines(all_lines)
+        
+        # Clear buffer
+        buffer_records = self.buffer_count
+        self.buffer.clear()
+        self.buffer_count = 0
+        print(f"Successfully flushed {buffer_records} records to disk")
+    
+    def __enter__(self):
+        """Context manager entry"""
+        return self
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Context manager exit - ensure buffer is flushed"""
+        self.flush_buffer()
     
     def get_scraping_resume_point(self) -> Tuple[Optional[str], int]:
         """Determine resume point: oldest scraped report date and total saved reports."""

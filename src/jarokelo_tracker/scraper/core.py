@@ -25,7 +25,7 @@ class JarokeloScraper:
     
     BASE_URL = "https://jarokelo.hu/bejelentesek"
     
-    def __init__(self, data_dir: str = "data/raw", backend: str = "beautifulsoup", headless: bool = True):
+    def __init__(self, data_dir: str = "data/raw", backend: str = "beautifulsoup", headless: bool = True, buffer_size: int = 100):
         """
         Initialize the scraper
         
@@ -33,8 +33,9 @@ class JarokeloScraper:
             data_dir: Directory to store scraped data
             backend: Scraping backend ('selenium' or 'beautifulsoup')
             headless: Whether to run browser in headless mode (for Selenium)
+            buffer_size: Number of records to buffer in memory before writing to disk
         """
-        self.data_manager = DataManager(data_dir)
+        self.data_manager = DataManager(data_dir, buffer_size)
         self.backend = backend
         self.headless = headless
         self.session = None
@@ -82,6 +83,8 @@ class JarokeloScraper:
         return self
     
     def __exit__(self, exc_type, exc_val, exc_tb):
+        # Ensure buffer is flushed before closing
+        self.data_manager.flush_buffer()
         self.close()
     
     @staticmethod
@@ -368,7 +371,8 @@ class JarokeloScraper:
 
     def scrape_listing_page_selenium(self, page_url: str, global_urls: Set[str], 
                                    until_date: Optional[str] = None, 
-                                   stop_on_existing: bool = True) -> Tuple[Optional[str], bool]:
+                                   stop_on_existing: bool = True,
+                                   use_buffered_saving: bool = False) -> Tuple[Optional[str], bool]:
         """Return next page URL and a flag if we reached an already scraped report or until_date."""
         if not self.driver:
             raise ValueError("Selenium not initialized")
@@ -402,7 +406,11 @@ class JarokeloScraper:
             else:
                 # New record - perform full scraping
                 report = self.scrape_report_selenium(url)
-                self.data_manager.save_report(report, global_urls)  # update global set
+                # Use buffered saving for comprehensive scraping, regular saving for status updates
+                if use_buffered_saving:
+                    self.data_manager.save_report_buffered(report, global_urls)
+                else:
+                    self.data_manager.save_report(report, global_urls)
                 if until_date and report["date"] <= until_date:
                     reached_done = True
                     break
@@ -454,7 +462,8 @@ class JarokeloScraper:
 
     def scrape_listing_page_beautifulsoup(self, page_url: str, global_urls: Set[str], 
                                         until_date: Optional[str] = None, 
-                                        stop_on_existing: bool = True) -> Tuple[Optional[str], bool]:
+                                        stop_on_existing: bool = True,
+                                        use_buffered_saving: bool = False) -> Tuple[Optional[str], bool]:
         """Return next page URL and a flag if we reached an already scraped report or until_date."""
         if not self.session:
             raise ValueError("Requests session not initialized")
@@ -488,7 +497,11 @@ class JarokeloScraper:
             else:
                 # New record - perform full scraping
                 report = self.scrape_report_beautifulsoup(url)
-                self.data_manager.save_report(report, global_urls)  # update global set
+                # Use buffered saving for comprehensive scraping, regular saving for status updates
+                if use_buffered_saving:
+                    self.data_manager.save_report_buffered(report, global_urls)
+                else:
+                    self.data_manager.save_report(report, global_urls)
                 if until_date and report["date"] <= until_date:
                     reached_done = True
                     break
@@ -513,12 +526,13 @@ class JarokeloScraper:
     
     def scrape_listing_page(self, page_url: str, global_urls: Set[str], 
                            until_date: Optional[str] = None, 
-                           stop_on_existing: bool = True) -> Tuple[Optional[str], bool]:
+                           stop_on_existing: bool = True,
+                           use_buffered_saving: bool = False) -> Tuple[Optional[str], bool]:
         """Scrape a listing page using the configured backend"""
         if self.backend == 'selenium':
-            return self.scrape_listing_page_selenium(page_url, global_urls, until_date, stop_on_existing)
+            return self.scrape_listing_page_selenium(page_url, global_urls, until_date, stop_on_existing, use_buffered_saving)
         elif self.backend == 'beautifulsoup':
-            return self.scrape_listing_page_beautifulsoup(page_url, global_urls, until_date, stop_on_existing)
+            return self.scrape_listing_page_beautifulsoup(page_url, global_urls, until_date, stop_on_existing, use_buffered_saving)
         else:
             raise ValueError(f"Unsupported backend: {self.backend}")
     
@@ -538,6 +552,11 @@ class JarokeloScraper:
         
         # Load existing URLs
         global_urls = self.data_manager.load_all_existing_urls()
+        
+        # Determine if we should use buffered saving (for comprehensive scraping)
+        use_buffered_saving = not update_existing_status
+        if use_buffered_saving:
+            print(f"Using buffered saving (buffer size: {self.data_manager.buffer_size}) for performance")
         
         # Determine starting page and behavior
         if continue_scraping:
@@ -559,12 +578,18 @@ class JarokeloScraper:
             page_url = f"{self.BASE_URL}?page={page}"
         
         # Main scraping loop
-        while page_url:
-            print(f"[Page {page}] Loading: {page_url}")
-            page_url, done = self.scrape_listing_page(
-                page_url, global_urls, until_date, stop_on_existing
-            )
-            if done:
-                print(f"Found already-scraped report or reached until-date ({until_date=}) Exiting.")
-                break
-            page += 1
+        try:
+            while page_url:
+                print(f"[Page {page}] Loading: {page_url}")
+                page_url, done = self.scrape_listing_page(
+                    page_url, global_urls, until_date, stop_on_existing, use_buffered_saving
+                )
+                if done:
+                    print(f"Found already-scraped report or reached until-date ({until_date=}) Exiting.")
+                    break
+                page += 1
+        finally:
+            # Always flush buffer at the end of scraping
+            if use_buffered_saving:
+                print("Scraping complete. Flushing remaining buffer...")
+                self.data_manager.flush_buffer()

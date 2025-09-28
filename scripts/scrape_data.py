@@ -27,6 +27,8 @@ def main():
                        help="Update status of existing records (for re-checking solved/waiting status)")
     parser.add_argument("--data-dir", type=str, default="data/raw", 
                        help="Directory to store data files")
+    parser.add_argument("--buffer-size", type=int, default=100, 
+                       help="Number of records to buffer in memory before writing to disk (used for comprehensive scraping, ignored for status updates)")
 
     args = parser.parse_args()
     
@@ -41,7 +43,8 @@ def main():
         with JarokeloScraper(
             data_dir=args.data_dir,
             backend=backend,
-            headless=headless
+            headless=headless,
+            buffer_size=args.buffer_size
         ) as scraper:
             scraper.scrape(
                 start_page=args.start_page,
