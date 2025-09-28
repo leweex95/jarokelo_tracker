@@ -1,4 +1,5 @@
 import json
+import subprocess
 from pathlib import Path
 from tqdm import tqdm
 from datetime import datetime
@@ -14,6 +15,14 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s"
 )
+
+def get_git_commit_hash():
+    commit_hash = subprocess.check_output(
+        ["git", "rev-parse", "HEAD"], 
+        cwd=Path(__file__).parent, 
+        text=True
+    ).strip()
+    return commit_hash
 
 def load_eval_set(path: str) -> List[Dict[str, Any]]:
     """Load the evaluation set from a JSON file."""
@@ -35,7 +44,8 @@ def aggregate_metrics(results: List[Dict[str, Any]], top_k: int) -> Tuple[Dict[s
         "hit_rate": hit_rate,
         "avg_recall@k": avg_recall,
         "avg_precision@k": avg_precision,
-        "results": results
+        "results": results,
+        "commit_hash": get_git_commit_hash()
     }
     logging.info(f"Hit rate: {hit_rate:.2f}, Avg recall@{top_k}: {avg_recall:.2f}, Avg precision@{top_k}: {avg_precision:.2f}")
     return summary, dt_str

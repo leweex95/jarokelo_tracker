@@ -52,7 +52,9 @@ def _load_latest_run(results_dir, img_dir):
         logging.error(f"Failed to load {file}: {e}")
         return None
     dt = next(iter(data.values())).get("datetime", "")
-    
+    commit_hash = next(iter(data.values())).get("commit_hash", "unknown")
+    logging.error(f"Commit hash: {str(commit_hash)}")
+
     k_values = []
     recall_values = []
     precision_values = []
@@ -78,11 +80,12 @@ def _load_latest_run(results_dir, img_dir):
         "date": dt,
         "recall_img": str(recall_img_rel).replace("\\", "/"),
         "precision_img": str(precision_img_rel).replace("\\", "/"),
-        "details": str(details_rel).replace("\\", "/")
+        "details": str(details_rel).replace("\\", "/"),
+        "commit_hash": commit_hash
     }
 
 def _parse_existing_rows(report_path):
-    """Parse the existing HTML report table rows, removing old highlights and update lines."""
+    """Parse the existing HTML report table rows, removing old highlights and header lines."""
     if not Path(report_path).exists():
         return []
     with open(report_path, "r", encoding="utf-8") as f:
@@ -96,6 +99,9 @@ def _parse_existing_rows(report_path):
         elif "</table>" in line:
             in_table = False
         elif in_table and "<tr" in line:
+            # Skip header rows
+            if "<th>" in line:
+                continue
             rows.append(line.replace(' style="background-color: #ffeeba;"', ''))
     return rows
 
@@ -109,6 +115,7 @@ def _generate_row(run, highlight=False):
         f'<td{td_style}><img src="{run["recall_img"]}" width="200" height="120"></td>'
         f'<td{td_style}><img src="{run["precision_img"]}" width="200" height="120"></td>'
         f'<td{td_style}><a href="{run["details"]}">JSON</a></td>'
+        f'<td{td_style}>{run["commit_hash"]}</td>'
         f'</tr>\n'
     )
 
@@ -120,7 +127,7 @@ def update_retrieval_eval_report(latest_run, report_path):
     rows = [row for row in rows if "_Report updated:" not in row]
     # Insert new row at the top (after header)
     header_row = (
-        '<tr><th>Date</th><th>Recall@k</th><th>Precision@k</th><th>Details</th></tr>\n'
+        '<tr><th>Date</th><th>Recall@k</th><th>Precision@k</th><th>Details</th><th>Commit hash</th></tr>\n'
     )
     # Remove header if present
     rows = [row for row in rows if header_row.strip() not in row.strip()]
