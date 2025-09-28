@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Járőkelő Embeddings Visualizations</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: #f5f5f5;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        .header p {
+            margin: 0.5rem 0 0 0;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        .visualization-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .visualization-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s, box-shadow 0.2s;
+            background: white;
+        }
+        .visualization-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+        }
+        .card-description {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .info-section {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border: 1px solid #ddd;
+        }
+        .tech-info {
+            font-size: 0.9rem;
+            color: #666;
+            text-align: center;
+            background-color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🗺️ Járőkelő Embeddings Visualizations</h1>
+        <p>Interactive 2D visualizations of civic issue embeddings using dimensionality reduction</p>
+    </div>
+    
+    <div class="info-section">
+        <h2>About These Visualizations</h2>
+        <p>These interactive plots show civic issues from the Járőkelő platform mapped to a 2D space based on their text content similarity. Points that are close together represent issues with similar content, while distant points represent very different types of issues.</p>
+        <p>Each visualization colors the points by a different metadata field to help identify patterns and clusters in the data.</p>
+    </div>
+    
+    <div class="visualization-grid">
+
+        <a href="embeddings_district.html" class="visualization-card">
+            <div class="card-title">Districts</div>
+            <div class="card-description">See how issues cluster by geographic districts in Budapest</div>
+        </a>
+
+        <a href="embeddings_status.html" class="visualization-card">
+            <div class="card-title">Issue Status</div>
+            <div class="card-description">Explore the distribution of issue statuses (solved, pending, etc.)</div>
+        </a>
+
+        <a href="embeddings_category.html" class="visualization-card">
+            <div class="card-title">Categories</div>
+            <div class="card-description">Discover patterns in different types of civic issues</div>
+        </a>
+
+        <a href="embeddings_institution.html" class="visualization-card">
+            <div class="card-title">Responsible Institutions</div>
+            <div class="card-description">Analyze how different responsible institutions handle various issues</div>
+        </a>
+
+    </div>
+    
+    <div class="tech-info">
+        <p><strong>Technical Details:</strong> Embeddings generated using sentence-transformers, 
+        dimensionality reduction via t-SNE, visualized with Plotly.</p>
+        <p>Generated automatically by the Járőkelő Tracker embeddings visualization pipeline.</p>
+    </div>
+</body>
+</html>

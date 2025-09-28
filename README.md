@@ -23,6 +23,7 @@ It automates data scraping, preprocessing, chunking, embedding, vector store cre
 - **Vector store**: Embeds and indexes the corpus using either FAISS or Chroma for fast semantic search.
 - **RAG pipeline**: The core of the system, responsible for answering user queries by retrieving relevant issues and generating responses via LLM (currently OpenAI's ChatGPT).
 - **Streamlit app**: User-friendly interface for interacting with the RAG pipeline.
+- **Embeddings visualization**: Interactive 2D visualizations of text embeddings using UMAP/t-SNE to explore patterns and clusters in civic issues.
 - **Experiments**: More applied research focused section for comparing embedding models, vector stores, using state-of-the-art RAG evaluation techniques.
 - **PowerBI dashboard**: A comprehensive interactive dashboard to understand the state of civic issues in a visual manner.
 
@@ -72,15 +73,31 @@ This loads raw jsonl files, cleans and normalizes their content, and prepares a 
 
     poetry run python ./scripts/build_vector_store.py --backend faiss --embedding sentence-transformers/distiluse-base-multilingual-cased-v2
 
-This saves the vector store to `data/vector_store/<backend>_YYYYMMDDTHHMMSSZ`.
+This saves the vector store to `data/vector_store/<backend>_YYYYMMDDTHHMMSSZ` and **automatically generates interactive embeddings visualizations** saved to `docs/`.
 
-5. Run the RAG pipeline
+5. (Optional) Generate embeddings visualizations
+
+The vector store building automatically creates visualizations, but you can also generate them manually:
+
+    # Generate visualization with default settings (colored by district)
+    poetry run python ./scripts/visualize_embeddings.py
+    
+    # Create comprehensive demo with multiple color schemes
+    poetry run python ./scripts/demo_embeddings_visualization.py
+    
+    # Color by different metadata fields
+    poetry run python ./scripts/visualize_embeddings.py --color-by status
+    poetry run python ./scripts/visualize_embeddings.py --color-by category
+
+See [docs/embeddings_visualization.md](docs/embeddings_visualization.md) for detailed usage instructions.
+
+6. Run the RAG pipeline
 
     poetry run python ./src/jarokelo_tracker/rag/pipeline.py --query "What issues are not yet resolved in district 8 in Budapest?" --vector-backend "faiss" --headless true --top_k 5
 
 Encodes the input query, fetches the top 5 closest matches from the vector store and feeds it to an LLM for answer generation.
 
-6. (Optional) Run RAG evaluation
+7. (Optional) Run RAG evaluation
 
     poetry run python -m jarokelo_tracker.rag.evaluation.evaluate \
         --eval-set-path data/eval/eval_set.json \
@@ -95,7 +112,7 @@ This evaluates retrieval performance and saves results to `experiments/results/r
     poetry run python ./src/jarokelo_tracker/rag/evaluation/assemble_retrieval_reports.py \
         --results-dir experiments/results/retrieval_eval
 
-7. Launch the streamlit app
+8. Launch the streamlit app
 
     poetry run streamlit run streamlit_app/app.py
 
