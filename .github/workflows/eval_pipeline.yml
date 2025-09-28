@@ -85,7 +85,7 @@ jobs:
       - name: Assemble retrieval reports
         run: |
           poetry run python ./src/jarokelo_tracker/rag/evaluation/assemble_retrieval_reports.py \
-            --results-dir "${{ github.event.inputs.save_dir }}/${{ github.event.inputs.lang }}"
+            --results-dir "${{ github.event.inputs.save_dir }}"
 
       - name: Configure Git
         run: |
