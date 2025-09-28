@@ -108,7 +108,10 @@ jobs:
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          DATA_DIR="${{ github.event.inputs.data_dir || 'data/raw' }}"
+          DATA_DIR="${{ github.event.inputs.data_dir }}"
+          if [ -z "$DATA_DIR" ]; then
+            DATA_DIR="data/raw"
+          fi
           git add "$DATA_DIR"
           git diff --quiet && git diff --staged --quiet || git commit -m "[Auto-commit] Add new scraped data [skip ci]"
           
