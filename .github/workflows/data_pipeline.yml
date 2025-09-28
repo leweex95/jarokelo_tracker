@@ -67,7 +67,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install --upgrade poetry==2.2.0
-          poetry install --no-interaction --no-root
+          poetry install --no-interaction
 
       - name: Clean Poetry cache  # drop only expired/unneeded cached packages, keep valid ones
         run: poetry cache clear pypi --expired -n || true
@@ -100,7 +100,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install --upgrade poetry==2.2.0
-          poetry install --no-interaction --no-root
+          poetry install --no-interaction
 
       - name: Run RAG preprocessing
         run: poetry run python ./src/jarokelo_tracker/preprocess/preprocess_rag.py
@@ -154,7 +154,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install --upgrade poetry==2.2.0
-          poetry install --no-interaction --no-root
+          poetry install --no-interaction
 
       - name: Run EDA preprocessing
         run: poetry run python ./src/jarokelo_tracker/preprocess/preprocess_eda.py
@@ -203,7 +203,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install --upgrade poetry==2.2.0
-          poetry install --no-interaction --no-root
+          poetry install --no-interaction
 
       - name: Generate CSV reports for PowerBI
         run: poetry run python ./src/jarokelo_tracker/eda/generate_csv_reports.py
@@ -260,7 +260,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install --upgrade poetry==2.2.0
-          poetry install --no-interaction --no-root
+          poetry install --no-interaction
           
       - name: Ensure latest master
         run: |
@@ -317,7 +317,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install --upgrade poetry==2.2.0
-          poetry install --no-interaction --no-root
+          poetry install --no-interaction
           
       - name: Ensure latest master
         run: |

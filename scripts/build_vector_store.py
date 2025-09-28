@@ -4,10 +4,6 @@ import argparse
 from pathlib import Path
 from datetime import datetime
 import numpy as np
-import sys
-
-# Add src to path for imports
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 
 
 CHUNKS_PATH = "data/processed/rag/issues_chunks.jsonl"
