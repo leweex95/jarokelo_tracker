@@ -88,7 +88,7 @@ class JarokeloScraper:
         self.close()
     
     @staticmethod
-    def normalize_date(date_str) -> str:
+    def normalize_date(date_str, url: str = None) -> str:
         """Convert Hungarian date like '2025. szeptember 15.' to 'YYYY-MM-DD'."""
         HU_MONTHS = {
             "január": "01",
@@ -104,14 +104,49 @@ class JarokeloScraper:
             "november": "11",
             "december": "12",
         }
-        if isinstance(date_str, list):
-            parts = date_str
-        else:
-            parts = date_str.strip(". ").split()
-        year = parts[0].replace(".", "")
-        month = HU_MONTHS[parts[1].lower()]
-        day = parts[2].replace(".", "")
-        return f"{year}-{month}-{day.zfill(2)}"
+        try:
+            if isinstance(date_str, list):
+                parts = date_str
+            else:
+                parts = date_str.strip(". ").split()
+            
+            if len(parts) < 3:
+                raise ValueError(f"Invalid date format: '{date_str}' - expected 3 parts, got {len(parts)}")
+            
+            year = parts[0].replace(".", "")
+            month_name = parts[1].lower()
+            
+            if month_name not in HU_MONTHS:
+                # Print detailed error information
+                print(f"[ERROR] Unknown Hungarian month: '{month_name}' (original: '{parts[1]}')")
+                print(f"[ERROR] Full date string: '{date_str}'")
+                print(f"[ERROR] Date parts: {parts}")
+                if url:
+                    print(f"[ERROR] URL: {url}")
+                print(f"[ERROR] Available months: {list(HU_MONTHS.keys())}")
+                
+                # Try to fix common encoding issues
+                encoding_fixes = {
+                    'jãšlius': 'július',  # Common encoding issue
+                    'mããšius': 'május',   # Another potential encoding issue
+                    'febriãšr': 'február', # February encoding issue
+                }
+                
+                if month_name in encoding_fixes:
+                    print(f"[FIX] Applying encoding fix: '{month_name}' -> '{encoding_fixes[month_name]}'")
+                    month_name = encoding_fixes[month_name]
+                else:
+                    raise KeyError(f"Unknown Hungarian month: '{month_name}' (from '{date_str}')")
+            
+            month = HU_MONTHS[month_name]
+            day = parts[2].replace(".", "")
+            return f"{year}-{month}-{day.zfill(2)}"
+            
+        except Exception as e:
+            print(f"[ERROR] Failed to normalize date: '{date_str}'")
+            if url:
+                print(f"[ERROR] URL where error occurred: {url}")
+            raise
     
     def scrape_report_selenium(self, url: str) -> Dict:
         """Scrape a single report page using Selenium and return its data."""
@@ -135,7 +170,7 @@ class JarokeloScraper:
 
         # Date, category, institution, supporter, description
         date_elem = self.driver.find_elements(By.CSS_SELECTOR, "time.report__date")
-        date = self.normalize_date(date_elem[0].text) if date_elem else None
+        date = self.normalize_date(date_elem[0].text, url) if date_elem else None
 
         category_elem = self.driver.find_elements(By.CSS_SELECTOR, "div.report__category a")
         category = category_elem[0].text if category_elem else None
@@ -250,7 +285,7 @@ class JarokeloScraper:
 
         # Date
         date_elem = soup.select_one("time.report__date")
-        date = self.normalize_date(date_elem.text.strip()) if date_elem else None
+        date = self.normalize_date(date_elem.text.strip(), url) if date_elem else None
 
         # Category
         category_elem = soup.select_one("div.report__category a")
@@ -394,9 +429,14 @@ class JarokeloScraper:
                 if self.data_manager.needs_full_rescrape(old_status, current_status):
                     print(f"Status change requires full re-scrape: {url} ({old_status} → {current_status})")
                     # Perform full scrape and update the record
-                    updated_report = self.scrape_report_selenium(url)
-                    # Replace the existing record with the updated one
-                    self.data_manager.replace_record(url, updated_report)
+                    try:
+                        updated_report = self.scrape_report_selenium(url)
+                        # Replace the existing record with the updated one
+                        self.data_manager.replace_record(url, updated_report)
+                    except Exception as e:
+                        print(f"ERROR: Failed to scrape report during status update: {url}")
+                        print(f"Error details: {str(e)}")
+                        continue  # Skip this report and continue with the next one
                 elif self.data_manager.update_status_if_changed(url, current_status):
                     print(f"Updated status for {url}: {current_status}")
                 
@@ -405,15 +445,20 @@ class JarokeloScraper:
                     break
             else:
                 # New record - perform full scraping
-                report = self.scrape_report_selenium(url)
-                # Use buffered saving for comprehensive scraping, regular saving for status updates
-                if use_buffered_saving:
-                    self.data_manager.save_report_buffered(report, global_urls)
-                else:
-                    self.data_manager.save_report(report, global_urls)
-                if until_date and report["date"] <= until_date:
-                    reached_done = True
-                    break
+                try:
+                    report = self.scrape_report_selenium(url)
+                    # Use buffered saving for comprehensive scraping, regular saving for status updates
+                    if use_buffered_saving:
+                        self.data_manager.save_report_buffered(report, global_urls)
+                    else:
+                        self.data_manager.save_report(report, global_urls)
+                    if until_date and report["date"] <= until_date:
+                        reached_done = True
+                        break
+                except Exception as e:
+                    print(f"ERROR: Failed to scrape new report: {url}")
+                    print(f"Error details: {str(e)}")
+                    continue  # Skip this report and continue with the next one
 
         if reached_done:
             return None, True
@@ -485,9 +530,14 @@ class JarokeloScraper:
                 if self.data_manager.needs_full_rescrape(old_status, current_status):
                     print(f"Status change requires full re-scrape: {url} ({old_status} → {current_status})")
                     # Perform full scrape and update the record
-                    updated_report = self.scrape_report_beautifulsoup(url)
-                    # Replace the existing record with the updated one
-                    self.data_manager.replace_record(url, updated_report)
+                    try:
+                        updated_report = self.scrape_report_beautifulsoup(url)
+                        # Replace the existing record with the updated one
+                        self.data_manager.replace_record(url, updated_report)
+                    except Exception as e:
+                        print(f"ERROR: Failed to scrape report during status update: {url}")
+                        print(f"Error details: {str(e)}")
+                        continue  # Skip this report and continue with the next one
                 elif self.data_manager.update_status_if_changed(url, current_status):
                     print(f"Updated status for {url}: {current_status}")
                 
@@ -496,15 +546,20 @@ class JarokeloScraper:
                     break
             else:
                 # New record - perform full scraping
-                report = self.scrape_report_beautifulsoup(url)
-                # Use buffered saving for comprehensive scraping, regular saving for status updates
-                if use_buffered_saving:
-                    self.data_manager.save_report_buffered(report, global_urls)
-                else:
-                    self.data_manager.save_report(report, global_urls)
-                if until_date and report["date"] <= until_date:
-                    reached_done = True
-                    break
+                try:
+                    report = self.scrape_report_beautifulsoup(url)
+                    # Use buffered saving for comprehensive scraping, regular saving for status updates
+                    if use_buffered_saving:
+                        self.data_manager.save_report_buffered(report, global_urls)
+                    else:
+                        self.data_manager.save_report(report, global_urls)
+                    if until_date and report["date"] <= until_date:
+                        reached_done = True
+                        break
+                except Exception as e:
+                    print(f"ERROR: Failed to scrape new report: {url}")
+                    print(f"Error details: {str(e)}")
+                    continue  # Skip this report and continue with the next one
 
         if reached_done:
             return None, True
