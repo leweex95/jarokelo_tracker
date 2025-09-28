@@ -1,0 +1,108 @@
+name: Automated RAG Evaluation Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      eval_set_path:
+        description: 'Path to evaluation set JSON'
+        required: false
+        default: 'data/eval/eval_set.json'
+      vector_backend:
+        description: 'Vector DB backend'
+        required: true
+        default: 'faiss'
+        type: string
+      embedding_provider:
+        description: 'Embedding provider'
+        required: true
+        default: 'local'
+        type: string
+      vector_path:
+        description: 'Vector store file path (if needed)'
+        required: false
+        default: ''
+      local_model:
+        description: 'Local embedding model name'
+        required: false
+        default: 'distiluse-base-multilingual-cased-v2'
+      vector_base_dir:
+        description: 'Base directory for vector store'
+        required: false
+        default: 'data/vector_store'
+      save_dir:
+        description: 'Directory to save evaluation results'
+        required: false
+        default: 'experiments/results/retrieval_eval'
+      topk:
+        description: 'Comma-separated top-k values (e.g. 1,5,10)'
+        required: false
+        default: '5'
+      lang:
+        description: 'Language for queries (en or hu)'
+        required: false
+        default: 'en'
+  schedule:
+    - cron: "0 23 * * *"
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Cache Poetry packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pypoetry/cache
+            ~/.cache/pypoetry/artifacts
+          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
+          restore-keys: ${{ runner.os }}-poetry-
+
+      - name: Set up Python & Poetry
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade poetry==2.2.0
+          poetry install --no-interaction --no-root
+
+      - name: Run RAG evaluation
+        run: |
+          poetry run python ./src/jarokelo_tracker/rag/evaluation/evaluate.py \
+            --eval-set-path "${{ github.event.inputs.eval_set_path }}" \
+            --vector-backend "${{ github.event.inputs.vector_backend }}" \
+            --embedding-provider "${{ github.event.inputs.embedding_provider }}" \
+            --vector-path "${{ github.event.inputs.vector_path }}" \
+            --local-model "${{ github.event.inputs.local_model }}" \
+            --vector-base-dir "${{ github.event.inputs.vector_base_dir }}" \
+            --save-dir "${{ github.event.inputs.save_dir }}" \
+            --topk "${{ github.event.inputs.topk }}" \
+            --lang "${{ github.event.inputs.lang }}"
+
+      - name: Assemble retrieval reports
+        run: |
+          poetry run python ./src/jarokelo_tracker/rag/evaluation/assemble_retrieval_reports.py \
+            --results-dir "${{ github.event.inputs.save_dir }}/${{ github.event.inputs.lang }}"
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+
+      - name: Commit and push evaluation results
+        env:
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          git add "${{ github.event.inputs.save_dir }}"
+          git diff --quiet && git diff --staged --quiet || git commit -m "[Auto-commit] Update RAG evaluation results [skip ci]"
+          RETRIES=10
+          for i in $(seq 1 $RETRIES); do
+            git pull --rebase
+            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master && break || {
+              echo "Push failed, retrying ($i/$RETRIES)..."
+              sleep 3
+            }
+          done
