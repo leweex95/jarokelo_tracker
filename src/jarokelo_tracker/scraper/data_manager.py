@@ -157,8 +157,11 @@ class DataManager:
         
         current_status = record.get("status")
         
-        # Only update if status actually changed
-        if current_status == new_status:
+        # Only update if status actually changed (case-insensitive comparison)
+        if current_status and current_status.lower() == new_status.lower():
+            # Status is the same (ignoring case) - no update needed
+            if current_status != new_status:
+                print(f"[DEBUG] Status case difference ignored for {url}: '{current_status}' vs '{new_status}'")
             return False
         
         print(f"Status changed for {url}: '{current_status}' → '{new_status}'")
