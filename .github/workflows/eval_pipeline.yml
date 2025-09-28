@@ -97,6 +97,8 @@ jobs:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           git add "${{ github.event.inputs.save_dir }}"
+          git add docs/experiments/retrieval_eval_report.html
+          git add docs/experiments/imgs/
           git diff --quiet && git diff --staged --quiet || git commit -m "[Auto-commit] Update RAG evaluation results [skip ci]"
           RETRIES=10
           for i in $(seq 1 $RETRIES); do

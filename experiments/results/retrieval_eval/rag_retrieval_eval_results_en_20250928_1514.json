@@ -1,0 +1,299 @@
+{
+  "k=5": {
+    "datetime": "20250928_1515",
+    "hit_rate": 0.0,
+    "avg_recall@k": 0.0,
+    "avg_precision@k": 0.0,
+    "results": [
+      {
+        "query": "Are there any construction debris issues around the underground garage at Millenáris?",
+        "gold_doc_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/169486/epitesi-tormelek"
+        ],
+        "retrieved_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/178626/erosen-szennyezett-atkelohely-olaj__0",
+          "https://jarokelo.hu/bejelentesek/budapest/169301/nagyon-nem-egy-parkba-illo-graffitik-egy-elmu-epuleten__0",
+          "https://jarokelo.hu/bejelentesek/budapest/164054/allando-parkolo__0",
+          "https://jarokelo.hu/bejelentesek/budapest/177069/szanaszet-graffitizett-epulet-obszcen-tartalommal__0",
+          "https://jarokelo.hu/bejelentesek/budapest/175056/kozteruletfoglalas__0"
+        ],
+        "hit": false,
+        "recall@k": 0.0,
+        "precision@k": 0.0
+      },
+      {
+        "query": "Has anyone reported a discarded bathtub on Pilisi street?",
+        "gold_doc_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/179064/kidobott-furdokad-a-pilisi-utcaban"
+        ],
+        "retrieved_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/172061/fa-egeszseg-problema__0",
+          "https://jarokelo.hu/bejelentesek/budapest/175221/eldugult-vizelnyelo__0",
+          "https://jarokelo.hu/bejelentesek/budapest/176933/evek-ota-nem-mukodo-szokokut__0",
+          "https://jarokelo.hu/bejelentesek/budapest/179905/eltomodott-vizelvezeto__0",
+          "https://jarokelo.hu/bejelentesek/budapest/165827/jokora-lyuk-az-ut-kozepen__0"
+        ],
+        "hit": false,
+        "recall@k": 0.0,
+        "precision@k": 0.0
+      },
+      {
+        "query": "Are there any open utility pits on Szárnyas street?",
+        "gold_doc_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/163036/nyitott-kozmu"
+        ],
+        "retrieved_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/180490/kidolo-oszlop-a-megalloban__0",
+          "https://jarokelo.hu/bejelentesek/budapest/173718/fa-potlas__0",
+          "https://jarokelo.hu/bejelentesek/budapest/174257/erodalt-fedlap__0",
+          "https://jarokelo.hu/bejelentesek/budapest/168493/zolditesi-lehetoseg__0",
+          "https://jarokelo.hu/bejelentesek/budapest/163503/faultetes__0"
+        ],
+        "hit": false,
+        "recall@k": 0.0,
+        "precision@k": 0.0
+      },
+      {
+        "query": "Is the rainwater drain blocked at Pollack Mihály tér?",
+        "gold_doc_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/166206/csapadeklefolyo-eltomodott-hianyos-rostely"
+        ],
+        "retrieved_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/172061/fa-egeszseg-problema__0",
+          "https://jarokelo.hu/bejelentesek/budapest/164054/allando-parkolo__0",
+          "https://jarokelo.hu/bejelentesek/budapest/171227/eltomodott-viznyelo__0",
+          "https://jarokelo.hu/bejelentesek/budapest/176452/biciklivel-vagy-vizibiciklivel__0",
+          "https://jarokelo.hu/bejelentesek/budapest/163527/torott-fem-fedlap__0"
+        ],
+        "hit": false,
+        "recall@k": 0.0,
+        "precision@k": 0.0
+      },
+      {
+        "query": "Has anyone noticed a sunken sidewalk near the Turul statue?",
+        "gold_doc_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/180336/botlasveszelyes-megsullyedt-jarda"
+        ],
+        "retrieved_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/173314/nem-latszik-a-gyalogos-a-magas-novenyzettol__0",
+          "https://jarokelo.hu/bejelentesek/budapest/173718/fa-potlas__0",
+          "https://jarokelo.hu/bejelentesek/budapest/180503/hianyos-tabla__0",
+          "https://jarokelo.hu/bejelentesek/budapest/180240/osszefirkalt-tabla__0",
+          "https://jarokelo.hu/bejelentesek/budapest/163503/faultetes__0"
+        ],
+        "hit": false,
+        "recall@k": 0.0,
+        "precision@k": 0.0
+      },
+      {
+        "query": "Is there a leaking fire hydrant on Erzsébet street?",
+        "gold_doc_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/175263/csopogo-tuzcsap"
+        ],
+        "retrieved_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/172061/fa-egeszseg-problema__0",
+          "https://jarokelo.hu/bejelentesek/budapest/178626/erosen-szennyezett-atkelohely-olaj__0",
+          "https://jarokelo.hu/bejelentesek/budapest/164054/allando-parkolo__0",
+          "https://jarokelo.hu/bejelentesek/budapest/174257/erodalt-fedlap__0",
+          "https://jarokelo.hu/bejelentesek/budapest/166791/kiallo-botlasveszelyes-aknafedel__0"
+        ],
+        "hit": false,
+        "recall@k": 0.0,
+        "precision@k": 0.0
+      },
+      {
+        "query": "Are there traffic issues at the Aquincum intersection?",
+        "gold_doc_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/177389/a-iii-keruleti-zsofia-utcai-keresztezodes"
+        ],
+        "retrieved_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/168402/morzsolodo-akna-fedlap__0",
+          "https://jarokelo.hu/bejelentesek/budapest/174257/erodalt-fedlap__0",
+          "https://jarokelo.hu/bejelentesek/budapest/162858/osszetort-akadalymentesitett-jardaszegely__0",
+          "https://jarokelo.hu/bejelentesek/budapest/179918/elhagyott-bevasarlokosarak__0",
+          "https://jarokelo.hu/bejelentesek/budapest/166966/hatalmas-aszfaltkulonbseg-a-bem-rakpart-csalogany-utca-sarkan__0"
+        ],
+        "hit": false,
+        "recall@k": 0.0,
+        "precision@k": 0.0
+      },
+      {
+        "query": "Is the pedestrian traffic light at Szugló utca / Nagy Lajos király útja working?",
+        "gold_doc_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/175668/nem-meukodo-kozlekedesi-lampa"
+        ],
+        "retrieved_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/179217/sashegyi-ut-elejen-nincs-kozvilagitas__0",
+          "https://jarokelo.hu/bejelentesek/budapest/174257/erodalt-fedlap__0",
+          "https://jarokelo.hu/bejelentesek/budapest/169264/megdontott-jelzolampa__0",
+          "https://jarokelo.hu/bejelentesek/budapest/176286/a-feny-utcai-epitkezes-melletti-gyalogosforgalom__0",
+          "https://jarokelo.hu/bejelentesek/budapest/163370/kiegett-lampa__0"
+        ],
+        "hit": false,
+        "recall@k": 0.0,
+        "precision@k": 0.0
+      },
+      {
+        "query": "Has the misting system at Liszt Ferenc tér been turned off or malfunctioning?",
+        "gold_doc_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/177567/nem-mukodo-parakapu"
+        ],
+        "retrieved_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/177965/cserjek-szorvanyosan__0",
+          "https://jarokelo.hu/bejelentesek/budapest/175946/elhagyott-keszulek-mentes-fulke__0",
+          "https://jarokelo.hu/bejelentesek/budapest/168402/morzsolodo-akna-fedlap__0",
+          "https://jarokelo.hu/bejelentesek/budapest/174257/erodalt-fedlap__0",
+          "https://jarokelo.hu/bejelentesek/budapest/166791/kiallo-botlasveszelyes-aknafedel__0"
+        ],
+        "hit": false,
+        "recall@k": 0.0,
+        "precision@k": 0.0
+      },
+      {
+        "query": "Is the green area at Kövér Lajos tér overgrown or neglected?",
+        "gold_doc_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/163225/kover-lajos-teri-falevelek-szegely-menti-fu-es-gyom"
+        ],
+        "retrieved_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/177965/cserjek-szorvanyosan__0",
+          "https://jarokelo.hu/bejelentesek/budapest/174518/otthagyott-faagak-zoldhulladek__0",
+          "https://jarokelo.hu/bejelentesek/budapest/163484/illatos-gubacsi-sarok-zoldfelulet-esetleg__0",
+          "https://jarokelo.hu/bejelentesek/budapest/167319/borzalmasan-leharcolt-zold__0",
+          "https://jarokelo.hu/bejelentesek/budapest/168493/zolditesi-lehetoseg__0"
+        ],
+        "hit": false,
+        "recall@k": 0.0,
+        "precision@k": 0.0
+      },
+      {
+        "query": "Are the street lights out on Daróczi út?",
+        "gold_doc_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/174453/sotet-utca"
+        ],
+        "retrieved_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/179217/sashegyi-ut-elejen-nincs-kozvilagitas__0",
+          "https://jarokelo.hu/bejelentesek/budapest/174257/erodalt-fedlap__0",
+          "https://jarokelo.hu/bejelentesek/budapest/173993/utcai-vilagitas__0",
+          "https://jarokelo.hu/bejelentesek/budapest/176731/hibas-kozteruleti-vilagitas__0",
+          "https://jarokelo.hu/bejelentesek/budapest/170653/nem-mukodo-utcai-lampa__0"
+        ],
+        "hit": false,
+        "recall@k": 0.0,
+        "precision@k": 0.0
+      },
+      {
+        "query": "Are the lamps in front of Bogdánfy Ödön utca 7 working?",
+        "gold_doc_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/179062/nem-mukodo-kozvilagitas"
+        ],
+        "retrieved_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/163356/nem-mukodik-a-lampa__0",
+          "https://jarokelo.hu/bejelentesek/budapest/172938/nem-mukodo-kozvilagitas__0",
+          "https://jarokelo.hu/bejelentesek/budapest/167239/takaritatlan-utszel__0",
+          "https://jarokelo.hu/bejelentesek/budapest/169578/nem-mukodo-lampak__0",
+          "https://jarokelo.hu/bejelentesek/budapest/163370/kiegett-lampa__0"
+        ],
+        "hit": false,
+        "recall@k": 0.0,
+        "precision@k": 0.0
+      },
+      {
+        "query": "Is Közraktár street full of potholes?",
+        "gold_doc_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/173051/felhaboritoan-rossz-ut"
+        ],
+        "retrieved_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/179217/sashegyi-ut-elejen-nincs-kozvilagitas__0",
+          "https://jarokelo.hu/bejelentesek/budapest/174257/erodalt-fedlap__0",
+          "https://jarokelo.hu/bejelentesek/budapest/166892/vasalatig-kopott-fedlap__0",
+          "https://jarokelo.hu/bejelentesek/budapest/170540/katyuk-a-keresztezodesben__0",
+          "https://jarokelo.hu/bejelentesek/budapest/179151/katyu__0"
+        ],
+        "hit": false,
+        "recall@k": 0.0,
+        "precision@k": 0.0
+      },
+      {
+        "query": "Are there unavoidable potholes on Vadóc street?",
+        "gold_doc_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/170593/katyukkal-teli-ut"
+        ],
+        "retrieved_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/173718/fa-potlas__0",
+          "https://jarokelo.hu/bejelentesek/budapest/164054/allando-parkolo__0",
+          "https://jarokelo.hu/bejelentesek/budapest/174257/erodalt-fedlap__0",
+          "https://jarokelo.hu/bejelentesek/budapest/166791/kiallo-botlasveszelyes-aknafedel__0",
+          "https://jarokelo.hu/bejelentesek/budapest/179996/hianyos-kerek-fedlap__0"
+        ],
+        "hit": false,
+        "recall@k": 0.0,
+        "precision@k": 0.0
+      },
+      {
+        "query": "Are there any issues with sidewalk accessibility at Hamzsabégi Vasúti Híd?",
+        "gold_doc_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/165438/bartok-tetenyi-vasutfelujitas"
+        ],
+        "retrieved_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/177847/figyelemfelhivo-a-gyalogosoknak-a-rakoczi-hidon__0",
+          "https://jarokelo.hu/bejelentesek/budapest/164054/allando-parkolo__0",
+          "https://jarokelo.hu/bejelentesek/budapest/174257/erodalt-fedlap__0",
+          "https://jarokelo.hu/bejelentesek/budapest/163904/akadalymentes-lejutas-nincs-biztositva__0",
+          "https://jarokelo.hu/bejelentesek/budapest/167466/kiallo-fedlap__0"
+        ],
+        "hit": false,
+        "recall@k": 0.0,
+        "precision@k": 0.0
+      },
+      {
+        "query": "Is it difficult to access the sidewalk at Budafoki út 2?",
+        "gold_doc_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/163933/nem-akadalymentes-nagyon-magas-a-jarda-zebranal"
+        ],
+        "retrieved_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/171313/kidolt-gyalog-atkelo-jelzo-tabla__0",
+          "https://jarokelo.hu/bejelentesek/budapest/163909/nem-megengedett-behajtasok__0",
+          "https://jarokelo.hu/bejelentesek/budapest/164054/allando-parkolo__0",
+          "https://jarokelo.hu/bejelentesek/budapest/175913/osszetort-fedlap__0",
+          "https://jarokelo.hu/bejelentesek/budapest/171017/nincs-karbantartas__0"
+        ],
+        "hit": false,
+        "recall@k": 0.0,
+        "precision@k": 0.0
+      },
+      {
+        "query": "Has anyone reported graffiti at Szugló utca / Cinkotai út?",
+        "gold_doc_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/169049/graffitis-elhanyagolt-varo"
+        ],
+        "retrieved_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/164770/graffiti__0",
+          "https://jarokelo.hu/bejelentesek/budapest/177526/firkas__0",
+          "https://jarokelo.hu/bejelentesek/budapest/163468/graffitis-a-telefonfulke-hirdetespanelje__0",
+          "https://jarokelo.hu/bejelentesek/budapest/180361/graffiti-a-deli-pu-homlokzatan__0",
+          "https://jarokelo.hu/bejelentesek/budapest/170746/graffiti-a-jardan__0"
+        ],
+        "hit": false,
+        "recall@k": 0.0,
+        "precision@k": 0.0
+      },
+      {
+        "query": "Are there graffiti or stickers on utility boxes at Ipar u. 25?",
+        "gold_doc_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/172915/graffitis-es-matricas-kozmuszekrenyek"
+        ],
+        "retrieved_ids": [
+          "https://jarokelo.hu/bejelentesek/budapest/164770/graffiti__0",
+          "https://jarokelo.hu/bejelentesek/budapest/165434/kertesz-utcai-gyermekjoleti-szolgalat-kornyeke__0",
+          "https://jarokelo.hu/bejelentesek/budapest/168641/graffitis-kozlekedesi-tabla__0",
+          "https://jarokelo.hu/bejelentesek/budapest/174156/egy-nagyon-graffitis-gephaz__0",
+          "https://jarokelo.hu/bejelentesek/budapest/165001/graffitis-utasvaro__0"
+        ],
+        "hit": false,
+        "recall@k": 0.0,
+        "precision@k": 0.0
+      }
+    ],
+    "commit_hash": "2e1a820e69471116bb6c4a1e18754bae4e735636"
+  }
+}
