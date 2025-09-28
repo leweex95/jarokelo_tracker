@@ -5,6 +5,10 @@ on:
     - cron: "0 22 * * *"
   workflow_dispatch:
     inputs:
+      backend:
+        description: 'Scraper backend to use (beautifulsoup/bs/selenium)'
+        required: false
+        default: 'beautifulsoup'
       data_dir:
         description: 'Target data directory'
         required: false
@@ -27,6 +31,11 @@ on:
         default: ''
   workflow_call:
     inputs:
+      backend:
+        description: 'Scraper backend to use (beautifulsoup/bs/selenium)'
+        required: false
+        default: 'beautifulsoup'
+        type: string
       data_dir:
         description: 'Target data directory'
         required: false
@@ -83,13 +92,14 @@ jobs:
 
       - name: Run scraper
         run: |
+          BACKEND="${{ github.event.inputs.backend || 'beautifulsoup' }}"
           HEADLESS="${{ github.event.inputs.headless || 'true' }}"
           DATA_DIR="${{ github.event.inputs.data_dir || 'data/raw' }}"
           START_PAGE="${{ github.event.inputs.start_page || '1' }}"
           UNTIL_DATE="${{ github.event.inputs.until_date || '' }}"
           CONTINUE_SCRAPING="${{ github.event.inputs.continue_scraping || '' }}"
 
-          ARGS="--headless $HEADLESS --data-dir $DATA_DIR --start-page $START_PAGE"
+          ARGS="--backend $BACKEND --headless $HEADLESS --data-dir $DATA_DIR --start-page $START_PAGE"
           if [ -n "$UNTIL_DATE" ]; then
             ARGS="$ARGS --until-date $UNTIL_DATE"
           fi
