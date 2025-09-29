@@ -1,0 +1,91 @@
+{
+  "timestamp": "20250929_194411",
+  "test_urls_count": 100,
+  "system_info": {
+    "cpu_count": 8,
+    "memory_gb": 31.8,
+    "python_version": "3.11.5"
+  },
+  "results": [
+    {
+      "method": "Synchronous",
+      "duration": 229.98,
+      "successful": 99,
+      "total": 100,
+      "success_rate": 99.0,
+      "memory_change_mb": 25.8,
+      "avg_cpu_percent": 54.7,
+      "cpu_samples": 1126
+    },
+    {
+      "method": "Async (max 5)",
+      "duration": 33.16,
+      "successful": 99,
+      "total": 100,
+      "success_rate": 99.0,
+      "memory_change_mb": 1.5,
+      "avg_cpu_percent": 63.3,
+      "cpu_samples": 150
+    },
+    {
+      "method": "Async (max 10)",
+      "duration": 26.77,
+      "successful": 100,
+      "total": 100,
+      "success_rate": 100.0,
+      "memory_change_mb": -0.1,
+      "avg_cpu_percent": 81.4,
+      "cpu_samples": 117
+    },
+    {
+      "method": "Async (max 15)",
+      "duration": 42.11,
+      "successful": 97,
+      "total": 100,
+      "success_rate": 97.0,
+      "memory_change_mb": 0.3,
+      "avg_cpu_percent": 37.4,
+      "cpu_samples": 200
+    },
+    {
+      "method": "Threading (3 workers)",
+      "duration": 90.35,
+      "successful": 97,
+      "total": 100,
+      "success_rate": 97.0,
+      "memory_change_mb": 3.4,
+      "avg_cpu_percent": 105.0,
+      "cpu_samples": 434
+    },
+    {
+      "method": "Threading (5 workers)",
+      "duration": 64.46,
+      "successful": 98,
+      "total": 100,
+      "success_rate": 98.0,
+      "memory_change_mb": 4.1,
+      "avg_cpu_percent": 187.8,
+      "cpu_samples": 305
+    },
+    {
+      "method": "Threading (8 workers)",
+      "duration": 70.34,
+      "successful": 93,
+      "total": 100,
+      "success_rate": 93.0,
+      "memory_change_mb": 7.1,
+      "avg_cpu_percent": 245.3,
+      "cpu_samples": 318
+    },
+    {
+      "method": "Threading (10 workers)",
+      "duration": 62.15,
+      "successful": 91,
+      "total": 100,
+      "success_rate": 91.0,
+      "memory_change_mb": 4.1,
+      "avg_cpu_percent": 257.5,
+      "cpu_samples": 283
+    }
+  ]
+}
