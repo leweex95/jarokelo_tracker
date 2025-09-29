@@ -219,7 +219,18 @@ class DataManager:
         return oldest_date, total
     
     def find_record_by_url(self, url: str) -> Tuple[Optional[str], Optional[Dict], Optional[int]]:
-        """Find a record by URL and return file path, record data, and line number"""
+        """Find a record by URL and return file path, record data, and line number.
+        
+        First checks the memory buffer, then searches disk files.
+        """
+        # First check memory buffer for recently scraped records
+        for file_path, buffered_reports in self.buffer.items():
+            for record in buffered_reports:
+                if record.get("url") == url:
+                    # Return buffer info (file_path, record, line_num=None for buffer)
+                    return file_path, record, None
+        
+        # Then check disk files
         for filename in os.listdir(self.data_dir):
             if not filename.endswith(".jsonl"):
                 continue
@@ -267,11 +278,18 @@ class DataManager:
         # Update the record
         record["status"] = new_status
         
-        # If status changed to "MEGOLDOTT", we might want to update resolution_date
-        # But since we're only getting info from listing page, we can't extract the full resolution date
-        # This would require a full scrape of the individual page
-        # For now, we'll just update the status
+        # Handle buffer vs disk record updates differently
+        if line_num is None:
+            # Record is in buffer - already updated by reference
+            print(f"[DEBUG] Updated buffered record for {url}")
+        else:
+            # Record is on disk - need to write back to file
+            self._update_disk_record(file_path, line_num, record)
         
+        return True
+    
+    def _update_disk_record(self, file_path: str, line_num: int, record: Dict) -> None:
+        """Helper method to update a record on disk"""
         # Read all lines from the file
         with open(file_path, "r", encoding="utf-8") as f:
             lines = f.readlines()
@@ -279,11 +297,9 @@ class DataManager:
         # Update the specific line
         lines[line_num - 1] = json.dumps(record, ensure_ascii=False) + "\n"
         
-        # Write back the updated content
+        # Write back to file
         with open(file_path, "w", encoding="utf-8") as f:
             f.writelines(lines)
-        
-        return True
     
     def needs_full_rescrape(self, old_status: str, new_status: str) -> bool:
         """
@@ -315,22 +331,22 @@ class DataManager:
         Returns:
             True if the record was replaced, False if not found
         """
-        file_path, _, line_num = self.find_record_by_url(url)
+        file_path, old_record, line_num = self.find_record_by_url(url)
         
         if not file_path:
             print(f"[WARNING] Record not found for replacement: {url}")
             return False
         
-        # Read all lines from the file
-        with open(file_path, "r", encoding="utf-8") as f:
-            lines = f.readlines()
-        
-        # Replace the specific line
-        lines[line_num - 1] = json.dumps(new_record, ensure_ascii=False) + "\n"
-        
-        # Write back the updated content
-        with open(file_path, "w", encoding="utf-8") as f:
-            f.writelines(lines)
-        
-        print(f"Replaced record for {url} with updated data")
-        return True
+        if line_num is None:
+            # Record is in buffer - find and replace it
+            for i, record in enumerate(self.buffer[file_path]):
+                if record.get("url") == url:
+                    self.buffer[file_path][i] = new_record
+                    print(f"[DEBUG] Replaced buffered record for {url}")
+                    return True
+            print(f"[WARNING] Buffered record not found for replacement: {url}")
+            return False
+        else:
+            # Record is on disk - replace it
+            self._update_disk_record(file_path, line_num, new_record)
+            return True
