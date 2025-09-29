@@ -36,11 +36,11 @@ on:
       topk:
         description: 'Comma-separated top-k values (e.g. 1,5,10)'
         required: false
-        default: '5'
+        default: '3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20'
       lang:
         description: 'Language for queries (en or hu)'
         required: false
-        default: 'en'
+        default: 'hu'
   schedule:
     - cron: "0 23 * * *"
 
@@ -72,20 +72,20 @@ jobs:
       - name: Run RAG evaluation
         run: |
           poetry run python -m jarokelo_tracker.rag.evaluation.evaluate \
-            --eval-set-path "${{ github.event.inputs.eval_set_path }}" \
-            --vector-backend "${{ github.event.inputs.vector_backend }}" \
-            --embedding-provider "${{ github.event.inputs.embedding_provider }}" \
-            --vector-path "${{ github.event.inputs.vector_path }}" \
-            --local-model "${{ github.event.inputs.local_model }}" \
-            --vector-base-dir "${{ github.event.inputs.vector_base_dir }}" \
-            --save-dir "${{ github.event.inputs.save_dir }}" \
-            --topk "${{ github.event.inputs.topk }}" \
-            --lang "${{ github.event.inputs.lang }}"
+            --eval-set-path "${{ github.event.inputs.eval_set_path || 'data/eval/eval_set.json' }}" \
+            --vector-backend "${{ github.event.inputs.vector_backend || 'faiss' }}" \
+            --embedding-provider "${{ github.event.inputs.embedding_provider || 'local' }}" \
+            --vector-path "${{ github.event.inputs.vector_path || '' }}" \
+            --local-model "${{ github.event.inputs.local_model || 'distiluse-base-multilingual-cased-v2' }}" \
+            --vector-base-dir "${{ github.event.inputs.vector_base_dir || 'data/vector_store' }}" \
+            --save-dir "${{ github.event.inputs.save_dir || 'experiments/results/retrieval_eval' }}" \
+            --topk "${{ github.event.inputs.topk || '3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20' }}" \
+            --lang "${{ github.event.inputs.lang || 'hu' }}"
 
       - name: Assemble retrieval reports
         run: |
           poetry run python ./src/jarokelo_tracker/rag/evaluation/assemble_retrieval_reports.py \
-            --results-dir "${{ github.event.inputs.save_dir }}"
+            --results-dir "${{ github.event.inputs.save_dir || 'experiments/results/retrieval_eval' }}"
 
       - name: Configure Git
         run: |
@@ -96,7 +96,7 @@ jobs:
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          git add "${{ github.event.inputs.save_dir }}"
+          git add "${{ github.event.inputs.save_dir || 'experiments/results/retrieval_eval' }}"
           git add docs/experiments/retrieval_eval_report.html
           git add docs/experiments/imgs/
           git diff --quiet && git diff --staged --quiet || git commit -m "[Auto-commit] Update RAG evaluation results [skip ci]"
