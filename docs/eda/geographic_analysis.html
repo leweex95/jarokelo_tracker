@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Járókelő Analysis - Geographic Analysis</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #1e1e1e;
+            color: #ffffff;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .chart-explanation {
+            background-color: #2d2d2d;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid #00d4aa;
+        }
+        .chart-explanation h4 {
+            color: #00d4aa;
+            margin-top: 0;
+        }
+        .chart-explanation ul {
+            line-height: 1.6;
+        }
+        .back-link {
+            display: inline-block;
+            margin: 20px 0;
+            padding: 10px 20px;
+            background-color: #007acc;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .back-link:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← Back to Dashboard</a>
+        <html>
+<head><meta charset="utf-8" /></head>
+<body>
+    <div>                        <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.1.0.min.js" integrity="sha256-Ei4740bWZhaUTQuD6q9yQlgVCMPBz6CZWhevDYPv93A=" crossorigin="anonymous"></script>                <div id="e7d5db73-b8de-4eb9-8c66-f0dae82a9ec6" class="plotly-graph-div" style="height:700px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("e7d5db73-b8de-4eb9-8c66-f0dae82a9ec6")) {                    Plotly.newPlot(                        "e7d5db73-b8de-4eb9-8c66-f0dae82a9ec6",                        [{"customdata":{"dtype":"f8","bdata":"8tJNYhBY5T9xPQrXo3DNP9nO91Pjpds\u002fyXa+nxovzT8730+Nl27mP3npJjEIrNQ\u002ffT81XrpJ5D\u002fpJjEIrBzSPwIrhxbZzt8\u002fukkMAiuH1j9oke18PzXiP99PjZduEtM\u002fZDvfT42X5j\u002f6fmq8dJPYP8uhRbbz\u002fdw\u002fAAAAAAAA0D9OYhBYObTgPwRWDi2ync8\u002fL90kBoGV5z8pXI\u002fC9SjMP+xRuB6F6+U\u002fvp8aL90k1j83iUFg5dDmPzVeukkMAss\u002f1XjpJjEI5D+gGi\u002fdJAbZP0Jg5dAi2+U\u002fnu+nxks30T8nMQisHFrsP05iEFg5tMg\u002f6SYxCKwc4j+e76fGSzfRP9v5fmq8dOM\u002fObTIdr6fyj9YObTIdr7jP23n+6nx0tU\u002f4XoUrkfh4j\u002fByqFFtvPNPzeJQWDl0OY\u002fZmZmZmZmxj8OLbKd76fmP5qZmZmZmck\u002f30+Nl24S6z9WDi2yne\u002fHPzm0yHa+n+o\u002frkfhehSu1z8=","shape":"23, 2"},"hovertemplate":"\u003cb\u003e%{hovertext}\u003c\u002fb\u003e\u003cbr\u003e\u003cbr\u003eTotal Reports=%{x:,}\u003cbr\u003eResolution Rate=%{y:.1%}\u003cbr\u003eAverage Updates=%{customdata[1]:.2f}\u003cbr\u003eAnonymous Reporting Rate=%{marker.color:.1%}\u003cextra\u003e\u003c\u002fextra\u003e","hovertext":["XIV. kerület","III. kerület","XI. kerület","II. kerület","XIII. kerület","X. kerület","IX. kerület","XII. kerület","VIII. kerület","XX. kerület","I. kerület","IV. kerület","V. kerület","XXI. kerület","XV. kerület","XVI. kerület","VII. kerület","VI. kerület","XIX. kerület","XVIII. kerület","XVII. kerület","XXII. kerület","XXIII. kerület"],"legendgroup":"","marker":{"color":{"dtype":"f8","bdata":"8tJNYhBY5T\u002fZzvdT46XbPzvfT42XbuY\u002ffT81XrpJ5D8CK4cW2c7fP2iR7Xw\u002fNeI\u002fZDvfT42X5j\u002fLoUW28\u002f3cP05iEFg5tOA\u002fL90kBoGV5z\u002fsUbgehevlPzeJQWDl0OY\u002f1XjpJjEI5D9CYOXQItvlPycxCKwcWuw\u002f6SYxCKwc4j\u002fb+X5qvHTjP1g5tMh2vuM\u002f4XoUrkfh4j83iUFg5dDmPw4tsp3vp+Y\u002f30+Nl24S6z85tMh2vp\u002fqPw=="},"coloraxis":"coloraxis","size":{"dtype":"f8","bdata":"cT0K16NwzT\u002fJdr6fGi\u002fNP3npJjEIrNQ\u002f6SYxCKwc0j+6SQwCK4fWP99PjZduEtM\u002f+n5qvHST2D8AAAAAAADQPwRWDi2ync8\u002fKVyPwvUozD++nxov3STWPzVeukkMAss\u002foBov3SQG2T+e76fGSzfRP05iEFg5tMg\u002fnu+nxks30T85tMh2vp\u002fKP23n+6nx0tU\u002fwcqhRbbzzT9mZmZmZmbGP5qZmZmZmck\u002fVg4tsp3vxz+uR+F6FK7XPw=="},"sizemode":"area","sizeref":0.0009775,"symbol":"circle"},"mode":"markers","name":"","orientation":"v","showlegend":false,"x":{"dtype":"i2","bdata":"kQYPBlMFaAQlBFoDGAOAAmsCEAIIApcBaQFhAUwBKQEbAQUBAAHfAMMAtgB3AA=="},"xaxis":"x","y":{"dtype":"f8","bdata":"BFYOLbKd4z+q8dJNYhDgP5qZmZmZmeE\u002fK4cW2c734z\u002fNzMzMzMzkP+58PzVeuuU\u002feekmMQis5D8MAiuHFtniPzm0yHa+n+I\u002foBov3SQG5T97FK5H4XrkP\u002fhT46WbxOQ\u002fokW28\u002f3U5D\u002fl0CLb+X7mPwisHFpkO+c\u002fBFYOLbKd4z+WQ4ts5\u002fvhP0SLbOf7qeE\u002frBxaZDvf4z8bL90kBoHhP65H4XoUruM\u002frkfhehSu4z\u002f2KFyPwvXkPw=="},"yaxis":"y","type":"scatter"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"marker":{"line":{"color":"#283442"}},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#f2f5fa"},"error_y":{"color":"#f2f5fa"},"marker":{"line":{"color":"rgb(17,17,17)","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"marker":{"line":{"color":"#283442"}},"type":"scattergl"}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#A2B1C6","gridcolor":"#506784","linecolor":"#506784","minorgridcolor":"#506784","startlinecolor":"#A2B1C6"},"baxis":{"endlinecolor":"#A2B1C6","gridcolor":"#506784","linecolor":"#506784","minorgridcolor":"#506784","startlinecolor":"#A2B1C6"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#506784"},"line":{"color":"rgb(17,17,17)"}},"header":{"fill":{"color":"#2a3f5f"},"line":{"color":"rgb(17,17,17)"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"rgb(17,17,17)","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#f2f5fa"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"rgb(17,17,17)","plot_bgcolor":"rgb(17,17,17)","polar":{"bgcolor":"rgb(17,17,17)","angularaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"radialaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""}},"ternary":{"bgcolor":"rgb(17,17,17)","aaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"baxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"caxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"#283442","linecolor":"#506784","ticks":"","title":{"standoff":15},"zerolinecolor":"#283442","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"#283442","linecolor":"#506784","ticks":"","title":{"standoff":15},"zerolinecolor":"#283442","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3","gridwidth":2},"yaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3","gridwidth":2},"zaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3","gridwidth":2}},"shapedefaults":{"line":{"color":"#f2f5fa"}},"annotationdefaults":{"arrowcolor":"#f2f5fa","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"rgb(17,17,17)","landcolor":"rgb(17,17,17)","subunitcolor":"#506784","showland":true,"showlakes":true,"lakecolor":"rgb(17,17,17)"},"title":{"x":0.05},"updatemenudefaults":{"bgcolor":"#506784","borderwidth":0},"sliderdefaults":{"bgcolor":"#C8D4E3","borderwidth":1,"bordercolor":"rgb(17,17,17)","tickwidth":0},"mapbox":{"style":"dark"}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Total Reports (Citizen Engagement)"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Resolution Rate (Municipal Effectiveness)"},"tickformat":".0%"},"coloraxis":{"colorbar":{"title":{"text":"Anonymous Reporting Rate"}},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]]},"legend":{"tracegroupgap":0,"itemsizing":"constant"},"title":{"text":"Complete District Performance Analysis - All Budapest Districts"},"shapes":[{"line":{"color":"green","dash":"dash"},"type":"line","x0":0,"x1":1,"xref":"x domain","y0":0.7,"y1":0.7,"yref":"y"},{"line":{"color":"yellow","dash":"dash"},"type":"line","x0":407.0,"x1":407.0,"xref":"x","y0":0,"y1":1,"yref":"y domain"}],"annotations":[{"showarrow":false,"text":"Good Performance (70%)","x":1,"xanchor":"right","xref":"x domain","y":0.7,"yanchor":"bottom","yref":"y"},{"showarrow":false,"text":"Median Volume","x":407.0,"xanchor":"left","xref":"x","y":1,"yanchor":"top","yref":"y domain"}],"height":700},                        {"responsive": true}                    )                };            </script>        </div>
+</body>
+</html>
+        
+        <div class="chart-explanation">
+            <h4>🗺️ Complete District Performance Analysis</h4>
+            <p><strong>What you see:</strong> All Budapest districts plotted by citizen engagement (x-axis) vs municipal effectiveness (y-axis).</p>
+            <ul>
+                <li><strong>X-axis:</strong> Total reports (higher = more citizen engagement)</li>
+                <li><strong>Y-axis:</strong> Resolution rate (higher = better municipal response)</li>
+                <li><strong>Bubble size:</strong> Average updates per report (communication frequency)</li>
+                <li><strong>Color:</strong> Anonymous reporting rate (darker = more anonymous reports)</li>
+            </ul>
+            <p><strong>Key Insights:</strong></p>
+            <ul>
+                <li><strong>Top-right quadrant:</strong> High engagement + high performance districts (benchmark areas)</li>
+                <li><strong>Bottom-right quadrant:</strong> High engagement + low performance (need improvement)</li>
+                <li><strong>XIV. kerület (Zugló):</strong> Highest engagement (1,681 reports) with moderate performance</li>
+                <li><strong>XXI. kerület (Csepel):</strong> Lower engagement but excellent 70% resolution rate</li>
+            </ul>
+        </div>
+        
+        <a href="index.html" class="back-link">← Back to Dashboard</a>
+    </div>
+</body>
+</html>
