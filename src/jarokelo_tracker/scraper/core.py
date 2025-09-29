@@ -127,9 +127,15 @@ class JarokeloScraper:
                 
                 # Try to fix common encoding issues
                 encoding_fixes = {
-                    'jãšlius': 'július',  # Common encoding issue
-                    'mããšius': 'május',   # Another potential encoding issue
+                    'jãšlius': 'július',   # Common encoding issue
+                    'jรบnius': 'június',    # Another encoding issue for June  
+                    'mããšius': 'május',    # Another potential encoding issue
                     'febriãšr': 'február', # February encoding issue
+                    'mรกrcius': 'március',  # March encoding issue
+                    'ãกprilis': 'április', # April encoding issue
+                    'oktรณber': 'október', # October encoding issue
+                    'novembรฉr': 'november', # November encoding issue (if it occurs)
+                    'decembรฉr': 'december', # December encoding issue (if it occurs)
                 }
                 
                 if month_name in encoding_fixes:
@@ -428,14 +434,17 @@ class JarokeloScraper:
                 # Check if we need full re-scrape (e.g., for resolution_date when status → MEGOLDOTT)
                 if self.data_manager.needs_full_rescrape(old_status, current_status):
                     print(f"Status change requires full re-scrape: {url} ({old_status} → {current_status})")
+                    print(f"[DEBUG] This is expected when status changes to/from 'MEGOLDOTT' to capture resolution_date")
                     # Perform full scrape and update the record
                     try:
                         updated_report = self.scrape_report_selenium(url)
                         # Replace the existing record with the updated one
                         self.data_manager.replace_record(url, updated_report)
+                        print(f"Successfully updated record for {url}")
                     except Exception as e:
                         print(f"ERROR: Failed to scrape report during status update: {url}")
                         print(f"Error details: {str(e)}")
+                        print(f"[INFO] Continuing with next report...")
                         continue  # Skip this report and continue with the next one
                 elif self.data_manager.update_status_if_changed(url, current_status):
                     print(f"Updated status for {url}: {current_status}")
@@ -529,14 +538,17 @@ class JarokeloScraper:
                 # Check if we need full re-scrape (e.g., for resolution_date when status → MEGOLDOTT)
                 if self.data_manager.needs_full_rescrape(old_status, current_status):
                     print(f"Status change requires full re-scrape: {url} ({old_status} → {current_status})")
+                    print(f"[DEBUG] This is expected when status changes to/from 'MEGOLDOTT' to capture resolution_date")
                     # Perform full scrape and update the record
                     try:
                         updated_report = self.scrape_report_beautifulsoup(url)
                         # Replace the existing record with the updated one
                         self.data_manager.replace_record(url, updated_report)
+                        print(f"Successfully updated record for {url}")
                     except Exception as e:
                         print(f"ERROR: Failed to scrape report during status update: {url}")
                         print(f"Error details: {str(e)}")
+                        print(f"[INFO] Continuing with next report...")
                         continue  # Skip this report and continue with the next one
                 elif self.data_manager.update_status_if_changed(url, current_status):
                     print(f"Updated status for {url}: {current_status}")

@@ -292,9 +292,14 @@ class DataManager:
         This is needed when:
         - Status changes to "MEGOLDOTT" (to get resolution_date)
         - Status changes from "MEGOLDOTT" to something else (to clear resolution_date)
+        
+        Note: Both "MEGOLDOTT" and "Megoldott" are considered resolved status.
         """
-        old_resolved = old_status and old_status.upper() == "MEGOLDOTT"
-        new_resolved = new_status and new_status.upper() == "MEGOLDOTT"
+        if not old_status or not new_status:
+            return False
+            
+        old_resolved = old_status.upper() == "MEGOLDOTT"
+        new_resolved = new_status.upper() == "MEGOLDOTT"
         
         # Need full rescrape if resolution status changed
         return old_resolved != new_resolved
