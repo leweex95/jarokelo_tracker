@@ -61,6 +61,9 @@ class JarokeloScraper:
         options.add_argument("--disable-sync")
         options.add_argument("--disable-component-update")
         options.add_argument("--log-level=3")
+        # Ensure proper UTF-8 encoding
+        options.add_argument("--lang=hu-HU")
+        options.add_argument("--accept-lang=hu-HU,hu,en-US,en")
         
         self.driver = webdriver.Chrome(options=options)
         self.wait = WebDriverWait(self.driver, 10)
@@ -88,6 +91,51 @@ class JarokeloScraper:
         self.close()
     
     @staticmethod
+    def fix_utf8_encoding(text: str) -> str:
+        """Fix common UTF-8 encoding issues in Hungarian text."""
+        if not text:
+            return text
+            
+        # Try to fix double-encoded UTF-8 issues
+        try:
+            # First try: if text is already double-encoded, decode it properly
+            # This handles cases like "mÃĄjus" -> "május"
+            if 'Ã' in text or 'Å' in text or 'â' in text:
+                # Try to encode as latin-1 and decode as utf-8
+                fixed = text.encode('latin-1').decode('utf-8')
+                return fixed
+        except (UnicodeEncodeError, UnicodeDecodeError):
+            pass
+            
+        # If that doesn't work, try direct character replacements
+        replacements = {
+            'mÃĄjus': 'május',
+            'mãąjus': 'május', 
+            'jãšlius': 'július',
+            'jรบnius': 'június',
+            'mããšius': 'március',
+            'febriãšr': 'február',
+            'mรกrcius': 'március',
+            'ãกprilis': 'április',
+            'oktรณber': 'október',
+            'novembรฉr': 'november',
+            'decembรฉr': 'december',
+            # Additional common corruptions
+            'jÃบnius': 'június',
+            'jÃºlius': 'július',
+            'mÃกrcius': 'március',
+            'ÃกpriÄบlis': 'április',
+            'oktÃ³ber': 'október',
+            'novembÃ©r': 'november',
+            'decembÃ©r': 'december'
+        }
+        
+        for corrupted, correct in replacements.items():
+            text = text.replace(corrupted, correct)
+            
+        return text
+
+    @staticmethod
     def normalize_date(date_str, url: str = None) -> str:
         """Convert Hungarian date like '2025. szeptember 15.' to 'YYYY-MM-DD'."""
         HU_MONTHS = {
@@ -108,13 +156,15 @@ class JarokeloScraper:
             if isinstance(date_str, list):
                 parts = date_str
             else:
-                parts = date_str.strip(". ").split()
+                # Fix encoding issues first
+                fixed_date_str = JarokeloScraper.fix_utf8_encoding(date_str)
+                parts = fixed_date_str.strip(". ").split()
             
             if len(parts) < 3:
                 raise ValueError(f"Invalid date format: '{date_str}' - expected 3 parts, got {len(parts)}")
             
             year = parts[0].replace(".", "")
-            month_name = parts[1].lower()
+            month_name = JarokeloScraper.fix_utf8_encoding(parts[1]).lower()
             
             if month_name not in HU_MONTHS:
                 # Print detailed error information
@@ -125,24 +175,7 @@ class JarokeloScraper:
                     print(f"[ERROR] URL: {url}")
                 print(f"[ERROR] Available months: {list(HU_MONTHS.keys())}")
                 
-                # Try to fix common encoding issues
-                encoding_fixes = {
-                    'jãšlius': 'július',   # Common encoding issue
-                    'jรบnius': 'június',    # Another encoding issue for June  
-                    'mããšius': 'május',    # Another potential encoding issue
-                    'febriãšr': 'február', # February encoding issue
-                    'mรกrcius': 'március',  # March encoding issue
-                    'ãกprilis': 'április', # April encoding issue
-                    'oktรณber': 'október', # October encoding issue
-                    'novembรฉr': 'november', # November encoding issue (if it occurs)
-                    'decembรฉr': 'december', # December encoding issue (if it occurs)
-                }
-                
-                if month_name in encoding_fixes:
-                    print(f"[FIX] Applying encoding fix: '{month_name}' -> '{encoding_fixes[month_name]}'")
-                    month_name = encoding_fixes[month_name]
-                else:
-                    raise KeyError(f"Unknown Hungarian month: '{month_name}' (from '{date_str}')")
+                raise KeyError(f"Unknown Hungarian month: '{month_name}' (from '{date_str}')")
             
             month = HU_MONTHS[month_name]
             day = parts[2].replace(".", "")
