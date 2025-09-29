@@ -91,8 +91,41 @@ class JarokeloScraper:
         self.close()
     
     @staticmethod
+    def validate_encoding(data: Dict, url: str) -> None:
+        """
+        Validate that no encoding corruption exists in scraped data.
+        FAILS LOUDLY if corruption is detected to ensure issues don't go unnoticed.
+        """
+        corruption_patterns = [
+            'Ă', 'ĂĄ', 'ĂŠ', 'Ăş', 'Ăł', 'Ăź', 'Ăś', 'Ä±', 'ĹŠ', 'Ĺ',  # Common corrupted chars
+            'mĂĄjus', 'jĂşlius', 'jĂşnius',  # Specific month corruptions
+            'Ã', 'â', 'Å'  # Double-encoding indicators
+        ]
+        
+        # Check all text fields for corruption
+        text_fields = ['title', 'author', 'category', 'institution', 'supporter', 'description', 'status', 'address']
+        
+        for field in text_fields:
+            value = data.get(field)
+            if isinstance(value, str):
+                for pattern in corruption_patterns:
+                    if pattern in value:
+                        error_msg = f"""
+🚨 ENCODING CORRUPTION DETECTED! 🚨
+Field: {field}
+Value: '{value}'
+Corruption pattern: '{pattern}'
+URL: {url}
+
+This indicates our encoding fix is not working properly.
+SCRAPING STOPPED to prevent corrupted data from being saved.
+"""
+                        print(error_msg)
+                        raise ValueError(f"Encoding corruption detected in field '{field}': '{pattern}' found in '{value}'")
+    
+    @staticmethod
     def fix_utf8_encoding(text: str) -> str:
-        """Fix common UTF-8 encoding issues in Hungarian text."""
+        """Fix common UTF-8 encoding issues in Hungarian text - only needed for date parsing now."""
         if not text:
             return text
             
@@ -107,27 +140,13 @@ class JarokeloScraper:
         except (UnicodeEncodeError, UnicodeDecodeError):
             pass
             
-        # If that doesn't work, try direct character replacements
+        # If that doesn't work, try direct character replacements for date parsing
         replacements = {
+            # Month name corruptions only (for legacy data/edge cases)
             'mÃĄjus': 'május',
-            'mãąjus': 'május', 
-            'jãšlius': 'július',
-            'jรบnius': 'június',
-            'mããšius': 'március',
-            'febriãšr': 'február',
-            'mรกrcius': 'március',
-            'ãกprilis': 'április',
-            'oktรณber': 'október',
-            'novembรฉr': 'november',
-            'decembรฉr': 'december',
-            # Additional common corruptions
-            'jÃบnius': 'június',
-            'jÃºlius': 'július',
-            'mÃกrcius': 'március',
-            'ÃกpriÄบlis': 'április',
-            'oktÃ³ber': 'október',
-            'novembÃ©r': 'november',
-            'decembÃ©r': 'december'
+            'mĂĄjus': 'május',
+            'jĂşlius': 'július',
+            'jĂşnius': 'június',
         }
         
         for corrupted, correct in replacements.items():
@@ -282,7 +301,7 @@ class JarokeloScraper:
         self.driver.close()
         self.driver.switch_to.window(self.driver.window_handles[0])
 
-        return {
+        result = {
             "url": url,
             "title": title,
             "author": author,
@@ -298,6 +317,11 @@ class JarokeloScraper:
             "latitude": latitude,
             "longitude": longitude,
         }
+        
+        # VALIDATE ENCODING - FAIL LOUDLY IF CORRUPTION DETECTED
+        self.validate_encoding(result, url)
+        
+        return result
     
     def scrape_report_beautifulsoup(self, url: str) -> Dict:
         """Scrape a single report page using BeautifulSoup and return its data."""
@@ -306,7 +330,7 @@ class JarokeloScraper:
             
         response = self.session.get(url)
         response.raise_for_status()
-        soup = BeautifulSoup(response.content, 'html.parser')
+        soup = BeautifulSoup(response.text, 'html.parser')  # Use response.text instead of response.content
 
         # Title
         title_elem = soup.select_one("h1.report__title")
@@ -387,7 +411,7 @@ class JarokeloScraper:
         # GPS Coordinates
         latitude, longitude = extract_gps_coordinates(response.text)
 
-        return {
+        result = {
             "url": url,
             "title": title,
             "author": author,
@@ -403,6 +427,11 @@ class JarokeloScraper:
             "latitude": latitude,
             "longitude": longitude,
         }
+        
+        # VALIDATE ENCODING - FAIL LOUDLY IF CORRUPTION DETECTED
+        self.validate_encoding(result, url)
+        
+        return result
     
     def scrape_report(self, url: str) -> Dict:
         """Scrape a single report using the configured backend"""
@@ -522,7 +551,7 @@ class JarokeloScraper:
             
         response = self.session.get(page_url)
         response.raise_for_status()
-        soup = BeautifulSoup(response.content, 'html.parser')
+        soup = BeautifulSoup(response.text, 'html.parser')  # Use response.text instead of response.content
         
         cards = soup.select("article.card")
         card_info = []
@@ -612,7 +641,7 @@ class JarokeloScraper:
         # Get pagination info - need to fetch the page again
         response = self.session.get(page_url)
         response.raise_for_status()
-        soup = BeautifulSoup(response.content, 'html.parser')
+        soup = BeautifulSoup(response.text, 'html.parser')  # Use response.text instead of response.content
         
         next_page_elems = soup.select("a.pagination__link")
         for elem in next_page_elems:
