@@ -857,19 +857,15 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                 
                 print(f"[Page {page}] Loading: {page_url}")
                 
-                # Extract card info from listing page (URL + status)
-                if self.backend == 'beautifulsoup':
-                    # Call scrape_listing_page with stop_on_existing=False to scan all pages
-                    next_url, _ = self.scrape_listing_page_beautifulsoup(page_url, set(), None, False, False)
-                    card_info = self.extract_listing_info_beautifulsoup(page_url)
-                else:
-                    next_url, _ = self.scrape_listing_page_selenium(page_url, set(), None, False, False)
-                    card_info = self.extract_listing_info_selenium(page_url)
+                # Extract card info from listing page (URL + status) - NO SCRAPING!
+                card_info = self.extract_listing_info_beautifulsoup(page_url)
+                
+                print(f"   Found {len(card_info)} cards on this page")
                 
                 if not card_info:
                     print(f"   No more cards found on page {page}, stopping")
                     break
-                
+
                 # Check each card for changes
                 for card in card_info:
                     url = card["url"]
@@ -883,7 +879,7 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                         
                         # Only check reports within our cutoff date
                         if report_date >= cutoff_date.strftime("%Y-%m-%d"):
-                                    # Detect if status changed or resolution was added
+                            # Detect if status changed or resolution was added
                             status_changed = current_status != old_status
                             newly_resolved = (not old_resolution and 
                                             current_status and 
@@ -903,7 +899,33 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                         # Just continue processing
                         continue
                 
-                # Continue to next page regardless of report age
+                # Get next page URL manually
+                if self.backend == 'beautifulsoup':
+                    response = self.session.get(page_url)
+                    response.raise_for_status()
+                    soup = BeautifulSoup(response.text, 'html.parser')
+                    
+                    next_page_elems = soup.select("a.pagination__link")
+                    next_url = None
+                    print(f"   Found {len(next_page_elems)} pagination links")
+                    for elem in next_page_elems:
+                        link_text = elem.text.strip()
+                        print(f"   Pagination link: '{link_text}'")
+                        if "Következő" in elem.text:
+                            href = elem.get("href")
+                            if href and href.startswith("/"):
+                                next_url = "https://jarokelo.hu" + href
+                                print(f"   Next page URL: {next_url}")
+                            break
+                else:
+                    # For selenium, implement similar logic if needed
+                    next_url = None
+                
+                # Check if there's a next page
+                if not next_url:
+                    print(f"   No more pages found, completed scanning")
+                    break
+                    
                 page += 1
                 
                 # Safety limit to prevent runaway
