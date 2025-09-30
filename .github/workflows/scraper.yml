@@ -1,4 +1,4 @@
-name: Data scraper
+name: Optimized Data Scraper
 
 on:
   schedule:
@@ -33,6 +33,10 @@ on:
         description: 'Buffer size for comprehensive scraping (higher = faster but more memory)'
         required: false
         default: '200'
+      cutoff_months:
+        description: 'Months cutoff for recent vs old status updates (default: 3)'
+        required: false
+        default: '3'
   workflow_call:
     inputs:
       backend:
@@ -70,12 +74,17 @@ on:
         required: false
         default: '200'
         type: string
+      cutoff_months:
+        description: 'Months cutoff for recent vs old status updates'
+        required: false
+        default: '3'
+        type: string
     secrets:
       PAT_TOKEN:
         required: true
 
 jobs:
-  # Job 1: Scrape new entries from Jarokelo website
+  # Job 1: Scrape new entries from Jarokelo website (unchanged)
   comprehensive-scraping:
     runs-on: ubuntu-latest
     name: "Comprehensive scraping (new entries)"
@@ -124,7 +133,7 @@ jobs:
           echo "Start page: $START_PAGE"
           
           BUFFER_SIZE="${{ github.event.inputs.buffer_size || '200' }}"
-                    ARGS: "--continue-scraping --data-dir data/raw --buffer-size 100"
+          ARGS="--continue-scraping --data-dir data/raw --buffer-size $BUFFER_SIZE"
           if [ -n "$UNTIL_DATE" ]; then
             ARGS="$ARGS --until-date $UNTIL_DATE"
             echo "Until date: $UNTIL_DATE"
@@ -204,10 +213,12 @@ jobs:
             }
           done
 
-  # Job 2: Update status of existing records (runs in parallel with Job 1)
-  status-updates:
+  # Job 2: Fast detection of recently changed URLs (last N months)
+  recent-url-detector:
     runs-on: ubuntu-latest
-    name: "Status updates (old entries)"
+    name: "Recent URL change detector"
+    outputs:
+      changed_urls_count: ${{ steps.detect_changes.outputs.changed_count }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v5
@@ -230,51 +241,153 @@ jobs:
           python -m pip install --upgrade poetry==2.2.0
           poetry install --no-interaction
 
-      - name: Count existing records
-        id: count_records
+      - name: Detect recently changed URLs
+        id: detect_changes
         run: |
-          RECORD_COUNT=$(find data/raw -name "*.jsonl" -exec wc -l {} + 2>/dev/null | tail -1 | awk '{print $1}' || echo "0")
-          echo "existing_records=$RECORD_COUNT" >> $GITHUB_OUTPUT
-          echo "Found $RECORD_COUNT existing records for status checking"
-
-      - name: Run status update scraper
-        run: |
-          BACKEND="${{ github.event.inputs.backend || 'beautifulsoup' }}"
-          HEADLESS="${{ github.event.inputs.headless || 'true' }}"
-          DATA_DIR="${{ github.event.inputs.data_dir || 'data/raw' }}"
-          UNTIL_DATE="${{ github.event.inputs.until_date || '' }}"
-
-          echo "Running STATUS UPDATE scraper..."
-          echo "Data directory: $DATA_DIR"
-          echo "Existing records: ${{ steps.count_records.outputs.existing_records }}"
-          echo "Backend: $BACKEND"
-          echo "Headless: $HEADLESS"
+          CUTOFF_MONTHS="${{ github.event.inputs.cutoff_months || '3' }}"
           
-          ARGS="          ARGS: "--update-existing-status --data-dir data/raw""
-          if [ -n "$UNTIL_DATE" ]; then
-            ARGS="$ARGS --until-date $UNTIL_DATE"
-            echo "Until date: $UNTIL_DATE"
+          echo "🔍 RECENT URL CHANGE DETECTION"
+          echo "Cutoff months: $CUTOFF_MONTHS"
+          echo "Backend: ${{ github.event.inputs.backend || 'beautifulsoup' }}"
+          
+          # Run fast URL change detection
+          poetry run python ./scripts/scrape_data.py \
+            --fetch-changed-urls \
+            --cutoff-months $CUTOFF_MONTHS \
+            --backend "${{ github.event.inputs.backend || 'beautifulsoup' }}" \
+            --headless "${{ github.event.inputs.headless || 'true' }}"
+          
+          # Count detected URLs
+          if [ -f "recent_changed_urls.txt" ]; then
+            CHANGED_COUNT=$(wc -l < recent_changed_urls.txt)
+          else
+            CHANGED_COUNT=0
           fi
-          echo "Note: Buffering disabled for status updates (immediate writes)"
-          echo "Async mode: enabled (8.6x performance boost with auto-fallback)"
           
-          echo "Running: poetry run python ./scripts/scrape_data.py $ARGS"
-          echo ""
-          
-          # Run the status update scraper
-          poetry run python ./scripts/scrape_data.py $ARGS
+          echo "changed_count=$CHANGED_COUNT" >> $GITHUB_OUTPUT
+          echo "Detected $CHANGED_COUNT recently changed URLs"
 
-      - name: Check for status changes
+      - name: Upload recent changed URLs
+        if: steps.detect_changes.outputs.changed_count > 0
+        uses: actions/upload-artifact@v4
+        with:
+          name: recent-changed-urls
+          path: recent_changed_urls.txt
+          retention-days: 1
+
+  # Job 3: Load old pending URLs (older than cutoff)
+  old-pending-loader:
+    runs-on: ubuntu-latest
+    name: "Old pending URL loader"
+    outputs:
+      pending_urls_count: ${{ steps.load_pending.outputs.pending_count }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Cache Poetry packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pypoetry/cache
+            ~/.cache/pypoetry/artifacts
+          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
+          restore-keys: ${{ runner.os }}-poetry-
+
+      - name: Set up Python & Poetry
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade poetry==2.2.0
+          poetry install --no-interaction
+
+      - name: Load old pending URLs
+        id: load_pending
+        run: |
+          CUTOFF_MONTHS="${{ github.event.inputs.cutoff_months || '3' }}"
+          
+          echo "📋 OLD PENDING URL LOADER"
+          echo "Cutoff months: $CUTOFF_MONTHS"
+          
+          # Load old pending URLs
+          poetry run python ./scripts/scrape_data.py \
+            --load-old-pending \
+            --cutoff-months $CUTOFF_MONTHS
+          
+          # Count pending URLs
+          if [ -f "old_pending_urls.txt" ]; then
+            PENDING_COUNT=$(wc -l < old_pending_urls.txt)
+          else
+            PENDING_COUNT=0
+          fi
+          
+          echo "pending_count=$PENDING_COUNT" >> $GITHUB_OUTPUT
+          echo "Found $PENDING_COUNT old pending URLs"
+
+      - name: Upload old pending URLs
+        if: steps.load_pending.outputs.pending_count > 0
+        uses: actions/upload-artifact@v4
+        with:
+          name: old-pending-urls
+          path: old_pending_urls.txt
+          retention-days: 1
+
+  # Job 4: Scrape recent changed URLs
+  recent-resolution-scraper:
+    runs-on: ubuntu-latest
+    name: "Recent resolution scraper"
+    needs: recent-url-detector
+    if: needs.recent-url-detector.outputs.changed_urls_count > 0
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Cache Poetry packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pypoetry/cache
+            ~/.cache/pypoetry/artifacts
+          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
+          restore-keys: ${{ runner.os }}-poetry-
+
+      - name: Set up Python & Poetry
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade poetry==2.2.0
+          poetry install --no-interaction
+
+      - name: Download recent changed URLs
+        uses: actions/download-artifact@v4
+        with:
+          name: recent-changed-urls
+
+      - name: Scrape recent changed URLs
+        run: |
+          echo "🎯 RECENT RESOLUTION SCRAPER"
+          echo "URLs to scrape: ${{ needs.recent-url-detector.outputs.changed_urls_count }}"
+          echo "Backend: ${{ github.event.inputs.backend || 'beautifulsoup' }}"
+          
+          # Scrape the recently changed URLs
+          poetry run python ./scripts/scrape_data.py \
+            --scrape-urls-file recent_changed_urls.txt \
+            --backend "${{ github.event.inputs.backend || 'beautifulsoup' }}" \
+            --headless "${{ github.event.inputs.headless || 'true' }}"
+
+      - name: Check for changes
         id: check_changes
         run: |
           if git diff --quiet && git diff --staged --quiet; then
             echo "changes_detected=false" >> $GITHUB_OUTPUT
-            echo "ℹNo status changes detected"
+            echo "No recent changes to commit"
           else
             echo "changes_detected=true" >> $GITHUB_OUTPUT
-            echo "Status changes detected!"
-            echo ""
-            echo "Changed files:"
+            echo "Recent resolution changes detected!"
             git diff --name-only
           fi
 
@@ -284,23 +397,18 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
 
-      - name: Commit and push status updates
+      - name: Commit recent resolutions
         if: steps.check_changes.outputs.changes_detected == 'true'
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          DATA_DIR="${{ github.event.inputs.data_dir || 'data/raw' }}"
-          
-          # Count how many files were modified
-          MODIFIED_COUNT=$(git diff --name-only "$DATA_DIR" | wc -l)
-          
-          git add "$DATA_DIR"
-          git commit -m "[Auto-commit] Status updates: $MODIFIED_COUNT files updated
+          git add data/raw
+          git commit -m "[Auto-commit] Recent resolutions: ${{ needs.recent-url-detector.outputs.changed_urls_count }} URLs updated
 
           Updated at: $(date -u '+%Y-%m-%d %H:%M:%S UTC')
           Backend: ${{ github.event.inputs.backend || 'beautifulsoup' }}
-          Records checked: ${{ steps.count_records.outputs.existing_records }}
-          Files modified: $MODIFIED_COUNT
+          Cutoff months: ${{ github.event.inputs.cutoff_months || '3' }}
+          URLs processed: ${{ needs.recent-url-detector.outputs.changed_urls_count }}
           
           [skip ci]"
           
@@ -309,7 +417,7 @@ jobs:
           for i in $(seq 1 $RETRIES); do
             git pull --rebase
             git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master && {
-              echo "Successfully pushed status updates!"
+              echo "Successfully pushed recent resolution updates!"
               break
             } || {
               echo "Push failed, retrying ($i/$RETRIES)..."
@@ -317,11 +425,102 @@ jobs:
             }
           done
 
-  # Job 3: Report results after both jobs complete
+  # Job 5: Scrape old pending URLs  
+  old-resolution-scraper:
+    runs-on: ubuntu-latest
+    name: "Old resolution scraper"
+    needs: old-pending-loader
+    if: needs.old-pending-loader.outputs.pending_urls_count > 0
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Cache Poetry packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pypoetry/cache
+            ~/.cache/pypoetry/artifacts
+          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
+          restore-keys: ${{ runner.os }}-poetry-
+
+      - name: Set up Python & Poetry
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade poetry==2.2.0
+          poetry install --no-interaction
+
+      - name: Download old pending URLs
+        uses: actions/download-artifact@v4
+        with:
+          name: old-pending-urls
+
+      - name: Scrape old pending URLs
+        run: |
+          echo "🕰️ OLD RESOLUTION SCRAPER"
+          echo "URLs to scrape: ${{ needs.old-pending-loader.outputs.pending_urls_count }}"
+          echo "Backend: ${{ github.event.inputs.backend || 'beautifulsoup' }}"
+          
+          # Scrape the old pending URLs
+          poetry run python ./scripts/scrape_data.py \
+            --scrape-urls-file old_pending_urls.txt \
+            --backend "${{ github.event.inputs.backend || 'beautifulsoup' }}" \
+            --headless "${{ github.event.inputs.headless || 'true' }}"
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if git diff --quiet && git diff --staged --quiet; then
+            echo "changes_detected=false" >> $GITHUB_OUTPUT
+            echo "No old pending changes to commit"
+          else
+            echo "changes_detected=true" >> $GITHUB_OUTPUT
+            echo "Old pending resolution changes detected!"
+            git diff --name-only
+          fi
+
+      - name: Configure Git
+        if: steps.check_changes.outputs.changes_detected == 'true'
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+
+      - name: Commit old resolutions
+        if: steps.check_changes.outputs.changes_detected == 'true'
+        env:
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          git add data/raw
+          git commit -m "[Auto-commit] Old resolutions: ${{ needs.old-pending-loader.outputs.pending_urls_count }} URLs checked
+
+          Updated at: $(date -u '+%Y-%m-%d %H:%M:%S UTC')
+          Backend: ${{ github.event.inputs.backend || 'beautifulsoup' }}
+          Cutoff months: ${{ github.event.inputs.cutoff_months || '3' }}
+          URLs processed: ${{ needs.old-pending-loader.outputs.pending_urls_count }}
+          
+          [skip ci]"
+          
+          # Push with retry logic
+          RETRIES=10
+          for i in $(seq 1 $RETRIES); do
+            git pull --rebase
+            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master && {
+              echo "Successfully pushed old resolution updates!"
+              break
+            } || {
+              echo "Push failed, retrying ($i/$RETRIES)..."
+              sleep 3
+            }
+          done
+
+  # Job 6: Report results after all jobs complete
   pipeline-summary:
     runs-on: ubuntu-latest
     name: "Pipeline Summary"
-    needs: [comprehensive-scraping, status-updates]
+    needs: [comprehensive-scraping, recent-url-detector, old-pending-loader, recent-resolution-scraper, old-resolution-scraper]
     if: always()  # Run even if previous jobs fail
     steps:
       - name: Checkout repo
@@ -333,19 +532,30 @@ jobs:
 
       - name: Report pipeline summary
         run: |
-          echo "Járokelő Tracker Pipeline Summary"
-          echo "==================================="
+          echo "🚀 Járokelő Tracker OPTIMIZED Pipeline Summary"
+          echo "==============================================="
           echo "Pipeline mode: ${{ github.event_name == 'workflow_dispatch' && 'Manual' || 'Nightly Scheduled' }}"
-          echo "Comprehensive scraping: ${{ needs.comprehensive-scraping.result || 'skipped' }}"
-          echo "Status updates: ${{ needs.status-updates.result || 'skipped' }}"
           echo ""
-          echo "Data directory structure:"
+          echo "Job Results:"
+          echo "- Comprehensive scraping: ${{ needs.comprehensive-scraping.result || 'skipped' }}"
+          echo "- Recent URL detection: ${{ needs.recent-url-detector.result || 'skipped' }}"
+          echo "- Old pending loader: ${{ needs.old-pending-loader.result || 'skipped' }}"
+          echo "- Recent resolution scraper: ${{ needs.recent-resolution-scraper.result || 'skipped' }}"
+          echo "- Old resolution scraper: ${{ needs.old-resolution-scraper.result || 'skipped' }}"
+          echo ""
+          echo "⚡ Performance Summary:"
+          echo "- Recent URLs detected: ${{ needs.recent-url-detector.outputs.changed_urls_count || '0' }}"
+          echo "- Old pending URLs: ${{ needs.old-pending-loader.outputs.pending_urls_count || '0' }}"
+          echo "- Cutoff months: ${{ github.event.inputs.cutoff_months || '3' }}"
+          echo "- Optimization: Split pipeline prevents 6-hour timeout!"
+          echo ""
+          echo "📁 Data directory structure:"
           ls -la data/raw/ || echo "No data directory found"
           echo ""
-          echo "Total JSONL files:"
+          echo "📊 Total JSONL files:"
           find data/raw -name "*.jsonl" -type f | wc -l || echo "0"
           echo ""
-          echo "Record counts by month:"
+          echo "📈 Record counts by month:"
           for file in data/raw/*.jsonl; do
             if [ -f "$file" ]; then
               count=$(wc -l < "$file" 2>/dev/null || echo "0")
@@ -353,6 +563,6 @@ jobs:
             fi
           done
           echo ""
-          echo "Pipeline completed at: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
-          echo "Repository: ${{ github.repository }}"
-          echo "Workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          echo "⏰ Pipeline completed at: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          echo "🔗 Repository: ${{ github.repository }}"
+          echo "🔗 Workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
