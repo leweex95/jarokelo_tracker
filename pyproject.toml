@@ -22,7 +22,6 @@ dependencies = [
     "kaleido (>=1.1.0,<2.0.0)",
     "torch (>=2.8.0)",
     "beautifulsoup4 (>=4.14.0,<5.0.0)",
-    "aiohttp (>=3.10.0,<4.0.0)",
 ]
 
 [tool.poetry]
