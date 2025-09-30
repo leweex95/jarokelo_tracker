@@ -885,11 +885,10 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                             else:
                                 self.data_manager.save_report(report, global_urls)
                             
-                            if until_date and report["date"] <= until_date:
-                                reached_done = True
-                                break
-                                
-                except Exception as e:
+                        if until_date and report["date"] >= until_date:
+                            # We've reached older records than our cutoff date
+                            reached_done = True
+                            break                except Exception as e:
                     print(f"[WARNING] Async batch processing failed: {e}")
                     print("[INFO] Falling back to sync processing for this page...")
                     # Fallback to sync processing
@@ -917,7 +916,8 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                             self.data_manager.save_report_buffered(report, global_urls)
                         else:
                             self.data_manager.save_report(report, global_urls)
-                        if until_date and report["date"] <= until_date:
+                        if until_date and report["date"] >= until_date:
+                            # We've reached older records than our cutoff date
                             reached_done = True
                             break
                     except Exception as e:
