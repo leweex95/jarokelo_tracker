@@ -133,7 +133,7 @@ jobs:
           echo "Start page: $START_PAGE"
           
           BUFFER_SIZE="${{ github.event.inputs.buffer_size || '200' }}"
-          ARGS="--continue-scraping --data-dir data/raw --buffer-size $BUFFER_SIZE"
+          ARGS="--data-dir data/raw --buffer-size $BUFFER_SIZE --until-date $(date +%Y-%m-%d)"
           if [ -n "$UNTIL_DATE" ]; then
             ARGS="$ARGS --until-date $UNTIL_DATE"
             echo "Until date: $UNTIL_DATE"
