@@ -36,7 +36,7 @@ continue-scraping:
 	poetry run python scripts/scrape_data.py \
 		--backend bs \
 		--continue-scraping \
-		--data-dir "data/raw3"
+		--data-dir "data/raw"
 
 # Task 2: Scrape newest entries and update status of existing records
 .PHONY: update-status
@@ -45,7 +45,7 @@ update-status:
 	poetry run python scripts/scrape_data.py \
 		--backend bs \
 		--update-existing-status \
-		--data-dir "data/raw3"
+		--data-dir "data/raw"
 
 # =============================================================================
 # ADDITIONAL SCRAPING TASKS
@@ -63,7 +63,7 @@ scrape-until-date:
 		--backend bs \
 		--start-page 1 \
 		--until-date $(DATE) \
-		--data-dir "data/raw3"
+		--data-dir "data/raw"
 
 # =============================================================================
 # DATA PIPELINE TASKS
@@ -98,4 +98,4 @@ run-pipeline: preprocess-all build-vector-store
 .PHONY: show-scraping-resume-date
 show-scraping-resume-date:
 	@echo "📍 Checking resume date where scraping would continue from..."
-	poetry run python -c "from src.jarokelo_tracker.scraper.data_manager import DataManager; dm = DataManager('data/raw3'); resume_date, page = dm.get_scraping_resume_point(); print(f'Would resume from: {resume_date} (page {page})' if resume_date else 'No existing data - would start from page 1')"
+	poetry run python -c "from src.jarokelo_tracker.scraper.data_manager import DataManager; dm = DataManager('data/raw'); resume_date, page = dm.get_scraping_resume_point(); print(f'Would resume from: {resume_date} (page {page})' if resume_date else 'No existing data - would start from page 1')"

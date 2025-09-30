@@ -38,12 +38,12 @@ goto end
 
 :continue-scraping
 echo 🚀 Continuing scraping from last scraped date onwards...
-poetry run python scripts/scrape_data.py --backend bs --continue-scraping --data-dir "data/raw3"
+poetry run python scripts/scrape_data.py --backend bs --continue-scraping --data-dir "data/raw"
 goto end
 
 :update-status
 echo 🔄 Updating status of existing records and scraping new entries...
-poetry run python scripts/scrape_data.py --backend bs --update-existing-status --data-dir "data/raw3"
+poetry run python scripts/scrape_data.py --backend bs --update-existing-status --data-dir "data/raw"
 goto end
 
 :scrape-until-date
@@ -52,12 +52,12 @@ if "%DATE%"=="" (
     goto end
 )
 echo 📅 Scraping until date: %DATE%
-poetry run python scripts/scrape_data.py --backend bs --start-page 1 --until-date %DATE% --data-dir "data/raw3"
+poetry run python scripts/scrape_data.py --backend bs --start-page 1 --until-date %DATE% --data-dir "data/raw"
 goto end
 
 :show-scraping-resume-date
 echo 📍 Checking resume date where scraping would continue from...
-poetry run python -c "from src.jarokelo_tracker.scraper.data_manager import DataManager; dm = DataManager('data/raw3'); resume_date, page = dm.get_scraping_resume_point(); print(f'Would resume from: {resume_date} (page {page})' if resume_date else 'No existing data - would start from page 1')"
+poetry run python -c "from src.jarokelo_tracker.scraper.data_manager import DataManager; dm = DataManager('data/raw'); resume_date, page = dm.get_scraping_resume_point(); print(f'Would resume from: {resume_date} (page {page})' if resume_date else 'No existing data - would start from page 1')"
 goto end
 
 :preprocess-all
