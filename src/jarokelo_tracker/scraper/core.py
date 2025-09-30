@@ -967,14 +967,17 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
             Number of changed URLs detected
         """
         from datetime import datetime, timedelta
-        import time
+        import time, os, json
         
         cutoff_date = datetime.now() - timedelta(days=cutoff_months * 30)
         
-        print(f"🔍 Fast URL change detection (last {cutoff_months} months)")
-        print(f"   Cutoff date: {cutoff_date.strftime('%Y-%m-%d')}")
+        print(f"� Running URL change detection for last {cutoff_months} months")
+        print(f"   Start date: {cutoff_date.strftime('%Y-%m-%d')}")
+        print(f"   End date: {datetime.now().strftime('%Y-%m-%d')}")
         print(f"   Output file: {output_file}")
         
+        print("\n[PERF] Building URL index cache...")
+        start_time = time.time()
         # Load existing data to compare against
         existing_data = {}
         for filename in os.listdir(self.data_manager.data_dir):
@@ -984,20 +987,20 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                     for line in f:
                         try:
                             data = json.loads(line)
-                            # Only load recent data for comparison
-                            if data.get("date", "0000-00-00") >= cutoff_date.strftime("%Y-%m-%d"):
-                                existing_data[data["url"]] = {
-                                    "status": data.get("status", ""),
-                                    "resolution_date": data.get("resolution_date")
-                                }
+                            # Only load data we care about for comparison
+                            existing_data[data["url"]] = {
+                                "date": data.get("date", "0000-00-00"),
+                                "status": data.get("status", ""),
+                                "resolution_date": data.get("resolution_date")
+                            }
                         except json.JSONDecodeError:
                             continue
         
-        print(f"   Loaded {len(existing_data):,} recent records for comparison")
+        print(f"   Loaded {len(existing_data):,} records in {time.time() - start_time:.2f}s")
         
         changed_urls = set()
         page = 1
-        start_time = time.time()
+        scan_start_time = time.time()
         
         try:
             while True:
@@ -1039,15 +1042,10 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                             print(f"   📝 Change detected: {url}")
                             print(f"      Status: '{old_status}' → '{current_status}'")
                     else:
-                        # New URL not in our database yet - this indicates we've gone beyond cutoff
-                        # Check the date to see if it's older than cutoff
-                        try:
-                            # Quick date extraction from listing page would be ideal, 
-                            # but for now we'll use a simpler heuristic
-                            found_old_report = True
-                            break
-                        except:
-                            pass
+                        # New URL not in our database yet
+                        print(f"   ℹ️ New URL found: {url}")
+                        # We'll keep processing since it might be recent
+                        continue
                 
                 # If we found reports older than cutoff, stop scanning
                 if found_old_report:
