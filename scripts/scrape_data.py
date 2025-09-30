@@ -29,7 +29,10 @@ def main():
                        help="Directory to store data files")
     parser.add_argument("--buffer-size", type=int, default=100, 
                        help="Number of records to buffer in memory before writing to disk (used for comprehensive scraping, ignored for status updates)")
-
+    parser.add_argument("--async-mode", action="store_true", 
+                       help="Enable async scraping for page-level batching (modest performance gains with fallback to sync)")
+    parser.add_argument("--max-concurrent", type=int, default=10, 
+                       help="Maximum concurrent requests for async mode (optimal: 10)")
     parser.add_argument("--cutoff-months", type=int, default=3,
                        help="Months cutoff for separating recent vs old status updates (default: 3)")
     parser.add_argument("--fetch-changed-urls", action="store_true",
