@@ -1,59 +1,8 @@
 #!/usr/bin/env python3
 """
-Járókelő Scraper Scr    # Initialize and run scraper
-    try:
-        print("🔄 Running in synchronous processing mode")
-        
-        with JarokeloScraper(
-            data_dir=args.data_dir,
-            backend=backend,
-            headless=headless,
-            buffer_size=args.buffer_size
-        ) as scraper:
-            # Handle different operation modes
-            if args.fetch_changed_urls:
-                # Recent URL Fetcher Mode - Only find URLs with status changes
-                print("🔍 Running in URL Change Detection Mode")
-                print(f"Detecting changed URLs from last {args.cutoff_months} months...")
-                changed_urls_count = scraper.detect_changed_urls_fast(
-                    cutoff_months=args.cutoff_months,
-                    output_file="recent_changed_urls.txt"
-                )
-                print(f"✅ Found {changed_urls_count} URLs with status changes")
-                
-            elif args.load_old_pending:
-                # Old Pending Issues Loader Mode
-                print("📋 Running in Old Pending Issues Loader Mode")
-                print(f"Extracting pending issues older than {args.cutoff_months} months...")
-                pending_urls_count = scraper.extract_old_pending_urls(
-                    cutoff_months=args.cutoff_months,
-                    output_file="old_pending_urls.txt"
-                )
-                print(f"✅ Found {pending_urls_count} old pending URLs")
-                
-            elif args.scrape_urls_file:
-                # Resolution Date Scraper Mode - Process specific URLs from file
-                print("🎯 Running in Resolution Date Scraper Mode")
-                print(f"Scraping URLs from file: {args.scrape_urls_file}")
-                
-                # The scrape_urls_file mode is optimized for resolution date extraction
-                # This is used for Jobs 4 & 5 in the pipeline
-                success_count = scraper.scrape_urls_from_file(
-                    urls_file=args.scrape_urls_file,
-                    resolution_focus=True  # Enable resolution date optimization
-                )
-                print(f"✅ Successfully updated resolution dates for {success_count} URLs")
-                
-            else:
-                # Standard Comprehensive Scraping Mode
-                print("🚀 Running in Comprehensive Scraping Mode")
-                scraper.scrape(
-                    start_page=args.start_page,
-                    until_date=args.until_date,
-                    stop_on_existing=not args.continue_scraping and not args.update_existing_status,
-                    continue_scraping=args.continue_scraping,
-                    update_existing_status=args.update_existing_status
-                )t provides a command-line interface to scrape municipal issue data
+Járókelő Scraper Script
+
+This script provides a command-line interface to scrape municipal issue data
 from the Járókelő website using the core scraper module.
 """
 
@@ -100,7 +49,8 @@ def main():
     
     # Initialize and run scraper
     try:
-        print("� Running in synchronous processing mode")
+        print("🔄 Running in synchronous processing mode")
+        print(f"[DEBUG] Arguments: fetch_changed_urls={args.fetch_changed_urls}, load_old_pending={args.load_old_pending}, scrape_urls_file={args.scrape_urls_file}")
         
         with JarokeloScraper(
             data_dir=args.data_dir,
@@ -108,13 +58,53 @@ def main():
             headless=headless,
             buffer_size=args.buffer_size
         ) as scraper:
-            scraper.scrape(
-                start_page=args.start_page,
-                until_date=args.until_date,
-                stop_on_existing=not args.continue_scraping and not args.update_existing_status,
-                continue_scraping=args.continue_scraping,
-                update_existing_status=args.update_existing_status
-            )
+            # Handle different operation modes
+            if args.fetch_changed_urls:
+                # Recent Status Change Detector Mode - Only find URLs with status changes
+                print("🔍 Running in Status Change Detection Mode")
+                print(f"Detecting status changes from last {args.cutoff_months} months...")
+                changed_urls_count = scraper.detect_changed_urls_fast(
+                    cutoff_months=args.cutoff_months,
+                    output_file="recent_changed_urls.txt"
+                )
+                print(f"✅ Found {changed_urls_count} status changes")
+                
+            elif args.load_old_pending:
+                # Old Pending Issues Loader Mode
+                print("📋 Running in Old Pending Issues Loader Mode") 
+                print(f"[DEBUG] This should call extract_old_pending_urls, NOT web scraping")
+                print(f"Extracting pending issues older than {args.cutoff_months} months...")
+                pending_urls_count = scraper.extract_old_pending_urls(
+                    cutoff_months=args.cutoff_months,
+                    output_file="old_pending_urls.txt"
+                )
+                print(f"✅ Found {pending_urls_count} old pending URLs")
+                
+            elif args.scrape_urls_file:
+                # Resolution Date Scraper Mode - Process specific URLs from file
+                print("🎯 Running in Resolution Date Scraper Mode")
+                print(f"Scraping URLs from file: {args.scrape_urls_file}")
+                
+                # The scrape_urls_file mode is optimized for resolution date extraction
+                # This is used for Jobs 4 & 5 in the pipeline
+                success_count = scraper.scrape_urls_from_file(
+                    urls_file=args.scrape_urls_file,
+                    resolution_focus=True  # Enable resolution date optimization
+                )
+                print(f"✅ Successfully updated resolution dates for {success_count} URLs")
+                
+            else:
+                # Standard Comprehensive Scraping Mode
+                print("🚀 Running in Comprehensive Scraping Mode")
+                print(f"[DEBUG] This should NOT run for --fetch-changed-urls or --load-old-pending!")
+                print(f"[DEBUG] fetch_changed_urls={args.fetch_changed_urls}, load_old_pending={args.load_old_pending}")
+                scraper.scrape(
+                    start_page=args.start_page,
+                    until_date=args.until_date,
+                    stop_on_existing=not args.continue_scraping and not args.update_existing_status,
+                    continue_scraping=args.continue_scraping,
+                    update_existing_status=args.update_existing_status
+                )
     except KeyboardInterrupt:
         print("\nScraping interrupted by user")
     except Exception as e:
