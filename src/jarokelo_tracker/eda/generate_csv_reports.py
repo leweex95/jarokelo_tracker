@@ -34,9 +34,6 @@ def extract_coords(desc):
 
 df["latitude"], df["longitude"] = zip(*df["description"].map(extract_coords))
 
-# Number of images
-df["num_images"] = df["images"].map(len)
-
 # Open vs solved
 df["is_solved"] = df["status"].str.contains("MEGOLDÁS")
 
