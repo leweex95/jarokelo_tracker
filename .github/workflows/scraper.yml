@@ -212,12 +212,12 @@ jobs:
             }
           done
 
-  # Job 2: Fast detection of recently changed URLs (configurable, default: last 3 months)
+  # Job 2: Fast detection of recently changed statuses (configurable, default: last 3 months)
   # This job quickly scans recent pages WITHOUT opening individual URLs to find status changes
   # Much faster than comprehensive scraping when only looking for status updates
   recent-url-detector:
     runs-on: ubuntu-latest
-    name: "2. Recent URL change detector"
+    name: "2. Recent status change detector"
     outputs:
       changed_urls_count: ${{ steps.detect_changes.outputs.changed_count }}
     steps:
@@ -242,18 +242,18 @@ jobs:
           python -m pip install --upgrade poetry==2.2.0
           poetry install --no-interaction
 
-      - name: Detect recently changed URLs
+      - name: Detect recently changed statuses
         id: detect_changes
         run: |
           CUTOFF_MONTHS="${{ github.event.inputs.cutoff_months || '3' }}"
           
-          echo "🔍 RECENT URL CHANGE DETECTION (FAST SCAN)"
+          echo "🔍 RECENT STATUS CHANGE DETECTION (FAST SCAN)"
           echo "Strategy: Scan only listing pages for status changes in the last $CUTOFF_MONTHS months"
           echo "Advantage: 100x faster than comprehensive scraping for status monitoring"
           echo "Cutoff months: $CUTOFF_MONTHS"
           echo "Backend: ${{ github.event.inputs.backend || 'beautifulsoup' }}"
           
-          # Run fast URL change detection
+          # Run fast status change detection
           poetry run python ./scripts/scrape_data.py \
             --fetch-changed-urls \
             --cutoff-months $CUTOFF_MONTHS \
@@ -268,7 +268,7 @@ jobs:
           fi
           
           echo "changed_count=$CHANGED_COUNT" >> $GITHUB_OUTPUT
-          echo "Detected $CHANGED_COUNT recently changed URLs"
+          echo "Detected $CHANGED_COUNT recently changed statuses"
 
       - name: Upload recent changed URLs
         if: steps.detect_changes.outputs.changed_count != '0'
@@ -343,7 +343,7 @@ jobs:
           path: old_pending_urls.txt
           retention-days: 1
 
-  # Job 4: Process recent changed URLs (detected by Job 2) to update resolution data
+  # Job 4: Process recently changed statuses (detected by Job 2) to update resolution data
   recent-resolution-scraper:
     runs-on: ubuntu-latest
     name: "4. Recent resolution date scraper"
@@ -379,7 +379,7 @@ jobs:
       - name: Scrape recent changed URLs
         run: |
           echo "🎯 RECENT RESOLUTION DATE SCRAPER"
-          echo "Strategy: Targeted resolution date extraction for recently changed URLs detected by Job 2"
+          echo "Strategy: Targeted resolution date extraction for recently changed statuses detected by Job 2"
           echo "Advantage: Optimized processing focusing only on status and resolution date extraction"
           echo "URLs to scrape: ${{ needs.recent-url-detector.outputs.changed_urls_count }}"
           echo "Backend: ${{ github.event.inputs.backend || 'beautifulsoup' }}"
@@ -414,7 +414,7 @@ jobs:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           git add data/raw
-          git commit -m "[Auto-commit] Recent resolutions: ${{ needs.recent-url-detector.outputs.changed_urls_count }} URLs updated
+          git commit -m "[Auto-commit] Recent resolutions: ${{ needs.recent-url-detector.outputs.changed_urls_count }} status changes updated
 
           Updated at: $(date -u '+%Y-%m-%d %H:%M:%S UTC')
           Backend: ${{ github.event.inputs.backend || 'beautifulsoup' }}
@@ -551,7 +551,7 @@ jobs:
           echo "✅ 1. Comprehensive scraping: Find completely new entries"
           echo "✅ 2. Recent change detection: Fast scan recent pages (${CUTOFF_MONTHS:-3} months) for status changes"
           echo "✅ 3. Old pending extraction: Get URLs of unresolved issues older than ${CUTOFF_MONTHS:-3} months"
-          echo "✅ 4. Recent resolution scraping: Update recently changed URLs"
+          echo "✅ 4. Recent resolution scraping: Update recently changed statuses"
           echo "✅ 5. Old resolution scraping: Check if old pending issues are now resolved"
           echo "Pipeline mode: ${{ github.event_name == 'workflow_dispatch' && 'Manual' || 'Nightly Scheduled' }}"
           echo ""

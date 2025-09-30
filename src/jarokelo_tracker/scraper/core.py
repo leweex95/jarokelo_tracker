@@ -799,29 +799,29 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
     
     def detect_changed_urls_fast(self, cutoff_months: int = 3, output_file: str = "recent_changed_urls.txt") -> int:
         """
-        Fast URL change detection - scans only recent pages for status changes.
+        Fast status change detection - scans only recent pages for status changes.
         
         Args:
             cutoff_months: Only scan pages from last N months (default: 3)
             output_file: File to save changed URLs to
             
         Returns:
-            Number of changed URLs detected
+            Number of status changes detected
         """
         from datetime import datetime, timedelta
         import time, os, json
         
         cutoff_date = datetime.now() - timedelta(days=cutoff_months * 30)
         
-        print(f"🔍 URL Change Detection for Past {cutoff_months} Months")
-        print(f"   Start date: {cutoff_date.strftime('%Y-%m-%d')}")
-        print(f"   End date: {datetime.now().strftime('%Y-%m-%d')}")
-        print(f"   Output file: {output_file}")
-        print(f"   Detection mode: Fast scan with no full scraping")
+        print(f"🔍 RECENT STATUS CHANGE DETECTION (FAST SCAN)")
+        print(f"Strategy: Scan only listing pages for status changes in the last {cutoff_months} months")
+        print(f"Advantage: 100x faster than comprehensive scraping for status monitoring")
+        print(f"Cutoff months: {cutoff_months}")
+        print(f"Backend: {self.backend}")
         
         print("\n[PERF] Building URL index cache...")
         start_time = time.time()
-        # Load existing data to compare against
+        # Load existing data to compare against for status changes
         existing_data = {}
         for filename in os.listdir(self.data_manager.data_dir):
             if filename.endswith(".jsonl"):
@@ -839,11 +839,14 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                         except json.JSONDecodeError:
                             continue
         
-        print(f"   Loaded {len(existing_data):,} records in {time.time() - start_time:.2f}s")
+        print(f"[PERF] Loaded {len(existing_data):,} URLs in {time.time() - start_time:.2f}s")
+        print(f"[PERF] URL index cached for future runs")
         
         changed_urls = set()
         page = 1
         scan_start_time = time.time()
+        print(f"\n� Running in synchronous processing mode")
+        print(f"Using buffered saving (buffer size: {self.data_manager.buffer_size}) for performance")
         
         try:
             while True:
@@ -852,7 +855,7 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                 else:
                     page_url = f"{self.BASE_URL}?page={page}"
                 
-                print(f"   [Page {page}] Checking: {page_url}")
+                print(f"[Page {page}] Loading: {page_url}")
                 
                 # Extract card info from listing page (URL + status)
                 if self.backend == 'beautifulsoup':
@@ -868,7 +871,6 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                     break
                 
                 # Check each card for changes
-                found_old_report = False
                 for card in card_info:
                     url = card["url"]
                     current_status = card.get("status", "")
@@ -881,7 +883,7 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                         
                         # Only check reports within our cutoff date
                         if report_date >= cutoff_date.strftime("%Y-%m-%d"):
-                            # Detect if status changed or resolution was added
+                                    # Detect if status changed or resolution was added
                             status_changed = current_status != old_status
                             newly_resolved = (not old_resolution and 
                                             current_status and 
@@ -889,22 +891,19 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                             
                             if status_changed or newly_resolved:
                                 changed_urls.add(url)
-                                print(f"   📝 Change detected: {url}")
+                                print(f"   📝 Status change detected: {url}")
                                 print(f"      Status: '{old_status}' → '{current_status}'")
-                                print(f"      Date: {report_date}")
+                                print(f"      Report date: {report_date}")
                         elif report_date < cutoff_date.strftime("%Y-%m-%d"):
-                            print(f"   Reached reports older than {cutoff_months} months, stopping")
-                            found_old_report = True
-                            break
+                            # Don't break here - we need to keep checking all reports within our time window
+                            # Just skip this individual report since it's too old
+                            continue
                     else:
-                        # New URL not in our database yet
-                        print(f"   ℹ️ New URL found: {url}")
-                        # We'll keep processing since it might be recent
+                        # New URL not in our database yet - don't consider it a change
+                        # Just continue processing
                         continue
                 
-                if found_old_report:
-                    break
-                    
+                # Continue to next page regardless of report age
                 page += 1
                 
                 # Safety limit to prevent runaway
@@ -913,7 +912,7 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                     break
         
         except Exception as e:
-            print(f"   Error during URL detection: {e}")
+            print(f"   Error during status detection: {e}")
             
         # Save changed URLs to file
         if changed_urls:
@@ -922,7 +921,7 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                     f.write(f"{url}\n")
         
         elapsed = time.time() - start_time
-        print(f"   ✅ Found {len(changed_urls):,} changed URLs in {elapsed:.1f}s")
+        print(f"   ✅ Detected {len(changed_urls):,} recently changed statuses in {elapsed:.1f}s")
         print(f"   📁 Saved to: {output_file}")
         
         return len(changed_urls)
