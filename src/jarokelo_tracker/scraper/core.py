@@ -972,10 +972,11 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
         
         cutoff_date = datetime.now() - timedelta(days=cutoff_months * 30)
         
-        print(f"� Running URL change detection for last {cutoff_months} months")
+        print(f"🔍 URL Change Detection for Past {cutoff_months} Months")
         print(f"   Start date: {cutoff_date.strftime('%Y-%m-%d')}")
         print(f"   End date: {datetime.now().strftime('%Y-%m-%d')}")
         print(f"   Output file: {output_file}")
+        print(f"   Detection mode: Fast scan with no full scraping")
         
         print("\n[PERF] Building URL index cache...")
         start_time = time.time()
