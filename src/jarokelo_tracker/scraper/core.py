@@ -6,10 +6,10 @@ using either Selenium or BeautifulSoup backends.
 """
 
 import re
+import os
+import time
 import requests
-import asyncio
-import aiohttp
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Dict, Optional, Tuple, Set, List
 from bs4 import BeautifulSoup
 from selenium import webdriver
@@ -27,7 +27,7 @@ class JarokeloScraper:
     
     BASE_URL = "https://jarokelo.hu/bejelentesek"
     
-    def __init__(self, data_dir: str = "data/raw", backend: str = "beautifulsoup", headless: bool = True, buffer_size: int = 100, async_mode: bool = False, max_concurrent: int = 10):
+    def __init__(self, data_dir: str = "data/raw", backend: str = "beautifulsoup", headless: bool = True, buffer_size: int = 100):
         """
         Initialize the scraper
         
@@ -36,19 +36,13 @@ class JarokeloScraper:
             backend: Scraping backend ('selenium' or 'beautifulsoup')
             headless: Whether to run browser in headless mode (for Selenium)
             buffer_size: Number of records to buffer in memory before writing to disk
-            async_mode: Whether to use async scraping (8.6x faster, auto-fallback to sync on errors)
-            max_concurrent: Maximum concurrent requests for async mode (optimal: 10)
         """
         self.data_manager = DataManager(data_dir, buffer_size)
         self.backend = backend
         self.headless = headless
-        self.async_mode = async_mode
-        self.max_concurrent = max_concurrent
         self.session = None
         self.driver = None
         self.wait = None
-        self.aio_session = None  # For async operations
-        self.semaphore = None  # For concurrency control
         
         if backend == 'selenium':
             self._init_selenium()
@@ -83,55 +77,12 @@ class JarokeloScraper:
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
         })
     
-    async def _init_async_session(self):
-        """Initialize async aiohttp session with optimal connection pooling"""
-        if not self.aio_session:
-            connector = aiohttp.TCPConnector(
-                limit=50,  # Total connection limit
-                limit_per_host=self.max_concurrent,
-                ttl_dns_cache=300,
-                use_dns_cache=True
-            )
-            
-            self.aio_session = aiohttp.ClientSession(
-                connector=connector,
-                headers={
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-                },
-                timeout=aiohttp.ClientTimeout(total=30)
-            )
-            
-            # Create semaphore for concurrency control
-            self.semaphore = asyncio.Semaphore(self.max_concurrent)
-    
-    async def _close_async_session(self):
-        """Close async session if open"""
-        if self.aio_session:
-            await self.aio_session.close()
-            self.aio_session = None
-            self.semaphore = None
-    
     def close(self):
         """Clean up resources"""
         if self.driver:
             self.driver.quit()
         if self.session:
             self.session.close()
-        
-        # Handle async session cleanup
-        if self.aio_session:
-            try:
-                # Try to close in current event loop
-                loop = asyncio.get_event_loop()
-                if loop.is_running():
-                    # Schedule cleanup for later
-                    loop.create_task(self._close_async_session())
-                else:
-                    # Run cleanup directly
-                    loop.run_until_complete(self._close_async_session())
-            except RuntimeError:
-                # No event loop, create one for cleanup
-                asyncio.run(self._close_async_session())
     
     def __enter__(self):
         return self
@@ -257,14 +208,67 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                 print(f"[ERROR] URL where error occurred: {url}")
             raise
     
-    def scrape_report_selenium(self, url: str) -> Dict:
-        """Scrape a single report page using Selenium and return its data."""
+    def scrape_report_selenium(self, url: str, resolution_focus: bool = False) -> Dict:
+        """
+        Scrape a single report page using Selenium and return its data.
+        
+        Args:
+            url: URL to scrape
+            resolution_focus: If True, optimizes for resolution date extraction
+        """
         if not self.driver or not self.wait:
             raise ValueError("Selenium not initialized")
             
         self.driver.execute_script("window.open(arguments[0]);", url)
         self.driver.switch_to.window(self.driver.window_handles[1])
-
+        
+        # For resolution_focus, we can optimize by only looking for status and resolution_date
+        if resolution_focus:
+            # Get existing record data first to preserve other fields
+            _, existing_record, _ = self.data_manager.find_record_by_url(url)
+            
+            if existing_record:
+                try:
+                    # Status
+                    status_elems = self.driver.find_elements(By.CSS_SELECTOR, "span.badge")
+                    status = None
+                    for elem in status_elems:
+                        # Skip comment badges
+                        if "badge--comment" not in elem.get_attribute("class"):
+                            status = elem.text.strip()
+                            break
+                    
+                    # Resolution date (if available)
+                    resolution_date = None
+                    status_cards = self.driver.find_elements(By.CSS_SELECTOR, "div.report__status__card")
+                    for card in status_cards:
+                        time_elems = card.find_elements(By.TAG_NAME, "time")
+                        if time_elems:
+                            time_text = time_elems[0].text.strip()
+                            if time_text:
+                                try:
+                                    resolution_date = self.normalize_date(time_text.split()[0:3])
+                                    break
+                                except Exception as e:
+                                    print(f"[DEBUG] Error normalizing date: {e}")
+                                    continue
+                    
+                    # Update only necessary fields
+                    result = existing_record.copy()
+                    result["status"] = status
+                    result["resolution_date"] = resolution_date
+                    
+                    # Clean up
+                    self.driver.close()
+                    self.driver.switch_to.window(self.driver.window_handles[0])
+                    
+                    print(f"[OPTIMIZATION] Resolution date focus: {url} -> status={status}, resolution_date={resolution_date}")
+                    return result
+                except Exception as e:
+                    print(f"[WARNING] Resolution focus failed: {e}. Falling back to full scraping")
+                    # Fallback - reload page and continue with full scraping
+                    self.driver.get(url)
+        
         title = self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "h1.report__title"))).text
 
         # Author
@@ -374,15 +378,54 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
         
         return result
     
-    def scrape_report_beautifulsoup(self, url: str) -> Dict:
-        """Scrape a single report page using BeautifulSoup and return its data."""
+    def scrape_report_beautifulsoup(self, url: str, resolution_focus: bool = False) -> Dict:
+        """
+        Scrape a single report page using BeautifulSoup and return its data.
+        
+        Args:
+            url: URL to scrape
+            resolution_focus: If True, optimizes for resolution date extraction
+        """
         if not self.session:
             raise ValueError("Requests session not initialized")
             
         response = self.session.get(url)
         response.raise_for_status()
         soup = BeautifulSoup(response.text, 'html.parser')  # Use response.text instead of response.content
-
+        
+        # For resolution_focus, we can optimize by only looking for status and resolution_date
+        if resolution_focus:
+            # Get existing record data first to preserve other fields
+            _, existing_record, _ = self.data_manager.find_record_by_url(url)
+            
+            if existing_record:
+                # Status
+                status_elem = soup.select_one("span.badge")
+                status = status_elem.text.strip() if status_elem else None
+                
+                # Resolution date (if available)
+                resolution_date = None
+                status_cards = soup.select("div.report__status__card")
+                for card in status_cards:
+                    time_elem = card.select_one("time")
+                    if time_elem:
+                        time_text = time_elem.text.strip()
+                        if time_text:
+                            try:
+                                resolution_date = self.normalize_date(time_text.split()[0:3])
+                                break
+                            except Exception as e:
+                                print(f"[DEBUG] Error normalizing date: {e}")
+                                continue
+                
+                # Update only necessary fields
+                result = existing_record.copy()
+                result["status"] = status
+                result["resolution_date"] = resolution_date
+                print(f"[OPTIMIZATION] Resolution date focus: {url} -> status={status}, resolution_date={resolution_date}")
+                return result
+        
+        # Full scraping (either not resolution_focus or no existing record found)
         # Title
         title_elem = soup.select_one("h1.report__title")
         title = title_elem.text.strip() if title_elem else None
@@ -483,186 +526,28 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
         
         return result
     
-    async def scrape_report_beautifulsoup_async(self, url: str) -> Dict:
-        """Async version of BeautifulSoup scraping with fallback to sync on errors"""
-        if not self.aio_session:
-            await self._init_async_session()
-        
-        async with self.semaphore:  # Limit concurrency
-            try:
-                async with self.aio_session.get(url) as response:
-                    response.raise_for_status()
-                    # Use text() with explicit encoding
-                    html = await response.text(encoding='utf-8', errors='replace')
-                    
-                    soup = BeautifulSoup(html, 'html.parser')
 
-                    # Title
-                    title_elem = soup.select_one("h1.report__title")
-                    title = title_elem.text.strip() if title_elem else None
-
-                    # Author
-                    author_elem = soup.select_one("div.report__reporter div.report__author a")
-                    if author_elem:
-                        author = author_elem.text.strip()
-                        author_profile = author_elem.get("href")
-                    else:
-                        anon_elem = soup.select_one("div.report__reporter div.report__author")
-                        author = anon_elem.text.strip() if anon_elem else None
-                        author_profile = None
-
-                    # Date
-                    date_elem = soup.select_one("time.report__date")
-                    date = self.normalize_date(date_elem.text.strip(), url) if date_elem else None
-
-                    # Category
-                    category_elem = soup.select_one("div.report__category a")
-                    category = category_elem.text.strip() if category_elem else None
-
-                    # Institution
-                    institution_elem = soup.select_one("div.report__institution a")
-                    institution = institution_elem.text.strip() if institution_elem else None
-
-                    # Supporter
-                    supporter_elem = soup.select_one("span.report__partner__about")
-                    supporter = supporter_elem.text.strip() if supporter_elem else None
-
-                    # Description
-                    description_elem = soup.select_one("p.report__description")
-                    description = description_elem.text.strip() if description_elem else None
-
-                    # Status
-                    status_elem = soup.select_one("span.badge")
-                    status = status_elem.text.strip() if status_elem else None
-
-                    # Address
-                    address_elem = soup.select_one("address.report__location__address")
-                    address = address_elem.text.strip() if address_elem else None
-
-                    # Resolution date (if available)
-                    resolution_date = None
-                    status_cards = soup.select("div.report__status__card")
-                    for card in status_cards:
-                        time_elem = card.select_one("time")
-                        if time_elem:
-                            time_text = time_elem.text.strip()
-                            if time_text:
-                                try:
-                                    resolution_date = self.normalize_date(time_text.split()[0:3])
-                                    break
-                                except Exception as e:
-                                    print(f"[DEBUG] Error normalizing date: {e}")
-                                    continue
-
-                    # GPS Coordinates
-                    latitude, longitude = extract_gps_coordinates(html)
-
-                    result = {
-                        "url": url,
-                        "title": title,
-                        "author": author,
-                        "author_profile": author_profile,
-                        "date": date,
-                        "category": category,
-                        "institution": institution,
-                        "supporter": supporter,
-                        "description": description,
-                        "status": status,
-                        "address": address,
-                        "resolution_date": resolution_date,
-                        "latitude": latitude,
-                        "longitude": longitude
-                    }
-                    
-                    # VALIDATE ENCODING - FAIL LOUDLY IF CORRUPTION DETECTED
-                    self.validate_encoding(result, url)
-                    
-                    return result
-                    
-            except Exception as e:
-                print(f"[WARNING] Async scraping failed for {url}: {e}")
-                print("[INFO] Falling back to synchronous scraping...")
-                # Fallback to sync method
-                return self.scrape_report_beautifulsoup(url)
     
-    def scrape_report(self, url: str) -> Dict:
-        """Scrape a single report using the configured backend and mode"""
+    def scrape_report(self, url: str, resolution_focus: bool = False) -> Dict:
+        """
+        Scrape a single report using the configured backend
+        
+        Args:
+            url: URL to scrape
+            resolution_focus: If True, optimizes for resolution date extraction
+                              For recent/old resolution date jobs (Job 4 & 5)
+        """
         if self.backend == 'selenium':
-            if self.async_mode:
-                print("[INFO] Async mode not yet implemented for Selenium backend, using sync mode")
-            return self.scrape_report_selenium(url)
+            return self.scrape_report_selenium(url, resolution_focus=resolution_focus)
         elif self.backend == 'beautifulsoup':
-            if self.async_mode:
-                # For individual reports, async doesn't provide benefits and can cause event loop issues
-                # The performance benefit comes from batch async processing only
-                print("[INFO] Using sync mode for single report (async benefits only apply to batch processing)")
-                return self.scrape_report_beautifulsoup(url)
-            else:
-                return self.scrape_report_beautifulsoup(url)
+            return self.scrape_report_beautifulsoup(url, resolution_focus=resolution_focus)
         else:
             raise ValueError(f"Unsupported backend: {self.backend}")
     
-    def _run_single_async(self, url: str) -> Dict:
-        """DEPRECATED: Single async operations don't provide performance benefits"""
-        return self.scrape_report_beautifulsoup(url)
-    
-    async def _single_async_scrape(self, url: str) -> Dict:
-        """DEPRECATED: Use batch async processing for performance benefits"""
-        pass
-    
-    async def scrape_reports_async(self, urls: List[str]) -> List[Dict]:
-        """
-        Scrape multiple reports asynchronously with optimal concurrency.
-        This is the high-performance method that delivers 8.6x speedup.
-        """
-        if self.backend != 'beautifulsoup':
-            raise ValueError("Async batch scraping only supported with BeautifulSoup backend")
-        
-        if not self.aio_session:
-            await self._init_async_session()
-        
-        print(f"🚀 Starting async batch scraping of {len(urls)} URLs with {self.max_concurrent} concurrent connections...")
-        
-        # Create tasks for all URLs
-        tasks = [self.scrape_report_beautifulsoup_async(url) for url in urls]
-        
-        # Execute with progress tracking
-        results = []
-        completed = 0
-        
-        # Process in batches to avoid overwhelming the event loop
-        batch_size = min(50, len(tasks))
-        for i in range(0, len(tasks), batch_size):
-            batch = tasks[i:i + batch_size]
-            batch_results = await asyncio.gather(*batch, return_exceptions=True)
-            
-            for result in batch_results:
-                if isinstance(result, Exception):
-                    print(f"[ERROR] Batch item failed: {result}")
-                    results.append(None)  # Placeholder for failed items
-                else:
-                    results.append(result)
-                
-                completed += 1
-                if completed % 10 == 0:
-                    print(f"✅ Completed {completed}/{len(urls)} reports")
-        
-        print(f"🎯 Async batch scraping completed: {len([r for r in results if r is not None])}/{len(urls)} successful")
-        return [r for r in results if r is not None]  # Filter out failed items
-    
     def scrape_reports_batch(self, urls: List[str]) -> List[Dict]:
         """
-        Scrape multiple reports with automatic async/sync mode selection.
-        Uses async mode for 8.6x speedup when enabled, falls back to sync on errors.
+        Scrape multiple reports synchronously.
         """
-        if self.async_mode and self.backend == 'beautifulsoup':
-            try:
-                return asyncio.run(self.scrape_reports_async(urls))
-            except Exception as e:
-                print(f"[WARNING] Async batch scraping failed: {e}")
-                print("[INFO] Falling back to synchronous batch processing...")
-        
-        # Synchronous fallback
         print(f"🔄 Starting synchronous batch scraping of {len(urls)} URLs...")
         results = []
         for i, url in enumerate(urls):
@@ -856,75 +741,31 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                     break
             else:
                 # New record - perform full scraping
-                # ASYNC OPTIMIZATION: Collect new URLs and batch process them
+                # Collect new URLs and batch process them
                 pass  # Processing moved to after the loop
 
-        # ASYNC BATCH PROCESSING: Process all new URLs from this page at once
+        # BATCH PROCESSING: Process all new URLs from this page at once
         new_urls_from_page = [card["url"] for card in card_info if card["url"] not in global_urls]
         
         if new_urls_from_page:
-            if self.async_mode:
+            print(f"� Processing {len(new_urls_from_page)} new URLs from this page...")
+            # Synchronous processing for new URLs
+            for url in new_urls_from_page:
                 try:
-                    print(f"🚀 Async batch processing {len(new_urls_from_page)} new URLs from this page...")
-                    # Use async batch processing for new URLs - PROPER EVENT LOOP HANDLING
-                    try:
-                        # Check if we're already in an event loop
-                        loop = asyncio.get_running_loop()
-                        print("[INFO] Already in event loop, using sync fallback for safety")
-                        raise RuntimeError("Event loop exists")
-                    except RuntimeError:
-                        # No event loop, safe to use asyncio.run
-                        reports = asyncio.run(self.scrape_reports_async(new_urls_from_page))
-                    
-                    # Save the reports and check for until_date
-                    for report in reports:
-                        if report:  # Skip None results from failed scrapes
-                            # Use buffered saving for comprehensive scraping, regular saving for status updates
-                            if use_buffered_saving:
-                                self.data_manager.save_report_buffered(report, global_urls)
-                            else:
-                                self.data_manager.save_report(report, global_urls)
-                            
-                        if until_date and report["date"] >= until_date:
-                            # We've reached older records than our cutoff date
-                            reached_done = True
-                            break
+                    report = self.scrape_report_beautifulsoup(url)
+                    # Use buffered saving for comprehensive scraping, regular saving for status updates
+                    if use_buffered_saving:
+                        self.data_manager.save_report_buffered(report, global_urls)
+                    else:
+                        self.data_manager.save_report(report, global_urls)
+                    if until_date and report["date"] >= until_date:
+                        # We've reached older records than our cutoff date
+                        reached_done = True
+                        break
                 except Exception as e:
-                    print(f"[WARNING] Async batch processing failed: {e}")
-                    print("[INFO] Falling back to sync processing for this page...")
-                    # Fallback to sync processing
-                    for url in new_urls_from_page:
-                        try:
-                            report = self.scrape_report_beautifulsoup(url)
-                            if use_buffered_saving:
-                                self.data_manager.save_report_buffered(report, global_urls)
-                            else:
-                                self.data_manager.save_report(report, global_urls)
-                            if until_date and report["date"] <= until_date:
-                                reached_done = True
-                                break
-                        except Exception as e:
-                            print(f"ERROR: Failed to scrape new report: {url}")
-                            print(f"Error details: {str(e)}")
-                            continue
-            else:
-                # Sync processing for new URLs (when async_mode=False)
-                for url in new_urls_from_page:
-                    try:
-                        report = self.scrape_report_beautifulsoup(url)
-                        # Use buffered saving for comprehensive scraping, regular saving for status updates
-                        if use_buffered_saving:
-                            self.data_manager.save_report_buffered(report, global_urls)
-                        else:
-                            self.data_manager.save_report(report, global_urls)
-                        if until_date and report["date"] >= until_date:
-                            # We've reached older records than our cutoff date
-                            reached_done = True
-                            break
-                    except Exception as e:
-                        print(f"ERROR: Failed to scrape new report: {url}")
-                        print(f"Error details: {str(e)}")
-                        continue  # Skip this report and continue with the next one
+                    print(f"ERROR: Failed to scrape new report: {url}")
+                    print(f"Error details: {str(e)}")
+                    continue  # Skip this report and continue with the next one
 
         if reached_done:
             return None, True
@@ -1086,19 +927,82 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
         
         return len(changed_urls)
     
-    def scrape_urls_from_file(self, urls_file: str, progress_prefix: str = "") -> int:
+    def extract_old_pending_urls(self, cutoff_months: int = 3, output_file: str = "old_pending_urls.txt") -> int:
+        """
+        Extract old pending URLs (older than cutoff_months) from existing database.
+        These are issues that were scraped a while ago but still don't have a resolution.
+        
+        Args:
+            cutoff_months: Extract issues older than this many months (default: 3)
+            output_file: File to save old pending URLs to
+            
+        Returns:
+            Number of old pending URLs extracted
+        """
+        import json
+        
+        print(f"🕰️ Extracting Old Pending URLs (older than {cutoff_months} months)")
+        start_time = time.time()
+        
+        # Calculate cutoff date
+        cutoff_date = (datetime.now() - timedelta(days=cutoff_months * 30)).strftime("%Y-%m-%d")
+        print(f"   Cutoff date: {cutoff_date}")
+        
+        # Load existing data to find old pending issues
+        old_pending_urls = set()
+        non_pending_statuses = {"MEGOLDOTT", "TÖRÖLT", "MEGOLDATLAN"}
+        
+        # Process each JSONL file in the data directory
+        for filename in os.listdir(self.data_manager.data_dir):
+            if not filename.endswith(".jsonl"):
+                continue
+                
+            file_path = os.path.join(self.data_manager.data_dir, filename)
+            print(f"   Processing {filename}...")
+            
+            with open(file_path, encoding="utf-8") as f:
+                for line in f:
+                    try:
+                        data = json.loads(line)
+                        
+                        # Check if the issue is old enough and still pending
+                        report_date = data.get("date", "9999-99-99")
+                        status = data.get("status", "").upper()
+                        url = data.get("url", "")
+                        
+                        if (report_date < cutoff_date and
+                            status not in non_pending_statuses and 
+                            url):
+                            old_pending_urls.add(url)
+                            
+                    except json.JSONDecodeError:
+                        continue
+        
+        # Save old pending URLs to file
+        if old_pending_urls:
+            with open(output_file, 'w', encoding='utf-8') as f:
+                for url in sorted(old_pending_urls):
+                    f.write(f"{url}\n")
+        
+        elapsed = time.time() - start_time
+        print(f"   ✅ Found {len(old_pending_urls):,} old pending URLs in {elapsed:.1f}s")
+        print(f"   📁 Saved to: {output_file}")
+        
+        return len(old_pending_urls)
+
+    def scrape_urls_from_file(self, urls_file: str, progress_prefix: str = "", resolution_focus: bool = True) -> int:
         """
         Scrape specific URLs from a file (for resolution date updates).
         
         Args:
             urls_file: File containing URLs to scrape (one per line)
             progress_prefix: Prefix for progress messages
+            resolution_focus: If True, optimizes for resolution date extraction
+                              For recent/old resolution date jobs (Job 4 & 5)
             
         Returns:
             Number of URLs successfully scraped
         """
-        import time
-        
         if not os.path.exists(urls_file):
             print(f"   ⚠️  URLs file not found: {urls_file}")
             return 0
@@ -1115,7 +1019,10 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
             print(f"   📝 No URLs to scrape in {urls_file}")
             return 0
         
-        print(f"{progress_prefix}Scraping {len(urls_to_scrape):,} URLs from {urls_file}")
+        if resolution_focus:
+            print(f"{progress_prefix}Fetching resolution dates for {len(urls_to_scrape):,} URLs from {urls_file}")
+        else:
+            print(f"{progress_prefix}Scraping {len(urls_to_scrape):,} URLs from {urls_file}")
         
         global_urls = self.data_manager.load_all_existing_urls()
         start_time = time.time()
@@ -1125,11 +1032,11 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
             try:
                 print(f"{progress_prefix}[{i}/{len(urls_to_scrape)}] {url}")
                 
-                # Scrape the report
+                # Scrape the report, using resolution_focus for efficiency if requested
                 if self.backend == 'beautifulsoup':
-                    report_data = self.scrape_report_beautifulsoup(url)
+                    report_data = self.scrape_report_beautifulsoup(url, resolution_focus=resolution_focus)
                 else:
-                    report_data = self.scrape_report_selenium(url)
+                    report_data = self.scrape_report_selenium(url, resolution_focus=resolution_focus)
                 
                 # Save immediately (no buffering for status updates)
                 self.data_manager.save_report(report_data, global_urls)
@@ -1140,7 +1047,10 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                 continue
         
         elapsed = time.time() - start_time
-        print(f"{progress_prefix}✅ Successfully scraped {successful_scrapes}/{len(urls_to_scrapes)} URLs in {elapsed:.1f}s")
+        if resolution_focus:
+            print(f"{progress_prefix}✅ Successfully updated resolution dates for {successful_scrapes}/{len(urls_to_scrape)} URLs in {elapsed:.1f}s")
+        else:
+            print(f"{progress_prefix}✅ Successfully scraped {successful_scrapes}/{len(urls_to_scrape)} URLs in {elapsed:.1f}s")
         
         return successful_scrapes
     

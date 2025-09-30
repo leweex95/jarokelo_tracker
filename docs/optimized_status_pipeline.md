@@ -4,7 +4,14 @@
 
 The original status update job was taking **6 hours and timing out** because it processed all 14,000+ entries sequentially through full page scraping. This was massively inefficient.
 
-## Solution: Smart 4-Job Pipeline
+## Solution: Smart Split Pipeline
+
+This intelligent approach separates the scraping process into targeted jobs based on content age and status:
+
+1. **New entries**: Comprehensive scraping of new content
+2. **Recent changes** (< 3 months): Fast listing page scanning to detect status changes
+3. **Old pending** (> 3 months): Database extraction of unresolved issues 
+4. **Targeted re-scraping**: Only process URLs that need attention
 
 ### Performance Improvements
 
@@ -17,46 +24,71 @@ The original status update job was taking **6 hours and timing out** because it 
 ### Architecture Overview
 
 ```
+┌─────────────────────┐
+│ 1. Comprehensive    │
+│    Scraping         │
+│ (new entries only)  │
+└─────────────────────┘
+
 ┌─────────────────────┐    ┌─────────────────────┐
-│ 1. Recent URL       │    │ 2. Old Pending     │
-│    Detector         │    │    URL Loader       │
+│ 2. Recent URL       │    │ 3. Old Pending     │
+│    Detector         │    │    URL Extractor    │
 │ (3 months, ~2 min)  │    │ (instant)           │
 └──────────┬──────────┘    └──────────┬──────────┘
            │                          │
            ▼                          ▼
 ┌─────────────────────┐    ┌─────────────────────┐
-│ 3. Recent           │    │ 4. Old Resolution  │
+│ 4. Recent           │    │ 5. Old Resolution  │
 │    Resolution       │    │    Scraper          │
 │    Scraper          │    │ (pending items)     │
 │ (changed URLs only) │    │                     │
 └─────────────────────┘    └─────────────────────┘
+
+┌─────────────────────┐
+│ 6. Pipeline         │
+│    Summary          │
+│ (results & metrics) │
+└─────────────────────┘
 ```
 
 ## Job Details
 
-### Job 1: Recent URL Detector 🔍
+### Job 1: Comprehensive Scraping 🚀
+- **Purpose**: Find completely new entries to add to our database
+- **Method**: Full scraping of new content with buffered saving
+- **Output**: New entries added to JSONL files
+- **Time**: ~5-10 minutes (depends on new content volume)
+- **Implementation**: Standard scraping that stops once it reaches already scraped entries
+
+### Job 2: Recent Status Change Detector 🔍
 - **Purpose**: Fast scan of last 3 months for status changes
 - **Method**: Lightweight listing page parsing (no full scraping)
 - **Output**: `recent_changed_urls.txt`
 - **Time**: ~2-3 minutes (same as full scraping, but only recent pages)
 
-### Job 2: Old Pending URL Loader 📋
-- **Purpose**: Load old unresolved issues from existing data
-- **Method**: Local file parsing (no network requests)
+### Job 3: Old Pending URL Extractor 📋
+- **Purpose**: Extract old unresolved issues from existing data
+- **Method**: Local database parsing (no network requests)
 - **Output**: `old_pending_urls.txt`
 - **Time**: <30 seconds
 
-### Job 3: Recent Resolution Scraper 🎯
-- **Purpose**: Full scraping of recently changed URLs only
-- **Method**: Targeted URL scraping from Job 1 output
-- **Dependencies**: Needs Job 1 results
+### Job 4: Recent Resolution Date Scraper 🎯
+- **Purpose**: Fetch resolution dates for recently changed URLs only
+- **Method**: Targeted URL scraping from Job 2 output (resolution date focus)
+- **Dependencies**: Needs Job 2 results
 - **Time**: ~2-5 minutes (depends on changes found)
 
-### Job 4: Old Resolution Scraper 🕰️
+### Job 5: Old Resolution Scraper 🕰️
 - **Purpose**: Check old pending issues for resolution
-- **Method**: Targeted URL scraping from Job 2 output
-- **Dependencies**: Needs Job 2 results
+- **Method**: Targeted URL scraping from Job 3 output
+- **Dependencies**: Needs Job 3 results
 - **Time**: ~5-10 minutes (depends on pending count)
+
+### Job 6: Pipeline Summary 📊
+- **Purpose**: Collect and report metrics from all jobs
+- **Method**: Aggregates results and presents statistics
+- **Dependencies**: Runs after all other jobs complete
+- **Time**: <30 seconds
 
 ## Configuration
 
@@ -71,15 +103,22 @@ cutoff_months:
 ### Command Line Usage
 
 ```bash
-# Fast URL change detection (Job 1)
+# Job 1: Comprehensive scraping (new entries)
+poetry run python scripts/scrape_data.py
+
+# Job 2: Fast URL change detection
 poetry run python scripts/scrape_data.py --fetch-changed-urls --cutoff-months 3
 
-# Load old pending URLs (Job 2)
+# Job 3: Load old pending URLs
 poetry run python scripts/scrape_data.py --load-old-pending --cutoff-months 3
 
-# Scrape specific URLs (Jobs 3 & 4)
+# Job 4: Scrape recently changed URLs
 poetry run python scripts/scrape_data.py --scrape-urls-file recent_changed_urls.txt
+
+# Job 5: Scrape old pending URLs
 poetry run python scripts/scrape_data.py --scrape-urls-file old_pending_urls.txt
+
+# Job 6: Generate pipeline summary (implemented in GitHub Actions)
 ```
 
 ## Key Optimizations
@@ -100,8 +139,8 @@ poetry run python scripts/scrape_data.py --scrape-urls-file old_pending_urls.txt
 - Immediate saves (no buffering for status updates)
 
 ### 4. **Parallel Execution**
-- Jobs 1 & 2 run in parallel (URL detection + local loading)
-- Jobs 3 & 4 run conditionally based on outputs
+- Jobs 2 & 3 run in parallel (URL detection + local loading)
+- Jobs 4 & 5 run conditionally based on outputs
 - Clear dependency chain for reliability
 
 ### 5. **Smart Fallbacks**
