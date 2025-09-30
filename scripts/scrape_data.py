@@ -30,7 +30,7 @@ def main():
     parser.add_argument("--buffer-size", type=int, default=100, 
                        help="Number of records to buffer in memory before writing to disk (used for comprehensive scraping, ignored for status updates)")
     parser.add_argument("--async-mode", action="store_true", 
-                       help="Enable async scraping for 8.6x performance boost (auto-fallback to sync on errors)")
+                       help="Enable async scraping for page-level batching (modest performance gains with fallback to sync)")
     parser.add_argument("--max-concurrent", type=int, default=10, 
                        help="Maximum concurrent requests for async mode (optimal: 10)")
 
@@ -46,11 +46,11 @@ def main():
     try:
         # Print performance mode info
         if args.async_mode:
-            print(f"🚀 Async mode enabled: Up to 8.6x faster performance with {args.max_concurrent} concurrent connections")
-            print("   Auto-fallback to sync mode on any errors")
+            print(f"🚀 Async mode enabled: Page-level batching with {args.max_concurrent} concurrent connections")
+            print("   Modest performance gains with sync fallback for reliability")
         else:
             print("🔄 Sync mode: Reliable sequential processing")
-            print("   Tip: Use --async-mode for 8.6x performance boost")
+            print("   Tip: Use --async-mode for page-level async batching")
         
         with JarokeloScraper(
             data_dir=args.data_dir,

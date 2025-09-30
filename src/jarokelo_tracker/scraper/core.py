@@ -448,7 +448,6 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                             if time_text:
                                 try:
                                     resolution_date = self.normalize_date(time_text.split()[0:3])
-                                    print(f"[DEBUG] Parsed resolution_date: {resolution_date}")
                                 except Exception as e:
                                     print(f"[DEBUG] Error normalizing date: {e}")
                                 break
@@ -594,27 +593,22 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
             return self.scrape_report_selenium(url)
         elif self.backend == 'beautifulsoup':
             if self.async_mode:
-                # Run async method in sync context with proper event loop handling
-                try:
-                    # Check if we're already in an event loop
-                    try:
-                        loop = asyncio.get_running_loop()
-                        # We're in an event loop, need to run in a separate thread
-                        import concurrent.futures
-                        with concurrent.futures.ThreadPoolExecutor() as executor:
-                            future = executor.submit(asyncio.run, self.scrape_report_beautifulsoup_async(url))
-                            return future.result()
-                    except RuntimeError:
-                        # No running event loop, can use asyncio.run directly
-                        return asyncio.run(self.scrape_report_beautifulsoup_async(url))
-                except Exception as e:
-                    print(f"[WARNING] Async mode failed: {e}")
-                    print("[INFO] Falling back to synchronous mode...")
-                    return self.scrape_report_beautifulsoup(url)
+                # For individual reports, async doesn't provide benefits and can cause event loop issues
+                # The performance benefit comes from batch async processing only
+                print("[INFO] Using sync mode for single report (async benefits only apply to batch processing)")
+                return self.scrape_report_beautifulsoup(url)
             else:
                 return self.scrape_report_beautifulsoup(url)
         else:
             raise ValueError(f"Unsupported backend: {self.backend}")
+    
+    def _run_single_async(self, url: str) -> Dict:
+        """DEPRECATED: Single async operations don't provide performance benefits"""
+        return self.scrape_report_beautifulsoup(url)
+    
+    async def _single_async_scrape(self, url: str) -> Dict:
+        """DEPRECATED: Use batch async processing for performance benefits"""
+        pass
     
     async def scrape_reports_async(self, urls: List[str]) -> List[Dict]:
         """
@@ -862,20 +856,74 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                     break
             else:
                 # New record - perform full scraping
+                # ASYNC OPTIMIZATION: Collect new URLs and batch process them
+                pass  # Processing moved to after the loop
+
+        # ASYNC BATCH PROCESSING: Process all new URLs from this page at once
+        new_urls_from_page = [card["url"] for card in card_info if card["url"] not in global_urls]
+        
+        if new_urls_from_page:
+            if self.async_mode:
                 try:
-                    report = self.scrape_report_beautifulsoup(url)
-                    # Use buffered saving for comprehensive scraping, regular saving for status updates
-                    if use_buffered_saving:
-                        self.data_manager.save_report_buffered(report, global_urls)
-                    else:
-                        self.data_manager.save_report(report, global_urls)
-                    if until_date and report["date"] <= until_date:
-                        reached_done = True
-                        break
+                    print(f"🚀 Async batch processing {len(new_urls_from_page)} new URLs from this page...")
+                    # Use async batch processing for new URLs - PROPER EVENT LOOP HANDLING
+                    try:
+                        # Check if we're already in an event loop
+                        loop = asyncio.get_running_loop()
+                        print("[INFO] Already in event loop, using sync fallback for safety")
+                        raise RuntimeError("Event loop exists")
+                    except RuntimeError:
+                        # No event loop, safe to use asyncio.run
+                        reports = asyncio.run(self.scrape_reports_async(new_urls_from_page))
+                    
+                    # Save the reports and check for until_date
+                    for report in reports:
+                        if report:  # Skip None results from failed scrapes
+                            # Use buffered saving for comprehensive scraping, regular saving for status updates
+                            if use_buffered_saving:
+                                self.data_manager.save_report_buffered(report, global_urls)
+                            else:
+                                self.data_manager.save_report(report, global_urls)
+                            
+                            if until_date and report["date"] <= until_date:
+                                reached_done = True
+                                break
+                                
                 except Exception as e:
-                    print(f"ERROR: Failed to scrape new report: {url}")
-                    print(f"Error details: {str(e)}")
-                    continue  # Skip this report and continue with the next one
+                    print(f"[WARNING] Async batch processing failed: {e}")
+                    print("[INFO] Falling back to sync processing for this page...")
+                    # Fallback to sync processing
+                    for url in new_urls_from_page:
+                        try:
+                            report = self.scrape_report_beautifulsoup(url)
+                            if use_buffered_saving:
+                                self.data_manager.save_report_buffered(report, global_urls)
+                            else:
+                                self.data_manager.save_report(report, global_urls)
+                            if until_date and report["date"] <= until_date:
+                                reached_done = True
+                                break
+                        except Exception as e:
+                            print(f"ERROR: Failed to scrape new report: {url}")
+                            print(f"Error details: {str(e)}")
+                            continue
+            else:
+                # Sync processing for new URLs (when async_mode=False)
+                for url in new_urls_from_page:
+                    try:
+                        report = self.scrape_report_beautifulsoup(url)
+                        # Use buffered saving for comprehensive scraping, regular saving for status updates
+                        if use_buffered_saving:
+                            self.data_manager.save_report_buffered(report, global_urls)
+                        else:
+                            self.data_manager.save_report(report, global_urls)
+                        if until_date and report["date"] <= until_date:
+                            reached_done = True
+                            break
+                    except Exception as e:
+                        print(f"ERROR: Failed to scrape new report: {url}")
+                        print(f"Error details: {str(e)}")
+                        continue  # Skip this report and continue with the next one
 
         if reached_done:
             return None, True
