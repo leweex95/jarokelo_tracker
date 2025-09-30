@@ -955,6 +955,185 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
         else:
             raise ValueError(f"Unsupported backend: {self.backend}")
     
+    def detect_changed_urls_fast(self, cutoff_months: int = 3, output_file: str = "recent_changed_urls.txt") -> int:
+        """
+        Fast URL change detection - scans only recent pages for status changes.
+        
+        Args:
+            cutoff_months: Only scan pages from last N months (default: 3)
+            output_file: File to save changed URLs to
+            
+        Returns:
+            Number of changed URLs detected
+        """
+        from datetime import datetime, timedelta
+        import time
+        
+        cutoff_date = datetime.now() - timedelta(days=cutoff_months * 30)
+        
+        print(f"🔍 Fast URL change detection (last {cutoff_months} months)")
+        print(f"   Cutoff date: {cutoff_date.strftime('%Y-%m-%d')}")
+        print(f"   Output file: {output_file}")
+        
+        # Load existing data to compare against
+        existing_data = {}
+        for filename in os.listdir(self.data_manager.data_dir):
+            if filename.endswith(".jsonl"):
+                file_path = os.path.join(self.data_manager.data_dir, filename)
+                with open(file_path, encoding="utf-8") as f:
+                    for line in f:
+                        try:
+                            data = json.loads(line)
+                            # Only load recent data for comparison
+                            if data.get("date", "0000-00-00") >= cutoff_date.strftime("%Y-%m-%d"):
+                                existing_data[data["url"]] = {
+                                    "status": data.get("status", ""),
+                                    "resolution_date": data.get("resolution_date")
+                                }
+                        except json.JSONDecodeError:
+                            continue
+        
+        print(f"   Loaded {len(existing_data):,} recent records for comparison")
+        
+        changed_urls = set()
+        page = 1
+        start_time = time.time()
+        
+        try:
+            while True:
+                if page == 1:
+                    page_url = self.BASE_URL
+                else:
+                    page_url = f"{self.BASE_URL}?page={page}"
+                
+                print(f"   [Page {page}] Checking: {page_url}")
+                
+                # Extract card info from listing page (URL + status)
+                if self.backend == 'beautifulsoup':
+                    card_info = self.extract_listing_info_beautifulsoup(page_url)
+                else:
+                    card_info = self.extract_listing_info_selenium(page_url)
+                
+                if not card_info:
+                    print(f"   No more cards found on page {page}, stopping")
+                    break
+                
+                # Check each card for changes
+                found_old_report = False
+                for card in card_info:
+                    url = card["url"]
+                    current_status = card.get("status", "")
+                    
+                    if url in existing_data:
+                        old_status = existing_data[url]["status"]
+                        old_resolution = existing_data[url]["resolution_date"]
+                        
+                        # Detect if status changed or resolution was added
+                        status_changed = current_status != old_status
+                        newly_resolved = (not old_resolution and 
+                                        current_status and 
+                                        current_status.upper() == "MEGOLDOTT")
+                        
+                        if status_changed or newly_resolved:
+                            changed_urls.add(url)
+                            print(f"   📝 Change detected: {url}")
+                            print(f"      Status: '{old_status}' → '{current_status}'")
+                    else:
+                        # New URL not in our database yet - this indicates we've gone beyond cutoff
+                        # Check the date to see if it's older than cutoff
+                        try:
+                            # Quick date extraction from listing page would be ideal, 
+                            # but for now we'll use a simpler heuristic
+                            found_old_report = True
+                            break
+                        except:
+                            pass
+                
+                # If we found reports older than cutoff, stop scanning
+                if found_old_report:
+                    print(f"   Reached reports older than {cutoff_months} months, stopping")
+                    break
+                    
+                page += 1
+                
+                # Safety limit to prevent runaway
+                if page > 500:  # Adjust based on your data volume
+                    print(f"   Reached safety limit of 500 pages, stopping")
+                    break
+        
+        except Exception as e:
+            print(f"   Error during URL detection: {e}")
+            
+        # Save changed URLs to file
+        if changed_urls:
+            with open(output_file, 'w', encoding='utf-8') as f:
+                for url in sorted(changed_urls):
+                    f.write(f"{url}\n")
+        
+        elapsed = time.time() - start_time
+        print(f"   ✅ Found {len(changed_urls):,} changed URLs in {elapsed:.1f}s")
+        print(f"   📁 Saved to: {output_file}")
+        
+        return len(changed_urls)
+    
+    def scrape_urls_from_file(self, urls_file: str, progress_prefix: str = "") -> int:
+        """
+        Scrape specific URLs from a file (for resolution date updates).
+        
+        Args:
+            urls_file: File containing URLs to scrape (one per line)
+            progress_prefix: Prefix for progress messages
+            
+        Returns:
+            Number of URLs successfully scraped
+        """
+        import time
+        
+        if not os.path.exists(urls_file):
+            print(f"   ⚠️  URLs file not found: {urls_file}")
+            return 0
+        
+        # Load URLs from file
+        urls_to_scrape = []
+        with open(urls_file, 'r', encoding='utf-8') as f:
+            for line in f:
+                url = line.strip()
+                if url:
+                    urls_to_scrape.append(url)
+        
+        if not urls_to_scrape:
+            print(f"   📝 No URLs to scrape in {urls_file}")
+            return 0
+        
+        print(f"{progress_prefix}Scraping {len(urls_to_scrape):,} URLs from {urls_file}")
+        
+        global_urls = self.data_manager.load_all_existing_urls()
+        start_time = time.time()
+        successful_scrapes = 0
+        
+        for i, url in enumerate(urls_to_scrape, 1):
+            try:
+                print(f"{progress_prefix}[{i}/{len(urls_to_scrape)}] {url}")
+                
+                # Scrape the report
+                if self.backend == 'beautifulsoup':
+                    report_data = self.scrape_report_beautifulsoup(url)
+                else:
+                    report_data = self.scrape_report_selenium(url)
+                
+                # Save immediately (no buffering for status updates)
+                self.data_manager.save_report(report_data, global_urls)
+                successful_scrapes += 1
+                
+            except Exception as e:
+                print(f"{progress_prefix}   ❌ Error scraping {url}: {e}")
+                continue
+        
+        elapsed = time.time() - start_time
+        print(f"{progress_prefix}✅ Successfully scraped {successful_scrapes}/{len(urls_to_scrapes)} URLs in {elapsed:.1f}s")
+        
+        return successful_scrapes
+    
     def scrape(self, start_page: int = 1, until_date: Optional[str] = None, 
                stop_on_existing: bool = True, continue_scraping: bool = False,
                update_existing_status: bool = False):

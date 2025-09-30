@@ -87,6 +87,48 @@ class DataManager:
         
         return global_urls
     
+    def load_pending_urls_older_than(self, cutoff_months: int = 3) -> Set[str]:
+        """
+        Load all URLs from existing data that are still pending/waiting and older than cutoff_months.
+        
+        Args:
+            cutoff_months: Number of months ago to use as cutoff (default: 3)
+            
+        Returns:
+            Set of URLs that are pending and older than cutoff
+        """
+        import time
+        from datetime import datetime, timedelta
+        
+        cutoff_date = datetime.now() - timedelta(days=cutoff_months * 30)
+        cutoff_str = cutoff_date.strftime("%Y-%m-%d")
+        
+        pending_urls = set()
+        pending_statuses = {"VÁRAKOZÁS", "FOLYAMATBAN", "BEKÜLDÖTT", "WAITING", "IN_PROGRESS", "SUBMITTED"}
+        
+        print(f"[PERF] Loading pending URLs older than {cutoff_str} ({cutoff_months} months ago)...")
+        start_time = time.time()
+        
+        for filename in os.listdir(self.data_dir):
+            if filename.endswith(".jsonl"):
+                file_path = os.path.join(self.data_dir, filename)
+                with open(file_path, encoding="utf-8") as f:
+                    for line in f:
+                        try:
+                            data = json.loads(line)
+                            # Check if report is old enough and still pending
+                            if (data.get("date", "9999-99-99") < cutoff_str and 
+                                data.get("status", "").upper() in pending_statuses and
+                                not data.get("resolution_date")):  # Not resolved
+                                pending_urls.add(data["url"])
+                        except json.JSONDecodeError:
+                            continue
+        
+        load_time = time.time() - start_time
+        print(f"[PERF] Found {len(pending_urls):,} old pending URLs in {load_time:.2f}s")
+        
+        return pending_urls
+    
     def _get_file_metadata(self) -> Dict[str, float]:
         """Get modification times for all JSONL files"""
         metadata = {}
