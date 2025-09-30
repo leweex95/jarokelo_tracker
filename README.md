@@ -63,6 +63,77 @@ _To update the status of existing records (e.g., when "Válaszra vár" changes t
 
 This efficiently checks and updates the status of already-scraped records without performing full re-scraping. When a status changes to "MEGOLDOTT" (resolved), the scraper automatically performs a full re-scrape to capture the `resolution_date`.
 
+### Quick Commands with Makefile
+
+For convenience, common scraping tasks are available as short commands.
+
+**Prerequisites:**
+- **Windows:** Use the included `jarokelo.bat` file (no installation needed!) or optionally install Make via: `winget install GnuWin32.Make`
+- **macOS/Linux:** Make is usually pre-installed
+
+**View all available commands:**
+
+```bash
+# Windows (using batch file - recommended)
+jarokelo.bat help
+
+# macOS/Linux (using Makefile)
+make help
+```
+
+**Most commonly used commands:**
+
+```bash
+# Windows
+jarokelo.bat continue-scraping
+jarokelo.bat update-status
+
+# macOS/Linux  
+make continue-scraping
+make update-status
+```
+
+**Scrape until a specific date:**
+
+```bash
+# Windows
+set DATE=2025-01-01 && jarokelo.bat scrape-until-date
+
+# macOS/Linux
+make scrape-until-date DATE=2025-01-01
+```
+
+**Other useful commands:**
+
+```bash
+# Show resume point
+jarokelo.bat show-scraping-resume-date    # Windows
+make show-scraping-resume-date           # macOS/Linux
+
+# Data pipeline
+jarokelo.bat run-pipeline        # Windows  
+make run-pipeline               # macOS/Linux
+```
+
+**Alternative: Direct Poetry Commands**
+
+If you prefer to use poetry commands directly:
+
+```bash
+# Continue scraping
+poetry run python scripts/scrape_data.py --backend bs --continue-scraping --data-dir "data/raw3"
+
+# Update status
+poetry run python scripts/scrape_data.py --backend bs --update-existing-status --data-dir "data/raw3"
+
+# Scrape until date
+poetry run python scripts/scrape_data.py --backend bs --start-page 1 --until-date 2025-01-01 --data-dir "data/raw3"
+```
+
+**Yes, you can now use short commands instead of the longer poetry commands!** 🎉
+- **Windows users:** Use `jarokelo.bat` (no installation required)
+- **macOS/Linux users:** Use `make` commands
+
 3. Preprocess data
 
 I implemented two types of preprocessing. One is specifically for the vector store and RAG functionality (`preprocess_rag.py`) while the other is for exploratory data analysis and extracting insights from data via Power BI dashboarding (`preprocess_eda.py`).
