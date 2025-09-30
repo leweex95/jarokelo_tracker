@@ -32,7 +32,7 @@ help:
 # Task 1: Continue scraping from the last scraped date onwards without an upper limit
 .PHONY: continue-scraping
 continue-scraping:
-	@echo "🚀 Continuing scraping from last scraped date onwards..."
+	@echo "Continuing scraping from last scraped date onwards..."
 	poetry run python scripts/scrape_data.py \
 		--backend bs \
 		--continue-scraping \
@@ -41,7 +41,7 @@ continue-scraping:
 # Task 2: Scrape newest entries and update status of existing records
 .PHONY: update-status
 update-status:
-	@echo "🔄 Updating status of existing records and scraping new entries..."
+	@echo "Updating status of existing records and scraping new entries..."
 	poetry run python scripts/scrape_data.py \
 		--backend bs \
 		--update-existing-status \
@@ -55,10 +55,10 @@ update-status:
 .PHONY: scrape-until-date
 scrape-until-date:
 	@if [ -z "$(DATE)" ]; then \
-		echo "❌ Error: Please specify DATE. Usage: make scrape-until-date DATE=YYYY-MM-DD"; \
+		echo "Error: Please specify DATE. Usage: make scrape-until-date DATE=YYYY-MM-DD"; \
 		exit 1; \
 	fi
-	@echo "📅 Scraping until date: $(DATE)"
+	@echo "Scraping until date: $(DATE)"
 	poetry run python scripts/scrape_data.py \
 		--backend bs \
 		--start-page 1 \
@@ -72,15 +72,15 @@ scrape-until-date:
 # Run both RAG and EDA preprocessing
 .PHONY: preprocess-all
 preprocess-all:
-	@echo "🔧 Running RAG preprocessing..."
+	@echo "Running RAG preprocessing..."
 	poetry run python src/jarokelo_tracker/preprocess/preprocess_rag.py
-	@echo "📊 Running EDA preprocessing..."
+	@echo "Running EDA preprocessing..."
 	poetry run python src/jarokelo_tracker/preprocess/preprocess_eda.py
 
 # Build FAISS vector store with default multilingual model
 .PHONY: build-vector-store
 build-vector-store:
-	@echo "🏗️ Building FAISS vector store..."
+	@echo "Building FAISS vector store..."
 	poetry run python scripts/build_vector_store.py \
 		--backend faiss \
 		--embedding sentence-transformers/distiluse-base-multilingual-cased-v2
@@ -88,7 +88,7 @@ build-vector-store:
 # Run full data pipeline (preprocess + vector store)
 .PHONY: run-pipeline
 run-pipeline: preprocess-all build-vector-store
-	@echo "✅ Full data pipeline completed!"
+	@echo "Full data pipeline completed!"
 
 # =============================================================================
 # UTILITY TASKS
@@ -97,5 +97,5 @@ run-pipeline: preprocess-all build-vector-store
 # Show where scraping would resume from
 .PHONY: show-scraping-resume-date
 show-scraping-resume-date:
-	@echo "📍 Checking resume date where scraping would continue from..."
+	@echo "Checking resume date where scraping would continue from..."
 	poetry run python -c "from src.jarokelo_tracker.scraper.data_manager import DataManager; dm = DataManager('data/raw'); resume_date, page = dm.get_scraping_resume_point(); print(f'Would resume from: {resume_date} (page {page})' if resume_date else 'No existing data - would start from page 1')"

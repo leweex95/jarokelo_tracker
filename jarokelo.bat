@@ -37,53 +37,53 @@ echo   set DATE=2025-01-01 ^&^& jarokelo.bat scrape-until-date
 goto end
 
 :continue-scraping
-echo 🚀 Continuing scraping from last scraped date onwards...
+echo Continuing scraping from last scraped date onwards...
 poetry run python scripts/scrape_data.py --backend bs --continue-scraping --data-dir "data/raw"
 goto end
 
 :update-status
-echo 🔄 Updating status of existing records and scraping new entries...
+echo Updating status of existing records and scraping new entries...
 poetry run python scripts/scrape_data.py --backend bs --update-existing-status --data-dir "data/raw"
 goto end
 
 :scrape-until-date
 if "%DATE%"=="" (
-    echo ❌ Error: Please set DATE environment variable. Example: set DATE=2025-01-01 ^&^& jarokelo.bat scrape-until-date
+    echo Error: Please set DATE environment variable. Example: set DATE=2025-01-01 ^&^& jarokelo.bat scrape-until-date
     goto end
 )
-echo 📅 Scraping until date: %DATE%
+echo Scraping until date: %DATE%
 poetry run python scripts/scrape_data.py --backend bs --start-page 1 --until-date %DATE% --data-dir "data/raw"
 goto end
 
 :show-scraping-resume-date
-echo 📍 Checking resume date where scraping would continue from...
+echo Checking resume date where scraping would continue from...
 poetry run python -c "from src.jarokelo_tracker.scraper.data_manager import DataManager; dm = DataManager('data/raw'); resume_date, page = dm.get_scraping_resume_point(); print(f'Would resume from: {resume_date} (page {page})' if resume_date else 'No existing data - would start from page 1')"
 goto end
 
 :preprocess-all
-echo 🔧 Running RAG preprocessing...
+echo Running RAG preprocessing...
 poetry run python src/jarokelo_tracker/preprocess/preprocess_rag.py
-echo 📊 Running EDA preprocessing...
+echo Running EDA preprocessing...
 poetry run python src/jarokelo_tracker/preprocess/preprocess_eda.py
 goto end
 
 :build-vector-store
-echo 🏗️ Building FAISS vector store...
+echo Building FAISS vector store...
 poetry run python scripts/build_vector_store.py --backend faiss --embedding sentence-transformers/distiluse-base-multilingual-cased-v2
 goto end
 
 :run-pipeline
-echo 🔧 Running RAG preprocessing...
+echo Running RAG preprocessing...
 poetry run python src/jarokelo_tracker/preprocess/preprocess_rag.py
-echo 📊 Running EDA preprocessing...
+echo Running EDA preprocessing...
 poetry run python src/jarokelo_tracker/preprocess/preprocess_eda.py
-echo 🏗️ Building FAISS vector store...
+echo Building FAISS vector store...
 poetry run python scripts/build_vector_store.py --backend faiss --embedding sentence-transformers/distiluse-base-multilingual-cased-v2
-echo ✅ Full data pipeline completed!
+echo Full data pipeline completed!
 goto end
 
 :invalid
-echo ❌ Invalid command: %1
+echo Invalid command: %1
 echo Run "jarokelo.bat help" to see available commands
 goto end
 
