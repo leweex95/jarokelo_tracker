@@ -485,7 +485,7 @@ def generate_demo(output_dir: str = "docs/embeddings", max_points: int = 1000):
     """
     from pathlib import Path
     
-    print("=== Járőkelő Embeddings Visualization Demo ===\n")
+    print("=== Jarokelo Embeddings Visualization Demo ===\n")
     
     # Create output directory
     output_path = Path(output_dir)
