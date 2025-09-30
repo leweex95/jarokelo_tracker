@@ -268,7 +268,7 @@ jobs:
           echo "Detected $CHANGED_COUNT recently changed URLs"
 
       - name: Upload recent changed URLs
-        if: steps.detect_changes.outputs.changed_count > 0
+        if: steps.detect_changes.outputs.changed_count != '0'
         uses: actions/upload-artifact@v4
         with:
           name: recent-changed-urls
