@@ -1014,8 +1014,11 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                 
                 # Extract card info from listing page (URL + status)
                 if self.backend == 'beautifulsoup':
+                    # Call scrape_listing_page with stop_on_existing=False to scan all pages
+                    next_url, _ = self.scrape_listing_page_beautifulsoup(page_url, set(), None, False, False)
                     card_info = self.extract_listing_info_beautifulsoup(page_url)
                 else:
+                    next_url, _ = self.scrape_listing_page_selenium(page_url, set(), None, False, False)
                     card_info = self.extract_listing_info_selenium(page_url)
                 
                 if not card_info:
@@ -1029,28 +1032,35 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                     current_status = card.get("status", "")
                     
                     if url in existing_data:
-                        old_status = existing_data[url]["status"]
-                        old_resolution = existing_data[url]["resolution_date"]
+                        old_data = existing_data[url]
+                        old_status = old_data["status"]
+                        old_resolution = old_data["resolution_date"]
+                        report_date = old_data["date"]
                         
-                        # Detect if status changed or resolution was added
-                        status_changed = current_status != old_status
-                        newly_resolved = (not old_resolution and 
-                                        current_status and 
-                                        current_status.upper() == "MEGOLDOTT")
-                        
-                        if status_changed or newly_resolved:
-                            changed_urls.add(url)
-                            print(f"   📝 Change detected: {url}")
-                            print(f"      Status: '{old_status}' → '{current_status}'")
+                        # Only check reports within our cutoff date
+                        if report_date >= cutoff_date.strftime("%Y-%m-%d"):
+                            # Detect if status changed or resolution was added
+                            status_changed = current_status != old_status
+                            newly_resolved = (not old_resolution and 
+                                            current_status and 
+                                            current_status.upper() == "MEGOLDOTT")
+                            
+                            if status_changed or newly_resolved:
+                                changed_urls.add(url)
+                                print(f"   📝 Change detected: {url}")
+                                print(f"      Status: '{old_status}' → '{current_status}'")
+                                print(f"      Date: {report_date}")
+                        elif report_date < cutoff_date.strftime("%Y-%m-%d"):
+                            print(f"   Reached reports older than {cutoff_months} months, stopping")
+                            found_old_report = True
+                            break
                     else:
                         # New URL not in our database yet
                         print(f"   ℹ️ New URL found: {url}")
                         # We'll keep processing since it might be recent
                         continue
                 
-                # If we found reports older than cutoff, stop scanning
                 if found_old_report:
-                    print(f"   Reached reports older than {cutoff_months} months, stopping")
                     break
                     
                 page += 1
