@@ -888,7 +888,8 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                         if until_date and report["date"] >= until_date:
                             # We've reached older records than our cutoff date
                             reached_done = True
-                            break                except Exception as e:
+                            break
+                except Exception as e:
                     print(f"[WARNING] Async batch processing failed: {e}")
                     print("[INFO] Falling back to sync processing for this page...")
                     # Fallback to sync processing
