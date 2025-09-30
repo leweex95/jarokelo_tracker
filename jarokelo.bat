@@ -6,6 +6,9 @@ if "%1"=="" goto help
 if "%1"=="help" goto help
 if "%1"=="continue-scraping" goto continue-scraping
 if "%1"=="update-status" goto update-status
+if "%1"=="detect-recent-changes" goto detect-recent-changes
+if "%1"=="load-old-pending" goto load-old-pending
+if "%1"=="scrape-urls-file" goto scrape-urls-file
 if "%1"=="scrape-until-date" goto scrape-until-date
 if "%1"=="show-scraping-resume-date" goto show-scraping-resume-date
 if "%1"=="preprocess-all" goto preprocess-all
