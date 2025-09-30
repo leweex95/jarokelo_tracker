@@ -1,4 +1,4 @@
-name: Data scraper
+name: Data scraper (old)
 
 on:
   schedule:

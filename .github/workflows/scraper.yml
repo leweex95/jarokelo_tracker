@@ -1,4 +1,4 @@
-name: Optimized Data Scraper
+name: Data scraper
 
 on:
   schedule:
