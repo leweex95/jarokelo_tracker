@@ -437,9 +437,10 @@ jobs:
           done
 
   # Job 5: Check old pending URLs (extracted by Job 3) for resolution updates
+  # PERFORMANCE OPTIMIZED: Process only random sample of 100 URLs per run
   old-resolution-scraper:
     runs-on: ubuntu-latest
-    name: "5. Old resolution date scraper"
+    name: "5. Old resolution date scraper (optimized)"
     needs: old-pending-loader
     if: needs.old-pending-loader.outputs.pending_urls_count > 0
     steps:
@@ -471,11 +472,23 @@ jobs:
 
       - name: Scrape old pending URLs
         run: |
-          echo "🕰️ OLD RESOLUTION DATE SCRAPER"
-          echo "Strategy: Check resolution status of old pending issues extracted by Job 3"
-          echo "Advantage: Only re-checks old issues still pending resolution, focusing on resolution dates"
-          echo "URLs to scrape: ${{ needs.old-pending-loader.outputs.pending_urls_count }}"
+          echo "🕰️ OLD RESOLUTION DATE SCRAPER (OPTIMIZED)"
+          echo "Strategy: Random sampling of old pending issues to check for resolutions"
+          echo "Optimization: Process max 100 random URLs per run for manageable runtime"
+          echo "Total URLs available: ${{ needs.old-pending-loader.outputs.pending_urls_count }}"
           echo "Backend: ${{ github.event.inputs.backend || 'beautifulsoup' }}"
+          
+          # Create random sample of max 100 URLs
+          if [ -f "old_pending_urls.txt" ]; then
+            TOTAL_URLS=$(wc -l < old_pending_urls.txt)
+            if [ $TOTAL_URLS -gt 100 ]; then
+              echo "Sampling 100 random URLs from $TOTAL_URLS total"
+              shuf old_pending_urls.txt | head -100 > old_pending_urls_sample.txt
+              mv old_pending_urls_sample.txt old_pending_urls.txt
+            else
+              echo "Processing all $TOTAL_URLS URLs (under limit)"
+            fi
+          fi
           
           # Scrape the old pending URLs
           poetry run python ./scripts/scrape_data.py \
@@ -507,12 +520,13 @@ jobs:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           git add data/raw
-          git commit -m "[Auto-commit] Old resolutions: ${{ needs.old-pending-loader.outputs.pending_urls_count }} URLs checked
+          git commit -m "[Auto-commit] Old resolutions: Random sample of max 100 URLs checked
 
           Updated at: $(date -u '+%Y-%m-%d %H:%M:%S UTC')
           Backend: ${{ github.event.inputs.backend || 'beautifulsoup' }}
           Cutoff months: ${{ github.event.inputs.cutoff_months || '3' }}
-          URLs processed: ${{ needs.old-pending-loader.outputs.pending_urls_count }}
+          Total pending URLs: ${{ needs.old-pending-loader.outputs.pending_urls_count }}
+          Processed: Random sample (max 100)
           
           [skip ci]"
           
@@ -552,7 +566,7 @@ jobs:
           echo "✅ 2. Recent change detection: Fast scan recent pages (${CUTOFF_MONTHS:-3} months) for status changes"
           echo "✅ 3. Old pending extraction: Get URLs of unresolved issues older than ${CUTOFF_MONTHS:-3} months"
           echo "✅ 4. Recent resolution scraping: Update recently changed statuses"
-          echo "✅ 5. Old resolution scraping: Check if old pending issues are now resolved"
+          echo "✅ 5. Old resolution scraping: Check random sample (max 100) of old pending issues"
           echo "Pipeline mode: ${{ github.event_name == 'workflow_dispatch' && 'Manual' || 'Nightly Scheduled' }}"
           echo ""
           echo "Job Results:"
