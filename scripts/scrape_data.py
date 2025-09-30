@@ -33,6 +33,14 @@ def main():
                        help="Enable async scraping for page-level batching (modest performance gains with fallback to sync)")
     parser.add_argument("--max-concurrent", type=int, default=10, 
                        help="Maximum concurrent requests for async mode (optimal: 10)")
+    parser.add_argument("--cutoff-months", type=int, default=3,
+                       help="Months cutoff for separating recent vs old status updates (default: 3)")
+    parser.add_argument("--fetch-changed-urls", action="store_true",
+                       help="Fast detection of recently changed URLs only (output to file)")
+    parser.add_argument("--scrape-urls-file", type=str, default=None,
+                       help="Scrape specific URLs from file (one URL per line)")
+    parser.add_argument("--load-old-pending", action="store_true",
+                       help="Load old pending URLs and save to file")
 
     args = parser.parse_args()
     
