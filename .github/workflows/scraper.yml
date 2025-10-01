@@ -127,13 +127,54 @@ jobs:
           echo "records_before=$RECORD_COUNT" >> $GITHUB_OUTPUT
           echo "Existing records before scraping: $RECORD_COUNT"
 
+      - name: Compute until-date
+        id: until_date
+        run: |
+          DATA_DIR="${{ github.event.inputs.data_dir || 'data/raw' }}"
+          UNTIL_DATE="${{ github.event.inputs.until_date || '' }}"
+
+          if [ -z "$UNTIL_DATE" ]; then
+            UNTIL_DATE=$(python3 - <<'EOF'
+            import json, glob
+            from datetime import datetime, timedelta
+
+            data_dir = "${DATA_DIR}"
+            # Find the latest jsonl file
+            files = sorted(glob.glob(f"{data_dir}/*.jsonl"))
+            if not files:
+                print((datetime.today() - timedelta(days=1)).strftime("%Y-%m-%d"))
+                exit()
+            latest_file = files[-1]
+
+            # Parse all lines and find max date
+            max_date = None
+            with open(latest_file, "r", encoding="utf-8") as f:
+                for line in f:
+                    try:
+                        entry = json.loads(line)
+                        d = datetime.fromisoformat(entry.get("date"))
+                        if max_date is None or d > max_date:
+                            max_date = d
+                    except Exception:
+                        continue
+
+            if max_date:
+                # Use 1 day before max date
+                print((max_date - timedelta(days=1)).strftime("%Y-%m-%d"))
+            else:
+                print((datetime.today() - timedelta(days=1)).strftime("%Y-%m-%d"))
+            EOF
+            )
+          fi
+
+          echo "UNTIL_DATE=$UNTIL_DATE" >> $GITHUB_ENV
+
       - name: Run comprehensive scraper
         run: |
           BACKEND="${{ github.event.inputs.backend || 'beautifulsoup' }}"
           HEADLESS="${{ github.event.inputs.headless || 'true' }}"
           DATA_DIR="${{ github.event.inputs.data_dir || 'data/raw' }}"
           START_PAGE="${{ github.event.inputs.start_page || '1' }}"
-          UNTIL_DATE="${{ github.event.inputs.until_date || '' }}"
           CONTINUE_SCRAPING="${{ github.event.inputs.continue_scraping || '' }}"
 
           echo "Running COMPREHENSIVE scraper for new entries..."
@@ -143,7 +184,8 @@ jobs:
           echo "Start page: $START_PAGE"
           
           BUFFER_SIZE="${{ github.event.inputs.buffer_size || '50' }}"
-          ARGS="--data-dir data/raw --buffer-size $BUFFER_SIZE --until-date $(date +%Y-%m-%d)"
+          ARGS="--data-dir $DATA_DIR --buffer-size $BUFFER_SIZE --until-date $UNTIL_DATE"
+          
           if [ -n "$UNTIL_DATE" ]; then
             ARGS="$ARGS --until-date $UNTIL_DATE"
             echo "Until date: $UNTIL_DATE"
