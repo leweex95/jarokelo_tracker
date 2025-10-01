@@ -860,8 +860,7 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                 # Extract card info from listing page (URL + status) - NO SCRAPING!
                 card_info = self.extract_listing_info_beautifulsoup(page_url)
                 
-                print(f"   Found {len(card_info)} cards on this page")
-                
+                # Only print if no cards found
                 if not card_info:
                     print(f"   No more cards found on page {page}, stopping")
                     break
@@ -888,8 +887,6 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                             if status_changed or newly_resolved:
                                 changed_urls.add(url)
                                 print(f"   📝 Status change detected: {url}")
-                                print(f"      Status: '{old_status}' → '{current_status}'")
-                                print(f"      Report date: {report_date}")
                         elif report_date < cutoff_date.strftime("%Y-%m-%d"):
                             # Don't break here - we need to keep checking all reports within our time window
                             # Just skip this individual report since it's too old
@@ -907,15 +904,12 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                     
                     next_page_elems = soup.select("a.pagination__link")
                     next_url = None
-                    print(f"   Found {len(next_page_elems)} pagination links")
                     for elem in next_page_elems:
                         link_text = elem.text.strip()
-                        print(f"   Pagination link: '{link_text}'")
                         if "Következő" in elem.text:
                             href = elem.get("href")
                             if href and href.startswith("/"):
                                 next_url = "https://jarokelo.hu" + href
-                                print(f"   Next page URL: {next_url}")
                             break
                 else:
                     # For selenium, implement similar logic if needed
