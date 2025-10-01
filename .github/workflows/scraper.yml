@@ -255,9 +255,9 @@ jobs:
         run: |
           DATA_DIR="${{ github.event.inputs.data_dir || 'data/raw' }}"
           NEW_RECORDS="${{ steps.count_after.outputs.new_records }}"
-          
-          git add "$DATA_DIR"
           BUFFER_SIZE="${{ github.event.inputs.buffer_size || '25' }}"
+
+          git add "$DATA_DIR"
           git commit -m "[Auto-commit] Comprehensive scraping: $NEW_RECORDS new records
 
           Scraped at: $(date -u '+%Y-%m-%d %H:%M:%S UTC')
@@ -265,21 +265,29 @@ jobs:
           Buffer size: $BUFFER_SIZE
           Total records: ${{ steps.count_after.outputs.records_after }}
           New records: $NEW_RECORDS
-          
+
           [skip ci]"
-          
-          # Push with retry logic
+
+          # Detect current branch
+          BRANCH=$(git rev-parse --abbrev-ref HEAD)
           RETRIES=10
+          SUCCESS=0
           for i in $(seq 1 $RETRIES); do
-            git pull --rebase
-            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master && {
+            git fetch origin "$BRANCH"
+            git pull --rebase origin "$BRANCH" || git merge origin/"$BRANCH"
+            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:"$BRANCH" && {
               echo "Successfully pushed comprehensive scraping data!"
+              SUCCESS=1
               break
             } || {
               echo "Push failed, retrying ($i/$RETRIES)..."
               sleep 3
             }
           done
+          if [ "$SUCCESS" -ne 1 ]; then
+            echo "ERROR: Failed to push after $RETRIES attempts."
+            exit 1
+          fi
 
   # Job 2: Fast detection of recently changed statuses (configurable, default: last 3 months)
   # This job quickly scans recent pages WITHOUT opening individual URLs to find status changes
