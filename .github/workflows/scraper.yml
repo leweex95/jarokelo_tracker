@@ -548,22 +548,19 @@ jobs:
 
       - name: Scrape old pending URLs
         run: |
-          echo "🕰️ OLD RESOLUTION DATE SCRAPER (OPTIMIZED)"
+          echo "OLD RESOLUTION DATE SCRAPER (OPTIMIZED)"
           echo "Strategy: Random sampling of old pending issues to check for resolutions"
           echo "Optimization: Process max 100 random URLs per run for manageable runtime"
           echo "Total URLs available: ${{ needs.old-pending-loader.outputs.pending_urls_count }}"
           echo "Backend: ${{ github.event.inputs.backend || 'beautifulsoup' }}"
           
-          # Create random sample of max 100 URLs
+          # Sample 250 random URLs from the last 1000 entries
           if [ -f "old_pending_urls.txt" ]; then
             TOTAL_URLS=$(wc -l < old_pending_urls.txt)
-            if [ $TOTAL_URLS -gt 100 ]; then
-              echo "Sampling 100 random URLs from $TOTAL_URLS total"
-              shuf old_pending_urls.txt | head -100 > old_pending_urls_sample.txt
-              mv old_pending_urls_sample.txt old_pending_urls.txt
-            else
-              echo "Processing all $TOTAL_URLS URLs (under limit)"
-            fi
+            START_LINE=$(( TOTAL_URLS > 1000 ? TOTAL_URLS - 999 : 1 ))
+            tail -n +$START_LINE old_pending_urls.txt | shuf | head -250 > old_pending_urls_sample.txt
+            mv old_pending_urls_sample.txt old_pending_urls.txt
+            echo "Processing $(wc -l < old_pending_urls.txt) URLs from last 1000 entries"
           fi
           
           # Scrape the old pending URLs
