@@ -199,13 +199,13 @@ jobs:
           fi
           echo "Buffer size: $BUFFER_SIZE (optimized for CI disk space constraints)"
           
-          echo "Running: python ./scripts/scrape_data.py $ARGS"
+          echo "Running: poetry run python ./scripts/scrape_data.py $ARGS"
           echo ""
           
           echo "🔍 Monitor before scraping:"
           ./scripts/monitor_resources.sh
           
-          python ./scripts/scrape_data.py $ARGS
+          poetry run python ./scripts/scrape_data.py $ARGS
           
           echo "🔍 Monitor after scraping:"
           ./scripts/monitor_resources.sh
@@ -331,7 +331,7 @@ jobs:
           echo "Backend: ${{ github.event.inputs.backend || 'beautifulsoup' }}"
           
           # Run fast status change detection
-          python ./scripts/scrape_data.py \
+          poetry run python ./scripts/scrape_data.py \
             --fetch-changed-urls \
             --cutoff-months $CUTOFF_MONTHS \
             --backend "${{ github.event.inputs.backend || 'beautifulsoup' }}" \
@@ -398,7 +398,7 @@ jobs:
           echo "Cutoff months: $CUTOFF_MONTHS"
           
           # Load old pending URLs
-          python ./scripts/scrape_data.py \
+          poetry run python ./scripts/scrape_data.py \
             --load-old-pending \
             --cutoff-months $CUTOFF_MONTHS
           
@@ -462,7 +462,7 @@ jobs:
           echo "Backend: ${{ github.event.inputs.backend || 'beautifulsoup' }}"
           
           # Scrape the recently changed URLs
-          python ./scripts/scrape_data.py \
+          poetry run python ./scripts/scrape_data.py \
             --scrape-urls-file recent_changed_urls.txt \
             --backend "${{ github.event.inputs.backend || 'beautifulsoup' }}" \
             --headless "${{ github.event.inputs.headless || 'true' }}"
@@ -565,7 +565,7 @@ jobs:
           fi
           
           # Scrape the old pending URLs
-          python ./scripts/scrape_data.py \
+          poetry run python ./scripts/scrape_data.py \
             --scrape-urls-file old_pending_urls.txt \
             --backend "${{ github.event.inputs.backend || 'beautifulsoup' }}" \
             --headless "${{ github.event.inputs.headless || 'true' }}"
