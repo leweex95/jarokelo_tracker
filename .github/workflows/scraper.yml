@@ -144,37 +144,30 @@ jobs:
           UNTIL_DATE="${{ github.event.inputs.until_date || '' }}"
 
           if [ -z "$UNTIL_DATE" ]; then
-            UNTIL_DATE=$(python3 - <<'EOF'
-            import json, glob
-            from datetime import datetime, timedelta
-
-            data_dir = "${DATA_DIR}"
-            # Find the latest jsonl file
-            files = sorted(glob.glob(f"{data_dir}/*.jsonl"))
-            if not files:
-                print((datetime.today() - timedelta(days=1)).strftime("%Y-%m-%d"))
-                exit()
-            latest_file = files[-1]
-
-            # Parse all lines and find max date
-            max_date = None
-            with open(latest_file, "r", encoding="utf-8") as f:
-                for line in f:
-                    try:
-                        entry = json.loads(line)
-                        d = datetime.fromisoformat(entry.get("date"))
-                        if max_date is None or d > max_date:
-                            max_date = d
-                    except Exception:
-                        continue
-
-            if max_date:
-                # Use 1 day before max date
-                print((max_date - timedelta(days=1)).strftime("%Y-%m-%d"))
-            else:
-                print((datetime.today() - timedelta(days=1)).strftime("%Y-%m-%d"))
-            EOF
-            )
+            UNTIL_DATE=$(python3 -c "
+          import json, glob
+          from datetime import datetime, timedelta
+          data_dir = '$DATA_DIR'
+          files = sorted(glob.glob(f'{data_dir}/*.jsonl'))
+          if not files:
+              print((datetime.today() - timedelta(days=1)).strftime('%Y-%m-%d'))
+              exit()
+          latest_file = files[-1]
+          max_date = None
+          with open(latest_file, 'r', encoding='utf-8') as f:
+              for line in f:
+                  try:
+                      entry = json.loads(line)
+                      d = datetime.fromisoformat(entry.get('date'))
+                      if max_date is None or d > max_date:
+                          max_date = d
+                  except Exception:
+                      continue
+          if max_date:
+              print((max_date - timedelta(days=1)).strftime('%Y-%m-%d'))
+          else:
+              print((datetime.today() - timedelta(days=1)).strftime('%Y-%m-%d'))
+          ")
           fi
 
           echo "UNTIL_DATE=$UNTIL_DATE" >> $GITHUB_ENV
