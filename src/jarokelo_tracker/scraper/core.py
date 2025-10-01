@@ -27,7 +27,7 @@ class JarokeloScraper:
     
     BASE_URL = "https://jarokelo.hu/bejelentesek"
     
-    def __init__(self, data_dir: str = "data/raw", backend: str = "beautifulsoup", headless: bool = True, buffer_size: int = 100):
+    def __init__(self, data_dir: str = "data/raw", backend: str = "beautifulsoup", headless: bool = True, buffer_size: int = 50):
         """
         Initialize the scraper
         
@@ -35,7 +35,7 @@ class JarokeloScraper:
             data_dir: Directory to store scraped data
             backend: Scraping backend ('selenium' or 'beautifulsoup')
             headless: Whether to run browser in headless mode (for Selenium)
-            buffer_size: Number of records to buffer in memory before writing to disk
+            buffer_size: Number of records to buffer in memory before writing to disk (default reduced for CI stability)
         """
         self.data_manager = DataManager(data_dir, buffer_size)
         self.backend = backend

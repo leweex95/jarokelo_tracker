@@ -9,6 +9,8 @@ import os
 import json
 import pickle
 import hashlib
+import gc
+import psutil
 from datetime import datetime
 from typing import Dict, Set, Tuple, Optional, List
 from collections import defaultdict
@@ -17,7 +19,7 @@ from collections import defaultdict
 class DataManager:
     """Manages data storage and retrieval for scraped reports"""
     
-    def __init__(self, data_dir: str = "data/raw", buffer_size: int = 100):
+    def __init__(self, data_dir: str = "data/raw", buffer_size: int = 50):
         self.data_dir = data_dir
         self.buffer_size = buffer_size  # Number of records to buffer before writing to disk
         self.buffer = defaultdict(list)  # Buffer organized by monthly file: {file_path: [reports]}
@@ -27,6 +29,10 @@ class DataManager:
         self.index_file = os.path.join(data_dir, ".url_index.cache")
         self.meta_file = os.path.join(data_dir, ".file_meta.cache")
         
+        # Memory and disk monitoring
+        self._monitor_resources = True
+        self._last_memory_check = 0
+        
         os.makedirs(data_dir, exist_ok=True)
     
     def get_monthly_file(self, report_date: str) -> str:
@@ -34,6 +40,44 @@ class DataManager:
         # report_date expected as string, e.g. "2025-08-25"
         month_str = datetime.strptime(report_date, "%Y-%m-%d").strftime("%Y-%m")
         return os.path.join(self.data_dir, f"{month_str}.jsonl")
+    
+    def _check_resource_usage(self, force: bool = False) -> None:
+        """Monitor memory and disk usage, force flush if necessary"""
+        if not self._monitor_resources:
+            return
+            
+        import time
+        current_time = time.time()
+        
+        # Check resources every 30 seconds or when forced
+        if not force and current_time - self._last_memory_check < 30:
+            return
+            
+        self._last_memory_check = current_time
+        
+        try:
+            # Get memory usage
+            process = psutil.Process()
+            memory_mb = process.memory_info().rss / 1024 / 1024
+            
+            # Get disk usage
+            disk_usage = psutil.disk_usage(self.data_dir)
+            disk_free_gb = disk_usage.free / 1024 / 1024 / 1024
+            
+            # Log resource usage
+            if force or memory_mb > 500:  # Log if memory > 500MB or forced
+                print(f"[RESOURCE] Memory: {memory_mb:.1f}MB, Disk free: {disk_free_gb:.1f}GB, Buffer: {self.buffer_count} records")
+            
+            # Force flush if memory usage is high or disk space is low
+            if memory_mb > 800 or disk_free_gb < 2.0:  # 800MB memory or <2GB disk
+                print(f"[WARNING] High resource usage detected - forcing buffer flush")
+                print(f"[WARNING] Memory: {memory_mb:.1f}MB, Disk free: {disk_free_gb:.1f}GB")
+                self.flush_buffer()
+                gc.collect()  # Force garbage collection
+                
+        except Exception as e:
+            print(f"[WARNING] Resource monitoring failed: {e}")
+            self._monitor_resources = False  # Disable monitoring if it fails
     
     def load_existing_urls(self, report_date: str) -> Set[str]:
         """Load already saved report URLs for the report's month."""
@@ -259,6 +303,9 @@ class DataManager:
         self.buffer[file_path].append(report)
         self.buffer_count += 1
         
+        # Check resource usage periodically
+        self._check_resource_usage()
+        
         # Flush buffer if it's full
         if self.buffer_count >= self.buffer_size:
             self.flush_buffer()
@@ -272,6 +319,9 @@ class DataManager:
             return
         
         print(f"Flushing {self.buffer_count} records from buffer to disk...")
+        
+        # Force resource check before flushing
+        self._check_resource_usage(force=True)
         
         for file_path, buffered_reports in self.buffer.items():
             if not buffered_reports:
@@ -327,10 +377,16 @@ class DataManager:
         self.buffer.clear()
         self.buffer_count = 0
         
+        # Force garbage collection after buffer clear
+        gc.collect()
+        
         # Invalidate cache since files were modified
         self.invalidate_cache()
         
         print(f"Successfully flushed {buffer_records} records to disk")
+        
+        # Final resource check after flush
+        self._check_resource_usage(force=True)
     
     def __enter__(self):
         """Context manager entry"""
@@ -339,6 +395,32 @@ class DataManager:
     def __exit__(self, exc_type, exc_val, exc_tb):
         """Context manager exit - ensure buffer is flushed"""
         self.flush_buffer()
+        self.cleanup_temp_files()
+    
+    def cleanup_temp_files(self) -> None:
+        """Clean up temporary files to free disk space"""
+        try:
+            # Clean up cache files if they exist and are large
+            cache_files = [self.index_file, self.meta_file]
+            for cache_file in cache_files:
+                if os.path.exists(cache_file):
+                    size_mb = os.path.getsize(cache_file) / 1024 / 1024
+                    if size_mb > 50:  # If cache is larger than 50MB, remove it
+                        os.remove(cache_file)
+                        print(f"[CLEANUP] Removed large cache file: {cache_file} ({size_mb:.1f}MB)")
+            
+            # Clean up any temporary files in data directory
+            for filename in os.listdir(self.data_dir):
+                if filename.startswith('.tmp') or filename.endswith('.tmp'):
+                    temp_file = os.path.join(self.data_dir, filename)
+                    try:
+                        os.remove(temp_file)
+                        print(f"[CLEANUP] Removed temporary file: {filename}")
+                    except OSError:
+                        pass
+                        
+        except Exception as e:
+            print(f"[WARNING] Cleanup failed: {e}")
     
     def get_scraping_resume_point(self) -> Tuple[Optional[str], int]:
         """Determine resume point: oldest scraped report date and total saved reports."""

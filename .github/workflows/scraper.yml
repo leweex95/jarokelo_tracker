@@ -30,9 +30,9 @@ on:
         required: false
         default: ''
       buffer_size:
-        description: 'Buffer size for comprehensive scraping (higher = faster but more memory)'
+        description: 'Buffer size for comprehensive scraping (higher = faster but more memory) - reduced for CI stability'
         required: false
-        default: '200'
+        default: '50'
       cutoff_months:
         description: 'Months cutoff for recent vs old status updates (default: 3)'
         required: false
@@ -72,7 +72,7 @@ on:
       buffer_size:
         description: 'Buffer size for comprehensive scraping'
         required: false
-        default: '200'
+        default: '50'
         type: string
       cutoff_months:
         description: 'Months cutoff for recent vs old status updates'
@@ -110,6 +110,16 @@ jobs:
           python -m pip install --upgrade poetry==2.2.0
           poetry install --no-interaction
 
+      - name: Check available disk space
+        run: |
+          echo "Available disk space before scraping:"
+          df -h
+          AVAILABLE_GB=$(df / | tail -1 | awk '{print $4}' | sed 's/G//')
+          if [ "${AVAILABLE_GB%.*}" -lt 5 ]; then
+            echo "WARNING: Less than 5GB disk space available. Scraping may fail."
+            echo "Available space: ${AVAILABLE_GB}G"
+          fi
+
       - name: Count existing records
         id: count_before
         run: |
@@ -132,7 +142,7 @@ jobs:
           echo "Headless: $HEADLESS"
           echo "Start page: $START_PAGE"
           
-          BUFFER_SIZE="${{ github.event.inputs.buffer_size || '200' }}"
+          BUFFER_SIZE="${{ github.event.inputs.buffer_size || '50' }}"
           ARGS="--data-dir data/raw --buffer-size $BUFFER_SIZE --until-date $(date +%Y-%m-%d)"
           if [ -n "$UNTIL_DATE" ]; then
             ARGS="$ARGS --until-date $UNTIL_DATE"
@@ -142,7 +152,7 @@ jobs:
             ARGS="$ARGS --continue-scraping"
             echo "Continue scraping: enabled"
           fi
-          echo "Buffer size: $BUFFER_SIZE (for optimal performance)"
+          echo "Buffer size: $BUFFER_SIZE (optimized for CI disk space constraints)"
           
           echo "Running: poetry run python ./scripts/scrape_data.py $ARGS"
           echo ""
@@ -158,6 +168,14 @@ jobs:
           echo "new_records=$NEW_RECORDS" >> $GITHUB_OUTPUT
           echo "Records after scraping: $RECORD_COUNT"
           echo "New records added: $NEW_RECORDS"
+
+      - name: Check disk space after scraping
+        run: |
+          echo "Available disk space after scraping:"
+          df -h
+          echo ""
+          echo "Data directory size:"
+          du -sh data/raw || echo "No data directory found"
 
       - name: Check for changes
         id: check_changes
