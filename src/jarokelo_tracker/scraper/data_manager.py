@@ -19,9 +19,9 @@ from collections import defaultdict
 class DataManager:
     """Manages data storage and retrieval for scraped reports"""
     
-    def __init__(self, data_dir: str = "data/raw", buffer_size: int = 50):
+    def __init__(self, data_dir: str = "data/raw", buffer_size: int = 25):
         self.data_dir = data_dir
-        self.buffer_size = buffer_size  # Number of records to buffer before writing to disk
+        self.buffer_size = buffer_size  # Number of records to buffer before writing to disk (reduced for CI)
         self.buffer = defaultdict(list)  # Buffer organized by monthly file: {file_path: [reports]}
         self.buffer_count = 0  # Total number of buffered records
         
@@ -29,9 +29,10 @@ class DataManager:
         self.index_file = os.path.join(data_dir, ".url_index.cache")
         self.meta_file = os.path.join(data_dir, ".file_meta.cache")
         
-        # Memory and disk monitoring
+        # Memory and disk monitoring (more aggressive for CI)
         self._monitor_resources = True
         self._last_memory_check = 0
+        self._check_interval = 10  # Check every 10 records instead of 30 seconds
         
         os.makedirs(data_dir, exist_ok=True)
     
@@ -68,16 +69,62 @@ class DataManager:
             if force or memory_mb > 500:  # Log if memory > 500MB or forced
                 print(f"[RESOURCE] Memory: {memory_mb:.1f}MB, Disk free: {disk_free_gb:.1f}GB, Buffer: {self.buffer_count} records")
             
-            # Force flush if memory usage is high or disk space is low
-            if memory_mb > 800 or disk_free_gb < 2.0:  # 800MB memory or <2GB disk
+            # Force flush if memory usage is high or disk space is low (very aggressive for CI)
+            if memory_mb > 400 or disk_free_gb < 5.0:  # 400MB memory or <5GB disk (much more aggressive)
                 print(f"[WARNING] High resource usage detected - forcing buffer flush")
                 print(f"[WARNING] Memory: {memory_mb:.1f}MB, Disk free: {disk_free_gb:.1f}GB")
                 self.flush_buffer()
                 gc.collect()  # Force garbage collection
                 
+                # Emergency cleanup if still critical
+                if disk_free_gb < 3.0:
+                    print(f"[EMERGENCY] Critical disk space - running emergency cleanup")
+                    self._emergency_cleanup()
+                
         except Exception as e:
             print(f"[WARNING] Resource monitoring failed: {e}")
             self._monitor_resources = False  # Disable monitoring if it fails
+    
+    def _emergency_cleanup(self) -> None:
+        """Emergency cleanup when disk space is critically low"""
+        try:
+            print("[EMERGENCY] Running emergency disk cleanup...")
+            
+            # 1. Clear all caches immediately
+            cache_files = [self.index_file, self.meta_file]
+            for cache_file in cache_files:
+                if os.path.exists(cache_file):
+                    os.remove(cache_file)
+                    print(f"[EMERGENCY] Removed cache: {cache_file}")
+            
+            # 2. Clean up pip caches if accessible
+            import shutil
+            pip_cache_dir = os.path.expanduser("~/.cache/pip")
+            if os.path.exists(pip_cache_dir):
+                try:
+                    shutil.rmtree(pip_cache_dir)
+                    print(f"[EMERGENCY] Cleared pip cache")
+                except:
+                    pass
+            
+            # 3. Remove any .pyc files
+            import glob
+            pyc_files = glob.glob("**/*.pyc", recursive=True)
+            for pyc_file in pyc_files[:100]:  # Limit to avoid hanging
+                try:
+                    os.remove(pyc_file)
+                except:
+                    pass
+            if pyc_files:
+                print(f"[EMERGENCY] Removed {min(len(pyc_files), 100)} .pyc files")
+            
+            # 4. Force garbage collection
+            gc.collect()
+            
+            print("[EMERGENCY] Emergency cleanup completed")
+            
+        except Exception as e:
+            print(f"[ERROR] Emergency cleanup failed: {e}")
     
     def load_existing_urls(self, report_date: str) -> Set[str]:
         """Load already saved report URLs for the report's month."""
@@ -303,8 +350,11 @@ class DataManager:
         self.buffer[file_path].append(report)
         self.buffer_count += 1
         
-        # Check resource usage periodically
-        self._check_resource_usage()
+        # Check resource usage every 10 records or when forced
+        if self.buffer_count % self._check_interval == 0:
+            self._check_resource_usage(force=True)
+        else:
+            self._check_resource_usage()
         
         # Flush buffer if it's full
         if self.buffer_count >= self.buffer_size:

@@ -30,9 +30,9 @@ on:
         required: false
         default: ''
       buffer_size:
-        description: 'Buffer size for comprehensive scraping (higher = faster but more memory) - reduced for CI stability'
+        description: 'Buffer size for comprehensive scraping (higher = faster but more memory) - heavily reduced for CI stability'
         required: false
-        default: '50'
+        default: '25'
       cutoff_months:
         description: 'Months cutoff for recent vs old status updates (default: 3)'
         required: false
@@ -72,7 +72,7 @@ on:
       buffer_size:
         description: 'Buffer size for comprehensive scraping'
         required: false
-        default: '50'
+        default: '25'
         type: string
       cutoff_months:
         description: 'Months cutoff for recent vs old status updates'
@@ -95,20 +95,30 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.PAT_TOKEN }}
 
-      - name: Cache Poetry packages
+      - name: 🔍 Monitor Resources (Start)
+        run: |
+          chmod +x scripts/monitor_resources.sh
+          echo "=== RESOURCE MONITORING (JOB START) ==="
+          ./scripts/monitor_resources.sh
+
+      - name: Cache pip packages  
         uses: actions/cache@v4
         with:
-          path: |
-            ~/.cache/pypoetry/cache
-            ~/.cache/pypoetry/artifacts
-          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
-          restore-keys: ${{ runner.os }}-poetry-
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-scraper-${{ hashFiles('requirements-scraper.txt') }}
+          restore-keys: ${{ runner.os }}-pip-scraper-
 
-      - name: Set up Python & Poetry
+      - name: Set up Python & Minimal Dependencies (Scraper-only)
         run: |
           python -m pip install --upgrade pip
-          python -m pip install --upgrade poetry==2.2.0
-          poetry install --no-interaction
+          echo "Installing minimal scraper dependencies only (no ML packages)..."
+          pip install -r requirements-scraper.txt
+          
+          # Add src to Python path for our modules
+          echo "PYTHONPATH=$PWD/src:$PYTHONPATH" >> $GITHUB_ENV
+          
+          echo "🔍 Monitor after dependency installation:"
+          ./scripts/monitor_resources.sh
 
       - name: Check available disk space
         run: |
@@ -183,7 +193,7 @@ jobs:
           echo "Headless: $HEADLESS"
           echo "Start page: $START_PAGE"
           
-          BUFFER_SIZE="${{ github.event.inputs.buffer_size || '50' }}"
+          BUFFER_SIZE="${{ github.event.inputs.buffer_size || '25' }}"
           ARGS="--data-dir $DATA_DIR --buffer-size $BUFFER_SIZE --until-date $UNTIL_DATE"
           
           if [ -n "$UNTIL_DATE" ]; then
@@ -196,10 +206,16 @@ jobs:
           fi
           echo "Buffer size: $BUFFER_SIZE (optimized for CI disk space constraints)"
           
-          echo "Running: poetry run python ./scripts/scrape_data.py $ARGS"
+          echo "Running: python ./scripts/scrape_data.py $ARGS"
           echo ""
           
-          poetry run python ./scripts/scrape_data.py $ARGS
+          echo "🔍 Monitor before scraping:"
+          ./scripts/monitor_resources.sh
+          
+          python ./scripts/scrape_data.py $ARGS
+          
+          echo "🔍 Monitor after scraping:"
+          ./scripts/monitor_resources.sh
 
       - name: Count new records
         id: count_after
@@ -248,7 +264,7 @@ jobs:
           NEW_RECORDS="${{ steps.count_after.outputs.new_records }}"
           
           git add "$DATA_DIR"
-          BUFFER_SIZE="${{ github.event.inputs.buffer_size || '200' }}"
+          BUFFER_SIZE="${{ github.event.inputs.buffer_size || '25' }}"
           git commit -m "[Auto-commit] Comprehensive scraping: $NEW_RECORDS new records
 
           Scraped at: $(date -u '+%Y-%m-%d %H:%M:%S UTC')
@@ -314,7 +330,7 @@ jobs:
           echo "Backend: ${{ github.event.inputs.backend || 'beautifulsoup' }}"
           
           # Run fast status change detection
-          poetry run python ./scripts/scrape_data.py \
+          python ./scripts/scrape_data.py \
             --fetch-changed-urls \
             --cutoff-months $CUTOFF_MONTHS \
             --backend "${{ github.event.inputs.backend || 'beautifulsoup' }}" \
@@ -381,7 +397,7 @@ jobs:
           echo "Cutoff months: $CUTOFF_MONTHS"
           
           # Load old pending URLs
-          poetry run python ./scripts/scrape_data.py \
+          python ./scripts/scrape_data.py \
             --load-old-pending \
             --cutoff-months $CUTOFF_MONTHS
           
@@ -445,7 +461,7 @@ jobs:
           echo "Backend: ${{ github.event.inputs.backend || 'beautifulsoup' }}"
           
           # Scrape the recently changed URLs
-          poetry run python ./scripts/scrape_data.py \
+          python ./scripts/scrape_data.py \
             --scrape-urls-file recent_changed_urls.txt \
             --backend "${{ github.event.inputs.backend || 'beautifulsoup' }}" \
             --headless "${{ github.event.inputs.headless || 'true' }}"
@@ -551,7 +567,7 @@ jobs:
           fi
           
           # Scrape the old pending URLs
-          poetry run python ./scripts/scrape_data.py \
+          python ./scripts/scrape_data.py \
             --scrape-urls-file old_pending_urls.txt \
             --backend "${{ github.event.inputs.backend || 'beautifulsoup' }}" \
             --headless "${{ github.event.inputs.headless || 'true' }}"

@@ -27,8 +27,8 @@ def main():
                        help="Update status of existing records (for re-checking solved/waiting status)")
     parser.add_argument("--data-dir", type=str, default="data/raw", 
                        help="Directory to store data files")
-    parser.add_argument("--buffer-size", type=int, default=50, 
-                       help="Number of records to buffer in memory before writing to disk (used for comprehensive scraping, ignored for status updates). Reduced from 100 to 50 for better memory efficiency on CI.")
+    parser.add_argument("--buffer-size", type=int, default=25, 
+                       help="Number of records to buffer in memory before writing to disk (used for comprehensive scraping, ignored for status updates). Reduced to 25 for CI stability.")
 
     parser.add_argument("--cutoff-months", type=int, default=3,
                        help="Months cutoff for separating recent vs old status updates (default: 3)")
