@@ -372,7 +372,7 @@ jobs:
           poetry install --no-interaction
 
       - name: Download recent changed URLs
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: recent-changed-urls
 
@@ -466,7 +466,7 @@ jobs:
           poetry install --no-interaction
 
       - name: Download old pending URLs
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: old-pending-urls
 
