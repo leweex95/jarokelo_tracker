@@ -172,6 +172,10 @@ jobs:
 
           echo "UNTIL_DATE=$UNTIL_DATE" >> $GITHUB_ENV
 
+      - name: Set PYTHONPATH
+        run: |
+          echo "PYTHONPATH=$PWD/src:$PYTHONPATH" >> $GITHUB_ENV
+
       - name: Run comprehensive scraper
         run: |
           BACKEND="${{ github.event.inputs.backend || 'beautifulsoup' }}"
@@ -205,7 +209,7 @@ jobs:
           echo "🔍 Monitor before scraping:"
           ./scripts/monitor_resources.sh
           
-          poetry run python ./scripts/scrape_data.py $ARGS
+          python ./scripts/scrape_data.py $ARGS
           
           echo "🔍 Monitor after scraping:"
           ./scripts/monitor_resources.sh
