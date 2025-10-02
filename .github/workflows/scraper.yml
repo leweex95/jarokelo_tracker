@@ -94,16 +94,6 @@ jobs:
         run: |
           echo "PYTHONPATH=$PWD/src:$PYTHONPATH" >> $GITHUB_ENV
 
-      - name: Check available disk space
-        run: |
-          echo "Available disk space before scraping:"
-          df -h
-          AVAILABLE_GB=$(df / | tail -1 | awk '{print $4}' | sed 's/G//')
-          if [ "${AVAILABLE_GB%.*}" -lt 5 ]; then
-            echo "WARNING: Less than 5GB disk space available. Scraping may fail."
-            echo "Available space: ${AVAILABLE_GB}G"
-          fi
-
       - name: Count existing records
         id: count_before
         run: |
