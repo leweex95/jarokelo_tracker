@@ -235,6 +235,20 @@ jobs:
       - name: Check for changes
         id: check_changes
         run: |
+          echo "🔍 DEBUG: Checking for changes..."
+          echo "Git status:"
+          git status --porcelain
+          echo ""
+          echo "Untracked files in data/raw:"
+          find data/raw -type f -name "*.jsonl" | head -10
+          echo ""
+          echo "Git diff (modified files):"
+          git diff --name-only
+          echo ""
+          echo "Git diff --staged (staged files):"
+          git diff --staged --name-only
+          echo ""
+          
           if git diff --quiet && git diff --staged --quiet; then
             echo "changes_detected=false" >> $GITHUB_OUTPUT
             echo "No new data to commit"
@@ -472,6 +486,20 @@ jobs:
       - name: Check for changes
         id: check_changes
         run: |
+          echo "🔍 DEBUG: Checking for changes..."
+          echo "Git status:"
+          git status --porcelain
+          echo ""
+          echo "Untracked files in data/raw:"
+          find data/raw -type f -name "*.jsonl" | head -10
+          echo ""
+          echo "Git diff (modified files):"
+          git diff --name-only
+          echo ""
+          echo "Git diff --staged (staged files):"
+          git diff --staged --name-only
+          echo ""
+          
           if git diff --quiet && git diff --staged --quiet; then
             echo "changes_detected=false" >> $GITHUB_OUTPUT
             echo "No recent changes to commit"
@@ -575,6 +603,20 @@ jobs:
       - name: Check for changes
         id: check_changes
         run: |
+          echo "🔍 DEBUG: Checking for changes..."
+          echo "Git status:"
+          git status --porcelain
+          echo ""
+          echo "Untracked files in data/raw:"
+          find data/raw -type f -name "*.jsonl" | head -10
+          echo ""
+          echo "Git diff (modified files):"
+          git diff --name-only
+          echo ""
+          echo "Git diff --staged (staged files):"
+          git diff --staged --name-only
+          echo ""
+          
           if git diff --quiet && git diff --staged --quiet; then
             echo "changes_detected=false" >> $GITHUB_OUTPUT
             echo "No old pending changes to commit"
