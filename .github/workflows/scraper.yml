@@ -174,14 +174,6 @@ jobs:
           echo "Records after scraping: $RECORD_COUNT"
           echo "New records added: $NEW_RECORDS"
 
-      - name: Check disk space after scraping
-        run: |
-          echo "Available disk space after scraping:"
-          df -h
-          echo ""
-          echo "Data directory size:"
-          du -sh data/raw || echo "No data directory found"
-
       - name: Check for changes
         id: check_changes
         run: |
@@ -223,26 +215,19 @@ jobs:
         run: |
           DATA_DIR="${{ github.event.inputs.data_dir || 'data/raw' }}"
           NEW_RECORDS="${{ steps.count_after.outputs.new_records }}"
-          BUFFER_SIZE="${{ github.event.inputs.buffer_size || '25' }}"
-
-          git add "$DATA_DIR"
-          git commit -m "[Auto-commit] Comprehensive scraping: $NEW_RECORDS new records
-
-          Scraped at: $(date -u '+%Y-%m-%d %H:%M:%S UTC')
-          Buffer size: $BUFFER_SIZE
-          Total records: ${{ steps.count_after.outputs.records_after }}
-          New records: $NEW_RECORDS
-
-          [skip ci]"
 
           # Detect current branch
           BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          
+          git add "$DATA_DIR"
+          git commit -m "[Auto-commit] Scraping: $NEW_RECORDS new entries saved [skip ci]"
+
           RETRIES=10
           SUCCESS=0
           for i in $(seq 1 $RETRIES); do
             git fetch origin "$BRANCH"
             git pull --rebase origin "$BRANCH" || git merge origin/"$BRANCH"
-            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:"$BRANCH" && {
+            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:$BRANCH && {
               echo "Successfully pushed comprehensive scraping data!"
               SUCCESS=1
               break
@@ -448,20 +433,18 @@ jobs:
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
+          # Detect current branch
+          BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          
           git add data/raw
-          git commit -m "[Auto-commit] Recent resolutions: ${{ needs.recent-url-detector.outputs.changed_urls_count }} status changes updated
+          git commit -m "[Auto-commit] Scraped recently changed entry statuses [skip ci]"
 
-          Updated at: $(date -u '+%Y-%m-%d %H:%M:%S UTC')
-          Cutoff months: ${{ github.event.inputs.cutoff_months || '3' }}
-          URLs processed: ${{ needs.recent-url-detector.outputs.changed_urls_count }}
-          
-          [skip ci]"
-          
           # Push with retry logic
           RETRIES=10
           for i in $(seq 1 $RETRIES); do
-            git pull --rebase
-            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:"$BRANCH" && {
+            git fetch origin "$BRANCH"
+            git pull --rebase origin "$BRANCH" || git merge origin/"$BRANCH"
+            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:$BRANCH && {
               echo "Successfully pushed recent resolution updates!"
               break
             } || {
@@ -474,7 +457,7 @@ jobs:
   # PERFORMANCE OPTIMIZED: Process only random sample of 100 URLs per run
   old-resolution-scraper:
     runs-on: ubuntu-latest
-    name: "5. Old resolution date scraper (optimized)"
+    name: "5. Old resolution date scraper"
     needs: old-pending-loader
     if: needs.old-pending-loader.outputs.pending_urls_count > 0
     steps:
@@ -551,26 +534,23 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
 
-      - name: Commit old resolutions
+      - name: Commit old resolution_dates
         if: steps.check_changes.outputs.changes_detected == 'true'
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          git add data/raw
-          git commit -m "[Auto-commit] Old resolutions: Random sample of max 100 URLs checked
+          # Set current active branch
+          BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 
-          Updated at: $(date -u '+%Y-%m-%d %H:%M:%S UTC')
-          Cutoff months: ${{ github.event.inputs.cutoff_months || '3' }}
-          Total pending URLs: ${{ needs.old-pending-loader.outputs.pending_urls_count }}
-          Processed: Random sample of 100 URLs
-          
-          [skip ci]"
+          git add data/raw
+          git commit -m "[Auto-commit] Update of resolution_date of old entries: rnd sample of 100 URLs checked [skip ci]"
           
           # Push with retry logic
           RETRIES=10
           for i in $(seq 1 $RETRIES); do
-            git pull --rebase
-            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:"$BRANCH" && {
+            git fetch origin "$BRANCH"
+            git pull --rebase origin "$BRANCH" || git merge origin/"$BRANCH"
+            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:$BRANCH && {
               echo "Successfully pushed old resolution updates!"
               break
             } || {
