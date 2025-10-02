@@ -95,12 +95,6 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.PAT_TOKEN }}
 
-      # - name: Monitor Resources (Start)
-      #   run: |
-      #     chmod +x scripts/monitor_resources.sh
-      #     echo "=== RESOURCE MONITORING (JOB START) ==="
-      #     ./scripts/monitor_resources.sh
-
       - name: Cache pip packages  
         uses: actions/cache@v4
         with:
@@ -114,11 +108,9 @@ jobs:
           echo "Installing minimal scraper dependencies only (no ML packages)..."
           pip install -r requirements-scraper.txt
           
-          # Add src to Python path for our modules
+      - name: Set PYTHONPATH
+        run: |
           echo "PYTHONPATH=$PWD/src:$PYTHONPATH" >> $GITHUB_ENV
-          
-          echo "Monitor after dependency installation:"
-          ./scripts/monitor_resources.sh
 
       - name: Check available disk space
         run: |
@@ -172,10 +164,6 @@ jobs:
 
           echo "UNTIL_DATE=$UNTIL_DATE" >> $GITHUB_ENV
 
-      - name: Set PYTHONPATH
-        run: |
-          echo "PYTHONPATH=$PWD/src:$PYTHONPATH" >> $GITHUB_ENV
-
       - name: Run comprehensive scraper
         run: |
           BACKEND="${{ github.event.inputs.backend || 'beautifulsoup' }}"
@@ -206,13 +194,7 @@ jobs:
           echo "Running: python ./scripts/scrape_data.py $ARGS"
           echo ""
           
-          echo "Monitor before scraping:"
-          ./scripts/monitor_resources.sh
-          
           python ./scripts/scrape_data.py $ARGS
-          
-          echo "Monitor after scraping:"
-          ./scripts/monitor_resources.sh
 
       - name: Count new records
         id: count_after
@@ -235,7 +217,7 @@ jobs:
       - name: Check for changes
         id: check_changes
         run: |
-          echo "🔍 DEBUG: Checking for changes..."
+          echo "DEBUG: Checking for changes..."
           echo "Git status:"
           git status --porcelain
           echo ""
@@ -256,7 +238,7 @@ jobs:
             echo "changes_detected=true" >> $GITHUB_OUTPUT
             echo "New data detected!"
             echo ""
-            echo "📝 Changed files:"
+            echo "Changed files:"
             git diff --name-only
           fi
 
@@ -339,7 +321,6 @@ jobs:
           
           echo "RECENT STATUS CHANGE DETECTION (FAST SCAN)"
           echo "Strategy: Scan only listing pages for status changes in the last $CUTOFF_MONTHS months"
-          echo "Advantage: 100x faster than comprehensive scraping for status monitoring"
           echo "Cutoff months: $CUTOFF_MONTHS"
           echo "Backend: ${{ github.event.inputs.backend || 'beautifulsoup' }}"
           
@@ -457,7 +438,7 @@ jobs:
 
       - name: Scrape recent changed URLs
         run: |
-          echo "🎯 RECENT RESOLUTION DATE SCRAPER"
+          echo "RECENT RESOLUTION DATE SCRAPER"
           echo "Strategy: Targeted resolution date extraction for recently changed statuses detected by Job 2"
           echo "Advantage: Optimized processing focusing only on status and resolution date extraction"
           echo "URLs to scrape: ${{ needs.recent-url-detector.outputs.changed_urls_count }}"
@@ -472,7 +453,7 @@ jobs:
       - name: Check for changes
         id: check_changes
         run: |
-          echo "🔍 DEBUG: Checking for changes..."
+          echo "DEBUG: Checking for changes..."
           echo "Git status:"
           git status --porcelain
           echo ""
@@ -584,7 +565,7 @@ jobs:
       - name: Check for changes
         id: check_changes
         run: |
-          echo "🔍 DEBUG: Checking for changes..."
+          echo "DEBUG: Checking for changes..."
           echo "Git status:"
           git status --porcelain
           echo ""
@@ -658,14 +639,14 @@ jobs:
 
       - name: Report pipeline summary
         run: |
-          echo "🚀 Járokelő Tracker OPTIMIZED Pipeline Summary"
+          echo "Járokelő Tracker Pipeline Summary"
           echo "==============================================="
           echo "Optimization strategy: Split processing between new, recent and old content"
-          echo "✅ 1. Comprehensive scraping: Find completely new entries"
-          echo "✅ 2. Recent change detection: Fast scan recent pages (${CUTOFF_MONTHS:-3} months) for status changes"
-          echo "✅ 3. Old pending extraction: Get URLs of unresolved issues older than ${CUTOFF_MONTHS:-3} months"
-          echo "✅ 4. Recent resolution scraping: Update recently changed statuses"
-          echo "✅ 5. Old resolution scraping: Check random sample (max 100) of old pending issues"
+          echo "1. Comprehensive scraping: Find completely new entries"
+          echo "2. Recent change detection: Fast scan recent pages (${CUTOFF_MONTHS:-3} months) for status changes"
+          echo "3. Old pending extraction: Get URLs of unresolved issues older than ${CUTOFF_MONTHS:-3} months"
+          echo "4. Recent resolution scraping: Update recently changed statuses"
+          echo "5. Old resolution scraping: Check random sample (max 100) of old pending issues"
           echo "Pipeline mode: ${{ github.event_name == 'workflow_dispatch' && 'Manual' || 'Nightly Scheduled' }}"
           echo ""
           echo "Job Results:"
@@ -675,7 +656,7 @@ jobs:
           echo "- Recent resolution scraper: ${{ needs.recent-resolution-scraper.result || 'skipped' }}"
           echo "- Old resolution scraper: ${{ needs.old-resolution-scraper.result || 'skipped' }}"
           echo ""
-          echo "⚡ Performance Summary:"
+          echo "Performance Summary:"
           echo "- Recent URLs detected: ${{ needs.recent-url-detector.outputs.changed_urls_count || '0' }}"
           echo "- Old pending URLs: ${{ needs.old-pending-loader.outputs.pending_urls_count || '0' }}"
           echo "- Cutoff months: ${{ github.event.inputs.cutoff_months || '3' }}"
@@ -683,13 +664,13 @@ jobs:
           echo "- Time savings: By only opening URLs that need attention (new/changed/pending)"
           echo "- Memory savings: Processing in smaller targeted batches reduces RAM requirements"
           echo ""
-          echo "📁 Data directory structure:"
+          echo "Data directory structure:"
           ls -la data/raw/ || echo "No data directory found"
           echo ""
-          echo "📊 Total JSONL files:"
+          echo "Total JSONL files:"
           find data/raw -name "*.jsonl" -type f | wc -l || echo "0"
           echo ""
-          echo "📈 Record counts by month:"
+          echo "Record counts by month:"
           for file in data/raw/*.jsonl; do
             if [ -f "$file" ]; then
               count=$(wc -l < "$file" 2>/dev/null || echo "0")
@@ -697,6 +678,6 @@ jobs:
             fi
           done
           echo ""
-          echo "⏰ Pipeline completed at: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
-          echo "🔗 Repository: ${{ github.repository }}"
-          echo "🔗 Workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          echo "Pipeline completed at: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          echo "Repository: ${{ github.repository }}"
+          echo "Workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
