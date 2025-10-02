@@ -264,13 +264,7 @@ class DataManager:
         file_path = self.get_monthly_file(report["date"])
         self.buffer[file_path].append(report)
         self.buffer_count += 1
-        
-        # Check resource usage every 10 records or when forced
-        if self.buffer_count % self._check_interval == 0:
-            self._check_resource_usage(force=True)
-        else:
-            self._check_resource_usage()
-        
+                
         # Flush buffer if it's full
         if self.buffer_count >= self.buffer_size:
             self.flush_buffer()
@@ -284,9 +278,6 @@ class DataManager:
             return
         
         print(f"Flushing {self.buffer_count} records from buffer to disk...")
-        
-        # Force resource check before flushing
-        self._check_resource_usage(force=True)
         
         for file_path, buffered_reports in self.buffer.items():
             if not buffered_reports:
@@ -349,10 +340,7 @@ class DataManager:
         self.invalidate_cache()
         
         print(f"Successfully flushed {buffer_records} records to disk")
-        
-        # Final resource check after flush
-        self._check_resource_usage(force=True)
-    
+            
     def __enter__(self):
         """Context manager entry"""
         return self
