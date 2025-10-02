@@ -382,9 +382,9 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
         return card_info
 
     def scrape_listing_page(self, page_url: str, global_urls: Set[str], 
-                                        until_date: Optional[str] = None, 
-                                        stop_on_existing: bool = True,
-                                        use_buffered_saving: bool = False) -> Tuple[Optional[str], bool]:
+                            until_date: Optional[str] = None, 
+                            stop_on_existing: bool = True,
+                            use_buffered_saving: bool = False) -> Tuple[Optional[str], bool]:
         """Return next page URL and a flag if we reached an already scraped report or until_date."""
         if not self.session:
             raise ValueError("Requests session not initialized")
@@ -462,13 +462,6 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                     return None, False
         return None, False
     
-    def scrape_listing_page(self, page_url: str, global_urls: Set[str], 
-                           until_date: Optional[str] = None, 
-                           stop_on_existing: bool = True,
-                           use_buffered_saving: bool = False) -> Tuple[Optional[str], bool]:
-        """Scrape a listing page using BeautifulSoup backend only"""
-        return self.scrape_listing_page(page_url, global_urls, until_date, stop_on_existing, use_buffered_saving)
-    
     def detect_changed_urls_fast(self, cutoff_months: int = 3, output_file: str = "recent_changed_urls.txt") -> int:
         """
         Fast status change detection - scans only recent pages for status changes.
@@ -487,9 +480,7 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
         
         print(f"🔍 RECENT STATUS CHANGE DETECTION (FAST SCAN)")
         print(f"Strategy: Scan only listing pages for status changes in the last {cutoff_months} months")
-        print(f"Advantage: 100x faster than comprehensive scraping for status monitoring")
         print(f"Cutoff months: {cutoff_months}")
-    # Only BeautifulSoup backend is supported
         
         print("\n[PERF] Building URL index cache...")
         start_time = time.time()
