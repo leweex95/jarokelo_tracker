@@ -635,17 +635,15 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                 for line in f:
                     try:
                         data = json.loads(line)
-                        
                         # Check if the issue is old enough and still pending
                         report_date = data.get("date", "9999-99-99")
-                        status = data.get("status", "").upper()
+                        status_raw = data.get("status", "")
+                        status = status_raw.upper() if isinstance(status_raw, str) else ""
                         url = data.get("url", "")
-                        
                         if (report_date < cutoff_date and
                             status not in non_pending_statuses and 
                             url):
                             old_pending_urls.add(url)
-                            
                     except json.JSONDecodeError:
                         continue
         
