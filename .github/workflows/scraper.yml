@@ -17,10 +17,6 @@ on:
         description: 'Scrape until this date (YYYY-MM-DD)'
         required: false
         default: ''
-      headless:
-        description: 'Run browser in headless mode'
-        required: false
-        default: 'true'
       continue_scraping:
         description: 'Continue scraping from last saved state'
         required: false
@@ -49,11 +45,6 @@ on:
         description: 'Scrape until this date (YYYY-MM-DD)'
         required: false
         default: ''
-        type: string
-      headless:
-        description: 'Run browser in headless mode'
-        required: false
-        default: 'true'
         type: string
       continue_scraping:
         description: 'Continue scraping from last saved state'
@@ -157,14 +148,12 @@ jobs:
 
       - name: Run comprehensive scraper
         run: |
-          HEADLESS="${{ github.event.inputs.headless || 'true' }}"
           DATA_DIR="${{ github.event.inputs.data_dir || 'data/raw' }}"
           START_PAGE="${{ github.event.inputs.start_page || '1' }}"
           CONTINUE_SCRAPING="${{ github.event.inputs.continue_scraping || '' }}"
 
           echo "Running COMPREHENSIVE scraper for new entries..."
           echo "Data directory: $DATA_DIR"
-          echo "Headless: $HEADLESS"
           echo "Start page: $START_PAGE"
           
           BUFFER_SIZE="${{ github.event.inputs.buffer_size || '25' }}"
@@ -314,8 +303,7 @@ jobs:
           # Run fast status change detection
           python ./scripts/scrape_data.py \
             --fetch-changed-urls \
-            --cutoff-months $CUTOFF_MONTHS \
-            --headless "${{ github.event.inputs.headless || 'true' }}"
+            --cutoff-months $CUTOFF_MONTHS
           
           # Count detected URLs
           if [ -f "recent_changed_urls.txt" ]; then
@@ -431,8 +419,7 @@ jobs:
           
           # Scrape the recently changed URLs
           python ./scripts/scrape_data.py \
-            --scrape-urls-file recent_changed_urls.txt \
-            --headless "${{ github.event.inputs.headless || 'true' }}"
+            --scrape-urls-file recent_changed_urls.txt
 
       - name: Check for changes
         id: check_changes
@@ -540,8 +527,7 @@ jobs:
           
           # Scrape the old pending URLs
           python ./scripts/scrape_data.py \
-            --scrape-urls-file old_pending_urls.txt \
-            --headless "${{ github.event.inputs.headless || 'true' }}"
+            --scrape-urls-file old_pending_urls.txt
 
       - name: Check for changes
         id: check_changes

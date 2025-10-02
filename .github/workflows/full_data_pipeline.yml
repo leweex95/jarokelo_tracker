@@ -24,10 +24,6 @@ on:
             description: 'Scrape until this date (YYYY-MM-DD)'
             required: false
             default: ''
-        headless:
-            description: 'Run browser in headless mode'
-            required: false
-            default: 'true'
         continue_scraping:
             description: 'Continue scraping from last saved state'
             required: false
@@ -51,7 +47,6 @@ jobs:
       data_dir: ${{ github.event.inputs.data_dir }}
       start_page: ${{ github.event.inputs.start_page }}
       until_date: ${{ github.event.inputs.until_date }}
-      headless: ${{ github.event.inputs.headless }}
       continue_scraping: ${{ github.event.inputs.continue_scraping }}
     secrets:
       PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
