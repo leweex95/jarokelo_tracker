@@ -319,15 +319,6 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
         self.validate_encoding(result, url)
         
         return result
-
-    def scrape_report(self, url: str, resolution_focus: bool = False) -> Dict:
-        """
-        Scrape a single report using BeautifulSoup backend only.
-        Args:
-            url: URL to scrape
-            resolution_focus: If True, optimizes for resolution date extraction
-        """
-        return self.scrape_report(url, resolution_focus=resolution_focus)
     
     def scrape_reports_batch(self, urls: List[str]) -> List[Dict]:
         """
