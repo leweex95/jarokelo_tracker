@@ -707,67 +707,52 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
             
         # Extract all card info (URL + status) from listing page
         card_info = self.extract_listing_info_beautifulsoup(page_url)
-        reached_done = False
 
+        # Update statuses or perform full re-scrapes for existing records
         for card in card_info:
             url = card["url"]
             current_status = card["status"]
-            
             if url in global_urls:
-                # Existing record - check if status needs updating
                 _, existing_record, _ = self.data_manager.find_record_by_url(url)
                 old_status = existing_record.get("status") if existing_record else None
-                
-                # Check if we need full re-scrape (e.g., for resolution_date when status → MEGOLDOTT)
                 if self.data_manager.needs_full_rescrape(old_status, current_status):
                     print(f"Status change requires full re-scrape: {url} ({old_status} → {current_status})")
                     print(f"[DEBUG] This is expected when status changes to/from 'MEGOLDOTT' to capture resolution_date")
-                    # Perform full scrape and update the record
                     try:
                         updated_report = self.scrape_report_beautifulsoup(url)
-                        # Replace the existing record with the updated one
                         self.data_manager.replace_record(url, updated_report)
                         print(f"Successfully updated record for {url}")
                     except Exception as e:
                         print(f"ERROR: Failed to scrape report during status update: {url}")
                         print(f"Error details: {str(e)}")
                         print(f"[INFO] Continuing with next report...")
-                        continue  # Skip this report and continue with the next one
+                        continue
                 elif self.data_manager.update_status_if_changed(url, current_status):
                     print(f"Updated status for {url}: {current_status}")
-                
-                if stop_on_existing:
-                    reached_done = True
-                    break
-            else:
-                # New record - perform full scraping
-                # Collect new URLs and batch process them
-                pass  # Processing moved to after the loop
 
-        # BATCH PROCESSING: Process all new URLs from this page at once
+        # Process all new URLs from this page
         new_urls_from_page = [card["url"] for card in card_info if card["url"] not in global_urls]
-        
+
         if new_urls_from_page:
             print(f"� Processing {len(new_urls_from_page)} new URLs from this page...")
-            # Synchronous processing for new URLs
             for url in new_urls_from_page:
                 try:
                     report = self.scrape_report_beautifulsoup(url)
-                    # Use buffered saving for comprehensive scraping, regular saving for status updates
                     if use_buffered_saving:
                         self.data_manager.save_report_buffered(report, global_urls)
                     else:
                         self.data_manager.save_report(report, global_urls)
                     if until_date and report["date"] >= until_date:
                         # We've reached older records than our cutoff date
-                        reached_done = True
-                        break
+                        return None, True
                 except Exception as e:
                     print(f"ERROR: Failed to scrape new report: {url}")
                     print(f"Error details: {str(e)}")
-                    continue  # Skip this report and continue with the next one
+                    continue
 
-        if reached_done:
+        # If there are no new URLs on this page, stop scraping
+        if not new_urls_from_page:
+            print("No new entries found on this page. Stopping scraping.")
             return None, True
 
         # Get pagination info - need to fetch the page again
