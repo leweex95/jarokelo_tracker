@@ -39,7 +39,6 @@ help:
 continue-scraping:
 	@echo "Continuing scraping from last scraped date onwards..."
 	poetry run python scripts/scrape_data.py \
-		--backend bs \
 		--continue-scraping \
 		--data-dir "data/raw"
 
@@ -48,7 +47,6 @@ continue-scraping:
 update-status:
 	@echo "Updating status of existing records and scraping new entries..."
 	poetry run python scripts/scrape_data.py \
-		--backend bs \
 		--update-existing-status \
 		--data-dir "data/raw"
 
@@ -65,7 +63,6 @@ scrape-until-date:
 	fi
 	@echo "Scraping until date: $(DATE)"
 	poetry run python scripts/scrape_data.py \
-		--backend bs \
 		--start-page 1 \
 		--until-date $(DATE) \
 		--data-dir "data/raw"

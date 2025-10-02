@@ -432,16 +432,26 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                         self.data_manager.save_report_buffered(report, global_urls)
                     else:
                         self.data_manager.save_report(report, global_urls)
-                    if until_date and report["date"] >= until_date:
+                    # Mark as reached if ALL new reports are past until_date
+                    if until_date and report["date"] < until_date:
+                        reached_until_date = False
+                    elif until_date and report["date"] >= until_date:
                         reached_until_date = True
                 except Exception as e:
                     print(f"ERROR: Failed to scrape new report: {url}")
                     print(f"Error details: {str(e)}")
                     continue
-        # Only stop after processing all new URLs
-        if reached_until_date:
-            print(f"Reached until_date ({until_date}) after processing all new URLs on this page.")
-            return None, True
+            # Only stop if ALL new reports are past until_date
+            if until_date:
+                def record_past_until(url):
+                    record = self.data_manager.find_record_by_url(url)[1]
+                    if record is not None:
+                        return record.get("date", "0000-00-00") >= until_date
+                    return False
+                all_past_until = all(record_past_until(url) for url in new_urls_from_page)
+                if all_past_until:
+                    print(f"Reached until_date ({until_date}) after processing all new URLs on this page.")
+                    return None, True
 
         # If there are no new URLs on this page, stop scraping
         if not new_urls_from_page:

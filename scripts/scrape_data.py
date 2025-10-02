@@ -13,7 +13,6 @@ from jarokelo_tracker.scraper import JarokeloScraper
 def main():
     """Main entry point for the scraper script"""
     parser = argparse.ArgumentParser(description="Járókelő scraper")
-    # Only BeautifulSoup backend is supported. Remove backend/headless args.
     parser.add_argument("--start-page", type=int, default=1, 
                        help="Page number to start scraping from")
     parser.add_argument("--until-date", type=str, default=None, 
@@ -37,9 +36,7 @@ def main():
                        help="Load old pending URLs and save to file")
 
     args = parser.parse_args()
-    
-    # Only BeautifulSoup backend is supported
-    
+        
     # Initialize and run scraper
     try:
         print("🔄 Running in synchronous processing mode")

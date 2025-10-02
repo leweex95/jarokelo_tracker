@@ -135,13 +135,13 @@ If you prefer to use poetry commands directly:
 
 ```bash
 # Continue scraping
-poetry run python scripts/scrape_data.py --backend bs --continue-scraping --data-dir "data/raw"
+poetry run python scripts/scrape_data.py --continue-scraping --data-dir "data/raw"
 
 # Update status
-poetry run python scripts/scrape_data.py --backend bs --update-existing-status --data-dir "data/raw"
+poetry run python scripts/scrape_data.py --update-existing-status --data-dir "data/raw"
 
 # Scrape until date
-poetry run python scripts/scrape_data.py --backend bs --start-page 1 --until-date 2025-01-01 --data-dir "data/raw"
+poetry run python scripts/scrape_data.py --start-page 1 --until-date 2025-01-01 --data-dir "data/raw"
 ```
 
 **Yes, you can now use short commands instead of the longer poetry commands!** 🎉

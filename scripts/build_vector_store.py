@@ -1,3 +1,4 @@
+from typing import Optional
 import os
 import json
 import argparse
@@ -11,7 +12,7 @@ VECTOR_DIR = "data/vector_store"
 
 
 class VectorStoreBuilder:
-    def __init__(self, backend: str, embedding: str, api_key: str = None):
+    def __init__(self, backend: str, embedding: str, api_key: 'Optional[str]' = None):
         self.backend = backend
         self.embedding = embedding
         self.api_key = api_key
@@ -26,18 +27,9 @@ class VectorStoreBuilder:
         return texts, metadatas
 
     def compute_embeddings(self):
-        if self.embedding.startswith("sentence-transformers"):
-            from sentence_transformers import SentenceTransformer
-            model = SentenceTransformer(self.embedding)
-            embeddings = model.encode(self.texts, convert_to_numpy=True).astype("float32")
-        else:
-            import openai
-            openai.api_key = self.api_key
-            embeddings = []
-            for t in self.texts:
-                resp = openai.Embedding.create(input=[t], model=self.embedding)
-                embeddings.append(np.array(resp["data"][0]["embedding"], dtype="float32"))
-            embeddings = np.vstack(embeddings)
+        from sentence_transformers import SentenceTransformer
+        model = SentenceTransformer(self.embedding)
+        embeddings = model.encode(self.texts, convert_to_numpy=True).astype("float32")
         return embeddings
 
     @staticmethod
@@ -61,6 +53,10 @@ class VectorStoreBuilder:
         metas = [{k: v for k, v in m.items() if k not in ("text", "id")} for m in metadatas]
 
         collection = client.create_collection(name="issues")
+        # Chroma expects metadatas as Sequence[Mapping[str, Any]]
+        from collections.abc import Sequence
+        if not isinstance(metas, Sequence):
+            metas = list(metas)
         collection.add(ids=ids, embeddings=embeddings.tolist(), metadatas=metas, documents=docs)
 
     def build(self, overwrite=False, generate_visualization=True):
