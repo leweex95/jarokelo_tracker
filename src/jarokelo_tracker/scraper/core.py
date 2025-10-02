@@ -170,8 +170,7 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                 print(f"[ERROR] URL where error occurred: {url}")
             raise
     
-    
-    def scrape_report_beautifulsoup(self, url: str, resolution_focus: bool = False) -> Dict:
+    def scrape_report(self, url: str, resolution_focus: bool = False) -> Dict:
         """
         Scrape a single report page using BeautifulSoup and return its data.
         
@@ -320,9 +319,7 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
         self.validate_encoding(result, url)
         
         return result
-    
 
-    
     def scrape_report(self, url: str, resolution_focus: bool = False) -> Dict:
         """
         Scrape a single report using BeautifulSoup backend only.
@@ -330,13 +327,13 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
             url: URL to scrape
             resolution_focus: If True, optimizes for resolution date extraction
         """
-        return self.scrape_report_beautifulsoup(url, resolution_focus=resolution_focus)
+        return self.scrape_report(url, resolution_focus=resolution_focus)
     
     def scrape_reports_batch(self, urls: List[str]) -> List[Dict]:
         """
         Scrape multiple reports synchronously.
         """
-        print(f"🔄 Starting synchronous batch scraping of {len(urls)} URLs...")
+        print(f"Starting synchronous batch scraping of {len(urls)} URLs...")
         results = []
         for i, url in enumerate(urls):
             try:
@@ -348,12 +345,10 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                 print(f"[ERROR] Failed to scrape {url}: {e}")
                 continue
         
-        print(f"🎯 Synchronous batch scraping completed: {len(results)}/{len(urls)} successful")
+        print(f"Synchronous batch scraping completed: {len(results)}/{len(urls)} successful")
         return results
     
-
-    
-    def extract_listing_info_beautifulsoup(self, page_url: str) -> list:
+    def extract_listing_info(self, page_url: str) -> list:
         """Extract URL and status from listing page cards using BeautifulSoup"""
         if not self.session:
             raise ValueError("Requests session not initialized")
@@ -386,7 +381,7 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
         
         return card_info
 
-    def scrape_listing_page_beautifulsoup(self, page_url: str, global_urls: Set[str], 
+    def scrape_listing_page(self, page_url: str, global_urls: Set[str], 
                                         until_date: Optional[str] = None, 
                                         stop_on_existing: bool = True,
                                         use_buffered_saving: bool = False) -> Tuple[Optional[str], bool]:
@@ -395,7 +390,7 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
             raise ValueError("Requests session not initialized")
             
         # Extract all card info (URL + status) from listing page
-        card_info = self.extract_listing_info_beautifulsoup(page_url)
+        card_info = self.extract_listing_info(page_url)
 
         # Update statuses or perform full re-scrapes for existing records
         for card in card_info:
@@ -408,7 +403,7 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                     print(f"Status change requires full re-scrape: {url} ({old_status} → {current_status})")
                     print(f"[DEBUG] This is expected when status changes to/from 'MEGOLDOTT' to capture resolution_date")
                     try:
-                        updated_report = self.scrape_report_beautifulsoup(url)
+                        updated_report = self.scrape_report(url)
                         self.data_manager.replace_record(url, updated_report)
                         print(f"Successfully updated record for {url}")
                     except Exception as e:
@@ -422,34 +417,25 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
         # Process all new URLs from this page
         new_urls_from_page = [card["url"] for card in card_info if card["url"] not in global_urls]
 
-        reached_until_date = False
         if new_urls_from_page:
-            print(f"� Processing {len(new_urls_from_page)} new URLs from this page...")
+            print(f"Processing {len(new_urls_from_page)} new URLs from this page...")
+            scraped_reports = []
             for url in new_urls_from_page:
                 try:
-                    report = self.scrape_report_beautifulsoup(url)
+                    report = self.scrape_report(url)
+                    scraped_reports.append(report)
                     if use_buffered_saving:
                         self.data_manager.save_report_buffered(report, global_urls)
                     else:
                         self.data_manager.save_report(report, global_urls)
-                    # Mark as reached if ALL new reports are past until_date
-                    if until_date and report["date"] < until_date:
-                        reached_until_date = False
-                    elif until_date and report["date"] >= until_date:
-                        reached_until_date = True
                 except Exception as e:
                     print(f"ERROR: Failed to scrape new report: {url}")
                     print(f"Error details: {str(e)}")
                     continue
-            # Only stop if ALL new reports are past until_date
+            # Only stop if ALL new scraped reports are older than until_date
             if until_date:
-                def record_past_until(url):
-                    record = self.data_manager.find_record_by_url(url)[1]
-                    if record is not None:
-                        return record.get("date", "0000-00-00") >= until_date
-                    return False
-                all_past_until = all(record_past_until(url) for url in new_urls_from_page)
-                if all_past_until:
+                all_older_than_until = all(r.get("date", "0000-00-00") < until_date for r in scraped_reports)
+                if all_older_than_until:
                     print(f"Reached until_date ({until_date}) after processing all new URLs on this page.")
                     return None, True
 
@@ -481,7 +467,7 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                            stop_on_existing: bool = True,
                            use_buffered_saving: bool = False) -> Tuple[Optional[str], bool]:
         """Scrape a listing page using BeautifulSoup backend only"""
-        return self.scrape_listing_page_beautifulsoup(page_url, global_urls, until_date, stop_on_existing, use_buffered_saving)
+        return self.scrape_listing_page(page_url, global_urls, until_date, stop_on_existing, use_buffered_saving)
     
     def detect_changed_urls_fast(self, cutoff_months: int = 3, output_file: str = "recent_changed_urls.txt") -> int:
         """
@@ -544,7 +530,7 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                 print(f"[Page {page}] Loading: {page_url}")
                 
                 # Extract card info from listing page (URL + status) - NO SCRAPING!
-                card_info = self.extract_listing_info_beautifulsoup(page_url)
+                card_info = self.extract_listing_info(page_url)
                 
                 # Only print if no cards found
                 if not card_info:
@@ -736,7 +722,7 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                 print(f"{progress_prefix}[{i}/{len(urls_to_scrape)}] {url}")
                 
                 # Scrape the report, using resolution_focus for efficiency if requested
-                report_data = self.scrape_report_beautifulsoup(url, resolution_focus=resolution_focus)
+                report_data = self.scrape_report(url, resolution_focus=resolution_focus)
                 
                 # Save immediately (no buffering for status updates)
                 self.data_manager.save_report(report_data, global_urls)
