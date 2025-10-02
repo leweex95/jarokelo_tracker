@@ -41,19 +41,15 @@ The scraper supports **BeautifulSoup** backend.
 
 _From scratch with BeautifulSoup:_
 
-    poetry run python ./scripts/scrape_data.py --backend beautifulsoup --start-page 1 --until-date 2025-08-01
+    poetry run python ./scripts/scrape_data.py --start-page 1 --until-date 2025-08-01
 
 _Or if there is already an amount of scraped data under `data/raw`, the scraper can continue from the last-scraped entry:_
 
-    poetry run python ./scripts/scrape_data.py --backend beautifulsoup --continue-scraping
-
-_You can also use the shorthand `bs` for `beautifulsoup`:_
-
-    poetry run python ./scripts/scrape_data.py --backend bs --continue-scraping
+    poetry run python ./scripts/scrape_data.py --continue-scraping
 
 _To update the status of existing records (e.g., when "Válaszra vár" changes to "MEGOLDOTT"):_
 
-    poetry run python ./scripts/scrape_data.py --backend bs --update-existing-status
+    poetry run python ./scripts/scrape_data.py --update-existing-status
 
 This efficiently checks and updates the status of already-scraped records without performing full re-scraping. When a status changes to "MEGOLDOTT" (resolved), the scraper automatically performs a full re-scrape to capture the `resolution_date`.
 

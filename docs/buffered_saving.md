@@ -54,10 +54,10 @@ Based on testing with 500 records:
 #### CLI Usage
 ```bash
 # Default buffer size (100 records)
-poetry run python ./scripts/scrape_data.py --backend beautifulsoup
+poetry run python ./scripts/scrape_data.py
 
 # Custom buffer size for high-performance scraping
-poetry run python ./scripts/scrape_data.py --backend beautifulsoup --buffer-size 200
+poetry run python ./scripts/scrape_data.py --buffer-size 200
 
 # Status updates (buffering automatically disabled)
 poetry run python ./scripts/scrape_data.py --update-existing-status
