@@ -313,10 +313,11 @@ jobs:
           python -m pip install --upgrade pip
           echo "Installing minimal scraper dependencies only (no ML packages)..."
           pip install -r requirements-scraper.txt
-          
+
           # Add src to Python path for our modules
           echo "PYTHONPATH=$PWD/src:$PYTHONPATH" >> $GITHUB_ENV
-          
+
+          chmod +x scripts/monitor_resources.sh
           echo "Monitor after dependency installation:"
           ./scripts/monitor_resources.sh
 
