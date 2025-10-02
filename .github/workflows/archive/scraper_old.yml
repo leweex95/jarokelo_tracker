@@ -195,7 +195,7 @@ jobs:
           RETRIES=10
           for i in $(seq 1 $RETRIES); do
             git pull --rebase
-            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master && {
+            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:"$BRANCH" && {
               echo "Successfully pushed comprehensive scraping data!"
               break
             } || {
@@ -308,7 +308,7 @@ jobs:
           RETRIES=10
           for i in $(seq 1 $RETRIES); do
             git pull --rebase
-            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master && {
+            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:"$BRANCH" && {
               echo "Successfully pushed status updates!"
               break
             } || {
