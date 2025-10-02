@@ -2,7 +2,7 @@
 Járókelő Scraper Module
 
 This module provides scraping functionality for the Járókelő municipal issue tracking system.
-Supports both Selenium and BeautifulSoup backends with GPS coordinate extraction.
+Supports BeautifulSoup backend with GPS coordinate extraction.
 """
 
 from .core import JarokeloScraper

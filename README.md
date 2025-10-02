@@ -18,7 +18,7 @@ It automates data scraping, preprocessing, chunking, embedding, vector store cre
 
 ## Features
 
-- **Data scraping**: Automated collection of public reports from Járókelő.hu using Selenium, triggered on a daily basis. 
+- **Data scraping**: Automated collection of public reports from Járókelő.hu using Beautifulsoup, triggered on a daily basis. 
 - **Preprocessing**: Cleans, normalizes, and chunks text for efficient retrieval, as well as for exploratory data analysis and Power BI reporting. Automated to run daily and on the arrival of any new scraped data.
 - **Vector store**: Embeds and indexes the corpus using either FAISS or Chroma for fast semantic search.
 - **RAG pipeline**: The core of the system, responsible for answering user queries by retrieving relevant issues and generating responses via LLM (currently OpenAI's ChatGPT).
@@ -37,17 +37,11 @@ It automates data scraping, preprocessing, chunking, embedding, vector store cre
 
 2. Scrape data
 
-The scraper supports two backends:
-- **BeautifulSoup** (default): Faster, more reliable, no browser needed
-- **Selenium**: Uses a headless Chrome browser (useful for dynamic content)
+The scraper supports **BeautifulSoup** backend.
 
-_From scratch with BeautifulSoup (recommended):_
+_From scratch with BeautifulSoup:_
 
     poetry run python ./scripts/scrape_data.py --backend beautifulsoup --start-page 1 --until-date 2025-08-01
-
-_From scratch with Selenium:_
-
-    poetry run python ./scripts/scrape_data.py --backend selenium --headless true --start-page 1 --until-date 2025-08-01
 
 _Or if there is already an amount of scraped data under `data/raw`, the scraper can continue from the last-scraped entry:_
 

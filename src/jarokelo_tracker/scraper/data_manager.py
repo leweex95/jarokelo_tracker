@@ -560,9 +560,12 @@ class DataManager:
         if line_num is None:
             # Record is in buffer - already updated by reference
             print(f"[DEBUG] Updated buffered record for {url}")
-        else:
+        elif file_path is not None:
             # Record is on disk - need to write back to file
             self._update_disk_record(file_path, line_num, record)
+        else:
+            print(f"[ERROR] file_path is None when updating disk record for {url}")
+            return False
         
         return True
     

@@ -60,7 +60,7 @@ gh workflow run scraper.yml
 
 # Run with specific backend
 gh workflow run scraper.yml \
-  --field backend="selenium" \
+  --field backend="beautifulsoup" \
   --field until_date="2025-01-01"
 
 # Run with continue scraping
@@ -103,7 +103,7 @@ gh workflow run scraper.yml \
 - `PAT_TOKEN`: GitHub Personal Access Token (required)
 
 ### Input Parameters
-- `backend`: Scraper backend (`beautifulsoup`/`selenium`)
+- `backend`: Scraper backend (`beautifulsoup`)
 - `data_dir`: Target data directory (`data/raw`)
 - `start_page`: Starting page for comprehensive scraping
 - `until_date`: Scrape/update until this date

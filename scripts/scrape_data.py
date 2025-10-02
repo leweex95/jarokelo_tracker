@@ -13,10 +13,7 @@ from jarokelo_tracker.scraper import JarokeloScraper
 def main():
     """Main entry point for the scraper script"""
     parser = argparse.ArgumentParser(description="Járókelő scraper")
-    parser.add_argument("--backend", type=str, choices=['selenium', 'beautifulsoup', 'bs'], 
-                       default='beautifulsoup', help="Scraper backend to use (selenium/beautifulsoup/bs)")
-    parser.add_argument("--headless", type=str, choices=['true', 'false'], default='true', 
-                       help="Run browser in headless mode (true/false)")
+    # Only BeautifulSoup backend is supported. Remove backend/headless args.
     parser.add_argument("--start-page", type=int, default=1, 
                        help="Page number to start scraping from")
     parser.add_argument("--until-date", type=str, default=None, 
@@ -41,11 +38,7 @@ def main():
 
     args = parser.parse_args()
     
-    # Convert headless string to boolean
-    headless = args.headless.lower() == 'true'
-    
-    # Handle 'bs' alias for 'beautifulsoup'
-    backend = 'beautifulsoup' if args.backend == 'bs' else args.backend
+    # Only BeautifulSoup backend is supported
     
     # Initialize and run scraper
     try:
@@ -54,8 +47,6 @@ def main():
         
         with JarokeloScraper(
             data_dir=args.data_dir,
-            backend=backend,
-            headless=headless,
             buffer_size=args.buffer_size
         ) as scraper:
             # Handle different operation modes

@@ -2,7 +2,7 @@
 Core Scraper Module
 
 This module contains the main JarokeloScraper class that orchestrates the scraping process
-using either Selenium or BeautifulSoup backends.
+using BeautifulSoup backend only.
 """
 
 import re
@@ -12,11 +12,6 @@ import requests
 from datetime import datetime, timedelta
 from typing import Dict, Optional, Tuple, Set, List
 from bs4 import BeautifulSoup
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 from .gps_extractor import extract_gps_coordinates
 from .data_manager import DataManager
@@ -27,48 +22,17 @@ class JarokeloScraper:
     
     BASE_URL = "https://jarokelo.hu/bejelentesek"
     
-    def __init__(self, data_dir: str = "data/raw", backend: str = "beautifulsoup", headless: bool = True, buffer_size: int = 50):
+    def __init__(self, data_dir: str = "data/raw", buffer_size: int = 50):
         """
         Initialize the scraper
         
         Args:
             data_dir: Directory to store scraped data
-            backend: Scraping backend ('selenium' or 'beautifulsoup')
-            headless: Whether to run browser in headless mode (for Selenium)
             buffer_size: Number of records to buffer in memory before writing to disk (default reduced for CI stability)
         """
         self.data_manager = DataManager(data_dir, buffer_size)
-        self.backend = backend
-        self.headless = headless
         self.session = None
-        self.driver = None
-        self.wait = None
-        
-        if backend == 'selenium':
-            self._init_selenium()
-        elif backend == 'beautifulsoup':
-            self._init_requests()
-        else:
-            raise ValueError(f"Unsupported backend: {backend}")
-    
-    def _init_selenium(self):
-        """Initialize Selenium WebDriver"""
-        options = Options()
-        if self.headless:
-            options.add_argument("--headless")
-        options.add_experimental_option("excludeSwitches", ["enable-logging", "enable-automation"])
-        options.add_argument("--disable-gpu")
-        options.add_argument("--disable-extensions")
-        options.add_argument("--disable-background-networking")
-        options.add_argument("--disable-sync")
-        options.add_argument("--disable-component-update")
-        options.add_argument("--log-level=3")
-        # Ensure proper UTF-8 encoding
-        options.add_argument("--lang=hu-HU")
-        options.add_argument("--accept-lang=hu-HU,hu,en-US,en")
-        
-        self.driver = webdriver.Chrome(options=options)
-        self.wait = WebDriverWait(self.driver, 10)
+        self._init_requests()
     
     def _init_requests(self):
         """Initialize requests session"""
@@ -79,8 +43,6 @@ class JarokeloScraper:
     
     def close(self):
         """Clean up resources"""
-        if self.driver:
-            self.driver.quit()
         if self.session:
             self.session.close()
     
@@ -157,7 +119,7 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
         return text
 
     @staticmethod
-    def normalize_date(date_str, url: str = None) -> str:
+    def normalize_date(date_str: str, url: Optional[str] = None) -> str:
         """Convert Hungarian date like '2025. szeptember 15.' to 'YYYY-MM-DD'."""
         HU_MONTHS = {
             "január": "01",
@@ -208,175 +170,6 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                 print(f"[ERROR] URL where error occurred: {url}")
             raise
     
-    def scrape_report_selenium(self, url: str, resolution_focus: bool = False) -> Dict:
-        """
-        Scrape a single report page using Selenium and return its data.
-        
-        Args:
-            url: URL to scrape
-            resolution_focus: If True, optimizes for resolution date extraction
-        """
-        if not self.driver or not self.wait:
-            raise ValueError("Selenium not initialized")
-            
-        self.driver.execute_script("window.open(arguments[0]);", url)
-        self.driver.switch_to.window(self.driver.window_handles[1])
-        
-        # For resolution_focus, we can optimize by only looking for status and resolution_date
-        if resolution_focus:
-            # Get existing record data first to preserve other fields
-            _, existing_record, _ = self.data_manager.find_record_by_url(url)
-            
-            if existing_record:
-                try:
-                    # Status
-                    status_elems = self.driver.find_elements(By.CSS_SELECTOR, "span.badge")
-                    status = None
-                    for elem in status_elems:
-                        # Skip comment badges
-                        if "badge--comment" not in elem.get_attribute("class"):
-                            status = elem.text.strip()
-                            break
-                    
-                    # Resolution date (if available)
-                    resolution_date = None
-                    status_cards = self.driver.find_elements(By.CSS_SELECTOR, "div.report__status__card")
-                    for card in status_cards:
-                        time_elems = card.find_elements(By.TAG_NAME, "time")
-                        if time_elems:
-                            time_text = time_elems[0].text.strip()
-                            if time_text:
-                                try:
-                                    resolution_date = self.normalize_date(time_text.split()[0:3])
-                                    break
-                                except Exception as e:
-                                    print(f"[DEBUG] Error normalizing date: {e}")
-                                    continue
-                    
-                    # Update only necessary fields
-                    result = existing_record.copy()
-                    result["status"] = status
-                    result["resolution_date"] = resolution_date
-                    
-                    # Clean up
-                    self.driver.close()
-                    self.driver.switch_to.window(self.driver.window_handles[0])
-                    
-                    print(f"[OPTIMIZATION] Resolution date focus: {url} -> status={status}, resolution_date={resolution_date}")
-                    return result
-                except Exception as e:
-                    print(f"[WARNING] Resolution focus failed: {e}. Falling back to full scraping")
-                    # Fallback - reload page and continue with full scraping
-                    self.driver.get(url)
-        
-        title = self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "h1.report__title"))).text
-
-        # Author
-        author_elem = self.driver.find_elements(By.CSS_SELECTOR, "div.report__reporter div.report__author a")
-        if author_elem:
-            author = author_elem[0].text
-            author_profile = author_elem[0].get_attribute("href")
-        else:
-            anon_elem = self.driver.find_elements(By.CSS_SELECTOR, "div.report__reporter div.report__author")
-            author = anon_elem[0].text.strip() if anon_elem else None
-            author_profile = None
-
-        # Date, category, institution, supporter, description
-        date_elem = self.driver.find_elements(By.CSS_SELECTOR, "time.report__date")
-        date = self.normalize_date(date_elem[0].text, url) if date_elem else None
-
-        category_elem = self.driver.find_elements(By.CSS_SELECTOR, "div.report__category a")
-        category = category_elem[0].text if category_elem else None
-
-        institution_elem = self.driver.find_elements(By.CSS_SELECTOR, "div.report__institution a")
-        institution = institution_elem[0].text if institution_elem else None
-
-        supporter_elem = self.driver.find_elements(By.CSS_SELECTOR, "span.report__partner__about")
-        supporter = supporter_elem[0].text if supporter_elem else None
-
-        description_elem = self.driver.find_elements(By.CSS_SELECTOR, "p.report__description")
-        description = description_elem[0].text if description_elem else None
-
-        # Status
-        status_elem = self.driver.find_elements(By.CSS_SELECTOR, "span.badge")
-        status = status_elem[0].text.strip() if status_elem else None
-
-        # Address
-        address_elem = self.driver.find_elements(By.CSS_SELECTOR, "address.report__location__address")
-        if address_elem:
-            city = address_elem[0].text.split("\n")[0].strip() if address_elem[0].text else None
-            district_elem = address_elem[0].find_elements(By.CSS_SELECTOR, "span.report__location__address__district")
-            district = district_elem[0].text.strip() if district_elem else None
-            address = ", ".join(filter(None, [city, district]))
-        else:
-            address = None
-
-        # Resolution date (if status is "MEGOLDOTT")
-        resolution_date = None
-        if status and status.upper() == "MEGOLDOTT":
-            comment_bodies = self.driver.find_elements(By.CSS_SELECTOR, "div.comment__body")
-            for body in comment_bodies:
-                msg_elems = body.find_elements(By.CSS_SELECTOR, "p.comment__message")
-                for msg in msg_elems:
-                    raw_html = msg.get_attribute("innerHTML")
-                    if re.search(r"lezárta a bejelentést.*Megoldott.*eredménnyel", raw_html, re.DOTALL | re.IGNORECASE):
-                        time_elems = body.find_elements(By.CSS_SELECTOR, "time")
-                        # Use the first non-empty time element
-                        for t in time_elems:
-                            time_text = t.text.strip()
-                            if not time_text:
-                                # Try to extract from innerHTML if .text is empty
-                                time_html = t.get_attribute("innerHTML").strip()
-                                if time_html:
-                                    time_text = time_html
-                                else:
-                                    # Fallback: extract from outerHTML using regex
-                                    outer_html = t.get_attribute("outerHTML")
-                                    match = re.search(r">([^<]+)<", outer_html)
-                                    if match:
-                                        time_text = match.group(1).strip()
-                            if time_text:
-                                try:
-                                    resolution_date = self.normalize_date(time_text.split()[0:3])  # Only use date part
-                                    print(f"[DEBUG] Parsed resolution_date: {resolution_date}")
-                                except Exception as e:
-                                    print(f"[DEBUG] Error normalizing date: {e}")
-                                break
-                        if not resolution_date:
-                            print("[DEBUG] No valid <time> text found for resolution_date")
-                            raise ValueError("Could not find valid resolution date")
-                        break
-                if resolution_date:
-                    break
-
-        # GPS Coordinates
-        page_source = self.driver.page_source
-        latitude, longitude = extract_gps_coordinates(page_source, self.driver)
-
-        self.driver.close()
-        self.driver.switch_to.window(self.driver.window_handles[0])
-
-        result = {
-            "url": url,
-            "title": title,
-            "author": author,
-            "author_profile": author_profile,
-            "date": date,
-            "category": category,
-            "institution": institution,
-            "supporter": supporter,
-            "description": description,
-            "status": status,
-            "address": address,
-            "resolution_date": resolution_date,
-            "latitude": latitude,
-            "longitude": longitude,
-        }
-        
-        # VALIDATE ENCODING - FAIL LOUDLY IF CORRUPTION DETECTED
-        self.validate_encoding(result, url)
-        
-        return result
     
     def scrape_report_beautifulsoup(self, url: str, resolution_focus: bool = False) -> Dict:
         """
@@ -412,7 +205,8 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                         time_text = time_elem.text.strip()
                         if time_text:
                             try:
-                                resolution_date = self.normalize_date(time_text.split()[0:3])
+                                date_parts = time_text.split()[0:3]
+                                resolution_date = self.normalize_date(" ".join(date_parts))
                                 break
                             except Exception as e:
                                 print(f"[DEBUG] Error normalizing date: {e}")
@@ -490,7 +284,8 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                                 time_text = t.string.strip()
                             if time_text:
                                 try:
-                                    resolution_date = self.normalize_date(time_text.split()[0:3])
+                                    date_parts = time_text.split()[0:3]
+                                    resolution_date = self.normalize_date(" ".join(date_parts))
                                 except Exception as e:
                                     print(f"[DEBUG] Error normalizing date: {e}")
                                 break
@@ -530,19 +325,12 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
     
     def scrape_report(self, url: str, resolution_focus: bool = False) -> Dict:
         """
-        Scrape a single report using the configured backend
-        
+        Scrape a single report using BeautifulSoup backend only.
         Args:
             url: URL to scrape
             resolution_focus: If True, optimizes for resolution date extraction
-                              For recent/old resolution date jobs (Job 4 & 5)
         """
-        if self.backend == 'selenium':
-            return self.scrape_report_selenium(url, resolution_focus=resolution_focus)
-        elif self.backend == 'beautifulsoup':
-            return self.scrape_report_beautifulsoup(url, resolution_focus=resolution_focus)
-        else:
-            raise ValueError(f"Unsupported backend: {self.backend}")
+        return self.scrape_report_beautifulsoup(url, resolution_focus=resolution_focus)
     
     def scrape_reports_batch(self, urls: List[str]) -> List[Dict]:
         """
@@ -563,107 +351,7 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
         print(f"🎯 Synchronous batch scraping completed: {len(results)}/{len(urls)} successful")
         return results
     
-    def extract_listing_info_selenium(self, page_url: str) -> list:
-        """Extract URL and status from listing page cards using Selenium"""
-        if not self.driver:
-            raise ValueError("Selenium not initialized")
-            
-        self.driver.get(page_url)
-        
-        cards = self.driver.find_elements(By.CSS_SELECTOR, "article.card")
-        card_info = []
-        
-        for card in cards:
-            # Extract URL
-            link_elem = card.find_elements(By.CSS_SELECTOR, "a.card__media__bg")
-            if not link_elem:
-                continue
-            url = link_elem[0].get_attribute("href")
-            
-            # Extract status from badge
-            status = None
-            status_elems = card.find_elements(By.CSS_SELECTOR, "span.badge")
-            for elem in status_elems:
-                # Skip comment badges
-                if "badge--comment" not in elem.get_attribute("class"):
-                    status = elem.text.strip()
-                    break
-            
-            card_info.append({"url": url, "status": status})
-        
-        return card_info
 
-    def scrape_listing_page_selenium(self, page_url: str, global_urls: Set[str], 
-                                   until_date: Optional[str] = None, 
-                                   stop_on_existing: bool = True,
-                                   use_buffered_saving: bool = False) -> Tuple[Optional[str], bool]:
-        """Return next page URL and a flag if we reached an already scraped report or until_date."""
-        if not self.driver:
-            raise ValueError("Selenium not initialized")
-            
-        # Extract all card info (URL + status) from listing page
-        card_info = self.extract_listing_info_selenium(page_url)
-        reached_done = False
-
-        for card in card_info:
-            url = card["url"]
-            current_status = card["status"]
-            
-            if url in global_urls:
-                # Existing record - check if status needs updating
-                _, existing_record, _ = self.data_manager.find_record_by_url(url)
-                old_status = existing_record.get("status") if existing_record else None
-                
-                # Check if we need full re-scrape (e.g., for resolution_date when status → MEGOLDOTT)
-                if self.data_manager.needs_full_rescrape(old_status, current_status):
-                    print(f"Status change requires full re-scrape: {url} ({old_status} → {current_status})")
-                    print(f"[DEBUG] This is expected when status changes to/from 'MEGOLDOTT' to capture resolution_date")
-                    # Perform full scrape and update the record
-                    try:
-                        updated_report = self.scrape_report_selenium(url)
-                        # Replace the existing record with the updated one
-                        self.data_manager.replace_record(url, updated_report)
-                        print(f"Successfully updated record for {url}")
-                    except Exception as e:
-                        print(f"ERROR: Failed to scrape report during status update: {url}")
-                        print(f"Error details: {str(e)}")
-                        print(f"[INFO] Continuing with next report...")
-                        continue  # Skip this report and continue with the next one
-                elif self.data_manager.update_status_if_changed(url, current_status):
-                    print(f"Updated status for {url}: {current_status}")
-                
-                if stop_on_existing:
-                    reached_done = True
-                    break
-            else:
-                # New record - perform full scraping
-                try:
-                    report = self.scrape_report_selenium(url)
-                    # Use buffered saving for comprehensive scraping, regular saving for status updates
-                    if use_buffered_saving:
-                        self.data_manager.save_report_buffered(report, global_urls)
-                    else:
-                        self.data_manager.save_report(report, global_urls)
-                    if until_date and report["date"] <= until_date:
-                        reached_done = True
-                        break
-                except Exception as e:
-                    print(f"ERROR: Failed to scrape new report: {url}")
-                    print(f"Error details: {str(e)}")
-                    continue  # Skip this report and continue with the next one
-
-        if reached_done:
-            return None, True
-
-        next_page_elems = self.driver.find_elements(By.CSS_SELECTOR, "a.pagination__link")
-        for elem in next_page_elems:
-            if "Következő" in elem.text:
-                href = elem.get_attribute("href")
-                # Convert relative URLs to absolute
-                if href and href.startswith("/"):
-                    href = "https://jarokelo.hu" + href
-                return href, False
-        return None, False
     
     def extract_listing_info_beautifulsoup(self, page_url: str) -> list:
         """Extract URL and status from listing page cards using BeautifulSoup"""
@@ -689,7 +377,8 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
             status_elems = card.select("span.badge")
             for elem in status_elems:
                 # Skip comment badges
-                if "badge--comment" not in elem.get("class", []):
+                elem_class = elem.get("class", None)
+                if isinstance(elem_class, str) and "badge--comment" not in elem_class:
                     status = elem.text.strip()
                     break
             
@@ -715,7 +404,7 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
             if url in global_urls:
                 _, existing_record, _ = self.data_manager.find_record_by_url(url)
                 old_status = existing_record.get("status") if existing_record else None
-                if self.data_manager.needs_full_rescrape(old_status, current_status):
+                if old_status is not None and current_status is not None and self.data_manager.needs_full_rescrape(str(old_status), str(current_status)):
                     print(f"Status change requires full re-scrape: {url} ({old_status} → {current_status})")
                     print(f"[DEBUG] This is expected when status changes to/from 'MEGOLDOTT' to capture resolution_date")
                     try:
@@ -733,6 +422,7 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
         # Process all new URLs from this page
         new_urls_from_page = [card["url"] for card in card_info if card["url"] not in global_urls]
 
+        reached_until_date = False
         if new_urls_from_page:
             print(f"� Processing {len(new_urls_from_page)} new URLs from this page...")
             for url in new_urls_from_page:
@@ -743,12 +433,15 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                     else:
                         self.data_manager.save_report(report, global_urls)
                     if until_date and report["date"] >= until_date:
-                        # We've reached older records than our cutoff date
-                        return None, True
+                        reached_until_date = True
                 except Exception as e:
                     print(f"ERROR: Failed to scrape new report: {url}")
                     print(f"Error details: {str(e)}")
                     continue
+        # Only stop after processing all new URLs
+        if reached_until_date:
+            print(f"Reached until_date ({until_date}) after processing all new URLs on this page.")
+            return None, True
 
         # If there are no new URLs on this page, stop scraping
         if not new_urls_from_page:
@@ -765,22 +458,20 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
             if "Következő" in elem.text:
                 href = elem.get("href")
                 # Convert relative URLs to absolute
-                if href and href.startswith("/"):
+                if isinstance(href, str) and href.startswith("/"):
                     href = "https://jarokelo.hu" + href
-                return href, False
+                if isinstance(href, str) or href is None:
+                    return href, False
+                else:
+                    return None, False
         return None, False
     
     def scrape_listing_page(self, page_url: str, global_urls: Set[str], 
                            until_date: Optional[str] = None, 
                            stop_on_existing: bool = True,
                            use_buffered_saving: bool = False) -> Tuple[Optional[str], bool]:
-        """Scrape a listing page using the configured backend"""
-        if self.backend == 'selenium':
-            return self.scrape_listing_page_selenium(page_url, global_urls, until_date, stop_on_existing, use_buffered_saving)
-        elif self.backend == 'beautifulsoup':
-            return self.scrape_listing_page_beautifulsoup(page_url, global_urls, until_date, stop_on_existing, use_buffered_saving)
-        else:
-            raise ValueError(f"Unsupported backend: {self.backend}")
+        """Scrape a listing page using BeautifulSoup backend only"""
+        return self.scrape_listing_page_beautifulsoup(page_url, global_urls, until_date, stop_on_existing, use_buffered_saving)
     
     def detect_changed_urls_fast(self, cutoff_months: int = 3, output_file: str = "recent_changed_urls.txt") -> int:
         """
@@ -802,7 +493,7 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
         print(f"Strategy: Scan only listing pages for status changes in the last {cutoff_months} months")
         print(f"Advantage: 100x faster than comprehensive scraping for status monitoring")
         print(f"Cutoff months: {cutoff_months}")
-        print(f"Backend: {self.backend}")
+    # Only BeautifulSoup backend is supported
         
         print("\n[PERF] Building URL index cache...")
         start_time = time.time()
@@ -881,24 +572,26 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                         # Just continue processing
                         continue
                 
-                # Get next page URL manually
-                if self.backend == 'beautifulsoup':
-                    response = self.session.get(page_url)
-                    response.raise_for_status()
-                    soup = BeautifulSoup(response.text, 'html.parser')
-                    
-                    next_page_elems = soup.select("a.pagination__link")
-                    next_url = None
-                    for elem in next_page_elems:
-                        link_text = elem.text.strip()
-                        if "Következő" in elem.text:
-                            href = elem.get("href")
-                            if href and href.startswith("/"):
-                                next_url = "https://jarokelo.hu" + href
-                            break
-                else:
-                    # For selenium, implement similar logic if needed
-                    next_url = None
+                # Get next page URL manually (BeautifulSoup only)
+                if not self.session:
+                    print("[ERROR] Requests session not initialized")
+                    break
+                response = self.session.get(page_url)
+                response.raise_for_status()
+                soup = BeautifulSoup(response.text, 'html.parser')
+                next_page_elems = soup.select("a.pagination__link")
+                next_url = None
+                for elem in next_page_elems:
+                    link_text = elem.text.strip()
+                    if "Következő" in elem.text:
+                        href = elem.get("href")
+                        if isinstance(href, str) and href.startswith("/"):
+                            next_url = "https://jarokelo.hu" + href
+                        elif isinstance(href, str):
+                            next_url = href
+                        else:
+                            next_url = None
+                        break
                 
                 # Check if there's a next page
                 if not next_url:
@@ -1033,10 +726,7 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                 print(f"{progress_prefix}[{i}/{len(urls_to_scrape)}] {url}")
                 
                 # Scrape the report, using resolution_focus for efficiency if requested
-                if self.backend == 'beautifulsoup':
-                    report_data = self.scrape_report_beautifulsoup(url, resolution_focus=resolution_focus)
-                else:
-                    report_data = self.scrape_report_selenium(url, resolution_focus=resolution_focus)
+                report_data = self.scrape_report_beautifulsoup(url, resolution_focus=resolution_focus)
                 
                 # Save immediately (no buffering for status updates)
                 self.data_manager.save_report(report_data, global_urls)

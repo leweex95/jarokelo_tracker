@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       backend:
-        description: 'Scraper backend to use (beautifulsoup/bs/selenium)'
+        description: 'Scraper backend to use (beautifulsoup/bs)'
         required: false
         default: 'beautifulsoup'
       data_dir:
@@ -40,7 +40,7 @@ on:
   workflow_call:
     inputs:
       backend:
-        description: 'Scraper backend to use (beautifulsoup/bs/selenium)'
+        description: 'Scraper backend to use (beautifulsoup/bs)'
         required: false
         default: 'beautifulsoup'
         type: string
