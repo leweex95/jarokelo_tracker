@@ -285,22 +285,14 @@ class DataManager:
         """
         Save a report to the monthly JSONL file, organizing entries by date.
 
-        Ordering logic:
-        - If the report URL already exists in the current file, it is skipped.
-        - If all existing entries in the file have the same date, new reports are always appended to the bottom.
-        - Otherwise:
-            - If the report's date is newer than or equal to the first line, it is prepended to the top.
-            - If the report's date is older than or equal to the last line, it is appended to the bottom.
-        - This ensures chronological ordering while handling single-date files or files at the start of scraping consistently.
+        If the report URL already exists, update the record if status or resolution_date changed.
+        Otherwise, insert as new.
         """
-        if report["url"] in existing_urls:
-            return
-        existing_urls.add(report["url"])
-
         file_path = self.get_monthly_file(report["date"])
         new_line = json.dumps(report, ensure_ascii=False) + "\n"
 
         lines = []
+        updated = False
         if os.path.exists(file_path):
             with open(file_path, "r", encoding="utf-8") as f:
                 for i, line in enumerate(f, start=1):
@@ -308,27 +300,39 @@ class DataManager:
                     if not line:
                         continue
                     try:
-                        json.loads(line)  # validate
+                        record = json.loads(line)
+                        # If URL matches, check for status/resolution_date changes
+                        if record.get("url") == report["url"]:
+                            # Only update if status or resolution_date changed
+                            if (record.get("status") != report.get("status") or
+                                record.get("resolution_date") != report.get("resolution_date")):
+                                lines.append(new_line)
+                                updated = True
+                            else:
+                                lines.append(line + "\n")
+                            continue  # Skip adding duplicate/new below
                         lines.append(line + "\n")
                     except json.JSONDecodeError as e:
                         print(f"[ERROR] Malformed line {i} in {file_path}: {line}")
                         raise
 
-        # Insert new report chronologically
-        inserted = False
-        report_date = report["date"]
-        new_lines = []
-        for line in lines:
-            line_date = json.loads(line)["date"]
-            if not inserted and report_date >= line_date:
-                new_lines.append(new_line)
-                inserted = True
-            new_lines.append(line)
-        if not inserted:
-            new_lines.append(new_line)  # append if newest
+        # If not updated, insert new report chronologically
+        if not updated:
+            report_date = report["date"]
+            inserted = False
+            new_lines = []
+            for line in lines:
+                line_date = json.loads(line)["date"]
+                if not inserted and report_date >= line_date:
+                    new_lines.append(new_line)
+                    inserted = True
+                new_lines.append(line)
+            if not inserted:
+                new_lines.append(new_line)  # append if newest
+            lines = new_lines
 
         with open(file_path, "w", encoding="utf-8") as f:
-            f.writelines(new_lines)
+            f.writelines(lines)
         
         # Invalidate cache since file was modified
         self.invalidate_cache()
