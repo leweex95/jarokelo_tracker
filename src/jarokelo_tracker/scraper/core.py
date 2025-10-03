@@ -705,28 +705,32 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
         global_urls = self.data_manager.load_all_existing_urls()
         start_time = time.time()
         successful_scrapes = 0
-        
+        non_null_resolution = 0
+
         for i, url in enumerate(urls_to_scrape, 1):
             try:
                 print(f"{progress_prefix}[{i}/{len(urls_to_scrape)}] {url}")
-                
+
                 # Scrape the report, using resolution_focus for efficiency if requested
                 report_data = self.scrape_report(url, resolution_focus=resolution_focus)
-                
+
                 # Save immediately (no buffering for status updates)
                 self.data_manager.save_report(report_data, global_urls)
                 successful_scrapes += 1
-                
+                if report_data.get("resolution_date") is not None:
+                    non_null_resolution += 1
+
             except Exception as e:
                 print(f"{progress_prefix}   ❌ Error scraping {url}: {e}")
                 continue
-        
+
         elapsed = time.time() - start_time
         if resolution_focus:
-            print(f"{progress_prefix}✅ Successfully updated resolution dates for {successful_scrapes}/{len(urls_to_scrape)} URLs in {elapsed:.1f}s")
+            print(f"{progress_prefix}✅ Finished processing {len(urls_to_scrape)} URLs in {elapsed:.1f}s")
+            print(f"{progress_prefix}✅ Resolution dates updated for {non_null_resolution} URLs (out of {successful_scrapes} successfully scraped)")
         else:
             print(f"{progress_prefix}✅ Successfully scraped {successful_scrapes}/{len(urls_to_scrape)} URLs in {elapsed:.1f}s")
-        
+
         return successful_scrapes
     
     def scrape(self, start_page: int = 1, until_date: Optional[str] = None, 
