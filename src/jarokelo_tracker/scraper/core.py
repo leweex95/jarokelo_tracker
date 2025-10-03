@@ -720,7 +720,7 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                 new_status = report_data.get("status")
                 new_resolution = report_data.get("resolution_date")
 
-                # Only print if status or resolution_date actually changes
+                # Only print if status or resolution_date actually changes, and always show both original and new values
                 if (original_status != new_status) or (original_resolution != new_resolution):
                     print(f"{progress_prefix}[{i}/{len(urls_to_scrape)}] {url}")
                     print(f"[OPTIMIZATION] Resolution date focus: {url} -> original_status={original_status}, new_status={new_status}, original_resolution_date={original_resolution}, new_resolution_date={new_resolution}")
