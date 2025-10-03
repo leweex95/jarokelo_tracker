@@ -49,7 +49,7 @@ def main():
             # Handle different operation modes
             if args.fetch_changed_urls:
                 # Recent Status Change Detector Mode - Only find URLs with status changes
-                print("🔍 Running in Status Change Detection Mode")
+                print("Running in Status Change Detection Mode")
                 print(f"Detecting status changes from last {args.cutoff_months} months...")
                 changed_urls_count = scraper.detect_changed_urls_fast(
                     cutoff_months=args.cutoff_months,
@@ -59,7 +59,7 @@ def main():
                 
             elif args.load_old_pending:
                 # Old Pending Issues Loader Mode
-                print("📋 Running in Old Pending Issues Loader Mode") 
+                print("Running in Old Pending Issues Loader Mode") 
                 print(f"[DEBUG] This should call extract_old_pending_urls, NOT web scraping")
                 print(f"Extracting pending issues older than {args.cutoff_months} months...")
                 pending_urls_count = scraper.extract_old_pending_urls(
@@ -70,7 +70,7 @@ def main():
                 
             elif args.scrape_urls_file:
                 # Resolution Date Scraper Mode - Process specific URLs from file
-                print("🎯 Running in Resolution Date Scraper Mode")
+                print("Running in Resolution Date Scraper Mode")
                 print(f"Scraping URLs from file: {args.scrape_urls_file}")
                 
                 # The scrape_urls_file mode is optimized for resolution date extraction
@@ -83,7 +83,7 @@ def main():
                 
             else:
                 # Standard Comprehensive Scraping Mode
-                print("🚀 Running in Comprehensive Scraping Mode")
+                print("Running in Comprehensive Scraping Mode")
                 print(f"[DEBUG] This should NOT run for --fetch-changed-urls or --load-old-pending!")
                 print(f"[DEBUG] fetch_changed_urls={args.fetch_changed_urls}, load_old_pending={args.load_old_pending}")
                 scraper.scrape(

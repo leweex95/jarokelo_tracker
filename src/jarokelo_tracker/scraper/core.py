@@ -280,29 +280,30 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
         resolution_date = None
         if status and status.upper() == "MEGOLDOTT":
             comment_bodies = soup.select("div.comment__body")
+            # Find all comment bodies with the closing message
+            closing_comments = []
             for body in comment_bodies:
                 msg_elems = body.select("p.comment__message")
                 for msg in msg_elems:
                     raw_html = str(msg)
                     if re.search(r"lezárta a bejelentést.*Megoldott.*eredménnyel", raw_html, re.DOTALL | re.IGNORECASE):
-                        time_elems = body.select("time")
-                        for t in time_elems:
-                            time_text = t.text.strip()
-                            if not time_text and t.string:
-                                time_text = t.string.strip()
-                            if time_text:
-                                try:
-                                    date_parts = time_text.split()[0:3]
-                                    resolution_date = self.normalize_date(" ".join(date_parts))
-                                except Exception as e:
-                                    print(f"[DEBUG] Error normalizing date: {e}")
-                                break
-                        if not resolution_date:
-                            print("[DEBUG] No valid <time> text found for resolution_date")
-                            raise ValueError("Could not find valid resolution date")
+                        closing_comments.append(body)
                         break
-                if resolution_date:
-                    break
+            if closing_comments:
+                # Use the last (topmost) closing comment
+                topmost = closing_comments[-1]
+                time_elem = topmost.select_one("time.comment__date")
+                if time_elem:
+                    time_text = time_elem.text.strip()
+                    if time_text:
+                        try:
+                            date_parts = time_text.split()[0:3]
+                            resolution_date = self.normalize_date(" ".join(date_parts))
+                        except Exception as e:
+                            print(f"[DEBUG] Error normalizing date: {e}")
+                if not resolution_date:
+                    print("[DEBUG] No valid <time> text found for resolution_date")
+                    # Do not raise, just leave as None
 
         # GPS Coordinates
         latitude, longitude = extract_gps_coordinates(response.text)
@@ -326,6 +327,13 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
         
         # VALIDATE ENCODING - FAIL LOUDLY IF CORRUPTION DETECTED
         self.validate_encoding(result, url)
+
+        # Prevent encoding issues from being detected as status changes
+        if "original_status" in result and result["status"] and result["original_status"]:
+            fixed_new_status = JarokeloScraper.fix_utf8_encoding(result["status"])
+            fixed_original_status = JarokeloScraper.fix_utf8_encoding(result["original_status"])
+            if fixed_new_status == fixed_original_status:
+                result["status"] = result["original_status"]
         
         return result
     
@@ -553,7 +561,7 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                             
                             if status_changed or newly_resolved:
                                 changed_urls.add(url)
-                                print(f"   📝 Status change detected: {url}")
+                                print(f"   Status change detected: {url}")
                         elif report_date < cutoff_date.strftime("%Y-%m-%d"):
                             # Don't break here - we need to keep checking all reports within our time window
                             # Just skip this individual report since it's too old
