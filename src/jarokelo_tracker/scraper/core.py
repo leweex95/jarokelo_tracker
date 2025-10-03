@@ -214,9 +214,13 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                                 continue
                 # Update only necessary fields
                 result = existing_record.copy()
+                original_status = existing_record.get("status") if existing_record else None
+                original_resolution = existing_record.get("resolution_date") if existing_record else None
                 result["status"] = status
                 result["resolution_date"] = resolution_date
-                print(f"[OPTIMIZATION] Resolution date focus: {url} -> status={status}, resolution_date={resolution_date}")
+                # Only print if status or resolution_date actually changes, and use tab for formatting
+                if (original_status != status) or (original_resolution != resolution_date):
+                    print(f"\tResolution date focus: {url} -> original_status={original_status}, new_status={status}, original_resolution_date={original_resolution}, new_resolution_date={resolution_date}")
                 return result
         
         # Full scraping (either not resolution_focus or no existing record found)
@@ -723,7 +727,7 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                 # Only print if status or resolution_date actually changes, and always show both original and new values
                 if (original_status != new_status) or (original_resolution != new_resolution):
                     print(f"{progress_prefix}[{i}/{len(urls_to_scrape)}] {url}")
-                    print(f"[OPTIMIZATION] Resolution date focus: {url} -> original_status={original_status}, new_status={new_status}, original_resolution_date={original_resolution}, new_resolution_date={new_resolution}")
+                    print(f"\tResolution date focus: {url} -> original_status={original_status}, new_status={new_status}, original_resolution_date={original_resolution}, new_resolution_date={new_resolution}")
 
                 # Save immediately (no buffering for status updates)
                 self.data_manager.save_report(report_data, global_urls)
