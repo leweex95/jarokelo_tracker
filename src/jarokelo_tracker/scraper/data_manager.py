@@ -337,25 +337,24 @@ class DataManager:
             True if the status was updated, False otherwise
         """
         file_path, record, line_num = self.find_record_by_url(url)
-        
         if not record:
             print(f"[WARNING] Record not found for URL: {url}")
             return False
-        
         current_status = record.get("status")
-        
+        # Do not update if new_status is None or empty
+        if not new_status:
+            error_msg = f"[ERROR] Attempted status update for {url} with None or empty value. Old status: '{record.get('status')}'"
+            print(error_msg)
+            raise ValueError(error_msg)
         # Only update if status actually changed (case-insensitive comparison)
         if current_status and new_status and current_status.lower() == new_status.lower():
             # Status is the same (ignoring case) - no update needed
             if current_status != new_status:
                 print(f"[DEBUG] Status case difference ignored for {url}: '{current_status}' vs '{new_status}'")
             return False
-        
         print(f"Status changed for {url}: '{current_status}' → '{new_status}'")
-        
         # Update the record
         record["status"] = new_status
-        
         # Handle buffer vs disk record updates differently
         if line_num is None:
             # Record is in buffer - already updated by reference
@@ -366,7 +365,6 @@ class DataManager:
         else:
             print(f"[ERROR] file_path is None when updating disk record for {url}")
             return False
-        
         return True
     
     def _update_disk_record(self, file_path: str, line_num: int, record: Dict) -> None:
