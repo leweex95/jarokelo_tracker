@@ -189,12 +189,14 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
         if resolution_focus:
             # Get existing record data first to preserve other fields
             _, existing_record, _ = self.data_manager.find_record_by_url(url)
-            
             if existing_record:
                 # Status
                 status_elem = soup.select_one("span.badge")
                 status = status_elem.text.strip() if status_elem else None
-                
+                if status is None:
+                    print(f"[ERROR] Status extraction failed for report: {url}")
+                    print(f"[DEBUG] Raw HTML snippet for report:")
+                    print(response.text[:1000])
                 # Resolution date (if available)
                 resolution_date = None
                 status_cards = soup.select("div.report__status__card")
@@ -210,7 +212,6 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                             except Exception as e:
                                 print(f"[DEBUG] Error normalizing date: {e}")
                                 continue
-                
                 # Update only necessary fields
                 result = existing_record.copy()
                 result["status"] = status
@@ -256,6 +257,10 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
         # Status
         status_elem = soup.select_one("span.badge")
         status = status_elem.text.strip() if status_elem else None
+        if status is None:
+            print(f"[ERROR] Status extraction failed for report: {url}")
+            print(f"[DEBUG] Raw HTML snippet for report:")
+            print(response.text[:1000])
 
         # Address
         address_elem = soup.select_one("address.report__location__address")
@@ -357,7 +362,6 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
             if not link_elem:
                 continue
             url = link_elem.get("href")
-            
             # Extract status from badge
             status = None
             status_elems = card.select("span.badge")
@@ -367,7 +371,10 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                 if isinstance(elem_class, str) and "badge--comment" not in elem_class:
                     status = elem.text.strip()
                     break
-            
+            if status is None:
+                print(f"[ERROR] Status extraction failed for listing card: {url}")
+                print(f"[DEBUG] Raw HTML snippet for card:")
+                print(str(card)[:1000])
             card_info.append({"url": url, "status": status})
         
         return card_info
