@@ -712,19 +712,23 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                 # Get original record from DB
                 _, original_record, _ = self.data_manager.find_record_by_url(url)
                 original_status = original_record.get("status") if original_record else None
-
-                print(f"{progress_prefix}[{i}/{len(urls_to_scrape)}] {url}")
+                original_resolution = original_record.get("resolution_date") if original_record else None
 
                 # Scrape the report, using resolution_focus for efficiency if requested
                 report_data = self.scrape_report(url, resolution_focus=resolution_focus)
 
                 new_status = report_data.get("status")
-                print(f"[OPTIMIZATION] Resolution date focus: {url} -> original_status={original_status}, new_status={new_status}, resolution_date={report_data.get('resolution_date')}")
+                new_resolution = report_data.get("resolution_date")
+
+                # Only print if status or resolution_date actually changes
+                if (original_status != new_status) or (original_resolution != new_resolution):
+                    print(f"{progress_prefix}[{i}/{len(urls_to_scrape)}] {url}")
+                    print(f"[OPTIMIZATION] Resolution date focus: {url} -> original_status={original_status}, new_status={new_status}, original_resolution_date={original_resolution}, new_resolution_date={new_resolution}")
 
                 # Save immediately (no buffering for status updates)
                 self.data_manager.save_report(report_data, global_urls)
                 successful_scrapes += 1
-                if report_data.get("resolution_date") is not None:
+                if new_resolution is not None:
                     non_null_resolution += 1
 
             except Exception as e:
