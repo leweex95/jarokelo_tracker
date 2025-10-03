@@ -66,10 +66,10 @@ on:
         required: true
 
 jobs:
-  # Job 1: Comprehensive scraping - Find new entries from Jarokelo website
-  comprehensive-scraping:
+  # Job 1: Full scraping of new entries
+  new-entries-scraping:
     runs-on: ubuntu-latest
-    name: "1. Comprehensive scraping (new entries)"
+    name: "1. Comprehensive scraping"
     steps:
       - name: Checkout repo
         uses: actions/checkout@v5
@@ -244,7 +244,7 @@ jobs:
   # Job 2: Fast detection of recently changed statuses (configurable, default: last 3 months)
   # This job quickly scans recent pages WITHOUT opening individual URLs to find status changes
   # Much faster than comprehensive scraping when only looking for status updates
-  recent-url-detector:
+  recent-entries-detector-with-changed-status:
     runs-on: ubuntu-latest
     name: "2. Recent status change detector"
     outputs:
@@ -303,7 +303,7 @@ jobs:
   # 1. Older than the cutoff period
   # 2. Still in a pending state (not resolved, deleted, or rejected)
   # This avoids having to scan thousands of pages for old content
-  old-pending-loader:
+  old-nonresolved-entries-loader:
     runs-on: ubuntu-latest
     name: "3. Old pending URL extractor"
     outputs:
@@ -358,11 +358,11 @@ jobs:
           retention-days: 1
 
   # Job 4: Process recently changed statuses (detected by Job 2) to update resolution data
-  recent-resolution-scraper:
+  recent-resolution-date-scraper:
     runs-on: ubuntu-latest
     name: "4. Recent resolution date scraper"
-    needs: recent-url-detector
-    if: needs.recent-url-detector.outputs.changed_urls_count > 0
+    needs: recent-entries-detector-with-changed-status
+    if: needs.recent-entries-detector-with-changed-status.outputs.changed_urls_count > 0
     steps:
       - name: Checkout repo
         uses: actions/checkout@v5
@@ -389,8 +389,7 @@ jobs:
         run: |
           echo "RECENT RESOLUTION DATE SCRAPER"
           echo "Strategy: Targeted resolution date extraction for recently changed statuses detected by Job 2"
-          echo "Advantage: Optimized processing focusing only on status and resolution date extraction"
-          echo "URLs to scrape: ${{ needs.recent-url-detector.outputs.changed_urls_count }}"
+          echo "URLs to scrape: ${{ needs.recent-entries-detector-with-changed-status.outputs.changed_urls_count }}"
           
           # Scrape the recently changed URLs
           python ./scripts/scrape_data.py \
@@ -454,12 +453,11 @@ jobs:
           done
 
   # Job 5: Check old pending URLs (extracted by Job 3) for resolution updates
-  # PERFORMANCE OPTIMIZED: Process only random sample of 100 URLs per run
-  old-resolution-scraper:
+  old-resolution-date-scraper:
     runs-on: ubuntu-latest
     name: "5. Old resolution date scraper"
-    needs: old-pending-loader
-    if: needs.old-pending-loader.outputs.pending_urls_count > 0
+    needs: old-nonresolved-entries-loader
+    if: needs.old-nonresolved-entries-loader.outputs.pending_urls_count > 0
     steps:
       - name: Checkout repo
         uses: actions/checkout@v5
@@ -484,10 +482,9 @@ jobs:
 
       - name: Scrape old pending URLs
         run: |
-          echo "OLD RESOLUTION DATE SCRAPER (OPTIMIZED)"
+          echo "OLD RESOLUTION DATE SCRAPER"
           echo "Strategy: Random sampling of old pending issues to check for resolutions"
-          echo "Optimization: Process max 100 random URLs per run for manageable runtime"
-          echo "Total URLs available: ${{ needs.old-pending-loader.outputs.pending_urls_count }}"
+          echo "Total URLs available: ${{ needs.old-nonresolved-entries-loader.outputs.pending_urls_count }}"
           
           # Sample 250 random URLs from the last 1000 entries
           if [ -f "old_pending_urls.txt" ]; then
@@ -563,7 +560,7 @@ jobs:
   pipeline-summary:
     runs-on: ubuntu-latest
     name: "6. Pipeline Summary"
-    needs: [comprehensive-scraping, recent-url-detector, old-pending-loader, recent-resolution-scraper, old-resolution-scraper]
+    needs: [new-entries-scraping, recent-entries-detector-with-changed-status, old-nonresolved-entries-loader, recent-resolution-date-scraper, old-resolution-date-scraper]
     if: always()  # Run even if previous jobs fail
     steps:
       - name: Checkout repo
@@ -577,29 +574,6 @@ jobs:
         run: |
           echo "Járokelő Tracker Pipeline Summary"
           echo "==============================================="
-          echo "Optimization strategy: Split processing between new, recent and old content"
-          echo "1. Comprehensive scraping: Find completely new entries"
-          echo "2. Recent change detection: Fast scan recent pages (${CUTOFF_MONTHS:-3} months) for status changes"
-          echo "3. Old pending extraction: Get URLs of unresolved issues older than ${CUTOFF_MONTHS:-3} months"
-          echo "4. Recent resolution scraping: Update recently changed statuses"
-          echo "5. Old resolution scraping: Check random sample (max 100) of old pending issues"
-          echo "Pipeline mode: ${{ github.event_name == 'workflow_dispatch' && 'Manual' || 'Nightly Scheduled' }}"
-          echo ""
-          echo "Job Results:"
-          echo "- Comprehensive scraping: ${{ needs.comprehensive-scraping.result || 'skipped' }}"
-          echo "- Recent URL detection: ${{ needs.recent-url-detector.result || 'skipped' }}"
-          echo "- Old pending loader: ${{ needs.old-pending-loader.result || 'skipped' }}"
-          echo "- Recent resolution scraper: ${{ needs.recent-resolution-scraper.result || 'skipped' }}"
-          echo "- Old resolution scraper: ${{ needs.old-resolution-scraper.result || 'skipped' }}"
-          echo ""
-          echo "Performance Summary:"
-          echo "- Recent URLs detected: ${{ needs.recent-url-detector.outputs.changed_urls_count || '0' }}"
-          echo "- Old pending URLs: ${{ needs.old-pending-loader.outputs.pending_urls_count || '0' }}"
-          echo "- Cutoff months: ${{ github.event.inputs.cutoff_months || '3' }}"
-          echo "- Optimization: Split pipeline with targeted processing reduces run time by ~90%!"
-          echo "- Time savings: By only opening URLs that need attention (new/changed/pending)"
-          echo "- Memory savings: Processing in smaller targeted batches reduces RAM requirements"
-          echo ""
           echo "Data directory structure:"
           ls -la data/raw/ || echo "No data directory found"
           echo ""
@@ -615,5 +589,4 @@ jobs:
           done
           echo ""
           echo "Pipeline completed at: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
-          echo "Repository: ${{ github.repository }}"
           echo "Workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
