@@ -366,9 +366,11 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
             status = None
             status_elems = card.select("span.badge")
             for elem in status_elems:
-                # Skip comment badges
-                elem_class = elem.get("class", None)
-                if isinstance(elem_class, str) and "badge--comment" not in elem_class:
+                elem_class = elem.get("class", [])
+                # elem_class can be a list or string; normalize to list
+                if isinstance(elem_class, str):
+                    elem_class = [elem_class]
+                if not any("badge--comment" in c for c in elem_class):
                     status = elem.text.strip()
                     break
             if status is None:
