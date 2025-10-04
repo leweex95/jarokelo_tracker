@@ -480,19 +480,27 @@ jobs:
         with:
           name: old-pending-urls
 
-      - name: Scrape old pending URLs
+      - name: Fetch URLs of old unfinished (pending) entries
         run: |
-          echo "OLD RESOLUTION DATE SCRAPER"
-          echo "Strategy: Random sampling of old pending issues to check for resolutions"
+          echo "SCRAPING RESOLUTION STATE OF OLD ISSUES"
+          echo "Strategy: Random sampling of old pending issues to check for resolution_date and status change"
           echo "Total URLs available: ${{ needs.old-nonresolved-entries-loader.outputs.pending_urls_count }}"
                     
-          # Sample 300 random URLs from the last 5000 entries
+          # Sample 300 random URLs from the most recent entries (up to 5000)
           if [ -f "old_pending_urls.txt" ]; then
             TOTAL_URLS=$(wc -l < old_pending_urls.txt)
-            START_LINE=$(( TOTAL_URLS > 5000 ? TOTAL_URLS - 4999 : 1 ))
-            tail -n +$START_LINE old_pending_urls.txt | shuf | head -250 > old_pending_urls_sample.txt
+            if [ "$TOTAL_URLS" -gt 5000 ]; then
+              # If more than 5000 URLs, sample from the last 5000 entries
+              tail -n 5000 old_pending_urls.txt | shuf | head -300 > old_pending_urls_sample.txt
+              echo "Sampling 300 URLs from the last 5000 entries (total: $TOTAL_URLS)"
+            else
+              # If 5000 or fewer URLs, sample from all available
+              SAMPLE_SIZE=$(( TOTAL_URLS < 300 ? TOTAL_URLS : 300 ))
+              shuf old_pending_urls.txt | head -$SAMPLE_SIZE > old_pending_urls_sample.txt
+              echo "Sampling $SAMPLE_SIZE URLs from all $TOTAL_URLS available entries"
+            fi
             mv old_pending_urls_sample.txt old_pending_urls.txt
-            echo "Processing $(wc -l < old_pending_urls.txt) URLs from last 5000 entries"
+            echo "Processing $(wc -l < old_pending_urls.txt) URLs"
           fi
 
           # Scrape the old pending URLs
@@ -540,7 +548,7 @@ jobs:
           BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 
           git add data/raw
-          git commit -m "[Auto-commit] Update of resolution_date of old entries: rnd sample of 100 URLs checked [skip ci]"
+          git commit -m "[Auto-commit] Update of resolution_date of old entries: rnd sample of 250 URLs checked [skip ci]"
           
           # Push with retry logic
           RETRIES=10
