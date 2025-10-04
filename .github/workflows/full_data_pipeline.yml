@@ -4,8 +4,8 @@
 
 name: Full data pipeline 
 on:
-  schedule:
-    - cron: "0 22 * * *"
+  # schedule:
+  #   - cron: "0 22 * * *"
   workflow_dispatch:
     inputs:
         data_dir:
