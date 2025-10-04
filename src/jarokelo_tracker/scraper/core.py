@@ -276,34 +276,43 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
         else:
             address = None
 
-        # Resolution date (if status is "MEGOLDOTT")
+        # Resolution date extraction: find last date when status becomes 'MEGOLDOTT'
         resolution_date = None
         if status and status.upper() == "MEGOLDOTT":
+            # Search all status change cards for 'MEGOLDOTT'
+            status_cards = soup.select("div.report__status__card")
+            megoldott_dates = []
+            for card in status_cards:
+                badge_elem = card.select_one("span.badge")
+                card_status = badge_elem.text.strip() if badge_elem else None
+                time_elems = card.select("time")
+                for t in time_elems:
+                    time_text = t.text.strip() if t.text else (t.string.strip() if t.string else None)
+                    if card_status and card_status.upper() == "MEGOLDOTT" and time_text:
+                        try:
+                            megoldott_dates.append(self.normalize_date(" ".join(time_text.split()[0:3])))
+                        except Exception:
+                            continue
+            # Also check comments for resolution
             comment_bodies = soup.select("div.comment__body")
-            # Find all comment bodies with the closing message
-            closing_comments = []
             for body in comment_bodies:
                 msg_elems = body.select("p.comment__message")
                 for msg in msg_elems:
                     raw_html = str(msg)
-                    if re.search(r"lezárta a bejelentést.*Megoldott.*eredménnyel", raw_html, re.DOTALL | re.IGNORECASE):
-                        closing_comments.append(body)
-                        break
-            if closing_comments:
-                # Use the last (topmost) closing comment
-                topmost = closing_comments[-1]
-                time_elem = topmost.select_one("time.comment__date")
-                if time_elem:
-                    time_text = time_elem.text.strip()
-                    if time_text:
-                        try:
-                            date_parts = time_text.split()[0:3]
-                            resolution_date = self.normalize_date(" ".join(date_parts))
-                        except Exception as e:
-                            print(f"[DEBUG] Error normalizing date: {e}")
-                if not resolution_date:
-                    print("[DEBUG] No valid <time> text found for resolution_date")
-                    # Do not raise, just leave as None
+                    if re.search(r"megoldott", raw_html, re.IGNORECASE):
+                        time_elems = body.select("time")
+                        for t in time_elems:
+                            time_text = t.text.strip() if t.text else (t.string.strip() if t.string else None)
+                            if time_text:
+                                try:
+                                    megoldott_dates.append(self.normalize_date(" ".join(time_text.split()[0:3])))
+                                except Exception:
+                                    continue
+            # Select the last date when status became 'MEGOLDOTT'
+            if megoldott_dates:
+                resolution_date = sorted(megoldott_dates)[-1]
+            else:
+                resolution_date = None
 
         # GPS Coordinates
         latitude, longitude = extract_gps_coordinates(response.text)
