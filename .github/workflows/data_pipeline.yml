@@ -120,7 +120,7 @@ jobs:
           RETRIES=10
           for i in $(seq 1 $RETRIES); do
             git pull --rebase
-            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:"$BRANCH" && break || {
+            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master && break || {
               echo "Push failed, retrying ($i/$RETRIES)..."
               sleep 3
             }
@@ -174,7 +174,7 @@ jobs:
           RETRIES=10
           for i in $(seq 1 $RETRIES); do
             git pull --rebase
-            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:"$BRANCH" && break || {
+            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master && break || {
               echo "Push failed, retrying ($i/$RETRIES)..."
               sleep 3
             }
@@ -223,7 +223,7 @@ jobs:
           RETRIES=10
           for i in $(seq 1 $RETRIES); do
             git pull --rebase
-            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:"$BRANCH" && break || {
+            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master && break || {
               echo "Push failed, retrying ($i/$RETRIES)..."
               sleep 3
             }
@@ -286,7 +286,7 @@ jobs:
           RETRIES=10
           for i in $(seq 1 $RETRIES); do
             git pull --rebase
-            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:"$BRANCH" && break || {
+            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master && break || {
               echo "Push failed, retrying ($i/$RETRIES)..."
               sleep 3
             }
@@ -343,7 +343,7 @@ jobs:
           RETRIES=10
           for i in $(seq 1 $RETRIES); do
             git pull --rebase
-            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:"$BRANCH" && break || {
+            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master && break || {
               echo "Push failed, retrying ($i/$RETRIES)..."
               sleep 3
             }
@@ -403,7 +403,7 @@ jobs:
           RETRIES=10
           for i in $(seq 1 $RETRIES); do
             git pull --rebase
-            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:"$BRANCH" && break || {
+            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master && break || {
               echo "Push failed, retrying ($i/$RETRIES)..."
               sleep 3
             }

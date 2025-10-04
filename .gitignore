@@ -5,4 +5,3 @@ temp/
 tmp/
 *.log
 .numba_cache/
-*.cache

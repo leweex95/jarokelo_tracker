@@ -18,7 +18,7 @@ It automates data scraping, preprocessing, chunking, embedding, vector store cre
 
 ## Features
 
-- **Data scraping**: Automated collection of public reports from Járókelő.hu using Beautifulsoup, triggered on a daily basis. 
+- **Data scraping**: Automated collection of public reports from Járókelő.hu using Selenium, triggered on a daily basis. 
 - **Preprocessing**: Cleans, normalizes, and chunks text for efficient retrieval, as well as for exploratory data analysis and Power BI reporting. Automated to run daily and on the arrival of any new scraped data.
 - **Vector store**: Embeds and indexes the corpus using either FAISS or Chroma for fast semantic search.
 - **RAG pipeline**: The core of the system, responsible for answering user queries by retrieving relevant issues and generating responses via LLM (currently OpenAI's ChatGPT).
@@ -37,19 +37,29 @@ It automates data scraping, preprocessing, chunking, embedding, vector store cre
 
 2. Scrape data
 
-The scraper supports **BeautifulSoup** backend.
+The scraper supports two backends:
+- **BeautifulSoup** (default): Faster, more reliable, no browser needed
+- **Selenium**: Uses a headless Chrome browser (useful for dynamic content)
 
-_From scratch with BeautifulSoup:_
+_From scratch with BeautifulSoup (recommended):_
 
-    poetry run python ./scripts/scrape_data.py --start-page 1 --until-date 2025-08-01
+    poetry run python ./scripts/scrape_data.py --backend beautifulsoup --start-page 1 --until-date 2025-08-01
+
+_From scratch with Selenium:_
+
+    poetry run python ./scripts/scrape_data.py --backend selenium --headless true --start-page 1 --until-date 2025-08-01
 
 _Or if there is already an amount of scraped data under `data/raw`, the scraper can continue from the last-scraped entry:_
 
-    poetry run python ./scripts/scrape_data.py --continue-scraping
+    poetry run python ./scripts/scrape_data.py --backend beautifulsoup --continue-scraping
+
+_You can also use the shorthand `bs` for `beautifulsoup`:_
+
+    poetry run python ./scripts/scrape_data.py --backend bs --continue-scraping
 
 _To update the status of existing records (e.g., when "Válaszra vár" changes to "MEGOLDOTT"):_
 
-    poetry run python ./scripts/scrape_data.py --update-existing-status
+    poetry run python ./scripts/scrape_data.py --backend bs --update-existing-status
 
 This efficiently checks and updates the status of already-scraped records without performing full re-scraping. When a status changes to "MEGOLDOTT" (resolved), the scraper automatically performs a full re-scrape to capture the `resolution_date`.
 
@@ -135,13 +145,13 @@ If you prefer to use poetry commands directly:
 
 ```bash
 # Continue scraping
-poetry run python scripts/scrape_data.py --continue-scraping --data-dir "data/raw"
+poetry run python scripts/scrape_data.py --backend bs --continue-scraping --data-dir "data/raw"
 
 # Update status
-poetry run python scripts/scrape_data.py --update-existing-status --data-dir "data/raw"
+poetry run python scripts/scrape_data.py --backend bs --update-existing-status --data-dir "data/raw"
 
 # Scrape until date
-poetry run python scripts/scrape_data.py --start-page 1 --until-date 2025-01-01 --data-dir "data/raw"
+poetry run python scripts/scrape_data.py --backend bs --start-page 1 --until-date 2025-01-01 --data-dir "data/raw"
 ```
 
 **Yes, you can now use short commands instead of the longer poetry commands!** 🎉
