@@ -190,28 +190,48 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
             # Get existing record data first to preserve other fields
             _, existing_record, _ = self.data_manager.find_record_by_url(url)
             if existing_record:
-                # Status
-                status_elem = soup.select_one("span.badge")
-                status = status_elem.text.strip() if status_elem else None
+                # Status - find the first non-comment badge
+                status_elems = soup.select("span.badge")
+                status = None
+                for elem in status_elems:
+                    elem_class = elem.get("class", [])
+                    if isinstance(elem_class, str):
+                        elem_class = [elem_class]
+                    if not any("badge--comment" in c for c in elem_class):
+                        status = elem.text.strip()
+                        break
+                
                 if status is None:
                     print(f"[ERROR] Status extraction failed for report: {url}")
                     print(f"[DEBUG] Raw HTML snippet for report:")
                     print(response.text[:1000])
-                # Resolution date (if available)
+                
+                # Resolution date (if available) - search comments for resolution pattern
                 resolution_date = None
-                status_cards = soup.select("div.report__status__card")
-                for card in status_cards:
-                    time_elem = card.select_one("time")
-                    if time_elem:
-                        time_text = time_elem.text.strip()
-                        if time_text:
-                            try:
-                                date_parts = time_text.split()[0:3]
-                                resolution_date = self.normalize_date(" ".join(date_parts))
-                                break
-                            except Exception as e:
-                                print(f"[DEBUG] Error normalizing date: {e}")
-                                continue
+                if status and status.upper() == "MEGOLDOTT":
+                    comment_bodies = soup.select("div.comment__body")
+                    for body in comment_bodies:
+                        msg_elems = body.select("p.comment__message")
+                        for msg in msg_elems:
+                            raw_html = str(msg)
+                            if re.search(r"lezárta a bejelentést.*Megoldott.*eredménnyel", raw_html, re.DOTALL | re.IGNORECASE):
+                                time_elems = body.select("time")
+                                for t in time_elems:
+                                    time_text = t.text.strip()
+                                    if time_text:
+                                        try:
+                                            # Use only first 3 parts of date
+                                            date_parts = time_text.split()[0:3]
+                                            resolution_date = self.normalize_date(date_parts)
+                                            break
+                                        except Exception as e:
+                                            print(f"[DEBUG] Error normalizing date '{time_text}': {e}")
+                                            continue
+                                if resolution_date:
+                                    break
+                        if resolution_date:
+                            break
+                
                 # Update only necessary fields
                 result = existing_record.copy()
                 original_status = existing_record.get("status") if existing_record else None
@@ -258,9 +278,17 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
         description_elem = soup.select_one("p.report__description")
         description = description_elem.text.strip() if description_elem else None
 
-        # Status
-        status_elem = soup.select_one("span.badge")
-        status = status_elem.text.strip() if status_elem else None
+        # Status - find the first non-comment badge
+        status_elems = soup.select("span.badge")
+        status = None
+        for elem in status_elems:
+            elem_class = elem.get("class", [])
+            if isinstance(elem_class, str):
+                elem_class = [elem_class]
+            if not any("badge--comment" in c for c in elem_class):
+                status = elem.text.strip()
+                break
+                
         if status is None:
             print(f"[ERROR] Status extraction failed for report: {url}")
             print(f"[DEBUG] Raw HTML snippet for report:")
@@ -276,43 +304,31 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
         else:
             address = None
 
-        # Resolution date extraction: find last date when status becomes 'MEGOLDOTT'
+        # Resolution date extraction: find resolution date from comments
         resolution_date = None
         if status and status.upper() == "MEGOLDOTT":
-            # Search all status change cards for 'MEGOLDOTT'
-            status_cards = soup.select("div.report__status__card")
-            megoldott_dates = []
-            for card in status_cards:
-                badge_elem = card.select_one("span.badge")
-                card_status = badge_elem.text.strip() if badge_elem else None
-                time_elems = card.select("time")
-                for t in time_elems:
-                    time_text = t.text.strip() if t.text else (t.string.strip() if t.string else None)
-                    if card_status and card_status.upper() == "MEGOLDOTT" and time_text:
-                        try:
-                            megoldott_dates.append(self.normalize_date(" ".join(time_text.split()[0:3])))
-                        except Exception:
-                            continue
-            # Also check comments for resolution
             comment_bodies = soup.select("div.comment__body")
             for body in comment_bodies:
                 msg_elems = body.select("p.comment__message")
                 for msg in msg_elems:
                     raw_html = str(msg)
-                    if re.search(r"megoldott", raw_html, re.IGNORECASE):
+                    if re.search(r"lezárta a bejelentést.*Megoldott.*eredménnyel", raw_html, re.DOTALL | re.IGNORECASE):
                         time_elems = body.select("time")
                         for t in time_elems:
-                            time_text = t.text.strip() if t.text else (t.string.strip() if t.string else None)
+                            time_text = t.text.strip()
                             if time_text:
                                 try:
-                                    megoldott_dates.append(self.normalize_date(" ".join(time_text.split()[0:3])))
-                                except Exception:
+                                    # Use only first 3 parts of date (year, month, day)
+                                    date_parts = time_text.split()[0:3]
+                                    resolution_date = self.normalize_date(date_parts)
+                                    break
+                                except Exception as e:
+                                    print(f"[DEBUG] Error normalizing resolution date '{time_text}': {e}")
                                     continue
-            # Select the last date when status became 'MEGOLDOTT'
-            if megoldott_dates:
-                resolution_date = sorted(megoldott_dates)[-1]
-            else:
-                resolution_date = None
+                        if resolution_date:
+                            break
+                if resolution_date:
+                    break
 
         # GPS Coordinates
         latitude, longitude = extract_gps_coordinates(response.text)

@@ -485,16 +485,16 @@ jobs:
           echo "OLD RESOLUTION DATE SCRAPER"
           echo "Strategy: Random sampling of old pending issues to check for resolutions"
           echo "Total URLs available: ${{ needs.old-nonresolved-entries-loader.outputs.pending_urls_count }}"
-          
-          # Sample 250 random URLs from the last 1000 entries
+                    
+          # Sample 300 random URLs from the last 5000 entries
           if [ -f "old_pending_urls.txt" ]; then
             TOTAL_URLS=$(wc -l < old_pending_urls.txt)
-            START_LINE=$(( TOTAL_URLS > 1000 ? TOTAL_URLS - 999 : 1 ))
+            START_LINE=$(( TOTAL_URLS > 5000 ? TOTAL_URLS - 4999 : 1 ))
             tail -n +$START_LINE old_pending_urls.txt | shuf | head -250 > old_pending_urls_sample.txt
             mv old_pending_urls_sample.txt old_pending_urls.txt
-            echo "Processing $(wc -l < old_pending_urls.txt) URLs from last 1000 entries"
+            echo "Processing $(wc -l < old_pending_urls.txt) URLs from last 5000 entries"
           fi
-          
+
           # Scrape the old pending URLs
           python ./scripts/scrape_data.py \
             --scrape-urls-file old_pending_urls.txt
