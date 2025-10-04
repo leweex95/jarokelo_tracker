@@ -13,10 +13,6 @@ from jarokelo_tracker.scraper import JarokeloScraper
 def main():
     """Main entry point for the scraper script"""
     parser = argparse.ArgumentParser(description="Járókelő scraper")
-    parser.add_argument("--backend", type=str, choices=['selenium', 'beautifulsoup', 'bs'], 
-                       default='beautifulsoup', help="Scraper backend to use (selenium/beautifulsoup/bs)")
-    parser.add_argument("--headless", type=str, choices=['true', 'false'], default='true', 
-                       help="Run browser in headless mode (true/false)")
     parser.add_argument("--start-page", type=int, default=1, 
                        help="Page number to start scraping from")
     parser.add_argument("--until-date", type=str, default=None, 
@@ -27,8 +23,8 @@ def main():
                        help="Update status of existing records (for re-checking solved/waiting status)")
     parser.add_argument("--data-dir", type=str, default="data/raw", 
                        help="Directory to store data files")
-    parser.add_argument("--buffer-size", type=int, default=100, 
-                       help="Number of records to buffer in memory before writing to disk (used for comprehensive scraping, ignored for status updates)")
+    parser.add_argument("--buffer-size", type=int, default=25, 
+                       help="Number of records to buffer in memory before writing to disk (used for comprehensive scraping, ignored for status updates). Reduced to 25 for CI stability.")
 
     parser.add_argument("--cutoff-months", type=int, default=3,
                        help="Months cutoff for separating recent vs old status updates (default: 3)")
@@ -40,13 +36,7 @@ def main():
                        help="Load old pending URLs and save to file")
 
     args = parser.parse_args()
-    
-    # Convert headless string to boolean
-    headless = args.headless.lower() == 'true'
-    
-    # Handle 'bs' alias for 'beautifulsoup'
-    backend = 'beautifulsoup' if args.backend == 'bs' else args.backend
-    
+        
     # Initialize and run scraper
     try:
         print("🔄 Running in synchronous processing mode")
@@ -54,14 +44,12 @@ def main():
         
         with JarokeloScraper(
             data_dir=args.data_dir,
-            backend=backend,
-            headless=headless,
             buffer_size=args.buffer_size
         ) as scraper:
             # Handle different operation modes
             if args.fetch_changed_urls:
                 # Recent Status Change Detector Mode - Only find URLs with status changes
-                print("🔍 Running in Status Change Detection Mode")
+                print("Running in Status Change Detection Mode")
                 print(f"Detecting status changes from last {args.cutoff_months} months...")
                 changed_urls_count = scraper.detect_changed_urls_fast(
                     cutoff_months=args.cutoff_months,
@@ -71,7 +59,7 @@ def main():
                 
             elif args.load_old_pending:
                 # Old Pending Issues Loader Mode
-                print("📋 Running in Old Pending Issues Loader Mode") 
+                print("Running in Old Pending Issues Loader Mode") 
                 print(f"[DEBUG] This should call extract_old_pending_urls, NOT web scraping")
                 print(f"Extracting pending issues older than {args.cutoff_months} months...")
                 pending_urls_count = scraper.extract_old_pending_urls(
@@ -82,7 +70,7 @@ def main():
                 
             elif args.scrape_urls_file:
                 # Resolution Date Scraper Mode - Process specific URLs from file
-                print("🎯 Running in Resolution Date Scraper Mode")
+                print("Running in Resolution Date Scraper Mode")
                 print(f"Scraping URLs from file: {args.scrape_urls_file}")
                 
                 # The scrape_urls_file mode is optimized for resolution date extraction
@@ -95,7 +83,7 @@ def main():
                 
             else:
                 # Standard Comprehensive Scraping Mode
-                print("🚀 Running in Comprehensive Scraping Mode")
+                print("Running in Comprehensive Scraping Mode")
                 print(f"[DEBUG] This should NOT run for --fetch-changed-urls or --load-old-pending!")
                 print(f"[DEBUG] fetch_changed_urls={args.fetch_changed_urls}, load_old_pending={args.load_old_pending}")
                 scraper.scrape(

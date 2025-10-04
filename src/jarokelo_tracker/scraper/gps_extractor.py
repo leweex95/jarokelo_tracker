@@ -1,3 +1,9 @@
+
+
+
+
+
+
 """
 GPS Coordinate Extraction Module
 
@@ -7,7 +13,6 @@ using multiple detection methods including meta tags, JavaScript, and pattern ma
 
 import re
 from typing import Tuple, Optional
-from selenium.webdriver.common.by import By
 
 
 def is_valid_coordinate(coord_str: str) -> bool:
@@ -104,32 +109,5 @@ def extract_gps_coordinates(page_source: str, driver=None) -> Tuple[Optional[str
                 if is_valid_coordinate(lat) and is_valid_coordinate(lng):
                     if is_budapest_coordinate(lat, lng):
                         return lat, lng  # Return first valid Budapest coordinate pair
-    
-    # If using Selenium, also check data attributes
-    if driver:
-        try:
-            # Check for coordinates in data attributes
-            elements_with_coords = []
-            elements_with_coords.extend(driver.find_elements(By.CSS_SELECTOR, "[data-lat]"))
-            elements_with_coords.extend(driver.find_elements(By.CSS_SELECTOR, "[data-lng]"))
-            elements_with_coords.extend(driver.find_elements(By.CSS_SELECTOR, "[data-latitude]"))
-            elements_with_coords.extend(driver.find_elements(By.CSS_SELECTOR, "[data-longitude]"))
-            
-            lat_val, lng_val = None, None
-            for element in elements_with_coords:
-                for attr_name in element.get_property('attributes'):
-                    attr_value = element.get_attribute(attr_name)
-                    if attr_name and attr_value:
-                        if 'lat' in attr_name.lower() and not 'lng' in attr_name.lower():
-                            if is_valid_coordinate(attr_value):
-                                lat_val = attr_value
-                        elif 'lng' in attr_name.lower() or 'lon' in attr_name.lower():
-                            if is_valid_coordinate(attr_value):
-                                lng_val = attr_value
-            
-            if lat_val and lng_val and is_budapest_coordinate(lat_val, lng_val):
-                return lat_val, lng_val
-        except Exception:
-            pass  # Ignore errors in data attribute extraction
     
     return None, None

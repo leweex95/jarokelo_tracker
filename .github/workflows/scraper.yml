@@ -5,10 +5,6 @@ on:
     - cron: "0 22 * * *"
   workflow_dispatch:
     inputs:
-      backend:
-        description: 'Scraper backend to use (beautifulsoup/bs/selenium)'
-        required: false
-        default: 'beautifulsoup'
       data_dir:
         description: 'Target data directory'
         required: false
@@ -21,29 +17,20 @@ on:
         description: 'Scrape until this date (YYYY-MM-DD)'
         required: false
         default: ''
-      headless:
-        description: 'Run browser in headless mode'
-        required: false
-        default: 'true'
       continue_scraping:
         description: 'Continue scraping from last saved state'
         required: false
         default: ''
       buffer_size:
-        description: 'Buffer size for comprehensive scraping (higher = faster but more memory)'
+        description: 'Buffer size for comprehensive scraping (higher = faster but more memory) - heavily reduced for CI stability'
         required: false
-        default: '200'
+        default: '25'
       cutoff_months:
         description: 'Months cutoff for recent vs old status updates (default: 3)'
         required: false
         default: '3'
   workflow_call:
     inputs:
-      backend:
-        description: 'Scraper backend to use (beautifulsoup/bs/selenium)'
-        required: false
-        default: 'beautifulsoup'
-        type: string
       data_dir:
         description: 'Target data directory'
         required: false
@@ -58,11 +45,6 @@ on:
         description: 'Scrape until this date (YYYY-MM-DD)'
         required: false
         default: ''
-        type: string
-      headless:
-        description: 'Run browser in headless mode'
-        required: false
-        default: 'true'
         type: string
       continue_scraping:
         description: 'Continue scraping from last saved state'
@@ -72,7 +54,7 @@ on:
       buffer_size:
         description: 'Buffer size for comprehensive scraping'
         required: false
-        default: '200'
+        default: '25'
         type: string
       cutoff_months:
         description: 'Months cutoff for recent vs old status updates'
@@ -84,10 +66,10 @@ on:
         required: true
 
 jobs:
-  # Job 1: Comprehensive scraping - Find new entries from Jarokelo website
-  comprehensive-scraping:
+  # Job 1: Full scraping of new entries
+  new-entries-scraping:
     runs-on: ubuntu-latest
-    name: "1. Comprehensive scraping (new entries)"
+    name: "1. Comprehensive scraping"
     steps:
       - name: Checkout repo
         uses: actions/checkout@v5
@@ -95,20 +77,22 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.PAT_TOKEN }}
 
-      - name: Cache Poetry packages
+      - name: Cache pip packages  
         uses: actions/cache@v4
         with:
-          path: |
-            ~/.cache/pypoetry/cache
-            ~/.cache/pypoetry/artifacts
-          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
-          restore-keys: ${{ runner.os }}-poetry-
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-scraper-${{ hashFiles('requirements-scraper.txt') }}
+          restore-keys: ${{ runner.os }}-pip-scraper-
 
-      - name: Set up Python & Poetry
+      - name: Set up Python & Minimal Dependencies (Scraper-only)
         run: |
           python -m pip install --upgrade pip
-          python -m pip install --upgrade poetry==2.2.0
-          poetry install --no-interaction
+          echo "Installing minimal scraper dependencies only (no ML packages)..."
+          pip install -r requirements-scraper.txt
+          
+      - name: Set PYTHONPATH
+        run: |
+          echo "PYTHONPATH=$PWD/src:$PYTHONPATH" >> $GITHUB_ENV
 
       - name: Count existing records
         id: count_before
@@ -117,23 +101,54 @@ jobs:
           echo "records_before=$RECORD_COUNT" >> $GITHUB_OUTPUT
           echo "Existing records before scraping: $RECORD_COUNT"
 
+      - name: Compute until-date
+        id: until_date
+        run: |
+          DATA_DIR="${{ github.event.inputs.data_dir || 'data/raw' }}"
+          UNTIL_DATE="${{ github.event.inputs.until_date || '' }}"
+
+          if [ -z "$UNTIL_DATE" ]; then
+            UNTIL_DATE=$(python3 -c "
+          import json, glob
+          from datetime import datetime, timedelta
+          data_dir = '$DATA_DIR'
+          files = sorted(glob.glob(f'{data_dir}/*.jsonl'))
+          if not files:
+              print((datetime.today() - timedelta(days=1)).strftime('%Y-%m-%d'))
+              exit()
+          latest_file = files[-1]
+          max_date = None
+          with open(latest_file, 'r', encoding='utf-8') as f:
+              for line in f:
+                  try:
+                      entry = json.loads(line)
+                      d = datetime.fromisoformat(entry.get('date'))
+                      if max_date is None or d > max_date:
+                          max_date = d
+                  except Exception:
+                      continue
+          if max_date:
+              print((max_date - timedelta(days=1)).strftime('%Y-%m-%d'))
+          else:
+              print((datetime.today() - timedelta(days=1)).strftime('%Y-%m-%d'))
+          ")
+          fi
+
+          echo "UNTIL_DATE=$UNTIL_DATE" >> $GITHUB_ENV
+
       - name: Run comprehensive scraper
         run: |
-          BACKEND="${{ github.event.inputs.backend || 'beautifulsoup' }}"
-          HEADLESS="${{ github.event.inputs.headless || 'true' }}"
           DATA_DIR="${{ github.event.inputs.data_dir || 'data/raw' }}"
           START_PAGE="${{ github.event.inputs.start_page || '1' }}"
-          UNTIL_DATE="${{ github.event.inputs.until_date || '' }}"
           CONTINUE_SCRAPING="${{ github.event.inputs.continue_scraping || '' }}"
 
           echo "Running COMPREHENSIVE scraper for new entries..."
           echo "Data directory: $DATA_DIR"
-          echo "Backend: $BACKEND"
-          echo "Headless: $HEADLESS"
           echo "Start page: $START_PAGE"
           
-          BUFFER_SIZE="${{ github.event.inputs.buffer_size || '200' }}"
-          ARGS="--data-dir data/raw --buffer-size $BUFFER_SIZE --until-date $(date +%Y-%m-%d)"
+          BUFFER_SIZE="${{ github.event.inputs.buffer_size || '25' }}"
+          ARGS="--data-dir $DATA_DIR --buffer-size $BUFFER_SIZE --until-date $UNTIL_DATE"
+          
           if [ -n "$UNTIL_DATE" ]; then
             ARGS="$ARGS --until-date $UNTIL_DATE"
             echo "Until date: $UNTIL_DATE"
@@ -142,12 +157,12 @@ jobs:
             ARGS="$ARGS --continue-scraping"
             echo "Continue scraping: enabled"
           fi
-          echo "Buffer size: $BUFFER_SIZE (for optimal performance)"
+          echo "Buffer size: $BUFFER_SIZE (optimized for CI disk space constraints)"
           
-          echo "Running: poetry run python ./scripts/scrape_data.py $ARGS"
+          echo "Running: python ./scripts/scrape_data.py $ARGS"
           echo ""
           
-          poetry run python ./scripts/scrape_data.py $ARGS
+          python ./scripts/scrape_data.py $ARGS
 
       - name: Count new records
         id: count_after
@@ -162,6 +177,20 @@ jobs:
       - name: Check for changes
         id: check_changes
         run: |
+          echo "DEBUG: Checking for changes..."
+          echo "Git status:"
+          git status --porcelain
+          echo ""
+          echo "Untracked files in data/raw:"
+          find data/raw -type f -name "*.jsonl" | head -10
+          echo ""
+          echo "Git diff (modified files):"
+          git diff --name-only
+          echo ""
+          echo "Git diff --staged (staged files):"
+          git diff --staged --name-only
+          echo ""
+          
           if git diff --quiet && git diff --staged --quiet; then
             echo "changes_detected=false" >> $GITHUB_OUTPUT
             echo "No new data to commit"
@@ -169,7 +198,7 @@ jobs:
             echo "changes_detected=true" >> $GITHUB_OUTPUT
             echo "New data detected!"
             echo ""
-            echo "📝 Changed files:"
+            echo "Changed files:"
             git diff --name-only
           fi
 
@@ -186,36 +215,36 @@ jobs:
         run: |
           DATA_DIR="${{ github.event.inputs.data_dir || 'data/raw' }}"
           NEW_RECORDS="${{ steps.count_after.outputs.new_records }}"
+
+          # Detect current branch
+          BRANCH=$(git rev-parse --abbrev-ref HEAD)
           
           git add "$DATA_DIR"
-          BUFFER_SIZE="${{ github.event.inputs.buffer_size || '200' }}"
-          git commit -m "[Auto-commit] Comprehensive scraping: $NEW_RECORDS new records
+          git commit -m "[Auto-commit] Scraping: $NEW_RECORDS new entries saved [skip ci]"
 
-          Scraped at: $(date -u '+%Y-%m-%d %H:%M:%S UTC')
-          Backend: ${{ github.event.inputs.backend || 'beautifulsoup' }}
-          Buffer size: $BUFFER_SIZE
-          Total records: ${{ steps.count_after.outputs.records_after }}
-          New records: $NEW_RECORDS
-          
-          [skip ci]"
-          
-          # Push with retry logic
           RETRIES=10
+          SUCCESS=0
           for i in $(seq 1 $RETRIES); do
-            git pull --rebase
-            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master && {
+            git fetch origin "$BRANCH"
+            git pull --rebase origin "$BRANCH" || git merge origin/"$BRANCH"
+            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:$BRANCH && {
               echo "Successfully pushed comprehensive scraping data!"
+              SUCCESS=1
               break
             } || {
               echo "Push failed, retrying ($i/$RETRIES)..."
               sleep 3
             }
           done
+          if [ "$SUCCESS" -ne 1 ]; then
+            echo "ERROR: Failed to push after $RETRIES attempts."
+            exit 1
+          fi
 
   # Job 2: Fast detection of recently changed statuses (configurable, default: last 3 months)
   # This job quickly scans recent pages WITHOUT opening individual URLs to find status changes
   # Much faster than comprehensive scraping when only looking for status updates
-  recent-url-detector:
+  recent-entries-detector-with-changed-status:
     runs-on: ubuntu-latest
     name: "2. Recent status change detector"
     outputs:
@@ -227,38 +256,29 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.PAT_TOKEN }}
 
-      - name: Cache Poetry packages
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/pypoetry/cache
-            ~/.cache/pypoetry/artifacts
-          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
-          restore-keys: ${{ runner.os }}-poetry-
-
-      - name: Set up Python & Poetry
+      - name: Set up Python & Minimal Dependencies (Scraper-only)
         run: |
           python -m pip install --upgrade pip
-          python -m pip install --upgrade poetry==2.2.0
-          poetry install --no-interaction
+          echo "Installing minimal scraper dependencies only (no ML packages)..."
+          pip install -r requirements-scraper.txt
+
+      - name: Set PYTHONPATH
+        run: |
+          echo "PYTHONPATH=$PWD/src:$PYTHONPATH" >> $GITHUB_ENV
 
       - name: Detect recently changed statuses
         id: detect_changes
         run: |
           CUTOFF_MONTHS="${{ github.event.inputs.cutoff_months || '3' }}"
           
-          echo "🔍 RECENT STATUS CHANGE DETECTION (FAST SCAN)"
+          echo "RECENT STATUS CHANGE DETECTION (FAST SCAN)"
           echo "Strategy: Scan only listing pages for status changes in the last $CUTOFF_MONTHS months"
-          echo "Advantage: 100x faster than comprehensive scraping for status monitoring"
           echo "Cutoff months: $CUTOFF_MONTHS"
-          echo "Backend: ${{ github.event.inputs.backend || 'beautifulsoup' }}"
           
           # Run fast status change detection
-          poetry run python ./scripts/scrape_data.py \
+          python ./scripts/scrape_data.py \
             --fetch-changed-urls \
-            --cutoff-months $CUTOFF_MONTHS \
-            --backend "${{ github.event.inputs.backend || 'beautifulsoup' }}" \
-            --headless "${{ github.event.inputs.headless || 'true' }}"
+            --cutoff-months $CUTOFF_MONTHS
           
           # Count detected URLs
           if [ -f "recent_changed_urls.txt" ]; then
@@ -283,7 +303,7 @@ jobs:
   # 1. Older than the cutoff period
   # 2. Still in a pending state (not resolved, deleted, or rejected)
   # This avoids having to scan thousands of pages for old content
-  old-pending-loader:
+  old-nonresolved-entries-loader:
     runs-on: ubuntu-latest
     name: "3. Old pending URL extractor"
     outputs:
@@ -295,33 +315,27 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.PAT_TOKEN }}
 
-      - name: Cache Poetry packages
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/pypoetry/cache
-            ~/.cache/pypoetry/artifacts
-          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
-          restore-keys: ${{ runner.os }}-poetry-
-
-      - name: Set up Python & Poetry
+      - name: Set up Python & Minimal Dependencies (Scraper-only)
         run: |
           python -m pip install --upgrade pip
-          python -m pip install --upgrade poetry==2.2.0
-          poetry install --no-interaction
+          echo "Installing minimal scraper dependencies only (no ML packages)..."
+          pip install -r requirements-scraper.txt
+
+      - name: Set PYTHONPATH
+        run: |
+          echo "PYTHONPATH=$PWD/src:$PYTHONPATH" >> $GITHUB_ENV
 
       - name: Load old pending URLs
         id: load_pending
         run: |
           CUTOFF_MONTHS="${{ github.event.inputs.cutoff_months || '3' }}"
           
-          echo "📋 OLD PENDING URL EXTRACTOR"
+          echo "OLD PENDING URL EXTRACTOR"
           echo "Strategy: Extract old pending URLs directly from database (older than $CUTOFF_MONTHS months)"
-          echo "Advantage: Avoids scanning thousands of pages for old content"
           echo "Cutoff months: $CUTOFF_MONTHS"
           
           # Load old pending URLs
-          poetry run python ./scripts/scrape_data.py \
+          python ./scripts/scrape_data.py \
             --load-old-pending \
             --cutoff-months $CUTOFF_MONTHS
           
@@ -344,11 +358,11 @@ jobs:
           retention-days: 1
 
   # Job 4: Process recently changed statuses (detected by Job 2) to update resolution data
-  recent-resolution-scraper:
+  recent-resolution-date-scraper:
     runs-on: ubuntu-latest
     name: "4. Recent resolution date scraper"
-    needs: recent-url-detector
-    if: needs.recent-url-detector.outputs.changed_urls_count > 0
+    needs: recent-entries-detector-with-changed-status
+    if: needs.recent-entries-detector-with-changed-status.outputs.changed_urls_count > 0
     steps:
       - name: Checkout repo
         uses: actions/checkout@v5
@@ -356,20 +370,15 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.PAT_TOKEN }}
 
-      - name: Cache Poetry packages
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/pypoetry/cache
-            ~/.cache/pypoetry/artifacts
-          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
-          restore-keys: ${{ runner.os }}-poetry-
-
-      - name: Set up Python & Poetry
+      - name: Set up Python & Minimal Dependencies (Scraper-only)
         run: |
           python -m pip install --upgrade pip
-          python -m pip install --upgrade poetry==2.2.0
-          poetry install --no-interaction
+          echo "Installing minimal scraper dependencies only (no ML packages)..."
+          pip install -r requirements-scraper.txt
+
+      - name: Set PYTHONPATH
+        run: |
+          echo "PYTHONPATH=$PWD/src:$PYTHONPATH" >> $GITHUB_ENV
 
       - name: Download recent changed URLs
         uses: actions/download-artifact@v5
@@ -378,21 +387,31 @@ jobs:
 
       - name: Scrape recent changed URLs
         run: |
-          echo "🎯 RECENT RESOLUTION DATE SCRAPER"
+          echo "RECENT RESOLUTION DATE SCRAPER"
           echo "Strategy: Targeted resolution date extraction for recently changed statuses detected by Job 2"
-          echo "Advantage: Optimized processing focusing only on status and resolution date extraction"
-          echo "URLs to scrape: ${{ needs.recent-url-detector.outputs.changed_urls_count }}"
-          echo "Backend: ${{ github.event.inputs.backend || 'beautifulsoup' }}"
+          echo "URLs to scrape: ${{ needs.recent-entries-detector-with-changed-status.outputs.changed_urls_count }}"
           
           # Scrape the recently changed URLs
-          poetry run python ./scripts/scrape_data.py \
-            --scrape-urls-file recent_changed_urls.txt \
-            --backend "${{ github.event.inputs.backend || 'beautifulsoup' }}" \
-            --headless "${{ github.event.inputs.headless || 'true' }}"
+          python ./scripts/scrape_data.py \
+            --scrape-urls-file recent_changed_urls.txt
 
       - name: Check for changes
         id: check_changes
         run: |
+          echo "DEBUG: Checking for changes..."
+          echo "Git status:"
+          git status --porcelain
+          echo ""
+          echo "Untracked files in data/raw:"
+          find data/raw -type f -name "*.jsonl" | head -10
+          echo ""
+          echo "Git diff (modified files):"
+          git diff --name-only
+          echo ""
+          echo "Git diff --staged (staged files):"
+          git diff --staged --name-only
+          echo ""
+          
           if git diff --quiet && git diff --staged --quiet; then
             echo "changes_detected=false" >> $GITHUB_OUTPUT
             echo "No recent changes to commit"
@@ -413,21 +432,18 @@ jobs:
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
+          # Detect current branch
+          BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          
           git add data/raw
-          git commit -m "[Auto-commit] Recent resolutions: ${{ needs.recent-url-detector.outputs.changed_urls_count }} status changes updated
+          git commit -m "[Auto-commit] Scraped recently changed entry statuses [skip ci]"
 
-          Updated at: $(date -u '+%Y-%m-%d %H:%M:%S UTC')
-          Backend: ${{ github.event.inputs.backend || 'beautifulsoup' }}
-          Cutoff months: ${{ github.event.inputs.cutoff_months || '3' }}
-          URLs processed: ${{ needs.recent-url-detector.outputs.changed_urls_count }}
-          
-          [skip ci]"
-          
           # Push with retry logic
           RETRIES=10
           for i in $(seq 1 $RETRIES); do
-            git pull --rebase
-            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master && {
+            git fetch origin "$BRANCH"
+            git pull --rebase origin "$BRANCH" || git merge origin/"$BRANCH"
+            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:$BRANCH && {
               echo "Successfully pushed recent resolution updates!"
               break
             } || {
@@ -437,12 +453,11 @@ jobs:
           done
 
   # Job 5: Check old pending URLs (extracted by Job 3) for resolution updates
-  # PERFORMANCE OPTIMIZED: Process only random sample of 100 URLs per run
-  old-resolution-scraper:
+  old-resolution-date-scraper:
     runs-on: ubuntu-latest
-    name: "5. Old resolution date scraper (optimized)"
-    needs: old-pending-loader
-    if: needs.old-pending-loader.outputs.pending_urls_count > 0
+    name: "5. Old resolution date scraper"
+    needs: old-nonresolved-entries-loader
+    if: needs.old-nonresolved-entries-loader.outputs.pending_urls_count > 0
     steps:
       - name: Checkout repo
         uses: actions/checkout@v5
@@ -450,55 +465,73 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.PAT_TOKEN }}
 
-      - name: Cache Poetry packages
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/pypoetry/cache
-            ~/.cache/pypoetry/artifacts
-          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
-          restore-keys: ${{ runner.os }}-poetry-
-
-      - name: Set up Python & Poetry
+      - name: Set up Python & Minimal Dependencies (Scraper-only)
         run: |
           python -m pip install --upgrade pip
-          python -m pip install --upgrade poetry==2.2.0
-          poetry install --no-interaction
+          echo "Installing minimal scraper dependencies only (no ML packages)..."
+          pip install -r requirements-scraper.txt
+
+      - name: Set PYTHONPATH
+        run: |
+          echo "PYTHONPATH=$PWD/src:$PYTHONPATH" >> $GITHUB_ENV
 
       - name: Download old pending URLs
         uses: actions/download-artifact@v5
         with:
           name: old-pending-urls
 
-      - name: Scrape old pending URLs
+      - name: Fetch URLs of old unfinished (pending) entries
         run: |
-          echo "🕰️ OLD RESOLUTION DATE SCRAPER (OPTIMIZED)"
-          echo "Strategy: Random sampling of old pending issues to check for resolutions"
-          echo "Optimization: Process max 100 random URLs per run for manageable runtime"
-          echo "Total URLs available: ${{ needs.old-pending-loader.outputs.pending_urls_count }}"
-          echo "Backend: ${{ github.event.inputs.backend || 'beautifulsoup' }}"
-          
-          # Create random sample of max 100 URLs
+          echo "SCRAPING RESOLUTION STATE OF OLD ISSUES"
+          echo "Strategy: Random sampling of old pending issues to check for resolution_date and status change"
+          echo "Total URLs available: ${{ needs.old-nonresolved-entries-loader.outputs.pending_urls_count }}"
+                    
+          # Sample 300 random URLs from the most recent entries (up to 5000)
           if [ -f "old_pending_urls.txt" ]; then
             TOTAL_URLS=$(wc -l < old_pending_urls.txt)
-            if [ $TOTAL_URLS -gt 100 ]; then
-              echo "Sampling 100 random URLs from $TOTAL_URLS total"
-              shuf old_pending_urls.txt | head -100 > old_pending_urls_sample.txt
-              mv old_pending_urls_sample.txt old_pending_urls.txt
+            if [ "$TOTAL_URLS" -gt 5000 ]; then
+              # If more than 5000 URLs, sample from the last 5000 entries
+              tail -n 5000 old_pending_urls.txt | shuf 2>/dev/null | head -300 > old_pending_urls_sample.txt
+              echo "Sampling 300 URLs from the last 5000 entries (total: $TOTAL_URLS)"
             else
-              echo "Processing all $TOTAL_URLS URLs (under limit)"
+              # If 5000 or fewer URLs, sample from all available
+              SAMPLE_SIZE=$(( TOTAL_URLS < 300 ? TOTAL_URLS : 300 ))
+              shuf old_pending_urls.txt 2>/dev/null | head -$SAMPLE_SIZE > old_pending_urls_sample.txt
+              echo "Sampling $SAMPLE_SIZE URLs from all $TOTAL_URLS available entries"
             fi
+            # Verify uniqueness of sampled URLs
+            UNIQUE_COUNT=$(sort old_pending_urls_sample.txt | uniq | wc -l)
+            TOTAL_SAMPLED=$(wc -l < old_pending_urls_sample.txt)
+            if [ "$UNIQUE_COUNT" -ne "$TOTAL_SAMPLED" ]; then
+              echo "⚠️ Warning: Found $(($TOTAL_SAMPLED - $UNIQUE_COUNT)) duplicate URLs in sample, deduplicating..."
+              sort old_pending_urls_sample.txt | uniq > old_pending_urls_clean.txt
+              mv old_pending_urls_clean.txt old_pending_urls_sample.txt
+            fi
+            mv old_pending_urls_sample.txt old_pending_urls.txt
+            echo "Processing $(wc -l < old_pending_urls.txt) URLs"
           fi
-          
+
           # Scrape the old pending URLs
-          poetry run python ./scripts/scrape_data.py \
-            --scrape-urls-file old_pending_urls.txt \
-            --backend "${{ github.event.inputs.backend || 'beautifulsoup' }}" \
-            --headless "${{ github.event.inputs.headless || 'true' }}"
+          python ./scripts/scrape_data.py \
+            --scrape-urls-file old_pending_urls.txt
 
       - name: Check for changes
         id: check_changes
         run: |
+          echo "DEBUG: Checking for changes..."
+          echo "Git status:"
+          git status --porcelain
+          echo ""
+          echo "Untracked files in data/raw:"
+          find data/raw -type f -name "*.jsonl" | head -10
+          echo ""
+          echo "Git diff (modified files):"
+          git diff --name-only
+          echo ""
+          echo "Git diff --staged (staged files):"
+          git diff --staged --name-only
+          echo ""
+          
           if git diff --quiet && git diff --staged --quiet; then
             echo "changes_detected=false" >> $GITHUB_OUTPUT
             echo "No old pending changes to commit"
@@ -514,27 +547,23 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
 
-      - name: Commit old resolutions
+      - name: Commit old resolution_dates
         if: steps.check_changes.outputs.changes_detected == 'true'
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          git add data/raw
-          git commit -m "[Auto-commit] Old resolutions: Random sample of max 100 URLs checked
+          # Set current active branch
+          BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 
-          Updated at: $(date -u '+%Y-%m-%d %H:%M:%S UTC')
-          Backend: ${{ github.event.inputs.backend || 'beautifulsoup' }}
-          Cutoff months: ${{ github.event.inputs.cutoff_months || '3' }}
-          Total pending URLs: ${{ needs.old-pending-loader.outputs.pending_urls_count }}
-          Processed: Random sample (max 100)
-          
-          [skip ci]"
+          git add data/raw
+          git commit -m "[Auto-commit] Update of resolution_date of old entries: rnd sample of 250 URLs checked [skip ci]"
           
           # Push with retry logic
           RETRIES=10
           for i in $(seq 1 $RETRIES); do
-            git pull --rebase
-            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master && {
+            git fetch origin "$BRANCH"
+            git pull --rebase origin "$BRANCH" || git merge origin/"$BRANCH"
+            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:$BRANCH && {
               echo "Successfully pushed old resolution updates!"
               break
             } || {
@@ -547,7 +576,7 @@ jobs:
   pipeline-summary:
     runs-on: ubuntu-latest
     name: "6. Pipeline Summary"
-    needs: [comprehensive-scraping, recent-url-detector, old-pending-loader, recent-resolution-scraper, old-resolution-scraper]
+    needs: [new-entries-scraping, recent-entries-detector-with-changed-status, old-nonresolved-entries-loader, recent-resolution-date-scraper, old-resolution-date-scraper]
     if: always()  # Run even if previous jobs fail
     steps:
       - name: Checkout repo
@@ -559,38 +588,15 @@ jobs:
 
       - name: Report pipeline summary
         run: |
-          echo "🚀 Járokelő Tracker OPTIMIZED Pipeline Summary"
+          echo "Járokelő Tracker Pipeline Summary"
           echo "==============================================="
-          echo "Optimization strategy: Split processing between new, recent and old content"
-          echo "✅ 1. Comprehensive scraping: Find completely new entries"
-          echo "✅ 2. Recent change detection: Fast scan recent pages (${CUTOFF_MONTHS:-3} months) for status changes"
-          echo "✅ 3. Old pending extraction: Get URLs of unresolved issues older than ${CUTOFF_MONTHS:-3} months"
-          echo "✅ 4. Recent resolution scraping: Update recently changed statuses"
-          echo "✅ 5. Old resolution scraping: Check random sample (max 100) of old pending issues"
-          echo "Pipeline mode: ${{ github.event_name == 'workflow_dispatch' && 'Manual' || 'Nightly Scheduled' }}"
-          echo ""
-          echo "Job Results:"
-          echo "- Comprehensive scraping: ${{ needs.comprehensive-scraping.result || 'skipped' }}"
-          echo "- Recent URL detection: ${{ needs.recent-url-detector.result || 'skipped' }}"
-          echo "- Old pending loader: ${{ needs.old-pending-loader.result || 'skipped' }}"
-          echo "- Recent resolution scraper: ${{ needs.recent-resolution-scraper.result || 'skipped' }}"
-          echo "- Old resolution scraper: ${{ needs.old-resolution-scraper.result || 'skipped' }}"
-          echo ""
-          echo "⚡ Performance Summary:"
-          echo "- Recent URLs detected: ${{ needs.recent-url-detector.outputs.changed_urls_count || '0' }}"
-          echo "- Old pending URLs: ${{ needs.old-pending-loader.outputs.pending_urls_count || '0' }}"
-          echo "- Cutoff months: ${{ github.event.inputs.cutoff_months || '3' }}"
-          echo "- Optimization: Split pipeline with targeted processing reduces run time by ~90%!"
-          echo "- Time savings: By only opening URLs that need attention (new/changed/pending)"
-          echo "- Memory savings: Processing in smaller targeted batches reduces RAM requirements"
-          echo ""
-          echo "📁 Data directory structure:"
+          echo "Data directory structure:"
           ls -la data/raw/ || echo "No data directory found"
           echo ""
-          echo "📊 Total JSONL files:"
+          echo "Total JSONL files:"
           find data/raw -name "*.jsonl" -type f | wc -l || echo "0"
           echo ""
-          echo "📈 Record counts by month:"
+          echo "Record counts by month:"
           for file in data/raw/*.jsonl; do
             if [ -f "$file" ]; then
               count=$(wc -l < "$file" 2>/dev/null || echo "0")
@@ -598,6 +604,5 @@ jobs:
             fi
           done
           echo ""
-          echo "⏰ Pipeline completed at: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
-          echo "🔗 Repository: ${{ github.repository }}"
-          echo "🔗 Workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          echo "Pipeline completed at: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          echo "Workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

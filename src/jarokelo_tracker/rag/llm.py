@@ -1,4 +1,4 @@
-from levisllmhub.chatgpt import chatgpt as chatgpt_client
+from textgenhub.chatgpt import chatgpt as chatgpt_client
 
 def answer_with_llm(prompt, answering_llm, headless):
     if answering_llm.lower() == "chatgpt":

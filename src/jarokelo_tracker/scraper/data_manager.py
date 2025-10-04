@@ -9,6 +9,8 @@ import os
 import json
 import pickle
 import hashlib
+import gc
+ 
 from datetime import datetime
 from typing import Dict, Set, Tuple, Optional, List
 from collections import defaultdict
@@ -17,15 +19,11 @@ from collections import defaultdict
 class DataManager:
     """Manages data storage and retrieval for scraped reports"""
     
-    def __init__(self, data_dir: str = "data/raw", buffer_size: int = 100):
+    def __init__(self, data_dir: str = "data/raw", buffer_size: int = 25):
         self.data_dir = data_dir
-        self.buffer_size = buffer_size  # Number of records to buffer before writing to disk
+        self.buffer_size = buffer_size  # Number of records to buffer before writing to disk (reduced for CI)
         self.buffer = defaultdict(list)  # Buffer organized by monthly file: {file_path: [reports]}
         self.buffer_count = 0  # Total number of buffered records
-        
-        # Performance optimization: URL index cache
-        self.index_file = os.path.join(data_dir, ".url_index.cache")
-        self.meta_file = os.path.join(data_dir, ".file_meta.cache")
         
         os.makedirs(data_dir, exist_ok=True)
     
@@ -34,6 +32,7 @@ class DataManager:
         # report_date expected as string, e.g. "2025-08-25"
         month_str = datetime.strptime(report_date, "%Y-%m-%d").strftime("%Y-%m")
         return os.path.join(self.data_dir, f"{month_str}.jsonl")
+
     
     def load_existing_urls(self, report_date: str) -> Set[str]:
         """Load already saved report URLs for the report's month."""
@@ -51,24 +50,10 @@ class DataManager:
     
     def load_all_existing_urls(self) -> Set[str]:
         """
-        Load all existing URLs from all monthly files with intelligent caching.
-        
-        Performance improvements:
-        - First run: Same as original (builds cache)  
-        - Subsequent runs: 10-100x faster (loads from cache)
-        - Incremental updates: Only processes changed files
+        Load all existing URLs from all monthly files.
         """
-        
-        # Check if we can use cached data
-        cache_valid, cached_urls = self._try_load_from_cache()
-        if cache_valid:
-            return cached_urls
-        
-        # Fallback to full file scan and rebuild cache
-        print("[PERF] Building URL index cache...")
         import time
         start_time = time.time()
-        
         global_urls = set()
         for f in os.listdir(self.data_dir):
             if f.endswith(".jsonl"):
@@ -78,13 +63,8 @@ class DataManager:
                             global_urls.add(json.loads(line)["url"])
                         except json.JSONDecodeError:
                             continue
-        
         load_time = time.time() - start_time
         print(f"[PERF] Loaded {len(global_urls):,} URLs in {load_time:.2f}s")
-        
-        # Save to cache for next time
-        self._save_to_cache(global_urls)
-        
         return global_urls
     
     def load_pending_urls_older_than(self, cutoff_months: int = 3) -> Set[str]:
@@ -129,87 +109,18 @@ class DataManager:
         
         return pending_urls
     
-    def _get_file_metadata(self) -> Dict[str, float]:
-        """Get modification times for all JSONL files"""
-        metadata = {}
-        for filename in os.listdir(self.data_dir):
-            if filename.endswith('.jsonl'):
-                file_path = os.path.join(self.data_dir, filename)
-                metadata[filename] = os.path.getmtime(file_path)
-        return metadata
-    
-    def _try_load_from_cache(self) -> Tuple[bool, Set[str]]:
-        """Try to load URLs from cache if files haven't changed"""
-        
-        if not os.path.exists(self.index_file) or not os.path.exists(self.meta_file):
-            return False, set()
-        
-        try:
-            # Load cached metadata
-            with open(self.meta_file, 'rb') as f:
-                cached_metadata = pickle.load(f)
-            
-            # Check if files have changed
-            current_metadata = self._get_file_metadata()
-            
-            if current_metadata == cached_metadata:
-                # No changes, load from cache
-                with open(self.index_file, 'rb') as f:
-                    cached_urls = pickle.load(f)
-                print(f"[PERF] Loaded {len(cached_urls):,} URLs from cache in <0.1s")
-                return True, cached_urls
-            else:
-                # Files changed, cache invalid
-                return False, set()
-                
-        except Exception as e:
-            print(f"[PERF] Cache load failed: {e}")
-            return False, set()
-    
-    def _save_to_cache(self, urls: Set[str]) -> None:
-        """Save URLs and file metadata to cache"""
-        try:
-            # Save URLs
-            with open(self.index_file, 'wb') as f:
-                pickle.dump(urls, f)
-            
-            # Save file metadata
-            current_metadata = self._get_file_metadata()
-            with open(self.meta_file, 'wb') as f:
-                pickle.dump(current_metadata, f)
-                
-            print(f"[PERF] URL index cached for future runs")
-            
-        except Exception as e:
-            print(f"[WARNING] Could not save URL cache: {e}")
-    
-    def invalidate_cache(self) -> None:
-        """Invalidate URL cache (call when files are modified)"""
-        for cache_file in [self.index_file, self.meta_file]:
-            if os.path.exists(cache_file):
-                os.remove(cache_file)
-        # print("[PERF] URL cache invalidated")  # Comment out to avoid spam
-    
     def save_report(self, report: Dict, existing_urls: Set[str]) -> None:
         """
         Save a report to the monthly JSONL file, organizing entries by date.
 
-        Ordering logic:
-        - If the report URL already exists in the current file, it is skipped.
-        - If all existing entries in the file have the same date, new reports are always appended to the bottom.
-        - Otherwise:
-            - If the report's date is newer than or equal to the first line, it is prepended to the top.
-            - If the report's date is older than or equal to the last line, it is appended to the bottom.
-        - This ensures chronological ordering while handling single-date files or files at the start of scraping consistently.
+        If the report URL already exists, update the record if status or resolution_date changed.
+        Otherwise, insert as new.
         """
-        if report["url"] in existing_urls:
-            return
-        existing_urls.add(report["url"])
-
         file_path = self.get_monthly_file(report["date"])
         new_line = json.dumps(report, ensure_ascii=False) + "\n"
 
         lines = []
+        updated = False
         if os.path.exists(file_path):
             with open(file_path, "r", encoding="utf-8") as f:
                 for i, line in enumerate(f, start=1):
@@ -217,31 +128,40 @@ class DataManager:
                     if not line:
                         continue
                     try:
-                        json.loads(line)  # validate
+                        record = json.loads(line)
+                        # If URL matches, check for status/resolution_date changes
+                        if record.get("url") == report["url"]:
+                            # Only update if status or resolution_date changed
+                            if (record.get("status") != report.get("status") or
+                                record.get("resolution_date") != report.get("resolution_date")):
+                                lines.append(new_line)
+                                updated = True
+                            else:
+                                lines.append(line + "\n")
+                            continue  # Skip adding duplicate/new below
                         lines.append(line + "\n")
                     except json.JSONDecodeError as e:
                         print(f"[ERROR] Malformed line {i} in {file_path}: {line}")
                         raise
 
-        # Insert new report chronologically
-        inserted = False
-        report_date = report["date"]
-        new_lines = []
-        for line in lines:
-            line_date = json.loads(line)["date"]
-            if not inserted and report_date >= line_date:
-                new_lines.append(new_line)
-                inserted = True
-            new_lines.append(line)
-        if not inserted:
-            new_lines.append(new_line)  # append if newest
+        # If not updated, insert new report chronologically
+        if not updated:
+            report_date = report["date"]
+            inserted = False
+            new_lines = []
+            for line in lines:
+                line_date = json.loads(line)["date"]
+                if not inserted and report_date >= line_date:
+                    new_lines.append(new_line)
+                    inserted = True
+                new_lines.append(line)
+            if not inserted:
+                new_lines.append(new_line)  # append if newest
+            lines = new_lines
 
         with open(file_path, "w", encoding="utf-8") as f:
-            f.writelines(new_lines)
-        
-        # Invalidate cache since file was modified
-        self.invalidate_cache()
-    
+            f.writelines(lines)
+            
     def save_report_buffered(self, report: Dict, existing_urls: Set[str]) -> None:
         """
         Save a report to the memory buffer and flush to disk when buffer is full.
@@ -258,7 +178,7 @@ class DataManager:
         file_path = self.get_monthly_file(report["date"])
         self.buffer[file_path].append(report)
         self.buffer_count += 1
-        
+                
         # Flush buffer if it's full
         if self.buffer_count >= self.buffer_size:
             self.flush_buffer()
@@ -327,11 +247,11 @@ class DataManager:
         self.buffer.clear()
         self.buffer_count = 0
         
-        # Invalidate cache since files were modified
-        self.invalidate_cache()
-        
+        # Force garbage collection after buffer clear
+        gc.collect()
+                
         print(f"Successfully flushed {buffer_records} records to disk")
-    
+            
     def __enter__(self):
         """Context manager entry"""
         return self
@@ -339,18 +259,53 @@ class DataManager:
     def __exit__(self, exc_type, exc_val, exc_tb):
         """Context manager exit - ensure buffer is flushed"""
         self.flush_buffer()
+        self.cleanup_temp_files()
+    
+    def cleanup_temp_files(self) -> None:
+        """Clean up temporary files to free disk space"""
+        try:
+            # Clean up any temporary files in data directory
+            for filename in os.listdir(self.data_dir):
+                if filename.startswith('.tmp') or filename.endswith('.tmp'):
+                    temp_file = os.path.join(self.data_dir, filename)
+                    try:
+                        os.remove(temp_file)
+                        print(f"[CLEANUP] Removed temporary file: {filename}")
+                    except OSError:
+                        pass
+        except Exception as e:
+            print(f"[WARNING] Cleanup failed: {e}")
     
     def get_scraping_resume_point(self) -> Tuple[Optional[str], int]:
-        """Determine resume point: oldest scraped report date and total saved reports."""
+        """Determine resume point: oldest scraped report date from recent files and total saved reports."""
+        from datetime import datetime, timedelta
+
         all_files = sorted(
             [os.path.join(self.data_dir, f) for f in os.listdir(self.data_dir) if f.endswith(".jsonl")]
         )
         if not all_files:
             return None, 0
 
+        # Only consider files with data from the last 12 months to avoid old leftover files
+        cutoff_date = (datetime.now() - timedelta(days=365)).strftime("%Y-%m-%d")
+        recent_files = []
+
+        for f in all_files:
+            with open(f, encoding="utf-8") as fh:
+                lines = fh.readlines()
+                if lines:
+                    # Check if this file has any recent data
+                    first_record = json.loads(lines[0])
+                    last_record = json.loads(lines[-1])
+                    if first_record["date"] >= cutoff_date or last_record["date"] >= cutoff_date:
+                        recent_files.append(f)
+
+        if not recent_files:
+            return None, 0
+
         oldest_date = None
         total = 0
-        for f in all_files:
+        for f in recent_files:
             with open(f, encoding="utf-8") as fh:
                 lines = fh.readlines()
                 total += len(lines)
@@ -401,33 +356,34 @@ class DataManager:
             True if the status was updated, False otherwise
         """
         file_path, record, line_num = self.find_record_by_url(url)
-        
         if not record:
             print(f"[WARNING] Record not found for URL: {url}")
             return False
-        
         current_status = record.get("status")
-        
+        # Do not update if new_status is None or empty
+        if not new_status:
+            error_msg = f"[ERROR] Attempted status update for {url} with None or empty value. Old status: '{record.get('status')}'"
+            print(error_msg)
+            raise ValueError(error_msg)
         # Only update if status actually changed (case-insensitive comparison)
-        if current_status and current_status.lower() == new_status.lower():
+        if current_status and new_status and current_status.lower() == new_status.lower():
             # Status is the same (ignoring case) - no update needed
             if current_status != new_status:
                 print(f"[DEBUG] Status case difference ignored for {url}: '{current_status}' vs '{new_status}'")
             return False
-        
         print(f"Status changed for {url}: '{current_status}' → '{new_status}'")
-        
         # Update the record
         record["status"] = new_status
-        
         # Handle buffer vs disk record updates differently
         if line_num is None:
             # Record is in buffer - already updated by reference
             print(f"[DEBUG] Updated buffered record for {url}")
-        else:
+        elif file_path is not None:
             # Record is on disk - need to write back to file
             self._update_disk_record(file_path, line_num, record)
-        
+        else:
+            print(f"[ERROR] file_path is None when updating disk record for {url}")
+            return False
         return True
     
     def _update_disk_record(self, file_path: str, line_num: int, record: Dict) -> None:
