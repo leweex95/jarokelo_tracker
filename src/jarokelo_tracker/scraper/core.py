@@ -417,6 +417,36 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
             card_info.append({"url": url, "status": status})
         
         return card_info
+    
+    def extract_listing_info_from_soup(self, soup) -> list:
+        """Extract URL and status from listing page cards using pre-parsed BeautifulSoup object"""
+        cards = soup.select("article.card")
+        card_info = []
+        
+        for card in cards:
+            # Extract URL
+            link_elem = card.select_one("a.card__media__bg")
+            if not link_elem:
+                continue
+            url = link_elem.get("href")
+            # Extract status from badge
+            status = None
+            status_elems = card.select("span.badge")
+            for elem in status_elems:
+                elem_class = elem.get("class", [])
+                # elem_class can be a list or string; normalize to list
+                if isinstance(elem_class, str):
+                    elem_class = [elem_class]
+                if not any("badge--comment" in c for c in elem_class):
+                    status = elem.text.strip()
+                    break
+            if status is None:
+                print(f"[ERROR] Status extraction failed for listing card: {url}")
+                print(f"[DEBUG] Raw HTML snippet for card:")
+                print(str(card)[:1000])
+            card_info.append({"url": url, "status": status})
+        
+        return card_info
 
     def scrape_listing_page(self, page_url: str, global_urls: Set[str], 
                             until_date: Optional[str] = None, 
@@ -502,23 +532,85 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
     def detect_changed_urls_fast(self, cutoff_months: int = 3, output_file: str = "recent_changed_urls.txt") -> int:
         """
         Fast status change detection - scans only recent pages for status changes.
-        
+
         Args:
             cutoff_months: Only scan pages from last N months (default: 3)
             output_file: File to save changed URLs to
-            
+
         Returns:
             Number of status changes detected
         """
+        import concurrent.futures
+        import threading
         from datetime import datetime, timedelta
         import time, os, json
-        
+
+        def fetch_page_threaded(page_url):
+            """Fetch a single page in a thread"""
+            try:
+                response = self.session.get(page_url, timeout=30)
+                response.raise_for_status()
+                return response.text
+            except Exception as e:
+                print(f"   Error fetching {page_url}: {e}")
+                return None
+
+        def process_page_batch(page_urls, existing_data, cutoff_date):
+            """Process a batch of pages and return changed URLs"""
+            changed_urls = set()
+
+            with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+                # Submit all page fetches
+                future_to_url = {executor.submit(fetch_page_threaded, url): url for url in page_urls}
+
+                # Process results as they complete
+                for future in concurrent.futures.as_completed(future_to_url):
+                    page_url = future_to_url[future]
+                    try:
+                        html_content = future.result()
+                        if not html_content:
+                            continue
+
+                        # Parse page content
+                        soup = BeautifulSoup(html_content, 'html.parser')
+
+                        # Extract card info from listing page (URL + status) - NO SCRAPING!
+                        card_info = self.extract_listing_info_from_soup(soup)
+
+                        # Check each card for changes
+                        for card in card_info:
+                            url = card["url"]
+                            current_status = card.get("status", "")
+
+                            if url in existing_data:
+                                old_data = existing_data[url]
+                                old_status = old_data["status"]
+                                old_resolution = old_data["resolution_date"]
+                                report_date = old_data["date"]
+
+                                # Only check reports within our cutoff date
+                                if report_date >= cutoff_date.strftime("%Y-%m-%d"):
+                                    # Detect if status changed or resolution was added
+                                    status_changed = current_status != old_status
+                                    newly_resolved = (not old_resolution and
+                                                    current_status and
+                                                    current_status.upper() == "MEGOLDOTT")
+
+                                    if status_changed or newly_resolved:
+                                        changed_urls.add(url)
+                                        print(f"   Status change detected: {url}")
+
+                    except Exception as e:
+                        print(f"   Error processing {page_url}: {e}")
+
+            return changed_urls
+
         cutoff_date = datetime.now() - timedelta(days=cutoff_months * 30)
-        
-        print(f"🔍 RECENT STATUS CHANGE DETECTION (FAST SCAN)")
-        print(f"Strategy: Scan only listing pages for status changes in the last {cutoff_months} months")
+
+        print(f"🔍 RECENT STATUS CHANGE DETECTION (FAST SCAN - OPTIMIZED)")
+        print(f"Strategy: Parallel page scanning for status changes in the last {cutoff_months} months")
         print(f"Cutoff months: {cutoff_months}")
-        
+
         print("\n[PERF] Building URL index cache...")
         start_time = time.time()
         # Load existing data to compare against for status changes
@@ -538,110 +630,85 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                             }
                         except json.JSONDecodeError:
                             continue
-        
+
         print(f"[PERF] Loaded {len(existing_data):,} URLs in {time.time() - start_time:.2f}s")
         print(f"[PERF] URL index cached for future runs")
-        
+
         changed_urls = set()
         page = 1
         scan_start_time = time.time()
-        print(f"\n� Running in synchronous processing mode")
-        print(f"Using buffered saving (buffer size: {self.data_manager.buffer_size}) for performance")
-        
+        batch_size = 5  # Process 5 pages at a time
+
         try:
             while True:
-                if page == 1:
-                    page_url = self.BASE_URL
-                else:
-                    page_url = f"{self.BASE_URL}?page={page}"
-                
-                print(f"[Page {page}] Loading: {page_url}")
-                
-                # Extract card info from listing page (URL + status) - NO SCRAPING!
-                card_info = self.extract_listing_info(page_url)
-                
-                # Only print if no cards found
-                if not card_info:
-                    print(f"   No more cards found on page {page}, stopping")
+                # Build batch of page URLs
+                page_urls = []
+                for i in range(batch_size):
+                    if page + i == 1:
+                        page_urls.append(self.BASE_URL)
+                    else:
+                        page_urls.append(f"{self.BASE_URL}?page={page + i}")
+
+                print(f"[Pages {page}-{page + len(page_urls) - 1}] Loading batch...")
+
+                # Process batch of pages in parallel
+                batch_changed_urls = process_page_batch(page_urls, existing_data, cutoff_date)
+                changed_urls.update(batch_changed_urls)
+
+                # Check if we got any cards from the last page in the batch
+                # If not, we've reached the end
+                last_page_url = page_urls[-1]
+                try:
+                    response = self.session.get(last_page_url, timeout=30)
+                    response.raise_for_status()
+                    soup = BeautifulSoup(response.text, 'html.parser')
+                    card_info = self.extract_listing_info_from_soup(soup)
+
+                    if not card_info:
+                        print(f"   No more cards found, stopping")
+                        break
+
+                    # Check if any cards on this page are within our cutoff date
+                    # If not, all subsequent pages will be even older, so we can stop
+                    page_has_recent_reports = False
+                    for card in card_info:
+                        url = card["url"]
+                        if url in existing_data:
+                            report_date = existing_data[url]["date"]
+                            if report_date >= cutoff_date.strftime("%Y-%m-%d"):
+                                page_has_recent_reports = True
+                                break
+
+                    if not page_has_recent_reports:
+                        print(f"   Page {page + len(page_urls) - 1} contains no reports within cutoff date ({cutoff_months} months), stopping")
+                        break
+
+                except Exception as e:
+                    print(f"   Error checking pagination: {e}")
                     break
 
-                # Check each card for changes
-                for card in card_info:
-                    url = card["url"]
-                    current_status = card.get("status", "")
-                    
-                    if url in existing_data:
-                        old_data = existing_data[url]
-                        old_status = old_data["status"]
-                        old_resolution = old_data["resolution_date"]
-                        report_date = old_data["date"]
-                        
-                        # Only check reports within our cutoff date
-                        if report_date >= cutoff_date.strftime("%Y-%m-%d"):
-                            # Detect if status changed or resolution was added
-                            status_changed = current_status != old_status
-                            newly_resolved = (not old_resolution and 
-                                            current_status and 
-                                            current_status.upper() == "MEGOLDOTT")
-                            
-                            if status_changed or newly_resolved:
-                                changed_urls.add(url)
-                                print(f"   Status change detected: {url}")
-                        elif report_date < cutoff_date.strftime("%Y-%m-%d"):
-                            # Don't break here - we need to keep checking all reports within our time window
-                            # Just skip this individual report since it's too old
-                            continue
-                    else:
-                        # New URL not in our database yet - don't consider it a change
-                        # Just continue processing
-                        continue
-                
-                # Get next page URL manually (BeautifulSoup only)
-                if not self.session:
-                    print("[ERROR] Requests session not initialized")
+                page += batch_size
+
+                # Safety limit to prevent runaway - but only if we're still finding recent reports
+                # If we've been scanning for too long without finding cutoff, something's wrong
+                if page > 2000:  # Much higher limit, but still prevent infinite loops
+                    print(f"   Reached safety limit of 2000 pages without finding end of recent data, stopping")
                     break
-                response = self.session.get(page_url)
-                response.raise_for_status()
-                soup = BeautifulSoup(response.text, 'html.parser')
-                next_page_elems = soup.select("a.pagination__link")
-                next_url = None
-                for elem in next_page_elems:
-                    link_text = elem.text.strip()
-                    if "Következő" in elem.text:
-                        href = elem.get("href")
-                        if isinstance(href, str) and href.startswith("/"):
-                            next_url = "https://jarokelo.hu" + href
-                        elif isinstance(href, str):
-                            next_url = href
-                        else:
-                            next_url = None
-                        break
-                
-                # Check if there's a next page
-                if not next_url:
-                    print(f"   No more pages found, completed scanning")
-                    break
-                    
-                page += 1
-                
-                # Safety limit to prevent runaway
-                if page > 500:  # Adjust based on your data volume
-                    print(f"   Reached safety limit of 500 pages, stopping")
-                    break
-        
+
         except Exception as e:
             print(f"   Error during status detection: {e}")
-            
+
         # Save changed URLs to file
         if changed_urls:
             with open(output_file, 'w', encoding='utf-8') as f:
                 for url in sorted(changed_urls):
                     f.write(f"{url}\n")
-        
+
         elapsed = time.time() - start_time
-        print(f"   ✅ Detected {len(changed_urls):,} recently changed statuses in {elapsed:.1f}s")
+        scan_elapsed = time.time() - scan_start_time
+        print(f"   ✅ Detected {len(changed_urls):,} recently changed statuses in {elapsed:.1f}s (scan: {scan_elapsed:.1f}s)")
         print(f"   📁 Saved to: {output_file}")
-        
+
         return len(changed_urls)
     
     def extract_old_pending_urls(self, cutoff_months: int = 3, output_file: str = "old_pending_urls.txt") -> int:
