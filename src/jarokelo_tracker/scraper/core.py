@@ -797,8 +797,14 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                 if url:
                     urls_to_scrape.append(url)
         
+        # Remove duplicates to avoid double work
+        original_count = len(urls_to_scrape)
+        urls_to_scrape = list(set(urls_to_scrape))  # Deduplicate
+        if len(urls_to_scrape) < original_count:
+            print(f"{progress_prefix}   📝 Removed {original_count - len(urls_to_scrape)} duplicate URLs from {urls_file}")
+        
         if not urls_to_scrape:
-            print(f"   📝 No URLs to scrape in {urls_file}")
+            print(f"{progress_prefix}   📝 No URLs to scrape in {urls_file}")
             return 0
         
         if resolution_focus:

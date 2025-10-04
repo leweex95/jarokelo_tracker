@@ -491,13 +491,21 @@ jobs:
             TOTAL_URLS=$(wc -l < old_pending_urls.txt)
             if [ "$TOTAL_URLS" -gt 5000 ]; then
               # If more than 5000 URLs, sample from the last 5000 entries
-              tail -n 5000 old_pending_urls.txt | shuf | head -300 > old_pending_urls_sample.txt
+              tail -n 5000 old_pending_urls.txt | shuf 2>/dev/null | head -300 > old_pending_urls_sample.txt
               echo "Sampling 300 URLs from the last 5000 entries (total: $TOTAL_URLS)"
             else
               # If 5000 or fewer URLs, sample from all available
               SAMPLE_SIZE=$(( TOTAL_URLS < 300 ? TOTAL_URLS : 300 ))
-              shuf old_pending_urls.txt | head -$SAMPLE_SIZE > old_pending_urls_sample.txt
+              shuf old_pending_urls.txt 2>/dev/null | head -$SAMPLE_SIZE > old_pending_urls_sample.txt
               echo "Sampling $SAMPLE_SIZE URLs from all $TOTAL_URLS available entries"
+            fi
+            # Verify uniqueness of sampled URLs
+            UNIQUE_COUNT=$(sort old_pending_urls_sample.txt | uniq | wc -l)
+            TOTAL_SAMPLED=$(wc -l < old_pending_urls_sample.txt)
+            if [ "$UNIQUE_COUNT" -ne "$TOTAL_SAMPLED" ]; then
+              echo "⚠️ Warning: Found $(($TOTAL_SAMPLED - $UNIQUE_COUNT)) duplicate URLs in sample, deduplicating..."
+              sort old_pending_urls_sample.txt | uniq > old_pending_urls_clean.txt
+              mv old_pending_urls_clean.txt old_pending_urls_sample.txt
             fi
             mv old_pending_urls_sample.txt old_pending_urls.txt
             echo "Processing $(wc -l < old_pending_urls.txt) URLs"
