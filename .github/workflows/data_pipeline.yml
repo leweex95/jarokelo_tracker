@@ -120,7 +120,7 @@ jobs:
           RETRIES=10
           for i in $(seq 1 $RETRIES); do
             git pull --rebase
-            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master && break || {
+            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:${{ github.ref_name }} && break || {
               echo "Push failed, retrying ($i/$RETRIES)..."
               sleep 3
             }
@@ -174,7 +174,7 @@ jobs:
           RETRIES=10
           for i in $(seq 1 $RETRIES); do
             git pull --rebase
-            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master && break || {
+            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:${{ github.ref_name }} && break || {
               echo "Push failed, retrying ($i/$RETRIES)..."
               sleep 3
             }
@@ -223,7 +223,7 @@ jobs:
           RETRIES=10
           for i in $(seq 1 $RETRIES); do
             git pull --rebase
-            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master && break || {
+            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:${{ github.ref_name }} && break || {
               echo "Push failed, retrying ($i/$RETRIES)..."
               sleep 3
             }
@@ -262,6 +262,11 @@ jobs:
           python -m pip install --upgrade poetry==2.2.0
           poetry install --no-interaction
           
+      - name: Configure Git
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+      
       - name: Ensure latest master
         run: |
           git fetch origin master
@@ -286,7 +291,7 @@ jobs:
           RETRIES=10
           for i in $(seq 1 $RETRIES); do
             git pull --rebase
-            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master && break || {
+            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:${{ github.ref_name }} && break || {
               echo "Push failed, retrying ($i/$RETRIES)..."
               sleep 3
             }
@@ -319,6 +324,11 @@ jobs:
           python -m pip install --upgrade poetry==2.2.0
           poetry install --no-interaction
           
+      - name: Configure Git
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+      
       - name: Ensure latest master
         run: |
           git fetch origin master
@@ -343,7 +353,7 @@ jobs:
           RETRIES=10
           for i in $(seq 1 $RETRIES); do
             git pull --rebase
-            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master && break || {
+            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:${{ github.ref_name }} && break || {
               echo "Push failed, retrying ($i/$RETRIES)..."
               sleep 3
             }
@@ -361,6 +371,11 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.PAT_TOKEN }}
 
+      - name: Configure Git
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+      
       - name: Ensure latest master
         run: |
           git fetch origin master
@@ -403,7 +418,7 @@ jobs:
           RETRIES=10
           for i in $(seq 1 $RETRIES); do
             git pull --rebase
-            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master && break || {
+            git push https://x-access-token:$PAT_TOKEN@github.com/${{ github.repository }} HEAD:${{ github.ref_name }} && break || {
               echo "Push failed, retrying ($i/$RETRIES)..."
               sleep 3
             }
