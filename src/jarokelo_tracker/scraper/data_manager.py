@@ -277,16 +277,35 @@ class DataManager:
             print(f"[WARNING] Cleanup failed: {e}")
     
     def get_scraping_resume_point(self) -> Tuple[Optional[str], int]:
-        """Determine resume point: oldest scraped report date and total saved reports."""
+        """Determine resume point: oldest scraped report date from recent files and total saved reports."""
+        from datetime import datetime, timedelta
+
         all_files = sorted(
             [os.path.join(self.data_dir, f) for f in os.listdir(self.data_dir) if f.endswith(".jsonl")]
         )
         if not all_files:
             return None, 0
 
+        # Only consider files with data from the last 12 months to avoid old leftover files
+        cutoff_date = (datetime.now() - timedelta(days=365)).strftime("%Y-%m-%d")
+        recent_files = []
+
+        for f in all_files:
+            with open(f, encoding="utf-8") as fh:
+                lines = fh.readlines()
+                if lines:
+                    # Check if this file has any recent data
+                    first_record = json.loads(lines[0])
+                    last_record = json.loads(lines[-1])
+                    if first_record["date"] >= cutoff_date or last_record["date"] >= cutoff_date:
+                        recent_files.append(f)
+
+        if not recent_files:
+            return None, 0
+
         oldest_date = None
         total = 0
-        for f in all_files:
+        for f in recent_files:
             with open(f, encoding="utf-8") as fh:
                 lines = fh.readlines()
                 total += len(lines)
