@@ -8,10 +8,6 @@ on:
     - cron: "0 22 * * *"
   workflow_dispatch:
     inputs:
-        scraper_backend:
-            description: 'Scraper backend to use (beautifulsoup/bs/selenium)'
-            required: false
-            default: 'beautifulsoup'
         data_dir:
             description: 'Target data directory'
             required: false
@@ -47,7 +43,6 @@ jobs:
   run-scraper:
     uses: leweex95/jarokelo_tracker/.github/workflows/scraper.yml@master
     with: 
-      backend: ${{ github.event.inputs.scraper_backend }}
       data_dir: ${{ github.event.inputs.data_dir }}
       start_page: ${{ github.event.inputs.start_page }}
       until_date: ${{ github.event.inputs.until_date }}

@@ -29,6 +29,10 @@ on:
         description: 'Months cutoff for recent vs old status updates (default: 3)'
         required: false
         default: '3'
+      headless:
+        description: 'Run browser in headless mode'
+        required: false
+        default: 'true'
   workflow_call:
     inputs:
       data_dir:
@@ -60,6 +64,11 @@ on:
         description: 'Months cutoff for recent vs old status updates'
         required: false
         default: '3'
+        type: string
+      headless:
+        description: 'Run browser in headless mode'
+        required: false
+        default: 'true'
         type: string
     secrets:
       PAT_TOKEN:
@@ -104,8 +113,8 @@ jobs:
       - name: Compute until-date
         id: until_date
         run: |
-          DATA_DIR="${{ github.event.inputs.data_dir || 'data/raw' }}"
-          UNTIL_DATE="${{ github.event.inputs.until_date || '' }}"
+          DATA_DIR="${{ inputs.data_dir || github.event.inputs.data_dir || 'data/raw' }}"
+          UNTIL_DATE="${{ inputs.until_date || github.event.inputs.until_date || '' }}"
 
           if [ -z "$UNTIL_DATE" ]; then
             UNTIL_DATE=$(python3 -c "
@@ -138,15 +147,15 @@ jobs:
 
       - name: Run comprehensive scraper
         run: |
-          DATA_DIR="${{ github.event.inputs.data_dir || 'data/raw' }}"
-          START_PAGE="${{ github.event.inputs.start_page || '1' }}"
-          CONTINUE_SCRAPING="${{ github.event.inputs.continue_scraping || '' }}"
+          DATA_DIR="${{ inputs.data_dir || github.event.inputs.data_dir || 'data/raw' }}"
+          START_PAGE="${{ inputs.start_page || github.event.inputs.start_page || '1' }}"
+          CONTINUE_SCRAPING="${{ inputs.continue_scraping || github.event.inputs.continue_scraping || '' }}"
 
           echo "Running COMPREHENSIVE scraper for new entries..."
           echo "Data directory: $DATA_DIR"
           echo "Start page: $START_PAGE"
           
-          BUFFER_SIZE="${{ github.event.inputs.buffer_size || '25' }}"
+          BUFFER_SIZE="${{ inputs.buffer_size || github.event.inputs.buffer_size || '25' }}"
           ARGS="--data-dir $DATA_DIR --buffer-size $BUFFER_SIZE --until-date $UNTIL_DATE"
           
           if [ -n "$UNTIL_DATE" ]; then
@@ -213,7 +222,7 @@ jobs:
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          DATA_DIR="${{ github.event.inputs.data_dir || 'data/raw' }}"
+          DATA_DIR="${{ inputs.data_dir || github.event.inputs.data_dir || 'data/raw' }}"
           NEW_RECORDS="${{ steps.count_after.outputs.new_records }}"
 
           # Detect current branch
@@ -269,7 +278,7 @@ jobs:
       - name: Detect recently changed statuses
         id: detect_changes
         run: |
-          CUTOFF_MONTHS="${{ github.event.inputs.cutoff_months || '3' }}"
+          CUTOFF_MONTHS="${{ inputs.cutoff_months || github.event.inputs.cutoff_months || '3' }}"
           
           echo "RECENT STATUS CHANGE DETECTION (FAST SCAN)"
           echo "Strategy: Scan only listing pages for status changes in the last $CUTOFF_MONTHS months"
@@ -328,7 +337,7 @@ jobs:
       - name: Load old pending URLs
         id: load_pending
         run: |
-          CUTOFF_MONTHS="${{ github.event.inputs.cutoff_months || '3' }}"
+          CUTOFF_MONTHS="${{ inputs.cutoff_months || github.event.inputs.cutoff_months || '3' }}"
           
           echo "OLD PENDING URL EXTRACTOR"
           echo "Strategy: Extract old pending URLs directly from database (older than $CUTOFF_MONTHS months)"
