@@ -232,12 +232,16 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                         if resolution_date:
                             break
                 
+                # First Authority Response Date (for resolution_focus updates)
+                first_authority_response_date = self.extract_first_authority_response_date(soup)
+                
                 # Update only necessary fields
                 result = existing_record.copy()
                 original_status = existing_record.get("status") if existing_record else None
                 original_resolution = existing_record.get("resolution_date") if existing_record else None
                 result["status"] = status
                 result["resolution_date"] = resolution_date
+                result["first_authority_response_date"] = first_authority_response_date
                 # Only print if status or resolution_date actually changes, and use tab for formatting
                 if (original_status != status) or (original_resolution != resolution_date):
                     print(f"\tResolution date focus: {url} -> original_status={original_status}, new_status={status}, original_resolution_date={original_resolution}, new_resolution_date={resolution_date}")
@@ -330,6 +334,9 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                 if resolution_date:
                     break
 
+        # First Authority Response Date
+        first_authority_response_date = self.extract_first_authority_response_date(soup)
+
         # GPS Coordinates
         latitude, longitude = extract_gps_coordinates(response.text)
 
@@ -340,6 +347,7 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
             "author_profile": author_profile,
             "date": date,
             "category": category,
+            "first_authority_response_date": first_authority_response_date,
             "institution": institution,
             "supporter": supporter,
             "description": description,
@@ -854,60 +862,71 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
 
         return successful_scrapes
     
-    def scrape(self, start_page: int = 1, until_date: Optional[str] = None, 
-               stop_on_existing: bool = True, continue_scraping: bool = False,
-               update_existing_status: bool = False):
+    def extract_first_authority_response_date(self, soup: BeautifulSoup) -> Optional[str]:
         """
-        Main scraping method
-        
+        Extract the first authority response date from the page.
+        Enhanced method that handles both explicit "illetékes válasza" and implicit
+        authority responses following "elküldte az ügyet az illetékesnek" pattern.
+
         Args:
-            start_page: Page number to start scraping from
-            until_date: Scrape until this date (YYYY-MM-DD), inclusive
-            stop_on_existing: Whether to stop when encountering existing reports
-            continue_scraping: Whether to resume from where we left off
-            update_existing_status: Whether to update status of existing records
+            soup: BeautifulSoup object of the page
+
+        Returns:
+            Date string in YYYY-MM-DD format, or None if not found
         """
-        
-        # Load existing URLs
-        global_urls = self.data_manager.load_all_existing_urls()
-        
-        # Determine if we should use buffered saving (for comprehensive scraping)
-        use_buffered_saving = not update_existing_status
-        if use_buffered_saving:
-            print(f"Using buffered saving (buffer size: {self.data_manager.buffer_size}) for performance")
-        
-        # Determine starting page and behavior
-        if continue_scraping:
-            oldest_date, total = self.data_manager.get_scraping_resume_point()
-            page = max(total // 8 - 1, 1)
-            stop_on_existing = False
-            print(f"Resuming scraping from date: {oldest_date} and from page number: {page}")
-        elif update_existing_status:
-            page = start_page
-            stop_on_existing = False  # Don't stop on existing when updating status
-            print(f"Status update mode: Will check and update existing record statuses")
-        else:
-            page = start_page
-        
-        # Determine starting URL
-        if page <= 1:
-            page_url = self.BASE_URL
-        else:
-            page_url = f"{self.BASE_URL}?page={page}"
-        
-        # Main scraping loop
-        try:
-            while page_url:
-                print(f"[Page {page}] Loading: {page_url}")
-                page_url, done = self.scrape_listing_page(
-                    page_url, global_urls, until_date, stop_on_existing, use_buffered_saving
-                )
-                if done:
-                    print(f"Found already-scraped report or reached until-date ({until_date=}) Exiting.")
-                    break
-                page += 1
-        finally:
-            # Always flush buffer at the end of scraping
-            if use_buffered_saving:
-                print("Scraping complete. Flushing remaining buffer...")
-                self.data_manager.flush_buffer()
+        # Find all comment bodies
+        comment_bodies = soup.select("div.comment__body")
+
+        # First, try the original method: look for explicit "Az illetékes válasza"
+        authority_response_dates = []
+        for body in comment_bodies:
+            message_elem = body.select_one("p.comment__message")
+            if message_elem and "Az illetékes válasza" in message_elem.text:
+                date_elem = body.select_one("time.comment__date")
+                if date_elem:
+                    date_text = date_elem.text.strip()
+                    try:
+                        date_parts = date_text.split()[:3]
+                        normalized_date = self.normalize_date(date_parts)
+                        authority_response_dates.append(normalized_date)
+                    except Exception as e:
+                        print(f"Warning: Failed to parse authority response date '{date_text}': {e}")
+                        continue
+
+        # Return the last (bottommost) date if found with explicit method
+        if authority_response_dates:
+            return authority_response_dates[-1]
+
+        # If no explicit responses found, try enhanced method
+        # Look for "elküldte az ügyet az illetékesnek" pattern
+        for i, body in enumerate(comment_bodies):
+            message_elem = body.select_one("p.comment__message")
+            if message_elem and "elküldte az ügyet az illetékesnek:" in message_elem.text:
+                # Found a forwarding message, extract the authority name
+                message_text = message_elem.text.strip()
+                if ":" in message_text:
+                    authority_name = message_text.split(":", 1)[1].strip()
+
+                    # Look for authority responses BEFORE this forwarding message
+                    # (comments are displayed newest-first)
+                    for j in range(i - 1, -1, -1):  # Search backwards
+                        next_body = comment_bodies[j]
+                        next_message_elem = next_body.select_one("p.comment__message")
+
+                        if next_message_elem:
+                            next_message_text = next_message_elem.text.strip()
+                            # Check if this comment is from the same authority
+                            if authority_name.lower() in next_message_text.lower():
+                                # Found a comment from the same authority, get the date
+                                date_elem = next_body.select_one("time.comment__date")
+                                if date_elem:
+                                    date_text = date_elem.text.strip()
+                                    try:
+                                        date_parts = date_text.split()[:3]
+                                        normalized_date = self.normalize_date(date_parts)
+                                        return normalized_date
+                                    except Exception as e:
+                                        print(f"Warning: Failed to parse enhanced authority response date '{date_text}': {e}")
+                                        continue
+
+        return None
