@@ -1,6 +1,8 @@
 name: Automated RAG Evaluation Pipeline
 
 on:
+  # schedule:
+  #   - cron: "0 23 * * *"
   workflow_dispatch:
     inputs:
       eval_set_path:
@@ -41,8 +43,6 @@ on:
         description: 'Language for queries (en or hu)'
         required: false
         default: 'hu'
-  schedule:
-    - cron: "0 23 * * *"
 
 jobs:
   evaluate:
