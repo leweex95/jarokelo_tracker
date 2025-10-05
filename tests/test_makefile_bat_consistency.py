@@ -1,14 +1,31 @@
 """
 Test to ensure Makefile and jarokelo.bat have consistent commands.
+
 This test validates that both files define the same commands with equivalent implementations.
+It helps catch divergence between the two files to ensure Windows (bat) and Unix (Makefile)
+users have the same set of commands available.
+
+The test performs the following checks:
+1. Command existence: All commands in one file exist in the other
+2. Command equivalence: Commands execute the same Python scripts with the same arguments
+3. Help text consistency: Help documentation lists the same commands (warnings only)
+
+Usage:
+    Run directly: python tests/test_makefile_bat_consistency.py
+    Run with pytest: pytest tests/test_makefile_bat_consistency.py -v
+
+The test will:
+- PASS if all implemented commands are consistent
+- WARN if help text has minor inconsistencies (non-blocking)
+- FAIL if commands are missing or have different implementations
 """
 
 import re
 from pathlib import Path
-from typing import Dict, Set
+from typing import Dict, Set, Tuple
 
 
-def parse_makefile_targets(makefile_path: Path) -> Dict[str, str]:
+def parse_makefile_targets(makefile_path: Path) -> Tuple[Dict[str, str], Dict[str, str]]:
     """Parse Makefile and extract targets with their commands."""
     targets = {}
     target_dependencies = {}
