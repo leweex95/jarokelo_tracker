@@ -1,0 +1,49 @@
+name: Test Makefile vs jarokelo.bat Consistency
+
+on:
+  push:
+    branches: [ master, main ]
+    paths:
+      - 'Makefile'
+      - 'jarokelo.bat'
+      - 'tests/test_makefile_bat_consistency.py'
+      - '.github/workflows/test_makefile_bat_consistency.yml'
+  pull_request:
+    branches: [ master, main ]
+    paths:
+      - 'Makefile'
+      - 'jarokelo.bat'
+      - 'tests/test_makefile_bat_consistency.py'
+      - '.github/workflows/test_makefile_bat_consistency.yml'
+  workflow_dispatch:
+
+jobs:
+  test-consistency:
+    runs-on: ubuntu-latest
+    name: Check Makefile and jarokelo.bat consistency
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Run consistency tests
+        id: run_tests
+        run: |
+          python tests/test_makefile_bat_consistency.py
+        continue-on-error: false
+        
+      - name: Test summary
+        if: always()
+        run: |
+          echo "## Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.run_tests.outcome }}" == "success" ]; then
+            echo "✅ Makefile and jarokelo.bat are consistent!" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Consistency test failed. See logs for details." >> $GITHUB_STEP_SUMMARY
+          fi
