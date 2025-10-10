@@ -459,7 +459,8 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
     def scrape_listing_page(self, page_url: str, global_urls: Set[str], 
                             until_date: Optional[str] = None, 
                             stop_on_existing: bool = True,
-                            use_buffered_saving: bool = False) -> Tuple[Optional[str], bool]:
+                            use_buffered_saving: bool = False,
+                            continue_scraping: bool = False) -> Tuple[Optional[str], bool]:
         """Return next page URL and a flag if we reached an already scraped report or until_date."""
         if not self.session:
             raise ValueError("Requests session not initialized")
@@ -514,8 +515,8 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                     print(f"Reached until_date ({until_date}) after processing all new URLs on this page.")
                     return None, True
 
-        # If there are no new URLs on this page, stop scraping
-        if not new_urls_from_page:
+        # If there are no new URLs on this page, stop scraping (unless continue_scraping)
+        if not new_urls_from_page and not continue_scraping:
             print("No new entries found on this page. Stopping scraping.")
             return None, True
 
@@ -537,6 +538,60 @@ SCRAPING STOPPED to prevent corrupted data from being saved.
                     return None, False
         return None, False
     
+    def scrape(self, start_page: int = 1, until_date: Optional[str] = None, 
+               stop_on_existing: bool = True, continue_scraping: bool = False, 
+               update_existing_status: bool = False) -> None:
+        """
+        Main scraping orchestration method.
+        
+        Args:
+            start_page: Page number to start scraping from
+            until_date: Stop scraping when reaching reports older than this date (YYYY-MM-DD)
+            stop_on_existing: Stop when encountering already scraped URLs
+            continue_scraping: Resume from the last scraped date based on existing data
+            update_existing_status: Update statuses of existing records and scrape new ones
+        """
+        print("Starting scraping process...")
+        
+        # Load existing URLs to avoid duplicates
+        global_urls = self.data_manager.load_all_existing_urls()
+        
+        # Determine resume point if continuing
+        if continue_scraping:
+            resume_date, total_existing = self.data_manager.get_scraping_resume_point()
+            if resume_date:
+                print(f"Resuming from date: {resume_date} (total existing: {total_existing})")
+                # Calculate start_page as the page after the oldest (assuming ~8 reports per page)
+                start_page = (total_existing // 8) + 1
+                print(f"Starting from page {start_page} to scrape older dates")
+            else:
+                print("No existing data found, starting from page 1")
+        
+        # Start scraping from the specified page
+        current_page = start_page
+        base_url = self.BASE_URL
+        
+        while True:
+            page_url = f"{base_url}?page={current_page}" if current_page > 1 else base_url
+            print(f"Scraping page {current_page}: {page_url}")
+            
+            # Scrape the listing page and get next page info
+            next_page_url, should_stop = self.scrape_listing_page(
+                page_url, global_urls, until_date, stop_on_existing, 
+                use_buffered_saving=not update_existing_status,  # Use buffering for comprehensive scraping
+                continue_scraping=continue_scraping
+            )
+            
+            if should_stop or not next_page_url:
+                print("🛑 Stopping scraping as requested or no more pages available.")
+                break
+            
+            current_page += 1
+        
+        # Flush any remaining buffered data
+        self.data_manager.flush_buffer()
+        print("✅ Scraping completed successfully.")
+
     def detect_changed_urls_fast(self, cutoff_months: int = 3, output_file: str = "recent_changed_urls.txt") -> int:
         """
         Fast status change detection - scans only recent pages for status changes.

@@ -170,8 +170,7 @@ class DataManager:
         For comprehensive scraping, this provides significant performance improvements
         by reducing disk I/O from O(n) to O(n/buffer_size).
         """
-        if report["url"] in existing_urls:
-            return
+        # Always add to buffer, dedup will happen on flush
         existing_urls.add(report["url"])
         
         # Add to buffer
@@ -215,28 +214,27 @@ class DataManager:
             # Sort buffered reports by date (newest first for prepending logic)
             buffered_reports.sort(key=lambda x: x["date"], reverse=True)
             
-            # Merge buffered reports with existing lines chronologically
-            all_lines = existing_lines.copy()
+            # Collect all reports: existing + buffered, dedup by URL (keep latest)
+            all_reports = {}
             
+            # Load existing
+            for line in existing_lines:
+                record = json.loads(line)
+                url = record.get("url")
+                if url:
+                    all_reports[url] = record
+            
+            # Add buffered (these take precedence)
             for report in buffered_reports:
-                new_line = json.dumps(report, ensure_ascii=False) + "\n"
-                report_date = report["date"]
-                
-                # Find insertion point
-                inserted = False
-                new_all_lines = []
-                
-                for line in all_lines:
-                    line_date = json.loads(line)["date"]
-                    if not inserted and report_date >= line_date:
-                        new_all_lines.append(new_line)
-                        inserted = True
-                    new_all_lines.append(line)
-                
-                if not inserted:
-                    new_all_lines.append(new_line)  # append if newest
-                
-                all_lines = new_all_lines
+                url = report.get("url")
+                if url:
+                    all_reports[url] = report
+            
+            # Sort by date descending (newest first)
+            sorted_reports = sorted(all_reports.values(), key=lambda x: x["date"], reverse=True)
+            
+            # Write all
+            all_lines = [json.dumps(report, ensure_ascii=False) + "\n" for report in sorted_reports]
             
             # Write merged content to file
             with open(file_path, "w", encoding="utf-8") as f:
@@ -277,7 +275,7 @@ class DataManager:
             print(f"[WARNING] Cleanup failed: {e}")
     
     def get_scraping_resume_point(self) -> Tuple[Optional[str], int]:
-        """Determine resume point: oldest scraped report date from recent files and total saved reports."""
+        """Determine resume point: oldest scraped report date from ALL files and total saved reports."""
         from datetime import datetime, timedelta
 
         all_files = sorted(
@@ -286,26 +284,10 @@ class DataManager:
         if not all_files:
             return None, 0
 
-        # Only consider files with data from the last 12 months to avoid old leftover files
-        cutoff_date = (datetime.now() - timedelta(days=365)).strftime("%Y-%m-%d")
-        recent_files = []
-
-        for f in all_files:
-            with open(f, encoding="utf-8") as fh:
-                lines = fh.readlines()
-                if lines:
-                    # Check if this file has any recent data
-                    first_record = json.loads(lines[0])
-                    last_record = json.loads(lines[-1])
-                    if first_record["date"] >= cutoff_date or last_record["date"] >= cutoff_date:
-                        recent_files.append(f)
-
-        if not recent_files:
-            return None, 0
-
+        # Check ALL files, not just recent ones
         oldest_date = None
         total = 0
-        for f in recent_files:
+        for f in all_files:
             with open(f, encoding="utf-8") as fh:
                 lines = fh.readlines()
                 total += len(lines)
@@ -313,6 +295,14 @@ class DataManager:
                     last_date = json.loads(lines[-1])["date"]
                     if oldest_date is None or last_date < oldest_date:
                         oldest_date = last_date
+        
+        # Apply 2-day buffer
+        if oldest_date:
+            from datetime import datetime, timedelta
+            oldest_dt = datetime.strptime(oldest_date, "%Y-%m-%d")
+            buffered_dt = oldest_dt - timedelta(days=2)
+            oldest_date = buffered_dt.strftime("%Y-%m-%d")
+        
         return oldest_date, total
     
     def find_record_by_url(self, url: str) -> Tuple[Optional[str], Optional[Dict], Optional[int]]:
