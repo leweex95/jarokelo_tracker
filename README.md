@@ -168,7 +168,7 @@ This loads raw jsonl files, cleans and normalizes their content, splits issue de
 
     poetry run python ./src/jarokelo_tracker/preprocess/preprocess_eda.py 
 
-This loads raw jsonl files, cleans and normalizes their content, and prepares a set of csv files for the Power BI dashboarding at `data/processed/powerbi`.
+This loads raw jsonl files, cleans and normalizes their content, and prepares comprehensive GPS-enhanced csv files for PowerBI at `data/processed/powerbi`.
 
 4.  Build vector store
 
