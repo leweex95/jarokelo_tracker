@@ -1,0 +1,40 @@
+﻿category,TotalReports,ResolutionRate,ResolvedCount,AvgDaysToResolution,MedianDaysToResolution,AvgDaysToFirstResponse,MedianDaysToFirstResponse,AnonymousRate,ImageAttachmentRate,InstitutionsInvolved,CategoryPriorityScore,CategoryName
+,14,0.214,3,1.333,0.0,,,0.571,0.0,1,39.4,
+AkadÃĄlymentesÃ­tÃés,1,0.0,0,,,1.0,1.0,1.0,0.0,1,50.0,AkadÃĄlymentesÃ­tÃés
+Akadálymentesítés,134,0.246,33,56.152,29.0,32.296,28.0,0.493,0.0,40,39.0,Akadálymentesítés
+EgyÃéb,4,0.5,2,14.5,14.5,14.5,14.5,0.75,0.0,4,25.0,EgyÃéb
+Egyéb,1360,0.438,595,79.217,40.0,32.311,18.0,0.588,0.0,133,41.0,Egyéb
+Elhagyott jÃĄrmÅ,4,0.25,1,,,6.5,7.0,1.0,0.0,4,37.5,Elhagyott jÃĄrmÅ
+Elhagyott jármű,2504,0.673,1686,81.024,55.0,21.274,7.0,0.777,0.0,71,40.0,Elhagyott jármű
+Elhagyott jรกrmลฑ,1,0.0,0,,,4.0,4.0,1.0,0.0,1,50.0,Elhagyott jรกrmลฑ
+Forgalomtechnika,4654,0.508,2365,94.463,55.0,16.694,5.0,0.494,0.0,120,68.6,Forgalomtechnika
+Graffiti,825,0.55,454,69.194,33.0,28.46,16.0,0.622,0.0,71,30.3,Graffiti
+JÃĄrda,1,0.0,0,,,27.0,27.0,1.0,0.0,1,50.0,JÃĄrda
+Járda,2069,0.348,719,99.971,61.0,31.04,22.0,0.638,0.0,107,52.2,Járda
+KerÃékpÃĄrozÃĄs,2,0.0,0,,,9.5,9.5,0.5,0.0,1,50.0,KerÃékpÃĄrozÃĄs
+Kerékpározás,674,0.438,295,85.963,42.5,29.745,21.0,0.386,0.0,59,34.5,Kerékpározás
+KÃzmÅvek,5,0.2,1,18.0,18.0,11.4,13.0,0.6,0.0,5,40.0,KÃzmÅvek
+KÃztisztasÃĄg,10,0.2,2,7.5,7.5,3.2,2.5,1.0,0.0,8,40.1,KÃztisztasÃĄg
+KÃĄtyÃš,2,0.0,0,,,30.0,30.0,0.0,0.0,2,50.0,KÃĄtyÃš
+Kátyú,1838,0.307,565,113.547,78.0,30.133,27.0,0.566,0.001,54,52.0,Kátyú
+Közművek,4306,0.678,2919,48.674,24.0,16.156,5.0,0.593,0.0,98,56.8,Közművek
+Köztisztaság,4661,0.687,3200,37.071,15.0,23.251,10.0,0.637,0.0,131,59.7,Köztisztaság
+Közvilágítás,1144,0.729,834,28.813,10.0,24.32,9.0,0.408,0.001,64,24.4,Közvilágítás
+Közösségi közlekedés,985,0.574,565,74.455,37.0,36.553,30.0,0.456,0.0,49,30.6,Közösségi közlekedés
+KûÑzméÝvek,1,0.0,0,,,0.0,0.0,1.0,0.0,1,50.0,KûÑzméÝvek
+Közművek,2,0.0,0,,,3.0,3.0,1.0,0.0,2,50.0,Közművek
+Köztisztaság,1,0.0,0,,,3.0,3.0,0.0,0.0,1,50.0,Köztisztaság
+KĂśzmĹvek,1,0.0,0,,,13.0,13.0,0.0,0.0,1,50.0,KĂśzmĹvek
+KĂśztisztasĂĄg,4,0.25,1,23.0,23.0,7.5,3.5,0.75,0.0,3,37.5,KĂśztisztasĂĄg
+KГ¶ztisztasГЎg,1,0.0,0,,,4.0,4.0,0.0,0.0,1,50.0,KГ¶ztisztasГЎg
+Kأ¶ztisztasأ،g,1,0.0,0,,,5.0,5.0,1.0,0.0,1,50.0,Kأ¶ztisztasأ،g
+Kأ،tyأ؛,1,0.0,0,,,9.0,9.0,0.0,0.0,1,50.0,Kأ،tyأ؛
+Kátyú,1,0.0,0,,,14.0,14.0,0.0,0.0,1,50.0,Kátyú
+Kรถzmลฑvek,1,1.0,1,10.0,10.0,7.0,7.0,1.0,0.0,1,0.0,Kรถzmลฑvek
+Kรถztisztasรกg,1,1.0,1,27.0,27.0,19.0,19.0,1.0,0.0,1,0.0,Kรถztisztasรกg
+Parkok Ã©s zÃ¶ldterÃŒletek,1,0.0,0,,,5.0,5.0,0.0,0.0,1,50.0,Parkok Ã©s zÃ¶ldterÃŒletek
+Parkok Ãés zÃldterÃületek,9,0.444,4,27.5,23.0,14.667,7.0,0.667,0.0,5,27.9,Parkok Ãés zÃldterÃületek
+Parkok és zöldterületek,5286,0.432,2282,84.701,44.0,30.561,16.0,0.538,0.0,125,78.4,Parkok és zöldterületek
+Parkok Ă©s zĂ¶ldterĂĽletek,1,0.0,0,,,43.0,43.0,0.0,0.0,1,50.0,Parkok Ă©s zĂ¶ldterĂĽletek
+Parkok ĂŠs zĂśldterĂźletek,2,0.5,1,25.0,25.0,12.5,12.5,1.0,0.0,2,25.0,Parkok ĂŠs zĂśldterĂźletek
+Parkolás,842,0.337,284,57.257,28.0,28.348,13.0,0.738,0.0,66,41.1,Parkolás

@@ -1,0 +1,269 @@
+﻿InstitutionName,ServiceCenterLatitude,ServiceCenterLongitude,ServiceAreaMinLatitude,ServiceAreaMaxLatitude,ServiceAreaMinLongitude,ServiceAreaMaxLongitude,ServiceAreaKmSquared,DistrictsServed,DistrictsServedList,TotalRecords,InstitutionType,IsDistrictLevel,IsCityWide,IsUtilityCompany,ServiceAreaCoverage,WorkloadCategory,PerformanceRanking,EfficiencyScore,TerritorySizeCategory
+10 millió Fa Alapítvány,47.583,19.116,47.573,47.592999999999996,19.105999999999998,19.126,0.0,1,['IV. kerület'],1,Other Municipal,0,0,0,1.0,Low,13,59.3,Small
+AH Infrastruktúra Zrt.,47.503,19.042,47.473,47.528,19.014999999999997,19.068,13.975500000000002,4,"['XI. kerület', 'XIII. kerület', 'I. kerület', 'V. kerület']",4,Other Municipal,0,0,1,1.0,Low,137,10.2,Large
+ATEV Fehérjefeldolgozó Zrt.,47.508,19.034,47.438,47.582,18.9076,19.2004,354.28799999999995,8,"['XI. kerület', 'II. kerület', 'Unknown', 'VII. kerület', 'IX. kerület', 'XVIII. kerület', 'VIII. kerület', 'XIII. kerület']",24,Other Municipal,0,0,1,1.0,Low,86,20.3,Large
+ATEV FehĂŠrjefeldolgozĂł Zrt.,47.434,19.071,47.424,47.443999999999996,19.061,19.081000000000003,0.0,1,['Csepel'],1,Other Municipal,0,0,1,1.0,Low,999,,Small
+AVIA Hungária Kft.,47.506,19.16,47.496,47.516,19.15,19.17,0.0,1,['X. kerület'],1,Other Municipal,0,0,1,1.0,Low,999,,Small
+Aldi,47.521,19.106,47.4217,47.6173,19.0104,19.2456,386.5708000000001,7,"['XX. kerület', 'XVII. kerület', 'XIX. kerület', 'III. kerület', 'XIII. kerület', 'XIV. kerület', 'XI. kerület']",17,Other Municipal,0,0,0,1.0,Low,122,14.4,Large
+Alza,47.597,19.058,47.587,47.607,19.048,19.068,0.0,1,['III. kerület'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+Auchan,47.56,19.049,47.548,47.571,19.037,19.062,0.1815,2,"['III. kerület', 'Unknown']",5,Other Municipal,0,0,0,1.0,Low,46,32.2,Small
+BDK Budapesti DÃ­sz-ÃĐs KÃķzvilÃĄgÃ­tÃĄsi Kft.,47.501,18.984,47.491,47.510999999999996,18.974,18.994000000000003,0.0,1,['Unknown'],1,Other Municipal,0,1,1,1.0,Low,999,,Small
+BDK Budapesti Dísz-és Közvilágítási Kft.,47.509,19.075,47.36750000000001,47.6255,18.9156,19.3164,868.901,24,"['XVI. kerület', 'XVII. kerület', 'XIV. kerület', 'III. kerület', 'IX. kerület', 'II. kerület', 'VII. kerület', 'VIII. kerület', 'XI. kerület', 'XXI. kerület', 'IV. kerület', 'XIX. kerület', 'Unknown', 'I. kerület', 'XV. kerület', 'X. kerület', 'XX. kerület', 'XVIII. kerület', 'XII. kerület', 'XIII. kerület', 'V. kerület', 'XXII. kerület', 'VI. kerület', 'XXIII. kerület']",712,Public Lighting,0,1,1,1.0,Very High,35,39.1,Large
+BFKH Budapest FÅvÃĄros KormÃĄnyhivatala,47.469,19.091,47.459,47.479,19.081,19.101000000000003,0.0,1,['Unknown'],1,Other Municipal,0,1,0,1.0,Low,999,,Small
+BFKH Budapest Főváros Kormányhivatala,47.499,19.066,47.392999999999994,47.597,18.9877,19.2673,479.28100000000006,17,"['XIV. kerület', 'III. kerület', 'VI. kerület', 'XVIII. kerület', 'VIII. kerület', 'II. kerület', 'XII. kerület', 'Unknown', 'I. kerület', 'XI. kerület', 'V. kerület', 'VII. kerület', 'XIII. kerület', 'XVII. kerület', 'XXIII. kerület', 'X. kerület', 'IX. kerület']",43,Other Municipal,0,1,0,1.0,Low,153,3.2,Large
+BFKH III. Kerületi Hivatal Hatósági Osztály,47.552,19.038,47.529,47.602,19.023999999999997,19.062,11.543399999999998,1,['III. kerület'],4,Local Government,1,0,0,1.0,Low,24,41.3,Large
+BGYH Budapest Gyógyfürdői és Hévizei Zrt.,47.523,19.126,47.513000000000005,47.533,19.116,19.136000000000003,0.0,1,['XIV. kerület'],1,Other Municipal,0,1,1,1.0,Low,999,,Small
+BKK Budapesti KÃķzlekedÃĐsi KÃķzpont,47.49,19.089,47.480000000000004,47.5,19.078999999999997,19.099,0.0,1,['Unknown'],1,Other Municipal,0,1,0,1.0,Low,999,,Small
+BKK Budapesti Közlekedési Központ,47.5,19.071,47.3785,47.6245,18.8969,19.3301,895.4604999999998,24,"['IX. kerület', 'XI. kerület', 'XIII. kerület', 'IV. kerület', 'II. kerület', 'XIV. kerület', 'III. kerület', 'XV. kerület', 'XXIII. kerület', 'XII. kerület', 'X. kerület', 'XX. kerület', 'V. kerület', 'I. kerület', 'VIII. kerület', 'Unknown', 'XXI. kerület', 'VI. kerület', 'XVI. kerület', 'XVIII. kerület', 'VII. kerület', 'XIX. kerület', 'XXII. kerület', 'XVII. kerület']",754,Roads & Traffic,0,1,0,1.0,Very High,125,14.0,Large
+BKM Budapesti KÃ¶zmÅ±vek,47.518,18.971,47.508,47.528,18.961,18.981,0.0,1,['Unknown'],1,Other Municipal,0,1,0,1.0,Low,999,,Small
+BKM Budapesti KÃķzmÅąvek,47.485,19.035,47.432,47.55,18.968700000000002,19.1403,169.56939999999997,1,['Unknown'],7,Other Municipal,0,1,0,1.0,Low,41,34.6,Large
+BKM Budapesti Közművek,47.5,19.067,47.3378,47.6282,18.9115,19.361500000000003,1098.075,24,"['XI. kerület', 'VII. kerület', 'V. kerület', 'IX. kerület', 'I. kerület', 'VI. kerület', 'XXII. kerület', 'XIII. kerület', 'VIII. kerület', 'XIX. kerület', 'Unknown', 'III. kerület', 'II. kerület', 'XX. kerület', 'X. kerület', 'XIV. kerület', 'XXIII. kerület', 'IV. kerület', 'XVIII. kerület', 'XII. kerület', 'XVII. kerület', 'XVI. kerület', 'XXI. kerület', 'XV. kerület']",1974,Other Municipal,0,1,0,1.0,Very High,66,26.3,Large
+BKM Budapesti Közművek,47.508,19.18,47.498000000000005,47.518,19.169999999999998,19.19,0.0,1,['Unknown'],1,Other Municipal,0,1,0,1.0,Low,999,,Small
+BKM Budapesti KĂśzmĹąvek,47.507,19.04,47.468,47.558,19.02,19.058,15.246,1,['Unknown'],8,Other Municipal,0,1,0,1.0,Low,30,40.3,Large
+BKM Budapesti Kรถzmลฑvek,47.446,19.126,47.436,47.455999999999996,19.116,19.136000000000003,0.0,1,['Unknown'],4,Other Municipal,0,1,0,1.0,Low,23,42.5,Small
+Becketts Ír Pub és Étterem,47.504,19.063,47.494,47.513999999999996,19.052999999999997,19.073,0.0,1,['VI. kerület'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+Bercsényi Miklós Szakiskola és Kollégium,47.488,19.153,47.478,47.498,19.142999999999997,19.163,0.0,1,['X. kerület'],1,Education,0,0,0,1.0,Low,999,,Small
+Bethesda Gyermekkórház,47.518,19.089,47.508,47.528,19.078999999999997,19.099,0.0,1,['XIV. kerület'],1,Healthcare,0,0,0,1.0,Low,999,,Small
+Budagyöngye,47.516,19.0,47.506,47.525999999999996,18.99,19.01,0.0,1,['II. kerület'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+Budai Tamás - egyéni vállalkozó,47.516,19.127,47.498000000000005,47.543,19.081999999999997,19.193,27.5275,2,"['XIV. kerület', 'XVI. kerület']",5,Other Municipal,0,0,0,1.0,Low,49,30.5,Large
+Budapest Airport,47.433,19.262,47.422000000000004,47.443,19.250999999999998,19.274,0.0363,2,"['XVIII. kerület', 'Unknown']",4,Other Municipal,0,1,0,1.0,Low,81,20.8,Small
+Budapest Brand NZrt.,47.527,19.07,47.469,47.568999999999996,19.029999999999998,19.095000000000002,43.56,2,"['XIII. kerület', 'XI. kerület']",5,Other Municipal,0,1,1,1.0,Low,999,,Large
+Budapest Film Zrt.,47.486,19.071,47.476,47.495999999999995,19.061,19.082,0.0,1,['VIII. kerület'],2,Other Municipal,0,1,1,1.0,Low,999,,Small
+Budapest Főváros Önkormányzata,47.498,19.076,47.4089,47.6141,18.9409,19.2661,560.7261000000001,18,"['IX. kerület', 'XI. kerület', 'III. kerület', 'VII. kerület', 'VI. kerület', 'V. kerület', 'XVI. kerület', 'I. kerület', 'II. kerület', 'XIII. kerület', 'X. kerület', 'Unknown', 'XV. kerület', 'VIII. kerület', 'XVIII. kerület', 'XIX. kerület', 'IV. kerület', 'XVII. kerület']",104,Local Government,0,1,0,1.0,Medium,147,7.1,Large
+Budapest Galéria,47.49,19.053,47.480000000000004,47.501,19.035999999999998,19.071,0.1815,2,"['V. kerület', 'I. kerület']",2,Other Municipal,0,1,0,1.0,Low,999,,Small
+Budapest KÃķzÃšt,47.478,19.064,47.385,47.529,18.998199999999997,19.2118,258.45599999999996,2,"['Unknown', 'Csepel']",12,Other Municipal,0,1,0,1.0,Low,37,38.1,Large
+Budapest Közút,47.5,19.073,47.3539,47.631099999999996,18.893800000000002,19.3402,1039.7772,24,"['III. kerület', 'XXIII. kerület', 'XIV. kerület', 'XIII. kerület', 'VI. kerület', 'VIII. kerület', 'XXII. kerület', 'IX. kerület', 'I. kerület', 'XVIII. kerület', 'XI. kerület', 'V. kerület', 'XIX. kerület', 'X. kerület', 'II. kerület', 'VII. kerület', 'XII. kerület', 'XVI. kerület', 'XV. kerület', 'XX. kerület', 'XVII. kerület', 'XXI. kerület', 'IV. kerület', 'Unknown']",4406,Roads & Traffic,0,1,0,1.0,Very High,131,11.3,Large
+Budapest KĂśzĂşt,47.427,19.074,47.395199999999996,47.524800000000006,19.061999999999998,19.09,10.4544,2,"['Unknown', 'Csepel']",5,Other Municipal,0,1,0,1.0,Low,15,55.5,Large
+Budapest Kأ¶zأ؛t,47.446,19.147,47.436,47.455999999999996,19.136999999999997,19.157,0.0,1,['Kispest'],1,Other Municipal,0,1,0,1.0,Low,999,,Small
+Budapest Kรถzรบt,47.452,19.109,47.442,47.461999999999996,19.099,19.119000000000003,0.0,1,['Unknown'],1,Other Municipal,0,1,0,1.0,Low,999,,Small
+Budapest Vásárcsarnokai,47.479,19.053,47.455000000000005,47.503,19.023,19.083000000000002,13.552000000000001,2,"['XI. kerület', 'VIII. kerület']",2,Other Municipal,0,1,0,1.0,Low,85,20.4,Large
+Budapesti Corvinus Egyetem,47.486,19.059,47.475,47.497,19.048,19.07,0.0484,2,"['IX. kerület', 'Unknown']",5,Other Municipal,0,1,0,1.0,Low,999,,Small
+Budavári Kapu Kft.,47.508,19.035,47.498000000000005,47.518,19.025,19.045,0.0,1,['I. kerület'],1,Other Municipal,0,0,1,1.0,Low,26,40.6,Small
+Burger King,47.464,19.032,47.454,47.474,19.022,19.042,0.0,1,['XI. kerület'],2,Other Municipal,0,0,0,1.0,Low,18,48.6,Small
+Bálna,47.483,19.062,47.473,47.492999999999995,19.052,19.072000000000003,0.0,1,['IX. kerület'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+Campona,47.406,19.016,47.396,47.416,19.005999999999997,19.026,0.0,1,['XXII. kerület'],4,Other Municipal,0,0,0,1.0,Low,999,,Small
+Citadella Vagyonkezelő Nonprofit Kft.,47.486,19.046,47.476,47.495999999999995,19.035999999999998,19.056,0.0,1,['XI. kerület'],1,Other Municipal,0,0,1,1.0,Low,999,,Small
+Cordia,47.485,19.077,47.475,47.495,19.067,19.087000000000003,0.0,1,['VIII. kerület'],2,Other Municipal,0,0,0,1.0,Low,999,,Small
+Corvin Plaza,47.486,19.074,47.476,47.495999999999995,19.064,19.084000000000003,0.0,1,['VIII. kerület'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+Csillag Center,47.581,19.05,47.571000000000005,47.591,19.04,19.060000000000002,0.0,1,['III. kerület'],3,Other Municipal,0,0,0,1.0,Low,999,,Small
+Cédrus Vásárcsarnok és Piac,47.501,19.137,47.491,47.510999999999996,19.127,19.147000000000002,0.0,1,['X. kerület'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+D-Infrastruktúra Távközlési Kft.,47.508,19.092,47.454,47.568999999999996,18.9647,19.1963,221.8535,10,"['XIV. kerület', 'IV. kerület', 'VI. kerület', 'IX. kerület', 'XIII. kerület', 'X. kerület', 'XVI. kerület', 'XVIII. kerület', 'II. kerület', 'XI. kerület']",24,Other Municipal,0,0,1,1.0,Low,60,27.2,Large
+Duna Plaza,47.551,19.072,47.541000000000004,47.561,19.061999999999998,19.082,0.0,1,['XIII. kerület'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+E.ON,47.501,19.084,47.382999999999996,47.623000000000005,18.9178,19.2802,730.84,22,"['VI. kerület', 'XIV. kerület', 'XIX. kerület', 'I. kerület', 'XX. kerület', 'XVIII. kerület', 'III. kerület', 'II. kerület', 'VIII. kerület', 'XXI. kerület', 'Unknown', 'XI. kerület', 'IX. kerület', 'XIII. kerület', 'X. kerület', 'XVII. kerület', 'VII. kerület', 'V. kerület', 'XVI. kerület', 'XV. kerület', 'XII. kerület', 'IV. kerület']",219,Other Municipal,0,0,0,1.0,High,150,5.5,Large
+ELTE Eötvös Loránd Tudományegyetem,47.496,19.096,47.465,47.527,19.051,19.142000000000003,36.0822,2,"['XIV. kerület', 'XI. kerület']",2,Other Municipal,0,0,0,1.0,Low,81,20.8,Large
+ERSTE BANK Hungary Zrt.,47.537,19.059,47.527,47.547,19.049,19.069000000000003,0.0,1,['XIII. kerület'],1,Other Municipal,0,0,1,1.0,Low,999,,Small
+ESMA Reklám Zrt.,47.479,19.09,47.469,47.489,19.08,19.1,0.0,1,['VIII. kerület'],1,Other Municipal,0,0,1,1.0,Low,999,,Small
+EgyÃĐb illetÃĐkes,47.465,19.018,47.455000000000005,47.475,19.008,19.028000000000002,0.0,1,['Unknown'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+Egyéb illetékes,47.505,19.078,47.3554,47.626599999999996,18.933400000000002,19.2886,809.4416,24,"['III. kerület', 'I. kerület', 'VI. kerület', 'XI. kerület', 'XV. kerület', 'XIII. kerület', 'X. kerület', 'XIV. kerület', 'XVIII. kerület', 'VIII. kerület', 'IV. kerület', 'V. kerület', 'XXII. kerület', 'IX. kerület', 'II. kerület', 'XVII. kerület', 'XIX. kerület', 'XII. kerület', 'Unknown', 'VII. kerület', 'XX. kerület', 'XXI. kerület', 'XVI. kerület', 'XXIII. kerület']",272,Other Municipal,0,0,0,1.0,High,124,14.1,Large
+EgyĂŠb illetĂŠkes,47.471,19.058,47.461,47.480999999999995,19.048,19.068,0.0,1,['Unknown'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+Erkel Színház,47.497,19.077,47.487,47.507,19.067,19.087000000000003,0.0,1,['VIII. kerület'],1,Other Municipal,0,0,0,1.0,Low,31,40.0,Small
+Europeum Bevásárlóközpont,47.496,19.071,47.486000000000004,47.506,19.061,19.081000000000003,0.0,1,['VIII. kerület'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+FCSM FÅvÃĄrosi CsatornÃĄzÃĄsi MÅąvek,47.594,19.067,47.584,47.604,19.057,19.077,0.0,1,['Unknown'],4,Other Municipal,0,0,0,1.0,Low,20,46.7,Small
+FCSM Fővárosi Csatornázási Művek,47.496,19.085,47.3684,47.6276,18.9314,19.3106,825.8976,24,"['IX. kerület', 'XIX. kerület', 'XVI. kerület', 'XIV. kerület', 'XI. kerület', 'XII. kerület', 'VII. kerület', 'X. kerület', 'I. kerület', 'IV. kerület', 'II. kerület', 'XX. kerület', 'XXIII. kerület', 'XIII. kerület', 'VI. kerület', 'XXII. kerület', 'XXI. kerület', 'VIII. kerület', 'XVII. kerület', 'Unknown', 'III. kerület', 'V. kerület', 'XV. kerület', 'XVIII. kerület']",357,Other Municipal,0,1,0,1.0,High,40,35.4,Large
+Fidesz - Magyar Polgári Szövetség,47.547,19.069,47.4079,47.613099999999996,19.041999999999998,19.135,151.04430000000002,4,"['XX. kerület', 'XXI. kerület', 'XIII. kerület', 'III. kerület']",8,Other Municipal,0,0,0,1.0,Low,71,25.3,Large
+FÖRI Fővárosi Önkormányzati Rendészet,47.493,19.074,47.407799999999995,47.5422,18.9833,19.195700000000002,239.87039999999996,12,"['VI. kerület', 'XIV. kerület', 'VII. kerület', 'VIII. kerület', 'X. kerület', 'II. kerület', 'Unknown', 'IX. kerület', 'V. kerület', 'XIII. kerület', 'XXII. kerület', 'XI. kerület']",66,Law Enforcement,0,1,0,1.0,Medium,97,18.5,Large
+Fővárosi Katasztrófavédelmi Igazgatóság,47.537,19.063,47.5,47.568999999999996,18.9358,19.214199999999998,137.55280000000002,3,"['XVI. kerület', 'III. kerület', 'II. kerület']",3,Other Municipal,0,1,0,1.0,Low,64,26.7,Large
+Fővárosi Vízművek,47.493,19.079,47.3611,47.6239,18.9176,19.330399999999997,911.5656,24,"['XIX. kerület', 'Unknown', 'XIV. kerület', 'XI. kerület', 'XII. kerület', 'XV. kerület', 'II. kerület', 'VI. kerület', 'XX. kerület', 'IX. kerület', 'X. kerület', 'XVIII. kerület', 'IV. kerület', 'XVI. kerület', 'XIII. kerület', 'XXI. kerület', 'V. kerület', 'VII. kerület', 'I. kerület', 'III. kerület', 'VIII. kerület', 'XVII. kerület', 'XXIII. kerület', 'XXII. kerület']",311,Utilities,0,1,0,1.0,High,26,40.6,Large
+Fővárosi Állat- és Növénykert,47.517,19.075,47.507000000000005,47.527,19.064999999999998,19.085,0.0,1,['XIV. kerület'],1,Parks & Environment,0,1,0,1.0,Low,31,40.0,Small
+GOBUDA Mall,47.546,19.029,47.536,47.556,19.019,19.039,0.0,1,['III. kerület'],2,Other Municipal,0,0,0,1.0,Low,88,20.0,Small
+HWR-Telecom,47.528,19.133,47.518,47.538,19.122999999999998,19.143,0.0,1,['XIV. kerület'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+Hermina Residence,47.522,19.102,47.512,47.532,19.092,19.112000000000002,0.0,1,['XIV. kerület'],1,Other Municipal,0,0,0,1.0,Low,28,40.4,Small
+Hesse Trade Kft.,47.457,19.082,47.413000000000004,47.509,19.037,19.141000000000002,77.2464,3,"['V. kerület', 'XIX. kerület', 'Csepel']",3,Other Municipal,0,0,1,1.0,Low,126,13.3,Large
+I. kerület Budavár Önkormányzata,47.5,19.035,47.476,47.518,19.000600000000002,19.281399999999998,62.2908,3,"['I. kerület', 'II. kerület', 'XVII. kerület']",213,Local Government,1,0,0,1.0,High,135,10.4,Large
+I. kerület Budavári Rendészet,47.498,19.035,47.479,47.518,19.014,19.055000000000003,4.8279,1,['I. kerület'],32,Law Enforcement,1,0,0,1.0,Low,98,18.0,Medium
+II. Kerületi Rendőrkapitányság,47.51,19.031,47.498000000000005,47.521,19.017,19.047,0.363,1,['II. kerület'],3,Law Enforcement,1,0,0,1.0,Low,999,,Small
+II. kerÃžlet KÃķzterÃžlet-felÃžgyeleti Csoport,47.564,18.956,47.554,47.574,18.945999999999998,18.966,0.0,1,['Unknown'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+II. kerÃžlet ÃnkormÃĄnyzata,47.525,18.999,47.512,47.541,18.968,19.035,5.1183,1,['Unknown'],4,Other Municipal,0,0,0,1.0,Low,999,,Medium
+II. kerület Közterület-felügyeleti Csoport,47.526,19.0,47.496,47.577999999999996,18.9267,19.0503,77.27059999999999,2,"['II. kerület', 'I. kerület']",123,Local Government,1,0,0,1.0,Medium,100,17.7,Large
+II. kerület Önkormányzata,47.525,19.003,47.4179,47.5871,18.907799999999998,19.1622,361.69319999999993,3,"['II. kerület', 'I. kerület', 'XX. kerület']",634,Local Government,1,0,0,1.0,Very High,120,14.8,Large
+II. kerület Önkormányzata,47.529,19.003,47.519000000000005,47.539,18.993,19.013,0.0,1,['Unknown'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+III. Kerületi Rendőrkapitányság,47.563,19.045,47.532000000000004,47.613,19.026999999999997,19.068,15.5001,1,['III. kerület'],3,Law Enforcement,1,0,0,1.0,Low,999,,Large
+III. kerület Békásmegyeri Piac Kft.,47.598,19.057,47.588,47.608999999999995,19.046,19.068,0.0242,1,['III. kerület'],12,Local Government,1,0,1,1.0,Low,75,23.6,Small
+III. kerület OVZRT Óbudai Vagyonkezelő NZrt.,47.573,19.048,47.52,47.617999999999995,18.993,19.080000000000002,63.23460000000001,1,['III. kerület'],76,Local Government,1,0,1,1.0,Medium,128,12.4,Large
+III. kerület ÓBKF Óbuda-Békásmegyer Közterület-felügyelet,47.574,19.049,47.511,47.62,18.979999999999997,19.082,88.30579999999999,3,"['III. kerület', 'II. kerület', 'XIII. kerület']",1226,Local Government,1,0,0,1.0,Very High,133,10.8,Large
+III. kerület Óbuda-Békásmegyer Városfejlesztő NKft.,47.572,19.044,47.524,47.614,19.005,19.075000000000003,42.35000000000001,1,['III. kerület'],29,Local Government,1,0,1,1.0,Low,149,6.1,Large
+III. kerület Óbuda-Békásmegyer Önkormányzata,47.555,19.039,47.523,47.613,18.994999999999997,19.074,49.973,1,['III. kerület'],18,Local Government,1,0,0,1.0,Low,72,25.2,Large
+III. kerület Óbudai Parkolási Nonprofit Kft.,47.573,19.05,47.522,47.611999999999995,19.019,19.07,26.257,1,['III. kerület'],9,Roads & Traffic,1,0,1,1.0,Low,999,,Large
+III. kerĂźlet OVZRT Ăbudai VagyonkezelĹ NZrt.,47.53,19.04,47.52,47.54,19.029999999999998,19.05,0.0,1,['Unknown'],1,Other Municipal,0,0,1,1.0,Low,999,,Small
+III. kerĂźlet ĂBKF Ăbuda-BĂŠkĂĄsmegyer KĂśzterĂźlet-felĂźgyelet,47.559,19.053,47.549,47.568999999999996,19.043,19.063000000000002,0.0,1,['Unknown'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+IKEA,47.448,19.153,47.4,47.515,19.128999999999998,19.173000000000002,27.587999999999997,2,"['XIV. kerület', 'XXIII. kerület']",5,Other Municipal,0,0,0,1.0,Low,999,,Large
+IV. kerület Újpest Önkormányzata,47.568,19.096,47.535000000000004,47.619,19.061999999999998,19.130000000000003,37.1712,2,"['IV. kerület', 'XIII. kerület']",236,Local Government,1,0,0,1.0,High,103,17.0,Large
+IV. kerület Újpesti Önkormányzati Rendészet,47.566,19.095,47.536,47.608,19.069,19.127000000000002,23.909599999999998,2,"['IV. kerület', 'XIII. kerület']",77,Law Enforcement,1,0,0,1.0,Medium,87,20.1,Large
+IV. kerГјlet Гљjpest Г–nkormГЎnyzata,47.611,19.108,47.601,47.620999999999995,19.098,19.118000000000002,0.0,1,['Unknown'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+IX. kerÃžlet - FESZOFE Nonprofit Kft.,47.46,19.084,47.435,47.486,19.058999999999997,19.108,10.8779,1,['Unknown'],2,Other Municipal,0,0,1,1.0,Low,999,,Large
+IX. kerület - FESZOFE Nonprofit Kft.,47.475,19.081,47.434000000000005,47.498,19.049999999999997,19.129,31.411599999999996,1,['IX. kerület'],102,Local Government,1,0,1,1.0,Medium,70,25.8,Large
+IX. kerület - FEV IX Zrt. Ferencvárosi Parkolási Igazgatóság,47.485,19.073,47.475,47.495,19.063,19.083000000000002,0.0,1,['VIII. kerület'],1,Roads & Traffic,1,0,1,1.0,Low,3,79.9,Small
+IX. kerület Ferencváros Önkormányzata,47.477,19.078,47.434000000000005,47.498999999999995,19.048,19.130000000000003,33.759,1,['IX. kerület'],242,Local Government,1,0,0,1.0,High,143,8.0,Large
+IX. kerület Ferencvárosi Közterület-felügyelet,47.473,19.087,47.447,47.498,19.051,19.130000000000003,22.1309,1,['IX. kerület'],48,Local Government,1,0,0,1.0,Low,61,27.0,Large
+IX. kerĂĽlet FerencvĂˇros Ă–nkormĂˇnyzata,47.477,19.082,47.467,47.486999999999995,19.072,19.092000000000002,0.0,1,['Unknown'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+Infopark,47.471,19.058,47.46,47.482,19.046999999999997,19.069000000000003,0.0484,1,['XI. kerület'],2,Parks & Environment,0,0,0,1.0,Low,34,39.5,Small
+Invitech,47.5,19.063,47.4025,47.576499999999996,19.0109,19.1321,177.2045,12,"['I. kerület', 'XIV. kerület', 'IX. kerület', 'XIII. kerület', 'XII. kerület', 'II. kerület', 'III. kerület', 'X. kerület', 'VI. kerület', 'XI. kerület', 'XXI. kerület', 'V. kerület']",34,Other Municipal,0,0,0,1.0,Low,74,23.7,Large
+JCDecaux,47.501,19.091,47.3896,47.6224,18.962699999999998,19.2543,570.4182000000001,23,"['XI. kerület', 'XII. kerület', 'X. kerület', 'XIV. kerület', 'IX. kerület', 'III. kerület', 'VII. kerület', 'XIII. kerület', 'I. kerület', 'VIII. kerület', 'IV. kerület', 'XX. kerület', 'V. kerület', 'II. kerület', 'VI. kerület', 'Unknown', 'XXII. kerület', 'XVIII. kerület', 'XIX. kerület', 'XVI. kerület', 'XVII. kerület', 'XXI. kerület', 'XV. kerület']",185,Other Municipal,0,0,0,1.0,Medium,38,37.0,Large
+KDVVIZIG Közép-Duna-völgyi Vízügyi Igazgatóság,47.48,19.064,47.3932,47.5828,19.037,19.111,103.2372,4,"['XI. kerület', 'XXI. kerület', 'III. kerület', 'IV. kerület']",12,Utilities,0,0,0,1.0,Low,999,,Large
+KFC,47.55,19.043,47.54,47.561,19.032999999999998,19.053,0.0,1,['III. kerület'],2,Other Municipal,0,0,0,1.0,Low,88,20.0,Small
+Komposztfórum,47.518,19.038,47.508,47.528,19.028,19.048000000000002,0.0,1,['II. kerület'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+KÖKI Terminál,47.463,19.149,47.453,47.473,19.139,19.159000000000002,0.0,1,['XIX. kerület'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+Kínai-Magyar Vasúti Nonprofit Zrt.,47.455,19.086,47.445,47.464999999999996,19.075999999999997,19.096,0.0,1,['IX. kerület'],1,Roads & Traffic,0,0,1,1.0,Low,999,,Small
+Közlekedési Múzeum,47.466,19.022,47.456,47.476,19.011999999999997,19.032,0.0,1,['XI. kerület'],1,Roads & Traffic,0,0,0,1.0,Low,999,,Small
+Legenda Kft.,47.496,19.048,47.486000000000004,47.506,19.037999999999997,19.058,0.0,1,['V. kerület'],1,Other Municipal,0,0,1,1.0,Low,999,,Small
+Lidl,47.508,19.108,47.431900000000006,47.577099999999994,18.9938,19.2482,310.38919999999996,8,"['III. kerület', 'IX. kerület', 'XIV. kerület', 'XI. kerület', 'VI. kerület', 'XVII. kerület', 'IV. kerület', 'X. kerület']",25,Other Municipal,0,0,0,1.0,Low,154,1.6,Large
+Lime,47.494,19.062,47.4241,47.6029,18.953100000000003,19.1439,286.6611,12,"['VII. kerület', 'XIII. kerület', 'III. kerület', 'XX. kerület', 'XI. kerület', 'VI. kerület', 'XV. kerület', 'II. kerület', 'IX. kerület', 'VIII. kerület', 'XII. kerület', 'V. kerület']",32,Other Municipal,0,0,0,1.0,Low,16,52.2,Large
+Lurdy ház,47.472,19.085,47.461,47.482,19.073999999999998,19.096,0.0242,1,['IX. kerület'],2,Other Municipal,0,0,0,1.0,Low,78,21.3,Small
+MAHART PassNave Személyhajózási Zrt.,47.493,19.051,47.47,47.504999999999995,19.037999999999997,19.076,3.2669999999999995,2,"['V. kerület', 'IX. kerület']",6,Other Municipal,0,0,1,1.0,Low,999,,Medium
+MAHIR Cityposter,47.444,19.038,47.434000000000005,47.454,19.026999999999997,19.048000000000002,0.0,1,['XI. kerület'],2,Other Municipal,0,0,0,1.0,Low,5,73.9,Small
+MKKP Magyar Kétfarkú Kutya Párt,47.513,19.098,47.452000000000005,47.571,19.066,19.158,86.2488,3,"['XIV. kerület', 'IV. kerület', 'XIX. kerület']",4,Other Municipal,0,0,0,1.0,Low,88,20.0,Large
+MNV Magyar Nemzeti Vagyonkezelő Zrt.,47.491,19.108,47.453,47.541999999999994,19.0346,19.243399999999998,145.27259999999998,6,"['XI. kerület', 'IX. kerület', 'V. kerület', 'XVI. kerület', 'VIII. kerület', 'XVII. kerület']",8,Other Municipal,0,0,1,1.0,Low,117,15.3,Large
+MOHU Budapest Zrt.,47.564,18.951,47.554,47.574,18.941,18.961000000000002,0.0,1,['II. kerület'],1,Other Municipal,0,1,1,1.0,Low,4,76.0,Small
+MOHU MOL Hulladékgazdálkodási Zrt.,47.504,19.037,47.465,47.574,18.9376,19.0984,144.30460000000002,5,"['V. kerület', 'XII. kerület', 'VIII. kerület', 'IX. kerület', 'II. kerület']",6,Utilities,0,0,1,1.0,Low,17,50.3,Large
+MOL Magyar Olaj- és Gázipari Nyrt.,47.525,19.087,47.459,47.565999999999995,19.04,19.145000000000003,89.4795,3,"['XV. kerület', 'XIII. kerület', 'XI. kerület']",3,Other Municipal,0,0,0,1.0,Low,999,,Large
+MOM Park,47.491,19.022,47.481,47.501,19.011999999999997,19.032,0.0,1,['XII. kerület'],1,Parks & Environment,0,0,0,1.0,Low,999,,Small
+MVM Főgáz Földgázhálózati Kft.,47.507,19.076,47.384,47.623999999999995,18.985999999999997,19.25,532.4000000000001,18,"['XIV. kerület', 'IX. kerület', 'XII. kerület', 'III. kerület', 'XIII. kerület', 'VIII. kerület', 'IV. kerület', 'VI. kerület', 'X. kerület', 'I. kerület', 'XI. kerület', 'XXI. kerület', 'XVI. kerület', 'II. kerület', 'VII. kerület', 'XV. kerület', 'XVII. kerület', 'XX. kerület']",71,Other Municipal,0,0,1,1.0,Medium,51,29.8,Large
+MVM Mobiliti,47.522,19.028,47.504000000000005,47.54,18.999,19.057000000000002,7.356800000000001,2,"['XIII. kerület', 'II. kerület']",2,Other Municipal,0,0,0,1.0,Low,999,,Medium
+MVM NET,47.481,19.054,47.47,47.492999999999995,19.035,19.080000000000002,0.9075000000000001,2,"['IX. kerület', 'XI. kerület']",3,Other Municipal,0,0,0,1.0,Low,58,28.0,Small
+MVM Next Energiakereskedelmi Zrt.,47.494,19.1,47.4215,47.5595,19.029999999999998,19.144000000000002,130.80100000000002,7,"['III. kerület', 'XI. kerület', 'XX. kerület', 'VII. kerület', 'X. kerület', 'IX. kerület', 'XIV. kerület']",12,Other Municipal,0,0,1,1.0,Low,152,3.8,Large
+Magyar Közút,47.558,19.062,47.393299999999996,47.6297,18.945800000000002,19.1162,338.48539999999997,2,"['IV. kerület', 'XXII. kerület']",4,Roads & Traffic,0,0,0,1.0,Low,999,,Large
+Magyar KĂśzĂşt,47.605,19.097,47.595,47.614999999999995,19.087,19.107000000000003,0.0,1,['Unknown'],4,Other Municipal,0,0,0,1.0,Low,10,62.9,Small
+Magyar Mezőgazdasági Múzeum és Könyvtár,47.515,19.084,47.505,47.525,19.073999999999998,19.094,0.0,1,['XIV. kerület'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+Magyar Nemzeti Múzeum,47.492,19.062,47.482,47.501999999999995,19.052,19.072000000000003,0.0,1,['VIII. kerület'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+Magyar Posta,47.491,19.088,47.3678,47.5862,18.983900000000002,19.225099999999998,442.64220000000006,11,"['XI. kerület', 'XIV. kerület', 'XVIII. kerület', 'IX. kerület', 'VIII. kerület', 'XXIII. kerület', 'II. kerület', 'XIII. kerület', 'XVI. kerület', 'VI. kerület', 'IV. kerület']",27,Other Municipal,0,0,0,1.0,Low,93,19.3,Large
+Magyar Telekom,47.492,19.08,47.3572,47.6188,18.904400000000003,19.331599999999998,939.0568,24,"['VII. kerület', 'VIII. kerület', 'XXII. kerület', 'XXIII. kerület', 'VI. kerület', 'XI. kerület', 'XIV. kerület', 'XVIII. kerület', 'XV. kerület', 'XX. kerület', 'I. kerület', 'IX. kerület', 'XII. kerület', 'IV. kerület', 'X. kerület', 'XVI. kerület', 'II. kerület', 'XXI. kerület', 'XVII. kerület', 'XIII. kerület', 'XIX. kerület', 'III. kerület', 'V. kerület', 'Unknown']",980,Other Municipal,0,0,0,1.0,Very High,51,29.8,Large
+Magyar Testnevelési és Sporttudományi Egyetem,47.493,19.024,47.483000000000004,47.503,19.014,19.034000000000002,0.0,1,['XII. kerület'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+Mammut Bevásárló- és Szórakoztató Központ,47.509,19.027,47.499,47.519,19.016,19.037000000000003,0.0,1,['II. kerület'],2,Other Municipal,0,0,0,1.0,Low,999,,Small
+Margitszigeti Atlétikai Centrum,47.518,19.042,47.508,47.528,19.032,19.052000000000003,0.0,1,['XIII. kerület'],2,Other Municipal,0,0,0,1.0,Low,999,,Small
+Margitszigeti Szabadtéri Színház,47.531,19.05,47.521,47.541,19.04,19.060000000000002,0.0,1,['XIII. kerület'],5,Other Municipal,0,0,0,1.0,Low,999,,Small
+McDonald's,47.501,19.12,47.4279,47.561099999999996,19.092,19.149,49.6947,3,"['XX. kerület', 'XV. kerület', 'XIV. kerület']",3,Other Municipal,0,0,0,1.0,Low,999,,Large
+Mediterrán Lakópark,47.431,19.094,47.421,47.440999999999995,19.084,19.104000000000003,0.0,1,['XX. kerület'],2,Parks & Environment,0,0,0,1.0,Low,999,,Small
+Metropol,47.511,19.101,47.501000000000005,47.521,19.090999999999998,19.111,0.0,1,['XIV. kerület'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+Mi Hazánk Mozgalom,47.445,19.119,47.435,47.455,19.108999999999998,19.129,0.0,1,['XX. kerület'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+Millenáris Park,47.511,19.026,47.5,47.521,19.014,19.039,0.060500000000000005,1,['II. kerület'],14,Parks & Environment,0,0,0,1.0,Low,55,28.8,Small
+Motorosbolt365.hu üzlet - PRO MOTO SHOP Kft.,47.526,19.036,47.516000000000005,47.536,19.026,19.046000000000003,0.0,1,['II. kerület'],1,Other Municipal,0,0,1,1.0,Low,25,41.0,Small
+MÁV Zrt.,47.494,19.09,47.3719,47.6011,18.922200000000004,19.2798,688.7077999999999,19,"['XIII. kerület', 'XI. kerület', 'XVIII. kerület', 'XXII. kerület', 'XIV. kerület', 'X. kerület', 'XXIII. kerület', 'XV. kerület', 'XII. kerület', 'IX. kerület', 'VI. kerület', 'IV. kerület', 'XVI. kerület', 'III. kerület', 'I. kerület', 'XX. kerület', 'VIII. kerület', 'XVII. kerület', 'XIX. kerület']",261,Other Municipal,0,0,1,1.0,High,146,7.3,Large
+MÁV-HÉV Zrt. (BKK),47.519,19.08,47.357099999999996,47.6199,19.001299999999997,19.2497,548.5293,10,"['III. kerület', 'IX. kerület', 'I. kerület', 'XVI. kerület', 'XI. kerület', 'II. kerület', 'X. kerület', 'XXIII. kerület', 'IV. kerület', 'XIV. kerület']",77,Other Municipal,0,0,1,1.0,Medium,129,12.0,Large
+MÜPA - Művészetek Palotája,47.47,19.071,47.459,47.48,19.06,19.083000000000002,0.0363,1,['IX. kerület'],4,Other Municipal,0,0,0,1.0,Low,999,,Small
+Mömax,47.552,19.044,47.541000000000004,47.562999999999995,19.032999999999998,19.055000000000003,0.0484,1,['III. kerület'],2,Other Municipal,0,0,0,1.0,Low,22,43.3,Small
+NAIH Nemzeti Adatvédelmi és Információszabadság Hatóság,47.483,19.15,47.473,47.492999999999995,19.139999999999997,19.16,0.0,1,['X. kerület'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+NKE Szolgáltató Kft.,47.481,19.086,47.471000000000004,47.492999999999995,19.073999999999998,19.1,0.1452,1,['VIII. kerület'],5,Other Municipal,0,0,1,1.0,Low,21,44.4,Small
+NKH Nemzeti Közlekedési Hatóság - Műszaki Vizsgálóállomás,47.452,19.156,47.442,47.461999999999996,19.145999999999997,19.166,0.0,1,['XIX. kerület'],1,Roads & Traffic,0,0,0,1.0,Low,999,,Small
+Nemzeti Sportközpontok,47.46,19.067,47.45,47.47,19.055999999999997,19.077,0.0,1,['XXI. kerület'],2,Other Municipal,0,0,0,1.0,Low,999,,Small
+Nemzeti Sportügynökség Nonprofit Zrt.,47.503,19.103,47.493,47.513,19.093,19.113000000000003,0.0,1,['XIV. kerület'],1,Other Municipal,0,0,1,1.0,Low,31,40.0,Small
+Nemzeti Színház,47.472,19.07,47.462,47.482,19.06,19.080000000000002,0.0,1,['IX. kerület'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+Normafa Park FenntartÃģ ÃĐs ÃzemeltetÅ,47.515,18.965,47.504000000000005,47.525999999999996,18.95,18.98,0.24200000000000002,1,['Unknown'],2,Parks & Environment,0,0,0,1.0,Low,12,59.5,Small
+Normafa Park Fenntartó és Üzemeltető,47.508,18.965,47.49,47.534,18.947999999999997,18.979000000000003,3.1943999999999995,1,['XII. kerület'],7,Parks & Environment,0,0,0,1.0,Low,28,40.4,Medium
+NÖRI Nemzeti Örökség Intézete,47.494,19.086,47.484,47.504,19.075999999999997,19.096,0.0,1,['VIII. kerület'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+OBI Barkácsáruház,47.501,19.083,47.457,47.577,19.066,19.108,26.62,2,"['IX. kerület', 'IV. kerület']",3,Other Municipal,0,0,0,1.0,Low,999,,Large
+OIF Országos Idegenrendészeti Főigazgatóság,47.459,19.053,47.449000000000005,47.469,19.043,19.063000000000002,0.0,1,['XI. kerület'],1,Law Enforcement,0,0,0,1.0,Low,999,,Small
+OMV Hungária Kft.,47.515,19.146,47.479,47.559999999999995,19.128,19.16,8.8572,2,"['X. kerület', 'XV. kerület']",3,Other Municipal,0,0,1,1.0,Low,59,27.4,Medium
+OMW,47.477,19.138,47.4038,47.5502,19.0563,19.2207,202.2394,2,"['XIII. kerület', 'XVIII. kerület']",2,Other Municipal,0,0,0,1.0,Low,999,,Large
+OTP Bank,47.447,19.103,47.436,47.457,19.0227,19.1823,1.6093000000000002,2,"['XVIII. kerület', 'XI. kerület']",2,Other Municipal,0,0,0,1.0,Low,42,34.3,Medium
+One MagyarorszÃĄg Zrt.,47.482,19.163,47.472,47.492,19.153,19.173000000000002,0.0,1,['Unknown'],1,Other Municipal,0,0,1,1.0,Low,999,,Small
+One Magyarország Zrt.,47.502,19.069,47.3891,47.603899999999996,18.9543,19.2867,599.9543,17,"['XI. kerület', 'I. kerület', 'IV. kerület', 'XII. kerület', 'XX. kerület', 'XIV. kerület', 'II. kerület', 'VIII. kerület', 'XIII. kerület', 'XXI. kerület', 'VII. kerület', 'XVI. kerület', 'IX. kerület', 'X. kerület', 'VI. kerület', 'XVII. kerület', 'III. kerület']",162,Other Municipal,0,0,1,1.0,Medium,115,15.6,Large
+Országgyűlés Hivatala,47.507,19.048,47.496,47.518,19.037,19.060000000000002,0.0726,1,['V. kerület'],5,Other Municipal,0,0,0,1.0,Low,11,60.2,Small
+Országos Onkológiai Intézet,47.502,19.019,47.491,47.513,19.008999999999997,19.029,0.0,1,['XII. kerület'],2,Other Municipal,0,0,0,1.0,Low,88,20.0,Small
+PVKH - Pest Vármegyei Kormányhivatal,47.459,19.121,47.3832,47.5248,18.957900000000002,19.2711,372.6558,6,"['XI. kerület', 'XIV. kerület', 'XXIII. kerület', 'XXI. kerület', 'XVII. kerület', 'X. kerület']",9,Other Municipal,0,0,0,1.0,Low,999,,Large
+"PVKH Körny.véd., Term.véd., Hull.gazd. és Bányafelügy. Főosztály",47.482,19.11,47.378699999999995,47.56229999999999,18.9723,19.232699999999998,401.7321,7,"['XX. kerület', 'XIV. kerület', 'XVI. kerület', 'XI. kerület', 'XVIII. kerület', 'XXI. kerület', 'II. kerület']",10,Other Municipal,0,0,0,1.0,Low,999,,Large
+Packeta,47.453,19.157,47.443000000000005,47.463,19.147,19.167,0.0,1,['XIX. kerület'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+Panoráma Sportközpont,47.524,19.035,47.514,47.534,19.025,19.045,0.0,1,['II. kerület'],1,Other Municipal,0,0,0,1.0,Low,2,80.0,Small
+Park Plazza,47.504,19.152,47.494,47.513999999999996,19.142,19.162000000000003,0.0,1,['X. kerület'],3,Parks & Environment,0,0,0,1.0,Low,999,,Small
+Parkol-6 Terézvárosi Parkolás,47.517,19.071,47.507000000000005,47.527,19.061,19.081000000000003,0.0,1,['VI. kerület'],1,Roads & Traffic,0,0,0,1.0,Low,8,67.0,Small
+Pasaréti Honvéd Lovarda,47.52,19.0,47.510000000000005,47.53,18.99,19.01,0.0,1,['II. kerület'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+Penny Market,47.503,19.112,47.4223,47.6107,19.043599999999998,19.168400000000002,197.56879999999998,6,"['IV. kerület', 'III. kerület', 'X. kerület', 'XIX. kerület', 'XIII. kerület', 'XX. kerület']",16,Other Municipal,0,0,0,1.0,Low,127,12.9,Large
+Peugeot Pásztor,47.485,19.225,47.475,47.495,19.215,19.235000000000003,0.0,1,['XVII. kerület'],2,Other Municipal,0,0,0,1.0,Low,999,,Small
+Pilisi Parkerdő,47.514,19.026,47.413199999999996,47.5908,18.8979,19.271099999999997,556.9388,9,"['IX. kerület', 'II. kerület', 'XI. kerület', 'XVII. kerület', 'XVI. kerület', 'XV. kerület', 'III. kerület', 'XIX. kerület', 'X. kerület']",50,Parks & Environment,0,0,0,1.0,Medium,19,47.4,Large
+Podmaniczky Mozgalom,47.513,19.094,47.503,47.522999999999996,19.084,19.104000000000003,0.0,1,['XIV. kerület'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+Praktiker,47.542,19.03,47.532000000000004,47.552,19.02,19.040000000000003,0.0,1,['III. kerület'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+Property Market,47.463,19.06,47.449000000000005,47.478,19.046999999999997,19.074,0.7623,1,['XI. kerület'],18,Other Municipal,0,0,0,1.0,Low,999,,Small
+Príma,47.537,19.085,47.4538,47.612199999999994,19.0033,19.1677,218.81640000000004,3,"['III. kerület', 'X. kerület', 'XI. kerület']",6,Other Municipal,0,0,0,1.0,Low,67,26.1,Large
+Publimont,47.472,19.095,47.41,47.542,18.9924,19.2516,287.496,5,"['XII. kerület', 'XXII. kerület', 'XVIII. kerület', 'XVI. kerület', 'III. kerület']",11,Other Municipal,0,0,0,1.0,Low,65,26.5,Large
+Punctum Kft.,47.523,19.067,47.483000000000004,47.556999999999995,19.037,19.104000000000003,30.709799999999998,3,"['V. kerület', 'XIII. kerület', 'VIII. kerület']",11,Other Municipal,0,0,1,1.0,Low,73,24.4,Large
+PÃģlus Center,47.551,19.139,47.541000000000004,47.561,19.128999999999998,19.149,0.0,1,['Unknown'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+Páli Szent Vince Plébánia és Templom,47.476,19.078,47.466,47.486,19.067999999999998,19.088,0.0,1,['IX. kerület'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+Pólus Center,47.551,19.139,47.541000000000004,47.561,19.128999999999998,19.149,0.0,1,['XV. kerület'],1,Other Municipal,0,0,0,1.0,Low,9,66.1,Small
+Rév8 Zrt.,47.489,19.085,47.479,47.498999999999995,19.069999999999997,19.1,0.0,1,['VIII. kerület'],2,Other Municipal,0,0,1,1.0,Low,999,,Small
+SOTE Semmelweis Orvostudományi Egyetem,47.483,19.08,47.473,47.492999999999995,19.069999999999997,19.09,0.0,1,['VIII. kerület'],3,Other Municipal,0,0,0,1.0,Low,1,83.3,Small
+SPAR Magyarország,47.505,19.118,47.3978,47.6162,18.993199999999998,19.2668,502.10159999999996,8,"['X. kerület', 'III. kerület', 'XVIII. kerület', 'XIV. kerület', 'XIII. kerület', 'XX. kerület', 'XVII. kerület', 'XVI. kerület']",24,Other Municipal,0,0,0,1.0,Low,106,16.8,Large
+Segítő Angyalok Állatmentés Kft.,47.538,19.057,47.449,47.617000000000004,19.017999999999997,19.137,167.70600000000002,3,"['III. kerület', 'II. kerület', 'XIX. kerület']",6,Other Municipal,0,0,1,1.0,Low,62,26.9,Large
+Shell Hungary Zrt.,47.486,19.098,47.423,47.527,18.981299999999997,19.1937,179.9028,5,"['XIV. kerület', 'II. kerület', 'XIX. kerület', 'XVIII. kerület', 'X. kerület']",7,Other Municipal,0,0,1,1.0,Low,139,9.7,Large
+Stop Shop,47.553,19.067,47.534,47.571999999999996,19.019,19.116000000000003,16.770599999999998,2,"['III. kerület', 'IV. kerület']",2,Other Municipal,0,0,0,1.0,Low,999,,Large
+Szabadságszínpad,47.503,19.05,47.493,47.513,19.04,19.060000000000002,0.0,1,['V. kerület'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+Sziget Kulturális Menedzser Iroda Zrt.,47.56,19.061,47.550000000000004,47.57,19.051,19.071,0.0,1,['III. kerület'],1,Other Municipal,0,0,1,1.0,Low,999,,Small
+TIER-Dott,47.493,19.053,47.443,47.623,18.9947,19.1423,223.24499999999998,8,"['VII. kerület', 'XII. kerület', 'XIII. kerület', 'I. kerület', 'XI. kerület', 'XIX. kerület', 'IX. kerület', 'III. kerület']",16,Other Municipal,0,0,0,1.0,Low,57,28.2,Large
+Tesco,47.482,19.126,47.3942,47.6198,19.001399999999997,19.248600000000003,468.6088,7,"['IX. kerület', 'XXI. kerület', 'III. kerület', 'XIV. kerület', 'XX. kerület', 'XVII. kerület', 'XIII. kerület']",33,Other Municipal,0,0,0,1.0,Low,145,7.4,Large
+TraffiCOM,47.5,19.066,47.465,47.534,19.0159,19.1371,59.88290000000001,9,"['XIII. kerület', 'XIV. kerület', 'VI. kerület', 'IX. kerület', 'V. kerület', 'I. kerület', 'II. kerület', 'XI. kerület', 'X. kerület']",12,Other Municipal,0,0,0,1.0,Low,50,30.3,Large
+V. kerület Belváros-Lipótváros Közterület-felügyelet,47.497,19.054,47.479,47.521,19.037999999999997,19.071,3.4605999999999995,1,['V. kerület'],11,Local Government,1,0,0,1.0,Low,76,22.1,Medium
+V. kerület Belváros-Lipótváros Városüzemeltető,47.5,19.052,47.477000000000004,47.522999999999996,19.035999999999998,19.071,4.719,3,"['V. kerület', 'IV. kerület', 'XIII. kerület']",118,Local Government,1,0,0,1.0,Medium,68,26.0,Medium
+VI. kerület Rendészeti Osztály,47.508,19.064,47.494,47.524,19.046,19.082,1.9360000000000002,1,['VI. kerület'],12,Law Enforcement,1,0,0,1.0,Low,39,36.3,Medium
+VI. kerület Terézváros Önkormányzata,47.506,19.063,47.488,47.528,19.029999999999998,19.085,8.47,3,"['VI. kerület', 'I. kerület', 'XX. kerület']",76,Local Government,1,0,0,1.0,Medium,135,10.4,Medium
+VII. kerület - EVIN Erzsébetvárosi Ingatlangazdákodási Nonprofit Zrt.,47.501,19.068,47.486000000000004,47.516999999999996,19.052,19.089000000000002,2.2626999999999997,1,['VII. kerület'],4,Local Government,1,0,1,1.0,Low,999,,Medium
+VII. kerület Erzsébetváros Rendészeti Igazgatósága,47.501,19.07,47.486000000000004,47.518,19.046999999999997,19.095000000000002,4.065600000000001,1,['VII. kerület'],34,Law Enforcement,1,0,0,1.0,Low,42,34.3,Medium
+VII. kerület Erzsébetváros Önkormányzata,47.501,19.068,47.486000000000004,47.519999999999996,19.046,19.099,5.5902,3,"['VII. kerület', 'XIV. kerület', 'VI. kerület']",124,Local Government,1,0,0,1.0,Medium,96,18.8,Medium
+VII. kerĂźlet ErzsĂŠbetvĂĄros ĂnkormĂĄnyzata,47.498,19.07,47.488,47.507999999999996,19.06,19.080000000000002,0.0,1,['Unknown'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+VIII. Kerületi Rendőrkapitányság,47.486,19.071,47.476,47.495999999999995,19.061,19.081000000000003,0.0,1,['VIII. kerület'],5,Law Enforcement,1,0,0,1.0,Low,999,,Small
+VIII. kerület JGK Józsefvárosi Gazdálkodási Központ,47.49,19.08,47.468,47.509,19.052,19.119000000000003,11.9427,1,['VIII. kerület'],195,Local Government,1,0,0,1.0,Medium,121,14.7,Large
+VIII. kerület Józsefvárosi Közterület-felügyelet,47.489,19.083,47.466,47.51,19.054,19.119000000000003,13.068,1,['VIII. kerület'],63,Local Government,1,0,0,1.0,Medium,56,28.3,Large
+VIII. kerület Józsefvárosi Önkormányzat,47.491,19.082,47.476,47.51,19.058999999999997,19.112000000000002,5.5902,1,['VIII. kerület'],12,Local Government,1,0,0,1.0,Low,151,4.4,Medium
+Volánbusz (MÁV-csoport),47.493,19.068,47.449600000000004,47.6104,19.012999999999998,19.117,136.19760000000002,7,"['XI. kerület', 'XIII. kerület', 'IX. kerület', 'III. kerület', 'XIV. kerület', 'X. kerület', 'II. kerület']",16,Other Municipal,0,0,0,1.0,Low,116,15.5,Large
+Volأ،nbusz (MأپV-csoport),47.468,19.017,47.458000000000006,47.478,19.006999999999998,19.027,0.0,1,['Unknown'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+Várkapitányság,47.498,19.039,47.484,47.51,19.026,19.052000000000003,0.4356,1,['I. kerület'],32,Other Municipal,0,0,0,1.0,Low,95,18.9,Small
+Városliget Zrt.,47.513,19.086,47.498000000000005,47.528999999999996,19.069,19.101000000000003,1.5971999999999997,2,"['XIV. kerület', 'Unknown']",87,Other Municipal,0,0,1,1.0,Medium,122,14.4,Medium
+Westend,47.512,19.058,47.502,47.522,19.048,19.068,0.0,1,['VI. kerület'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+X. kerÃžlet KÅbÃĄnya ÃnkormÃĄnyzata,47.49,19.131,47.480000000000004,47.5,19.121,19.141000000000002,0.0,1,['Unknown'],3,Other Municipal,0,0,0,1.0,Low,7,70.5,Small
+X. kerület Kőbánya Önkormányzata,47.48,19.147,47.452000000000005,47.513,19.098,19.212000000000003,46.6334,5,"['X. kerület', 'XIV. kerület', 'Unknown', 'XVI. kerület', 'XVII. kerület']",338,Local Government,1,0,0,1.0,High,79,21.2,Large
+X. kerület Kőbányai Közterület-felügyelet,47.481,19.145,47.454,47.513999999999996,19.099,19.194000000000003,36.300000000000004,2,"['X. kerület', 'XVI. kerület']",110,Local Government,1,0,0,1.0,Medium,84,20.6,Large
+XI. Kerületi Rendőrkapitányság,47.463,19.02,47.434000000000005,47.482,19.003,19.044,7.114800000000001,1,['XI. kerület'],3,Law Enforcement,1,0,0,1.0,Low,999,,Medium
+XI. kerÃžlet Ãjbuda ÃnkormÃĄnyzata,47.463,19.032,47.453,47.473,19.022,19.042,0.0,1,['Unknown'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+XI. kerület Újbuda Közterület-felügyelet,47.467,19.025,47.428000000000004,47.497,18.968999999999998,19.07,48.0249,2,"['XI. kerület', 'Unknown']",325,Local Government,1,0,0,1.0,High,118,15.0,Large
+XI. kerület Újbuda Parkolásüzemeltető Nonprofit Kft.,47.473,19.037,47.451,47.492999999999995,19.003999999999998,19.064,10.648,1,['XI. kerület'],11,Roads & Traffic,1,0,1,1.0,Low,36,38.8,Large
+XI. kerület Újbuda Önkormányzata,47.468,19.029,47.421,47.532,18.9608,19.1792,200.4002,4,"['XI. kerület', 'XXII. kerület', 'XIX. kerület', 'II. kerület']",584,Local Government,1,0,0,1.0,Very High,141,9.1,Large
+XI. kerรผlet รjbuda Parkolรกsรผzemeltetล Nonprofit Kft.,47.478,19.044,47.468,47.488,19.034,19.054000000000002,0.0,1,['Unknown'],4,Parks & Environment,0,0,1,1.0,Low,6,73.6,Small
+XII. Kerületi Rendőrkapitányság,47.5,19.002,47.482,47.513999999999996,18.967,19.034000000000002,6.824400000000001,1,['XII. kerület'],9,Law Enforcement,1,0,0,1.0,Low,138,10.1,Medium
+XII. kerÃžlet HegyvidÃĐk ÃnkormÃĄnyzata,47.501,19.006,47.489000000000004,47.513,18.991999999999997,19.019000000000002,0.3388,1,['Unknown'],2,Other Municipal,0,0,0,1.0,Low,999,,Small
+XII. kerület Hegyvidék Önkormányzata,47.498,19.003,47.468,47.534,18.942999999999998,19.040000000000003,42.858200000000004,4,"['XII. kerület', 'I. kerület', 'XI. kerület', 'II. kerület']",387,Local Government,1,0,0,1.0,High,130,11.4,Large
+XII. kerületi Hegyvidéki Rendészet,47.501,19.009,47.474000000000004,47.528999999999996,18.962999999999997,19.038,23.292500000000004,2,"['XII. kerület', 'I. kerület']",138,Law Enforcement,1,0,0,1.0,Medium,103,17.0,Large
+XIII. Kerületi Rendőrkapitányság,47.527,19.054,47.510000000000005,47.547999999999995,19.035,19.074,4.138199999999999,1,['XIII. kerület'],3,Law Enforcement,1,0,0,1.0,Low,62,26.9,Medium
+XIII. kerÃžlet ÃnkormÃĄnyzata,47.533,19.067,47.504000000000005,47.547999999999995,19.046,19.079,3.7752,1,['Unknown'],5,Other Municipal,0,0,0,1.0,Low,47,32.1,Medium
+XIII. kerület Közterület-felügyelet,47.53,19.067,47.502,47.564,19.037999999999997,19.107000000000003,24.901800000000005,2,"['XIII. kerület', 'IV. kerület']",103,Local Government,1,0,0,1.0,Medium,80,21.1,Large
+XIII. kerület Önkormányzata,47.531,19.069,47.4448,47.5792,19.0338,19.1922,178.8864,5,"['XIII. kerület', 'IV. kerület', 'XIV. kerület', 'Unknown', 'XVIII. kerület']",509,Local Government,1,0,0,1.0,Very High,114,15.7,Large
+XIV. Kerületi Rendőrkapitányság,47.521,19.117,47.501000000000005,47.54,19.090999999999998,19.154,9.885699999999998,1,['XIV. kerület'],4,Law Enforcement,1,0,0,1.0,Low,999,,Medium
+XIV. kerÃžlet ZuglÃģ ÃnkormÃĄnyzata,47.507,19.107,47.497,47.516999999999996,19.096999999999998,19.117,0.0,1,['Unknown'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+XIV. kerÃžlet ZuglÃģi VÃĄrosgazdÃĄlkodÃĄsi KÃķzszolgÃĄltatÃģ Zrt.,47.52,19.12,47.507000000000005,47.537,19.104999999999997,19.143,2.178,1,['Unknown'],6,Other Municipal,0,0,1,1.0,Low,54,29.2,Medium
+XIV. kerÃžlet ZuglÃģi ÃnkormÃĄnyzati RendÃĐszet,47.513,19.147,47.503,47.522999999999996,19.136999999999997,19.157,0.0,1,['Unknown'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+XIV. kerület Zugló Önkormányzata,47.515,19.121,47.49,47.546,19.070999999999998,19.161,30.492,1,['XIV. kerület'],71,Local Government,1,0,0,1.0,Medium,148,7.0,Large
+XIV. kerület Zuglói Közbiztonsági NKft.,47.504,19.135,47.494,47.513999999999996,19.125,19.145000000000003,0.0,1,['XIV. kerület'],1,Law Enforcement,1,0,1,1.0,Low,999,,Small
+XIV. kerület Zuglói Városgazdálkodási Közszolgáltató Zrt.,47.515,19.12,47.49,47.553,19.0582,19.2598,87.4104,5,"['XIV. kerület', 'X. kerület', 'XIII. kerület', 'XV. kerület', 'XVI. kerület']",814,Utilities,1,0,1,1.0,Very High,113,16.1,Large
+XIV. kerület Zuglói Önkormányzati Rendészet,47.517,19.117,47.49,47.547,19.076999999999998,19.164,29.9959,3,"['XIV. kerület', 'VIII. kerület', 'XIII. kerület']",274,Law Enforcement,1,0,0,1.0,High,102,17.6,Large
+XIV. kerĂĽlet ZuglĂłi VĂˇrosgazdĂˇlkodĂˇsi KĂ¶zszolgĂˇltatĂł Zrt.,47.517,19.1,47.507000000000005,47.527,19.09,19.110000000000003,0.0,1,['Unknown'],1,Other Municipal,0,0,1,1.0,Low,999,,Small
+XIX. kerület Kispest Önkormányzata,47.454,19.146,47.441,47.472,19.118,19.164,3.4605999999999995,1,['XIX. kerület'],5,Local Government,1,0,0,1.0,Low,140,9.5,Medium
+XIX. kerület Kispesti Rendészeti Központ,47.452,19.141,47.418,47.475,19.110999999999997,19.174000000000003,19.251099999999997,2,"['XIX. kerület', 'XX. kerület']",84,Law Enforcement,1,0,0,1.0,Medium,107,16.7,Large
+XIX. kerület Közpark NKft.,47.454,19.144,47.422000000000004,47.483,19.067,19.172,42.1685,2,"['XIX. kerület', 'XXI. kerület']",128,Parks & Environment,1,0,1,1.0,Medium,92,19.9,Large
+XV. KerÃžleti RendÅrkapitÃĄnysÃĄg,47.54,19.145,47.53,47.55,19.134999999999998,19.155,0.0,1,['Unknown'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+XV. Kerületi Rendőrkapitányság,47.558,19.121,47.532000000000004,47.573,19.105999999999998,19.145000000000003,4.8279,1,['XV. kerület'],4,Law Enforcement,1,0,0,1.0,Low,999,,Medium
+XV. kerület Palota Holding Zrt.,47.547,19.132,47.516000000000005,47.592,19.095,19.161,31.169600000000003,2,"['XV. kerület', 'XIV. kerület']",134,Local Government,1,0,1,1.0,Medium,48,30.7,Large
+XV. kerület Önkormányzati Rendészet,47.546,19.132,47.524,47.594,19.096999999999998,19.158,24.805000000000003,1,['XV. kerület'],129,Law Enforcement,1,0,0,1.0,Medium,111,16.5,Large
+XV. kerület Újpalota Önkormányzata,47.549,19.135,47.524,47.608999999999995,19.104999999999997,19.158,25.954500000000003,1,['XV. kerület'],25,Local Government,1,0,0,1.0,Low,132,11.2,Large
+XVI. Kerületi Rendőrkapitányság,47.504,19.184,47.494,47.513999999999996,19.174,19.194000000000003,0.0,1,['XVI. kerület'],2,Law Enforcement,1,0,0,1.0,Low,999,,Small
+XVI. kerület Közterület-felügyeleti Csoport,47.52,19.178,47.495000000000005,47.549,19.134999999999998,19.242,35.7918,3,"['XVI. kerület', 'XIV. kerület', 'V. kerület']",36,Local Government,1,0,0,1.0,Low,108,16.6,Large
+XVI. kerületi Önkormányzat,47.517,19.185,47.489000000000004,47.547999999999995,19.136999999999997,19.246000000000002,41.9991,1,['XVI. kerület'],168,Local Government,1,0,0,1.0,Medium,111,16.5,Large
+XVII. kerület Rákosmente Önkormányzata,47.48,19.256,47.440000000000005,47.510999999999996,19.209999999999997,19.319000000000003,54.921899999999994,1,['XVII. kerület'],197,Local Government,1,0,0,1.0,Medium,94,19.1,Large
+XVIII. kerület Közterület-felügyeleti Csoport,47.436,19.185,47.389,47.498999999999995,19.0475,19.2455,179.685,1,['XVIII. kerület'],45,Local Government,1,0,0,1.0,Low,142,8.4,Large
+XVIII. kerület Pestszentlőrinc-Pestszentimre Önkormányzata,47.439,19.18,47.394000000000005,47.464999999999996,19.157,19.232000000000003,33.9405,1,['XVIII. kerület'],16,Local Government,1,0,0,1.0,Low,99,17.9,Large
+XVIII. kerület Pestszentlőrinc-Pestszentimrei Fenntartható Fejlődés Főosztály,47.421,19.191,47.38,47.467,19.154999999999998,19.217000000000002,34.049400000000006,1,['XVIII. kerület'],9,Local Government,1,0,0,1.0,Low,44,34.2,Large
+XVIII. kerület Városgazda NZrt.,47.437,19.185,47.382000000000005,47.472,19.151,19.234,53.36100000000001,1,['XVIII. kerület'],100,Local Government,1,0,1,1.0,Medium,83,20.7,Large
+XVIII. kerรผlet Vรกrosgazda NZrt.,47.438,19.194,47.428000000000004,47.448,19.183999999999997,19.204,0.0,1,['Unknown'],4,Other Municipal,0,0,1,1.0,Low,14,56.7,Small
+XX. kerület Pesterzsébet Önkormányzata,47.437,19.11,47.411,47.461999999999996,19.078999999999997,19.169,26.257,4,"['XXIII. kerület', 'XX. kerület', 'XIX. kerület', 'Unknown']",329,Local Government,1,0,0,1.0,High,105,16.9,Large
+XX. kerület Rendvédelmi Osztály,47.436,19.11,47.412,47.461999999999996,19.084,19.143,14.157,2,"['XX. kerület', 'IX. kerület']",98,Local Government,1,0,0,1.0,Medium,77,21.9,Large
+XX. kerรผlet Rendvรฉdelmi Osztรกly,47.431,19.094,47.421,47.440999999999995,19.084,19.104000000000003,0.0,1,['Unknown'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+XX. és XXIII. Kerületi Rendőrkapitányság,47.435,19.126,47.413000000000004,47.455,19.104999999999997,19.142000000000003,4.525399999999999,2,"['XX. kerület', 'XXIII. kerület']",3,Law Enforcement,1,0,0,1.0,Low,999,,Medium
+XXI. kerület Csepel Városrendészeti Igazgatóság,47.423,19.074,47.387,47.457,19.041999999999998,19.116000000000003,32.67,1,['XXI. kerület'],60,Law Enforcement,1,0,0,1.0,Medium,119,14.9,Large
+XXI. kerület Csepel Önkormányzata,47.4,19.075,47.378,47.439,19.037999999999997,19.113000000000003,27.2855,1,['XXI. kerület'],9,Local Government,1,0,0,1.0,Low,108,16.6,Large
+XXI. kerület Csepeli Városfejlesztési NKft.,47.419,19.077,47.384,47.443,19.048,19.107000000000003,18.4041,1,['XXI. kerület'],4,Local Government,1,0,1,1.0,Low,45,33.9,Large
+XXI. kerület Csepeli Városgazda NZrt.,47.422,19.073,47.378,47.469,19.041999999999998,19.117,47.250499999999995,1,['XXI. kerület'],123,Local Government,1,0,1,1.0,Medium,108,16.6,Large
+XXII. kerÃžlet KÃķzterÃžlet-felÃžgyeleti Csoport,47.397,18.997,47.387,47.407,18.987,19.007,0.0,1,['Unknown'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+XXII. kerület Budafok-Tétény Önkormányzata,47.419,19.02,47.379000000000005,47.455999999999996,18.947999999999997,19.053,58.624500000000005,1,['XXII. kerület'],96,Local Government,1,0,0,1.0,Medium,133,10.8,Large
+XXII. kerület Közterület-felügyeleti Csoport,47.41,19.011,47.378,47.446999999999996,18.962999999999997,19.052000000000003,40.91010000000001,1,['XXII. kerület'],61,Local Government,1,0,0,1.0,Medium,68,26.0,Large
+XXIII. kerület Soroksár Rendészeti Osztály,47.409,19.121,47.386,47.431,19.099,19.149,9.075000000000001,2,"['XXIII. kerület', 'XX. kerület']",33,Law Enforcement,1,0,0,1.0,Low,53,29.6,Medium
+XXIII. kerület Soroksár Önkormányzata,47.408,19.122,47.368,47.436,19.084999999999997,19.184,45.8832,2,"['XXIII. kerület', 'XX. kerület']",38,Local Government,1,0,0,1.0,Low,100,17.7,Large
+dm Drogerie Markt,47.439,19.101,47.429,47.449,19.090999999999998,19.111,0.0,1,['XX. kerület'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
+Árkád Budapest,47.503,19.137,47.493,47.513,19.127,19.149,0.0,1,['X. kerület'],3,Other Municipal,0,1,0,1.0,Low,999,,Small
+Építésügyi és Közlekedési Minisztérium,47.473,19.069,47.454,47.501999999999995,19.054,19.081000000000003,2.3716000000000004,2,"['IX. kerület', 'VIII. kerület']",3,Roads & Traffic,0,0,0,1.0,Low,999,,Medium
+Észak-Budapesti Tankerületi Központ,47.555,19.055,47.528,47.608999999999995,19.034,19.111,42.0717,2,"['IV. kerület', 'III. kerület']",7,Local Government,1,1,0,1.0,Low,144,7.7,Large
+Újbuda Center,47.458,19.052,47.448,47.467999999999996,19.041999999999998,19.062,0.0,1,['XI. kerület'],1,Other Municipal,0,0,0,1.0,Low,999,,Small
