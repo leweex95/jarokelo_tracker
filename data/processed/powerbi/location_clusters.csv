@@ -1,101 +1,101 @@
 ﻿ClusterID,ClusterCenterLat,ClusterCenterLng,IssueCount,ResolutionRate,AvgResolutionTime,DominantCategory,PrimaryInstitution,DominantDistrict,ClusterSize,ClusterType
-0,47.511,19.037,702,0.432,61.822,Forgalomtechnika,Budapest Közút,II. kerület,702,Major Hotspot
-1,47.484,19.134,424,0.644,56.846,Forgalomtechnika,Budapest Közút,X. kerület,424,Major Hotspot
-2,47.569,19.053,196,0.378,69.338,Parkok és zöldterületek,III. kerület ÓBKF Óbuda-Békásmegyer Közterület-felügyelet,III. kerület,196,Major Hotspot
-3,47.464,19.051,238,0.458,64.685,Forgalomtechnika,Budapest Közút,XI. kerület,238,Major Hotspot
-4,47.528,19.105,360,0.483,88.092,Elhagyott jármű,XIV. kerület Zuglói Városgazdálkodási Közszolgáltató Zrt.,XIV. kerület,360,Major Hotspot
-5,47.463,19.238,82,0.561,90.022,Kátyú,XVII. kerület Rákosmente Önkormányzata,XVII. kerület,82,Major Hotspot
-6,47.434,19.128,279,0.609,116.429,Parkok és zöldterületek,XX. kerület Pesterzsébet Önkormányzata,XX. kerület,279,Major Hotspot
-7,47.468,19.016,669,0.525,67.744,Köztisztaság,XI. kerület Újbuda Önkormányzata,XI. kerület,669,Major Hotspot
-8,47.525,18.985,476,0.559,48.751,Köztisztaság,II. kerület Önkormányzata,II. kerület,476,Major Hotspot
-9,47.479,19.078,396,0.545,53.213,Forgalomtechnika,IX. kerület Ferencváros Önkormányzata,IX. kerület,396,Major Hotspot
-10,47.534,19.065,479,0.564,58.841,Parkok és zöldterületek,XIII. kerület Önkormányzata,XIII. kerület,479,Major Hotspot
-11,47.509,19.196,145,0.6,85.195,Közművek,XVI. kerületi Önkormányzat,XVI. kerület,145,Major Hotspot
-12,47.41,19.05,107,0.626,80.164,Elhagyott jármű,Budapest Közút,XXI. kerület,107,Major Hotspot
-13,47.435,19.074,259,0.533,79.0,Parkok és zöldterületek,Budapest Közút,XXI. kerület,259,Major Hotspot
-14,47.467,19.156,363,0.689,56.516,Közművek,Budapest Közút,X. kerület,363,Major Hotspot
-15,47.542,19.037,692,0.46,67.701,Parkok és zöldterületek,III. kerület ÓBKF Óbuda-Békásmegyer Közterület-felügyelet,III. kerület,692,Major Hotspot
-16,47.597,19.054,533,0.433,57.348,Parkok és zöldterületek,III. kerület ÓBKF Óbuda-Békásmegyer Közterület-felügyelet,III. kerület,533,Major Hotspot
-17,47.503,19.138,309,0.557,64.43,Közművek,Budapest Közút,XIV. kerület,309,Major Hotspot
-18,47.543,19.119,101,0.594,56.933,Elhagyott jármű,XV. kerület Önkormányzati Rendészet,XV. kerület,101,Major Hotspot
-19,47.491,19.023,444,0.653,87.772,Közművek,Budapest Közút,XII. kerület,444,Major Hotspot
-20,47.495,19.07,557,0.587,87.722,Forgalomtechnika,Budapest Közút,VIII. kerület,557,Major Hotspot
-21,47.563,18.997,39,0.538,56.524,Parkok és zöldterületek,III. kerület ÓBKF Óbuda-Békásmegyer Közterület-felügyelet,III. kerület,39,Medium Hotspot
-22,47.426,19.221,99,0.566,55.089,Forgalomtechnika,XVIII. kerület Városgazda NZrt.,XVIII. kerület,99,Major Hotspot
-23,47.584,19.112,222,0.523,61.31,Parkok és zöldterületek,IV. kerület Újpest Önkormányzata,IV. kerület,222,Major Hotspot
-24,47.516,19.112,647,0.631,47.664,Köztisztaság,XIV. kerület Zuglói Városgazdálkodási Közszolgáltató Zrt.,XIV. kerület,647,Major Hotspot
-25,47.493,19.27,58,0.603,28.657,Közművek,XVII. kerület Rákosmente Önkormányzata,XVII. kerület,58,Major Hotspot
-26,47.514,19.095,567,0.519,61.963,Közművek,XIV. kerület Zuglói Városgazdálkodási Közszolgáltató Zrt.,XIV. kerület,567,Major Hotspot
-27,47.515,19.077,247,0.466,72.826,Parkok és zöldterületek,Budapest Közút,XIV. kerület,247,Major Hotspot
-28,47.407,19.009,146,0.555,67.444,Elhagyott jármű,XXII. kerület Közterület-felügyeleti Csoport,XXII. kerület,146,Major Hotspot
-29,47.563,18.951,153,0.451,66.783,Parkok és zöldterületek,II. kerület Önkormányzata,II. kerület,153,Major Hotspot
-30,47.467,19.121,430,0.607,65.276,Köztisztaság,Budapest Közút,X. kerület,430,Major Hotspot
-31,47.477,19.051,522,0.513,76.216,Közművek,XI. kerület Újbuda Önkormányzata,XI. kerület,522,Major Hotspot
-32,47.487,19.116,184,0.625,59.026,Forgalomtechnika,Budapest Közút,X. kerület,184,Major Hotspot
-33,47.541,19.089,274,0.58,86.465,Parkok és zöldterületek,XIII. kerület Önkormányzata,XIII. kerület,274,Major Hotspot
-34,47.447,19.12,280,0.639,115.905,Parkok és zöldterületek,XX. kerület Pesterzsébet Önkormányzata,XX. kerület,280,Major Hotspot
-35,47.432,19.038,318,0.431,78.445,Forgalomtechnika,Budapest Közút,XXII. kerület,318,Major Hotspot
-36,47.5,18.982,178,0.567,73.446,Forgalomtechnika,XII. kerület Hegyvidék Önkormányzata,XII. kerület,178,Major Hotspot
-37,47.394,19.114,112,0.464,65.519,Forgalomtechnika,Budapest Közút,XXIII. kerület,112,Major Hotspot
-38,47.423,19.07,275,0.622,70.982,Közművek,XXI. kerület Csepeli Városgazda NZrt.,XXI. kerület,275,Major Hotspot
-39,47.497,19.037,497,0.481,70.912,Parkok és zöldterületek,Budapest Közút,I. kerület,497,Major Hotspot
-40,47.45,19.171,216,0.532,98.896,Forgalomtechnika,XVIII. kerület Városgazda NZrt.,XVIII. kerület,216,Major Hotspot
-41,47.474,19.166,316,0.693,60.667,Közművek,X. kerület Kőbánya Önkormányzata,X. kerület,316,Major Hotspot
-42,47.548,19.076,294,0.544,78.525,Parkok és zöldterületek,XIII. kerület Önkormányzata,XIII. kerület,294,Major Hotspot
-43,47.455,19.146,535,0.624,64.126,Forgalomtechnika,XIX. kerület Közpark NKft.,XIX. kerület,535,Major Hotspot
-44,47.511,19.013,327,0.535,71.983,Köztisztaság,Budapest Közút,II. kerület,327,Major Hotspot
-45,47.479,19.296,66,0.409,74.704,Parkok és zöldterületek,XVII. kerület Rákosmente Önkormányzata,XVII. kerület,66,Major Hotspot
-46,47.509,19.149,411,0.521,82.831,Elhagyott jármű,XIV. kerület Zuglói Városgazdálkodási Közszolgáltató Zrt.,XIV. kerület,411,Major Hotspot
-47,47.513,19.052,754,0.574,56.949,Közművek,Budapest Közút,XIII. kerület,754,Major Hotspot
-48,47.561,19.087,497,0.513,60.213,Közművek,IV. kerület Újpest Önkormányzata,IV. kerület,497,Major Hotspot
-49,47.552,19.045,310,0.394,55.918,Parkok és zöldterületek,III. kerület ÓBKF Óbuda-Békásmegyer Közterület-felügyelet,III. kerület,310,Major Hotspot
-50,47.449,19.037,373,0.512,65.366,Parkok és zöldterületek,XI. kerület Újbuda Önkormányzata,XI. kerület,373,Major Hotspot
-51,47.488,19.056,619,0.439,67.261,Forgalomtechnika,Budapest Közút,V. kerület,619,Major Hotspot
-52,47.524,19.128,325,0.449,56.301,Parkok és zöldterületek,XIV. kerület Zuglói Városgazdálkodási Közszolgáltató Zrt.,XIV. kerület,325,Major Hotspot
-53,47.504,19.083,420,0.543,67.579,Forgalomtechnika,Budapest Közút,VII. kerület,420,Major Hotspot
-54,47.469,18.997,186,0.473,64.034,Parkok és zöldterületek,XI. kerület Újbuda Önkormányzata,XI. kerület,186,Major Hotspot
-55,47.531,19.04,479,0.453,57.157,Parkok és zöldterületek,III. kerület ÓBKF Óbuda-Békásmegyer Közterület-felügyelet,III. kerület,479,Major Hotspot
-56,47.524,19.156,127,0.48,57.262,Parkok és zöldterületek,XVI. kerületi Önkormányzat,XVI. kerület,127,Major Hotspot
-57,47.543,18.958,154,0.506,56.117,Forgalomtechnika,II. kerület Önkormányzata,II. kerület,154,Major Hotspot
-58,47.519,19.028,254,0.48,48.943,Parkok és zöldterületek,II. kerület Önkormányzata,II. kerület,254,Major Hotspot
-59,47.574,19.016,83,0.386,95.469,Forgalomtechnika,III. kerület ÓBKF Óbuda-Békásmegyer Közterület-felügyelet,III. kerület,83,Major Hotspot
-60,47.437,19.1,513,0.616,93.408,Parkok és zöldterületek,XX. kerület Pesterzsébet Önkormányzata,XX. kerület,513,Major Hotspot
-61,47.544,19.137,340,0.571,46.242,Elhagyott jármű,XV. kerület Palota Holding Zrt.,XV. kerület,340,Major Hotspot
-62,47.505,19.025,767,0.493,64.056,Köztisztaság,Budapest Közút,II. kerület,767,Major Hotspot
-63,47.52,19.227,89,0.517,53.174,Köztisztaság,XVI. kerületi Önkormányzat,XVI. kerület,89,Major Hotspot
-64,47.408,19.075,131,0.649,76.859,Forgalomtechnika,XXI. kerület Csepeli Városgazda NZrt.,XXI. kerület,131,Major Hotspot
-65,47.533,19.194,85,0.506,56.349,Parkok és zöldterületek,XVI. kerületi Önkormányzat,XVI. kerület,85,Major Hotspot
-66,47.472,19.099,228,0.513,65.393,Köztisztaság,Budapest Közút,IX. kerület,228,Major Hotspot
-67,47.404,19.188,111,0.559,56.967,Forgalomtechnika,Budapest Közút,XVIII. kerület,111,Major Hotspot
-68,47.482,19.068,617,0.574,59.268,Közművek,Budapest Közút,IX. kerület,617,Major Hotspot
-69,47.495,19.007,283,0.629,96.034,Közművek,XII. kerület Hegyvidék Önkormányzata,XII. kerület,283,Major Hotspot
-70,47.51,19.127,336,0.562,60.349,Parkok és zöldterületek,XIV. kerület Zuglói Városgazdálkodási Közszolgáltató Zrt.,XIV. kerület,336,Major Hotspot
-71,47.583,19.07,105,0.305,79.781,Kátyú,Budapest Közút,III. kerület,105,Major Hotspot
-72,47.462,19.031,411,0.552,68.145,Parkok és zöldterületek,XI. kerület Újbuda Önkormányzata,XI. kerület,411,Major Hotspot
-73,47.528,19.082,306,0.693,86.569,Köztisztaság,XIII. kerület Önkormányzata,XIII. kerület,306,Major Hotspot
-74,47.431,19.164,183,0.519,68.968,Köztisztaság,Budapest Közút,XVIII. kerület,183,Major Hotspot
-75,47.505,19.066,416,0.502,66.316,Közművek,Budapest Közút,VI. kerület,416,Major Hotspot
-76,47.443,19.198,114,0.544,86.855,Forgalomtechnika,Budapest Közút,XVIII. kerület,114,Major Hotspot
-77,47.503,19.109,450,0.491,62.045,Köztisztaság,Budapest Közút,XIV. kerület,450,Major Hotspot
-78,47.479,19.035,499,0.503,55.84,Parkok és zöldterületek,XI. kerület Újbuda Önkormányzata,XI. kerület,499,Major Hotspot
-79,47.491,19.081,313,0.604,88.667,Parkok és zöldterületek,VIII. kerület JGK Józsefvárosi Gazdálkodási Központ,VIII. kerület,313,Major Hotspot
-80,47.418,19.117,213,0.681,63.393,Elhagyott jármű,XX. kerület Pesterzsébet Önkormányzata,XXIII. kerület,213,Major Hotspot
-81,47.53,19.015,146,0.479,77.543,Parkok és zöldterületek,II. kerület Önkormányzata,II. kerület,146,Major Hotspot
-82,47.583,19.046,145,0.393,82.246,Forgalomtechnika,III. kerület ÓBKF Óbuda-Békásmegyer Közterület-felügyelet,III. kerület,145,Major Hotspot
-83,47.486,19.193,65,0.538,93.286,Parkok és zöldterületek,X. kerület Kőbánya Önkormányzata,X. kerület,65,Major Hotspot
-84,47.561,19.109,311,0.502,63.968,Parkok és zöldterületek,IV. kerület Újpest Önkormányzata,IV. kerület,311,Major Hotspot
-85,47.556,19.026,161,0.429,70.377,Elhagyott jármű,III. kerület ÓBKF Óbuda-Békásmegyer Közterület-felügyelet,III. kerület,161,Major Hotspot
-86,47.469,19.075,341,0.501,62.076,Köztisztaság,Budapest Közút,IX. kerület,341,Major Hotspot
-87,47.438,19.001,55,0.491,53.074,Kátyú,Budapest Közút,XXII. kerület,55,Major Hotspot
-88,47.478,19.257,95,0.674,46.156,Parkok és zöldterületek,XVII. kerület Rákosmente Önkormányzata,XVII. kerület,95,Major Hotspot
-89,47.395,18.978,50,0.46,69.261,Forgalomtechnika,XXII. kerület Budafok-Tétény Önkormányzata,XXII. kerület,50,Major Hotspot
-90,47.514,19.176,167,0.461,55.468,Parkok és zöldterületek,XVI. kerületi Önkormányzat,XVI. kerület,167,Major Hotspot
-91,47.498,19.054,669,0.492,74.796,Forgalomtechnika,Budapest Közút,V. kerület,669,Major Hotspot
-92,47.521,19.059,551,0.541,57.47,Forgalomtechnika,XIII. kerület Önkormányzata,XIII. kerület,551,Major Hotspot
-93,47.518,18.998,374,0.545,53.426,Köztisztaság,II. kerület Önkormányzata,II. kerület,374,Major Hotspot
-94,47.6,19.063,757,0.517,56.304,Parkok és zöldterületek,III. kerület ÓBKF Óbuda-Békásmegyer Közterület-felügyelet,III. kerület,757,Major Hotspot
-95,47.485,19.093,244,0.578,68.305,Forgalomtechnika,Budapest Közút,VIII. kerület,244,Major Hotspot
-96,47.486,19.156,241,0.643,56.51,Köztisztaság,X. kerület Kőbánya Önkormányzata,X. kerület,241,Major Hotspot
-97,47.447,19.102,259,0.598,105.916,Köztisztaság,XX. kerület Pesterzsébet Önkormányzata,XX. kerület,259,Major Hotspot
-98,47.483,19.236,222,0.554,58.732,Parkok és zöldterületek,XVII. kerület Rákosmente Önkormányzata,XVII. kerület,222,Major Hotspot
-99,47.482,19.001,186,0.565,55.952,Közművek,XII. kerület Hegyvidék Önkormányzata,XI. kerület,186,Major Hotspot
+0,47.512,19.052,888,0.595,66.339,Közművek,Budapest Közút,XIII. kerület,888,Major Hotspot
+1,47.459,19.133,346,0.621,73.34,Forgalomtechnika,XIX. kerület Közpark NKft.,XIX. kerület,346,Major Hotspot
+2,47.568,19.053,239,0.435,70.462,Parkok és zöldterületek,III. kerület ÓBKF Óbuda-Békásmegyer Közterület-felügyelet,III. kerület,239,Major Hotspot
+3,47.468,19.016,769,0.553,76.494,Köztisztaság,XI. kerület Újbuda Önkormányzata,XI. kerület,769,Major Hotspot
+4,47.516,19.114,723,0.657,52.335,Közművek,XIV. kerület Zuglói Városgazdálkodási Közszolgáltató Zrt.,XIV. kerület,723,Major Hotspot
+5,47.532,19.202,76,0.579,96.636,Parkok és zöldterületek,XVI. kerületi Önkormányzat,XVI. kerület,76,Major Hotspot
+6,47.431,19.038,402,0.48,81.658,Forgalomtechnika,Budapest Közút,XXII. kerület,402,Major Hotspot
+7,47.52,18.995,558,0.573,49.612,Köztisztaság,II. kerület Önkormányzata,II. kerület,558,Major Hotspot
+8,47.483,19.073,617,0.566,71.069,Forgalomtechnika,Budapest Közút,IX. kerület,617,Major Hotspot
+9,47.55,19.117,145,0.531,79.545,Elhagyott jármű,XV. kerület Palota Holding Zrt.,XV. kerület,145,Major Hotspot
+10,47.435,19.129,273,0.648,108.362,Parkok és zöldterületek,XX. kerület Pesterzsébet Önkormányzata,XX. kerület,273,Major Hotspot
+11,47.483,19.259,167,0.641,54.748,Parkok és zöldterületek,XVII. kerület Rákosmente Önkormányzata,XVII. kerület,167,Major Hotspot
+12,47.6,19.063,918,0.545,62.474,Parkok és zöldterületek,III. kerület ÓBKF Óbuda-Békásmegyer Közterület-felügyelet,III. kerület,918,Major Hotspot
+13,47.483,19.154,278,0.673,57.487,Elhagyott jármű,X. kerület Kőbánya Önkormányzata,X. kerület,278,Major Hotspot
+14,47.528,19.081,392,0.722,101.426,Köztisztaság,XIII. kerület Önkormányzata,XIII. kerület,392,Major Hotspot
+15,47.444,19.198,130,0.577,94.24,Forgalomtechnika,Budapest Közút,XVIII. kerület,130,Major Hotspot
+16,47.56,19.099,378,0.59,79.527,Parkok és zöldterületek,IV. kerület Újpest Önkormányzata,IV. kerület,378,Major Hotspot
+17,47.439,19.1,714,0.65,89.015,Közművek,XX. kerület Pesterzsébet Önkormányzata,XX. kerület,714,Major Hotspot
+18,47.521,19.06,694,0.579,70.047,Közművek,XIII. kerület Önkormányzata,XIII. kerület,694,Major Hotspot
+19,47.542,19.037,885,0.49,76.194,Parkok és zöldterületek,III. kerület ÓBKF Óbuda-Békásmegyer Közterület-felügyelet,III. kerület,885,Major Hotspot
+20,47.484,19.03,521,0.568,70.949,Közművek,Budapest Közút,XI. kerület,521,Major Hotspot
+21,47.563,18.95,179,0.48,66.244,Parkok és zöldterületek,II. kerület Önkormányzata,II. kerület,179,Major Hotspot
+22,47.453,19.149,437,0.652,68.621,Forgalomtechnika,XIX. kerület Közpark NKft.,XIX. kerület,437,Major Hotspot
+23,47.396,18.98,64,0.5,73.0,Forgalomtechnika,XXII. kerület Budafok-Tétény Önkormányzata,XXII. kerület,64,Major Hotspot
+24,47.505,19.025,932,0.528,74.128,Közművek,Budapest Közút,II. kerület,932,Major Hotspot
+25,47.464,19.051,300,0.497,74.723,Forgalomtechnika,Budapest Közút,XI. kerület,300,Major Hotspot
+26,47.486,19.114,199,0.633,58.317,Forgalomtechnika,Budapest Közút,X. kerület,199,Major Hotspot
+27,47.415,19.205,57,0.649,62.405,Kátyú,XVIII. kerület Városgazda NZrt.,XVIII. kerület,57,Major Hotspot
+28,47.507,19.133,625,0.586,67.828,Közművek,XIV. kerület Zuglói Városgazdálkodási Közszolgáltató Zrt.,XIV. kerület,625,Major Hotspot
+29,47.499,19.057,749,0.543,89.246,Forgalomtechnika,Budapest Közút,V. kerület,749,Major Hotspot
+30,47.466,19.152,352,0.699,68.13,Forgalomtechnika,Budapest Közút,X. kerület,352,Major Hotspot
+31,47.424,19.07,321,0.648,64.298,Közművek,XXI. kerület Csepeli Városgazda NZrt.,XXI. kerület,321,Major Hotspot
+32,47.51,19.101,395,0.542,54.444,Közművek,XIV. kerület Zuglói Városgazdálkodási Közszolgáltató Zrt.,XIV. kerület,395,Major Hotspot
+33,47.47,19.078,467,0.542,68.04,Köztisztaság,Budapest Közút,IX. kerület,467,Major Hotspot
+34,47.5,18.983,216,0.634,81.139,Forgalomtechnika,XII. kerület Hegyvidék Önkormányzata,XII. kerület,216,Major Hotspot
+35,47.483,19.292,98,0.52,73.255,Parkok és zöldterületek,XVII. kerület Rákosmente Önkormányzata,XVII. kerület,98,Major Hotspot
+36,47.518,19.023,279,0.577,58.137,Forgalomtechnika,II. kerület Önkormányzata,II. kerület,279,Major Hotspot
+37,47.596,19.111,79,0.684,80.278,Elhagyott jármű,IV. kerület Újpest Önkormányzata,IV. kerület,79,Major Hotspot
+38,47.524,19.172,194,0.423,84.549,Közművek,XVI. kerületi Önkormányzat,XVI. kerület,194,Major Hotspot
+39,47.558,19.025,175,0.48,75.155,Elhagyott jármű,III. kerület ÓBKF Óbuda-Békásmegyer Közterület-felügyelet,III. kerület,175,Major Hotspot
+40,47.478,19.064,542,0.577,63.62,Közművek,Budapest Közút,IX. kerület,542,Major Hotspot
+41,47.388,19.113,70,0.443,98.29,Közművek,Budapest Közút,XXIII. kerület,70,Major Hotspot
+42,47.509,19.194,225,0.622,79.536,Közművek,XVI. kerületi Önkormányzat,XVI. kerület,225,Major Hotspot
+43,47.541,19.089,329,0.617,94.379,Parkok és zöldterületek,XIII. kerület Önkormányzata,XIII. kerület,329,Major Hotspot
+44,47.486,19.002,328,0.634,86.673,Közművek,XII. kerület Hegyvidék Önkormányzata,XII. kerület,328,Major Hotspot
+45,47.446,19.115,360,0.667,132.192,Parkok és zöldterületek,XX. kerület Pesterzsébet Önkormányzata,XX. kerület,360,Major Hotspot
+46,47.449,19.037,473,0.577,67.597,Parkok és zöldterületek,XI. kerület Újbuda Önkormányzata,XI. kerület,473,Major Hotspot
+47,47.497,19.04,662,0.486,83.134,Parkok és zöldterületek,Budapest Közút,I. kerület,662,Major Hotspot
+48,47.543,18.959,174,0.552,66.221,Parkok és zöldterületek,II. kerület Önkormányzata,II. kerület,174,Major Hotspot
+49,47.407,19.011,181,0.591,77.533,Elhagyott jármű,XXII. kerület Közterület-felügyeleti Csoport,XXII. kerület,181,Major Hotspot
+50,47.434,19.168,152,0.533,65.21,Forgalomtechnika,XVIII. kerület Városgazda NZrt.,XVIII. kerület,152,Major Hotspot
+51,47.469,19.117,423,0.61,73.519,Köztisztaság,X. kerület Kőbánya Önkormányzata,X. kerület,423,Major Hotspot
+52,47.534,19.064,567,0.589,73.099,Parkok és zöldterületek,XIII. kerület Önkormányzata,XIII. kerület,567,Major Hotspot
+53,47.487,19.088,473,0.634,80.283,Közművek,VIII. kerület JGK Józsefvárosi Gazdálkodási Központ,VIII. kerület,473,Major Hotspot
+54,47.435,19.074,299,0.565,84.923,Elhagyott jármű,Budapest Közút,XXI. kerület,299,Major Hotspot
+55,47.484,19.133,506,0.666,64.994,Közművek,Budapest Közút,X. kerület,506,Major Hotspot
+56,47.476,19.046,719,0.561,85.96,Közművek,XI. kerület Újbuda Önkormányzata,XI. kerület,719,Major Hotspot
+57,47.509,19.07,484,0.574,86.468,Közművek,Budapest Közút,VI. kerület,484,Major Hotspot
+58,47.503,19.167,126,0.587,83.257,Köztisztaság,X. kerület Kőbánya Önkormányzata,X. kerület,126,Major Hotspot
+59,47.531,19.109,292,0.586,93.205,Elhagyott jármű,XIV. kerület Zuglói Városgazdálkodási Közszolgáltató Zrt.,XIV. kerület,292,Major Hotspot
+60,47.408,19.067,242,0.661,101.838,Forgalomtechnika,XXI. kerület Csepeli Városgazda NZrt.,XXI. kerület,242,Major Hotspot
+61,47.511,19.037,834,0.48,74.442,Forgalomtechnika,Budapest Közút,II. kerület,834,Major Hotspot
+62,47.451,19.172,224,0.571,102.414,Forgalomtechnika,XVIII. kerület Városgazda NZrt.,XVIII. kerület,224,Major Hotspot
+63,47.51,19.009,409,0.582,74.853,Közművek,Budapest Közút,II. kerület,409,Major Hotspot
+64,47.597,19.054,634,0.443,72.514,Parkok és zöldterületek,III. kerület ÓBKF Óbuda-Békásmegyer Közterület-felügyelet,III. kerület,634,Major Hotspot
+65,47.469,18.997,257,0.541,65.345,Elhagyott jármű,XI. kerület Újbuda Önkormányzata,XI. kerület,257,Major Hotspot
+66,47.488,19.056,738,0.466,70.576,Forgalomtechnika,Budapest Közút,V. kerület,738,Major Hotspot
+67,47.429,19.225,86,0.523,51.222,Forgalomtechnika,Budapest Közút,XVIII. kerület,86,Major Hotspot
+68,47.581,19.11,196,0.52,85.971,Parkok és zöldterületek,IV. kerület Újpest Önkormányzata,IV. kerület,196,Major Hotspot
+69,47.552,19.045,378,0.442,84.204,Forgalomtechnika,III. kerület ÓBKF Óbuda-Békásmegyer Közterület-felügyelet,III. kerület,378,Major Hotspot
+70,47.495,19.018,546,0.687,94.467,Közművek,Budapest Közút,XII. kerület,546,Major Hotspot
+71,47.472,19.164,424,0.715,62.987,Közművek,X. kerület Kőbánya Önkormányzata,X. kerület,424,Major Hotspot
+72,47.544,19.137,389,0.591,59.361,Elhagyott jármű,XV. kerület Önkormányzati Rendészet,XV. kerület,389,Major Hotspot
+73,47.42,19.148,128,0.609,86.526,Köztisztaság,XXIII. kerület Soroksár Önkormányzata,XXIII. kerület,128,Major Hotspot
+74,47.495,19.071,808,0.635,100.271,Közművek,Budapest Közút,VIII. kerület,808,Major Hotspot
+75,47.524,19.129,387,0.46,68.685,Parkok és zöldterületek,XIV. kerület Zuglói Városgazdálkodási Közszolgáltató Zrt.,XIV. kerület,387,Major Hotspot
+76,47.548,19.076,338,0.574,86.985,Parkok és zöldterületek,XIII. kerület Önkormányzata,XIII. kerület,338,Major Hotspot
+77,47.573,19.009,115,0.435,85.88,Forgalomtechnika,III. kerület ÓBKF Óbuda-Békásmegyer Közterület-felügyelet,III. kerület,115,Major Hotspot
+78,47.473,19.097,238,0.563,69.06,Forgalomtechnika,Budapest Közút,IX. kerület,238,Major Hotspot
+79,47.483,19.236,281,0.591,72.241,Parkok és zöldterületek,XVII. kerület Rákosmente Önkormányzata,XVII. kerület,281,Major Hotspot
+80,47.504,19.083,494,0.569,79.765,Forgalomtechnika,Budapest Közút,VII. kerület,494,Major Hotspot
+81,47.463,19.031,503,0.571,73.794,Parkok és zöldterületek,XI. kerület Újbuda Önkormányzata,XI. kerület,503,Major Hotspot
+82,47.51,19.148,513,0.532,90.106,Elhagyott jármű,XIV. kerület Zuglói Városgazdálkodási Közszolgáltató Zrt.,XIV. kerület,513,Major Hotspot
+83,47.522,19.102,271,0.491,77.902,Parkok és zöldterületek,XIV. kerület Zuglói Városgazdálkodási Közszolgáltató Zrt.,XIV. kerület,271,Major Hotspot
+84,47.424,19.112,224,0.701,70.739,Elhagyott jármű,XX. kerület Pesterzsébet Önkormányzata,XX. kerület,224,Major Hotspot
+85,47.562,19.084,442,0.507,65.933,Közművek,IV. kerület Újpest Önkormányzata,IV. kerület,442,Major Hotspot
+86,47.485,19.189,99,0.545,91.685,Köztisztaság,X. kerület Kőbánya Önkormányzata,X. kerület,99,Major Hotspot
+87,47.406,19.11,111,0.676,44.213,Elhagyott jármű,XXIII. kerület Soroksár Rendészeti Osztály,XXIII. kerület,111,Major Hotspot
+88,47.403,19.184,126,0.571,71.681,Forgalomtechnika,XVIII. kerület Városgazda NZrt.,XVIII. kerület,126,Major Hotspot
+89,47.583,19.045,185,0.384,115.141,Kátyú,III. kerület ÓBKF Óbuda-Békásmegyer Közterület-felügyelet,III. kerület,185,Major Hotspot
+90,47.442,19.002,70,0.486,63.588,Kátyú,Budapest Közút,XI. kerület,70,Major Hotspot
+91,47.501,19.11,397,0.506,59.682,Köztisztaság,Budapest Közút,XIV. kerület,397,Major Hotspot
+92,47.566,19.119,130,0.592,72.714,Forgalomtechnika,Budapest Közút,XV. kerület,130,Major Hotspot
+93,47.532,19.016,168,0.512,96.547,Parkok és zöldterületek,III. kerület ÓBKF Óbuda-Békásmegyer Közterület-felügyelet,II. kerület,168,Major Hotspot
+94,47.53,19.039,573,0.464,68.312,Forgalomtechnika,III. kerület ÓBKF Óbuda-Békásmegyer Közterület-felügyelet,III. kerület,573,Major Hotspot
+95,47.583,19.067,113,0.345,82.795,Kátyú,Budapest Közút,III. kerület,113,Major Hotspot
+96,47.519,19.229,99,0.596,73.288,Köztisztaság,XVI. kerületi Önkormányzat,XVI. kerület,99,Major Hotspot
+97,47.464,19.238,99,0.586,87.397,Kátyú,XVII. kerület Rákosmente Önkormányzata,XVII. kerület,99,Major Hotspot
+98,47.527,18.983,359,0.593,62.486,Köztisztaság,II. kerület Önkormányzata,II. kerület,359,Major Hotspot
+99,47.516,19.089,444,0.509,79.372,Parkok és zöldterületek,Városliget Zrt.,XIV. kerület,444,Major Hotspot

@@ -1,0 +1,24 @@
+﻿DistrictID,District,DistrictName,CenterLatitude,CenterLongitude,MinLat,MaxLat,MinLng,MaxLng,GeographicSpanLat,GeographicSpanLng,PerformanceCategory
+1,I. kerület,I. kerület,47.499,19.035,47.436,47.528,19.021,19.089,0.092,0.068,Critical
+2,II. kerület,II. kerület,47.522,19.008,47.49,47.576,18.929,19.091,0.086,0.162,Needs Attention
+3,III. kerület,III. kerület,47.57,19.047,47.521,47.61,18.99,19.075,0.089,0.085,Critical
+4,IV. kerület,IV. kerület,47.567,19.097,47.495,47.611,19.038,19.124,0.116,0.086,Needs Attention
+5,IX. kerület,IX. kerület,47.475,19.08,47.442,47.495,19.055,19.148,0.053,0.093,Needs Attention
+6,V. kerület,V. kerület,47.499,19.052,47.485,47.519,19.041,19.153,0.034,0.112,Needs Attention
+7,VI. kerület,VI. kerület,47.508,19.063,47.497,47.524,19.051,19.081,0.027,0.03,Needs Attention
+8,VII. kerület,VII. kerület,47.501,19.071,47.494,47.579,19.049,19.091,0.085,0.042,Needs Attention
+9,VIII. kerület,VIII. kerület,47.491,19.08,47.476,47.533,19.056,19.109,0.057,0.053,Needs Attention
+10,X. kerület,X. kerület,47.481,19.144,47.462,47.506,19.098,19.212,0.044,0.114,Needs Attention
+11,XI. kerület,XI. kerület,47.468,19.032,47.428,47.489,18.979,19.15,0.061,0.171,Needs Attention
+12,XII. kerület,XII. kerület,47.499,19.008,47.478,47.528,18.935,19.03,0.05,0.095,Needs Attention
+13,XIII. kerület,XIII. kerület,47.529,19.067,47.499,47.604,19.04,19.097,0.105,0.057,Needs Attention
+14,XIV. kerület,XIV. kerület,47.515,19.114,47.49,47.545,19.061,19.156,0.055,0.095,Needs Attention
+15,XIX. kerület,XIX. kerület,47.454,19.142,47.423,47.561,19.055,19.17,0.138,0.115,Needs Attention
+16,XV. kerület,XV. kerület,47.548,19.13,47.529,47.599,19.105,19.156,0.07,0.051,Needs Attention
+17,XVI. kerület,XVI. kerület,47.518,19.188,47.492,47.543,19.071,19.253,0.051,0.182,Needs Attention
+18,XVII. kerület,XVII. kerület,47.48,19.25,47.432,47.51,19.038,19.324,0.078,0.286,Needs Attention
+19,XVIII. kerület,XVIII. kerület,47.434,19.187,47.39,47.489,19.064,19.263,0.099,0.199,Needs Attention
+20,XX. kerület,XX. kerület,47.437,19.111,47.409,47.502,19.063,19.212,0.093,0.149,Needs Attention
+21,XXI. kerület,XXI. kerület,47.422,19.072,47.388,47.462,19.033,19.107,0.074,0.074,Needs Attention
+22,XXII. kerület,XXII. kerület,47.419,19.021,47.38,47.49,18.954,19.111,0.11,0.157,Needs Attention
+23,XXIII. kerület,XXIII. kerület,47.408,19.123,47.362,47.539,19.092,19.174,0.177,0.082,Needs Attention

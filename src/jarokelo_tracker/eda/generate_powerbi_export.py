@@ -6,6 +6,13 @@ This script creates comprehensive GPS-enhanced PowerBI datasets from all raw dat
 Includes geographic analytics, spatial clustering, and territorial analysis.
 """
 
+import sys
+from pathlib import Path
+
+# Add the src directory to the Python path for imports
+src_path = Path(__file__).parent.parent
+sys.path.insert(0, str(src_path))
+
 import json
 import pandas as pd
 import numpy as np
@@ -15,6 +22,9 @@ from typing import Dict, List, Optional, Tuple
 import re
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
+
+# Import district correction utilities
+from jarokelo_tracker.utils.correct_districts import correct_known_districts, resolve_unknown_districts
 
 def load_all_raw_data() -> pd.DataFrame:
     """Load all data from raw directory with GPS coordinates"""
@@ -504,6 +514,16 @@ def main():
 
     # Clean and enhance
     enhanced_df = clean_and_enhance_data(raw_df)
+
+    # Apply district corrections to eliminate Unknown districts and map known names
+    print("\n🏛️ Applying district corrections...")
+    # Rename cleaned GPS columns for district correction functions
+    enhanced_df['Latitude'] = enhanced_df['latitude_clean']
+    enhanced_df['Longitude'] = enhanced_df['longitude_clean']
+    enhanced_df = correct_known_districts(enhanced_df)
+    enhanced_df = resolve_unknown_districts(enhanced_df)
+    # Clean up temporary columns
+    enhanced_df = enhanced_df.drop(['Latitude', 'Longitude'], axis=1)
 
     # Create PowerBI datasets
     print("\n📊 Generating Complete GPS-Enhanced PowerBI Datasets...")
