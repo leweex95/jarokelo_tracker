@@ -81,7 +81,7 @@ jobs:
     name: "1. Comprehensive scraping"
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
           token: ${{ secrets.PAT_TOKEN }}
@@ -260,7 +260,7 @@ jobs:
       changed_urls_count: ${{ steps.detect_changes.outputs.changed_count }}
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
           token: ${{ secrets.PAT_TOKEN }}
@@ -319,7 +319,7 @@ jobs:
       pending_urls_count: ${{ steps.load_pending.outputs.pending_count }}
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
           token: ${{ secrets.PAT_TOKEN }}
@@ -374,7 +374,7 @@ jobs:
     if: needs.recent-entries-detector-with-changed-status.outputs.changed_urls_count > 0
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
           token: ${{ secrets.PAT_TOKEN }}
@@ -469,7 +469,7 @@ jobs:
     if: needs.old-nonresolved-entries-loader.outputs.pending_urls_count > 0
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
           token: ${{ secrets.PAT_TOKEN }}
@@ -589,7 +589,7 @@ jobs:
     if: always()  # Run even if previous jobs fail
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
           token: ${{ secrets.PAT_TOKEN }}
