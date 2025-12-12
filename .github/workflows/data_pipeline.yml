@@ -55,7 +55,7 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
 
       - name: Cache Poetry packages
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.cache/pypoetry/cache
@@ -83,7 +83,7 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
 
       - name: Restore Poetry cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.cache/pypoetry/cache
@@ -137,7 +137,7 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
 
       - name: Restore Poetry cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.cache/pypoetry/cache
@@ -191,7 +191,7 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
 
       - name: Restore Poetry cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.cache/pypoetry/cache
@@ -248,7 +248,7 @@ jobs:
           echo "embedding=${{ needs.setup.outputs.embedding }}"
   
       - name: Restore Poetry cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.cache/pypoetry/cache
@@ -310,7 +310,7 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
 
       - name: Restore Poetry cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.cache/pypoetry/cache
