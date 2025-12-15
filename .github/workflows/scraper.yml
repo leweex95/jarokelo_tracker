@@ -390,7 +390,7 @@ jobs:
           echo "PYTHONPATH=$PWD/src:$PYTHONPATH" >> $GITHUB_ENV
 
       - name: Download recent changed URLs
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v7
         with:
           name: recent-changed-urls
 
@@ -485,7 +485,7 @@ jobs:
           echo "PYTHONPATH=$PWD/src:$PYTHONPATH" >> $GITHUB_ENV
 
       - name: Download old pending URLs
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v7
         with:
           name: old-pending-urls
 
