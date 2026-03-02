@@ -301,7 +301,7 @@ jobs:
 
       - name: Upload recent changed URLs
         if: steps.detect_changes.outputs.changed_count != '0'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: recent-changed-urls
           path: recent_changed_urls.txt
@@ -360,7 +360,7 @@ jobs:
 
       - name: Upload old pending URLs
         if: steps.load_pending.outputs.pending_count > 0
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: old-pending-urls
           path: old_pending_urls.txt
