@@ -64,7 +64,7 @@ jobs:
           echo "version_changes=$VERSION_CHANGES" >> $GITHUB_OUTPUT
 
       - name: Send email
-        uses: dawidd6/action-send-mail@v7
+        uses: dawidd6/action-send-mail@v12
         with:
           server_address: smtp.example.com
           server_port: 587
